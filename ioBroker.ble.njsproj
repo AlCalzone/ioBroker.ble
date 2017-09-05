@@ -11,7 +11,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>3c0718ac-3122-430d-963a-f0efc2b87a84</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>app.ts</StartupFile>
+    <StartupFile>src\main.ts</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -63,7 +63,10 @@
     <Compile Include="test\testPackageFiles.js" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="src\lib\global.ts" />
     <TypeScriptCompile Include="src\lib\ioBroker.d.ts" />
+    <TypeScriptCompile Include="src\lib\object-polyfill.ts" />
+    <TypeScriptCompile Include="src\lib\promises.ts" />
     <TypeScriptCompile Include="src\lib\utils.ts" />
     <TypeScriptCompile Include="src\main.ts" />
   </ItemGroup>

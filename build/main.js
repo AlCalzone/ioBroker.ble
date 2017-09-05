@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t;
+    return { next: verb(0), "throw": verb(1), "return": verb(2) };
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -34,38 +34,58 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-// you have to require the utils module and call adapter function
+var global_1 = require("./lib/global");
 var noble = require("noble");
 var utils_1 = require("./lib/utils");
+/** MAC addresses of known devices */
+var knownDevices = [];
 var services = [];
+// Adapter-Objekt erstellen
 var adapter = utils_1.default.adapter({
-    name: "template-ts",
+    name: "ble",
     // is called when databases are connected and adapter received configuration.
     // start here!
-    ready: function () {
-        // TODO: Make extended adapter
-        // Bring the monitored service names into the correct form
-        services = adapter.config.services
-            .split(",")
-            .map(function (s) { return fixServiceName(s); })
-            .filter(function (s) { return s != null; });
-        adapter.subscribeStates("*");
-        adapter.subscribeObjects("*");
-        // prepare scanning for beacons
-        noble.on("stateChange", function (state) {
-            switch (state) {
-                case "poweredOn":
-                    startScanning();
-                    break;
-                case "poweredOff":
-                    stopScanning();
-                    break;
+    ready: function () { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    // Adapter-Instanz global machen
+                    adapter = global_1.Global.extend(adapter);
+                    global_1.Global.adapter = adapter;
+                    // Bring the monitored service names into the correct form
+                    services = adapter.config.services
+                        .split(",")
+                        .map(function (s) { return fixServiceName(s); })
+                        .filter(function (s) { return s != null; });
+                    adapter.subscribeStates("*");
+                    adapter.subscribeObjects("*");
+                    _b = (_a = Object).keys;
+                    return [4 /*yield*/, global_1.Global.$$(adapter.namespace + ".*", "device")];
+                case 1:
+                    // Find all known devices
+                    knownDevices = _b.apply(_a, [_d.sent()]);
+                    // prepare scanning for beacons
+                    noble.on("stateChange", function (state) {
+                        switch (state) {
+                            case "poweredOn":
+                                startScanning();
+                                break;
+                            case "poweredOff":
+                                stopScanning();
+                                break;
+                        }
+                        adapter.setState("info.driverState", state, true);
+                    });
+                    if (noble.state === "poweredOn")
+                        startScanning();
+                    adapter.setState("info.driverState", noble.state, true);
+                    return [2 /*return*/];
             }
         });
-        if (noble.state === "poweredOn")
-            startScanning();
-    },
+    }); },
     // is called when adapter shuts down - callback has to be called under any circumstances!
     unload: function (callback) {
         try {
@@ -79,17 +99,9 @@ var adapter = utils_1.default.adapter({
     },
     // is called if a subscribed object changes
     objectChange: function (id, obj) {
-        // Warning, obj can be null if it was deleted
-        adapter.log.info("objectChange " + id + " " + JSON.stringify(obj));
     },
     // is called if a subscribed state changes
     stateChange: function (id, state) {
-        // Warning, state can be null if it was deleted
-        adapter.log.info("stateChange " + id + " " + JSON.stringify(state));
-        // you can use the ack flag to detect if it is status (true) or command (false)
-        if (state && !state.ack) {
-            adapter.log.info("ack is not set!");
-        }
     },
     // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
     // requires the property to be configured in io-package.json
@@ -124,20 +136,30 @@ function fixServiceName(name) {
  * @param stateId ID of the state to update or create
  * @param value The value to store
  */
-function updateState(stateId, value, ack) {
+function updateCharacteristic(deviceID, characteristic, value, ack) {
     return __awaiter(this, void 0, void 0, function () {
-        var val;
+        var stateID, state;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, adapter.$getState(stateId)];
+                case 0:
+                    stateID = deviceID + "." + characteristic;
+                    return [4 /*yield*/, adapter.$getState(stateID)];
                 case 1:
-                    val = (_a.sent()).val;
-                    if (!(val == null)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, adapter.$createState(stateId, value)];
+                    state = _a.sent();
+                    if (!(state == null)) return [3 /*break*/, 3];
+                    return [4 /*yield*/, adapter.$createState(deviceID, null, characteristic, {
+                            "role": "value",
+                            "name": "BLE characteristic " + characteristic,
+                            "desc": "",
+                            "type": "mixed",
+                            "read": true,
+                            "write": false,
+                            "def": value
+                        })];
                 case 2:
                     _a.sent();
                     return [3 /*break*/, 5];
-                case 3: return [4 /*yield*/, adapter.$setStateChanged(stateId, value, ack)];
+                case 3: return [4 /*yield*/, adapter.$setStateChanged(stateID, value, ack)];
                 case 4:
                     _a.sent();
                     _a.label = 5;
@@ -146,33 +168,55 @@ function updateState(stateId, value, ack) {
         });
     });
 }
-var onDiscover = function (p) {
-    // TODO: create better object structures
-    if (!(p && p.advertisement && p.advertisement.serviceData))
-        return;
-    var stateId_name = "BLE." + p.address + ".name";
-    createState("BLE." + p.address + ".name", p.advertisement.localName);
-    for (var _i = 0, _a = p.advertisement.serviceData; _i < _a.length; _i++) {
-        var entry = _a[_i];
-        var uuid = entry.uuid;
-        var data = entry.data;
-        if (data.type === "Buffer") {
-            data = Buffer.from(data.data);
-        }
-        if (data.length === 1) {
-            // single byte
-            data = data[0];
-        }
-        else {
-            continue;
-        }
-        updateState("BLE." + p.address + "." + uuid, data, true);
-    }
-};
+function onDiscover(peripheral) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _i, _a, entry, uuid, data;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    if (!(peripheral && peripheral.advertisement && peripheral.advertisement.serviceData))
+                        return [2 /*return*/];
+                    if (!(knownDevices.indexOf(peripheral.address) === -1)) return [3 /*break*/, 2];
+                    // need to create device first
+                    return [4 /*yield*/, adapter.$createDevice(peripheral.address, {
+                            name: peripheral.advertisement.localName,
+                        })];
+                case 1:
+                    // need to create device first
+                    _b.sent();
+                    _b.label = 2;
+                case 2:
+                    for (_i = 0, _a = peripheral.advertisement.serviceData; _i < _a.length; _i++) {
+                        entry = _a[_i];
+                        uuid = entry.uuid;
+                        data = entry.data;
+                        if (data.type === "Buffer") {
+                            data = Buffer.from(data.data);
+                        }
+                        if (data.length === 1) {
+                            // single byte
+                            data = data[0];
+                        }
+                        else if (data instanceof Buffer) {
+                            // Output hex value
+                            data = data.toString("hex");
+                        }
+                        else {
+                            continue;
+                        }
+                        updateCharacteristic(peripheral.address, uuid, data, true);
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+;
 var isScanning = false;
 function startScanning() {
     if (isScanning)
         return;
+    adapter.setState("info.connection", true, true);
     noble.on("discover", onDiscover);
     noble.startScanning(services, true);
     isScanning = true;
@@ -182,6 +226,7 @@ function stopScanning() {
         return;
     noble.removeAllListeners("discover");
     noble.stopScanning();
+    adapter.setState("info.connection", false, true);
     isScanning = false;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5qcyIsInNvdXJjZVJvb3QiOiJkOi9pb0Jyb2tlci5ibGUvc3JjLyIsInNvdXJjZXMiOlsibWFpbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsaUVBQWlFO0FBQ2pFLDZCQUErQjtBQUMvQixxQ0FBZ0M7QUFFaEMsSUFBSSxRQUFRLEdBQWEsRUFBRSxDQUFDO0FBRTVCLElBQU0sT0FBTyxHQUFHLGVBQUssQ0FBQyxPQUFPLENBQUM7SUFDN0IsSUFBSSxFQUFFLGFBQWE7SUFFbkIsNkVBQTZFO0lBQzdFLGNBQWM7SUFDZCxLQUFLLEVBQUU7UUFFTiw4QkFBOEI7UUFFOUIsMERBQTBEO1FBQzFELFFBQVEsR0FBRyxPQUFPLENBQUMsTUFBTSxDQUFDLFFBQVE7YUFDaEMsS0FBSyxDQUFDLEdBQUcsQ0FBQzthQUNWLEdBQUcsQ0FBQyxVQUFBLENBQUMsSUFBSSxPQUFBLGNBQWMsQ0FBQyxDQUFDLENBQUMsRUFBakIsQ0FBaUIsQ0FBQzthQUMzQixNQUFNLENBQUMsVUFBQSxDQUFDLElBQUksT0FBQSxDQUFDLElBQUksSUFBSSxFQUFULENBQVMsQ0FBQyxDQUN0QjtRQUVGLE9BQU8sQ0FBQyxlQUFlLENBQUMsR0FBRyxDQUFDLENBQUM7UUFDN0IsT0FBTyxDQUFDLGdCQUFnQixDQUFDLEdBQUcsQ0FBQyxDQUFDO1FBRTlCLCtCQUErQjtRQUMvQixLQUFLLENBQUMsRUFBRSxDQUFDLGFBQWEsRUFBRSxVQUFDLEtBQUs7WUFDN0IsTUFBTSxDQUFDLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQztnQkFDZixLQUFLLFdBQVc7b0JBQ2YsYUFBYSxFQUFFLENBQUM7b0JBQ2hCLEtBQUssQ0FBQztnQkFDUCxLQUFLLFlBQVk7b0JBQ2hCLFlBQVksRUFBRSxDQUFDO29CQUNmLEtBQUssQ0FBQztZQUNSLENBQUM7UUFDRixDQUFDLENBQUMsQ0FBQztRQUNILEVBQUUsQ0FBQyxDQUFDLEtBQUss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
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5qcyIsInNvdXJjZVJvb3QiOiJDOi9Vc2Vycy9Eb21pbmljL0RvY3VtZW50cy9WaXN1YWwgU3R1ZGlvIDIwMTcvUmVwb3NpdG9yaWVzL2lvQnJva2VyLmJsZS9zcmMvIiwic291cmNlcyI6WyJtYWluLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLGlCQXlLQTs7QUF6S0EsdUNBQTREO0FBQzVELDZCQUErQjtBQUMvQixxQ0FBZ0M7QUFFaEMscUNBQXFDO0FBQ3JDLElBQUksWUFBWSxHQUFhLEVBQUUsQ0FBQztBQUNoQyxJQUFJLFFBQVEsR0FBYSxFQUFFLENBQUM7QUFFNUIsMkJBQTJCO0FBQzNCLElBQUksT0FBTyxHQUFvQixlQUFLLENBQUMsT0FBTyxDQUFDO0lBQzVDLElBQUksRUFBRSxLQUFLO0lBRVgsNkVBQTZFO0lBQzdFLGNBQWM7SUFDZCxLQUFLLEVBQUU7Ozs7O29CQUVOLGdDQUFnQztvQkFDaEMsT0FBTyxHQUFHLGVBQUMsQ0FBQyxNQUFNLENBQUMsT0FBTyxDQUFDLENBQUM7b0JBQzVCLGVBQUMsQ0FBQyxPQUFPLEdBQUcsT0FBTyxDQUFDO29CQUVwQiwwREFBMEQ7b0JBQzFELFFBQVEsR0FBRyxPQUFPLENBQUMsTUFBTSxDQUFDLFFBQVE7eUJBQ2hDLEtBQUssQ0FBQyxHQUFHLENBQUM7eUJBQ1YsR0FBRyxDQUFDLFVBQUEsQ0FBQyxJQUFJLE9BQUEsY0FBYyxDQUFDLENBQUMsQ0FBQyxFQUFqQixDQUFpQixDQUFDO3lCQUMzQixNQUFNLENBQUMsVUFBQSxDQUFDLElBQUksT0FBQSxDQUFDLElBQUksSUFBSSxFQUFULENBQVMsQ0FBQyxDQUN0QjtvQkFFRixPQUFPLENBQUMsZUFBZSxDQUFDLEdBQUcsQ0FBQyxDQUFDO29CQUM3QixPQUFPLENBQUMsZ0JBQWdCLENBQUMsR0FBRyxDQUFDLENBQUM7b0JBR2YsS0FBQSxDQUFBLEtBQUEsTUFBTSxDQUFBLENBQUMs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

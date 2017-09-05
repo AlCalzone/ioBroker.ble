@@ -32,5 +32,43 @@
     },
     "objects": [
 
+    ],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Adapter-Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "If BLE scan is active",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.driverState",
+            "type": "state",
+            "common": {
+                "role": "indicator.state",
+                "name": "bluetooth driver state",
+                "desc": "The current state of the bluetooth driver",
+                "type": "string",
+                "read": true,
+                "write": false,
+                "def": "poweredOff"
+            },
+            "native": {}
+        }
+
     ]
 }

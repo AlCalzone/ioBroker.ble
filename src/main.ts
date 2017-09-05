@@ -1,17 +1,22 @@
-// you have to require the utils module and call adapter function
+import { ExtendedAdapter, Global as _ } from "./lib/global";
 import * as noble from "noble";
 import utils from "./lib/utils";
 
+/** MAC addresses of known devices */
+let knownDevices: string[] = [];
 let services: string[] = [];
 
-const adapter = utils.adapter({
-	name: "template-ts",
+// Adapter-Objekt erstellen
+let adapter: ExtendedAdapter = utils.adapter({
+	name: "ble",
 
 	// is called when databases are connected and adapter received configuration.
 	// start here!
-	ready: () => {
+	ready: async () => {
 
-		// TODO: Make extended adapter
+		// Adapter-Instanz global machen
+		adapter = _.extend(adapter);
+		_.adapter = adapter;
 
 		// Bring the monitored service names into the correct form
 		services = adapter.config.services
@@ -23,6 +28,11 @@ const adapter = utils.adapter({
 		adapter.subscribeStates("*");
 		adapter.subscribeObjects("*");
 
+		// Find all known devices
+		knownDevices = Object.keys(
+			await _.$$(`${adapter.namespace}.*`, "device"),
+		);
+
 		// prepare scanning for beacons
 		noble.on("stateChange", (state) => {
 			switch (state) {
@@ -33,8 +43,10 @@ const adapter = utils.adapter({
 					stopScanning();
 					break;
 			}
+			adapter.setState("info.driverState", state, true);
 		});
 		if (noble.state === "poweredOn") startScanning();
+		adapter.setState("info.driverState", noble.state, true);
 	},
 
 	// is called when adapter shuts down - callback has to be called under any circumstances!
@@ -50,19 +62,12 @@ const adapter = utils.adapter({
 
 	// is called if a subscribed object changes
 	objectChange: (id, obj) => {
-		// Warning, obj can be null if it was deleted
-		adapter.log.info("objectChange " + id + " " + JSON.stringify(obj));
+
 	},
 
 	// is called if a subscribed state changes
 	stateChange: (id, state) => {
-		// Warning, state can be null if it was deleted
-		adapter.log.info("stateChange " + id + " " + JSON.stringify(state));
 
-		// you can use the ack flag to detect if it is status (true) or command (false)
-		if (state && !state.ack) {
-			adapter.log.info("ack is not set!");
-		}
 	},
 
 	// Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
@@ -78,7 +83,7 @@ const adapter = utils.adapter({
 			}
 		}
 	},
-});
+}) as ExtendedAdapter;
 
 // =========================
 
@@ -99,22 +104,35 @@ function fixServiceName(name: string): string {
  * @param stateId ID of the state to update or create
  * @param value The value to store
  */
-async function updateState(stateId, value, ack) {
+async function updateCharacteristic(deviceID: string, characteristic: string, value: any, ack: boolean) {
 	// TODO: Check if this is ok
-	const val = (await adapter.$getState(stateId)).val;
-	if (val == null) {
-		await adapter.$createState(stateId, value);
+	const stateID = `${deviceID}.${characteristic}`
+	const state = await adapter.$getState(stateID);
+	if (state == null) {
+		await adapter.$createState(deviceID, null, characteristic, {
+			"role": "value",
+			"name": "BLE characteristic " + characteristic,
+			"desc": "",
+			"type": "mixed",
+			"read": true,
+			"write": false,
+			"def": value
+		});
 	} else {
-		await adapter.$setStateChanged(stateId, value, ack);
+		await adapter.$setStateChanged(stateID, value, ack);
 	}
 }
 
-const onDiscover = (p) => {
-	// TODO: create better object structures
-	if (!(p && p.advertisement && p.advertisement.serviceData)) return;
-	const stateId_name = `BLE.${p.address}.name`;
-	createState(`BLE.${p.address}.name`, p.advertisement.localName);
-	for (const entry of p.advertisement.serviceData) {
+async function onDiscover(peripheral) {
+	if (!(peripheral && peripheral.advertisement && peripheral.advertisement.serviceData)) return;
+
+	if (knownDevices.indexOf(peripheral.address) === -1) {
+		// need to create device first
+		await adapter.$createDevice(peripheral.address, {
+			name: peripheral.advertisement.localName,
+		});
+	}
+	for (const entry of peripheral.advertisement.serviceData) {
 		const uuid = entry.uuid;
 		let data = entry.data;
 		if (data.type === "Buffer") {
@@ -123,17 +141,21 @@ const onDiscover = (p) => {
 		if (data.length === 1) {
 			// single byte
 			data = data[0];
+		} else if (data instanceof Buffer) {
+			// Output hex value
+			data = data.toString("hex");
 		} else { // not supported yet
 			continue;
 		}
 
-		updateState(`BLE.${p.address}.${uuid}`, data, true);
+		updateCharacteristic(peripheral.address, uuid, data, true);
 	}
 };
 
 let isScanning = false;
 function startScanning() {
 	if (isScanning) return;
+	adapter.setState("info.connection", true, true);
 	noble.on("discover", onDiscover);
 	noble.startScanning(services, true);
 	isScanning = true;
@@ -142,5 +164,6 @@ function stopScanning() {
 	if (!isScanning) return;
 	noble.removeAllListeners("discover");
 	noble.stopScanning();
+	adapter.setState("info.connection", false, true);
 	isScanning = false;
 }
