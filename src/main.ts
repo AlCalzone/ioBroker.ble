@@ -1,143 +1,146 @@
-/**
- *
- * template adapter
- *
- *
- *  file io-package.json comments:
- *
- *  {
- *      "common": {
- *          "name":         "template",                  // name has to be set and has to be equal to adapters folder name and main file name excluding extension
- *          "version":      "0.0.0",                    // use "Semantic Versioning"! see http://semver.org/
- *          "title":        "Node.js template Adapter",  // Adapter title shown in User Interfaces
- *          "authors":  [                               // Array of authord
- *              "name <mail@template.com>"
- *          ]
- *          "desc":         "template adapter",          // Adapter description shown in User Interfaces. Can be a language object {de:"...",ru:"..."} or a string
- *          "platform":     "Javascript/Node.js",       // possible values "javascript", "javascript/Node.js" - more coming
- *          "mode":         "daemon",                   // possible values "daemon", "schedule", "subscribe"
- *          "schedule":     "0 0 * * *"                 // cron-style schedule. Only needed if mode=schedule
- *          "loglevel":     "info"                      // Adapters Log Level
- *      },
- *      "native": {                                     // the native object is available via adapter.config in your adapters code - use it for configuration
- *          "test1": true,
- *          "test2": 42
- *      }
- *  }
- *
- */
-
 // you have to require the utils module and call adapter function
+import * as noble from "noble";
 import utils from "./lib/utils";
 
-// you have to call the adapter function and pass a options object
-// name has to be set and has to be equal to adapters folder name and main file name excluding extension
-// adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.template.0
+let services: string[] = [];
+
 const adapter = utils.adapter({
-    name: "template-ts",
+	name: "template-ts",
 
-    // is called when databases are connected and adapter received configuration.
-    // start here!
-    ready: main, // Main method defined below for readability
+	// is called when databases are connected and adapter received configuration.
+	// start here!
+	ready: () => {
 
-    // is called when adapter shuts down - callback has to be called under any circumstances!
-    unload: (callback) => {
-        try {
-            adapter.log.info("cleaned everything up...");
-            callback();
-        } catch (e) {
-            callback();
-        }
-    },
+		// TODO: Make extended adapter
 
-    // is called if a subscribed object changes
-    objectChange: (id, obj) => {
-        // Warning, obj can be null if it was deleted
-        adapter.log.info("objectChange " + id + " " + JSON.stringify(obj));
-    },
+		// Bring the monitored service names into the correct form
+		services = adapter.config.services
+			.split(",")
+			.map(s => fixServiceName(s))
+			.filter(s => s != null)
+			;
 
-    // is called if a subscribed state changes
-    stateChange: (id, state) => {
-        // Warning, state can be null if it was deleted
-        adapter.log.info("stateChange " + id + " " + JSON.stringify(state));
+		adapter.subscribeStates("*");
+		adapter.subscribeObjects("*");
 
-        // you can use the ack flag to detect if it is status (true) or command (false)
-        if (state && !state.ack) {
-            adapter.log.info("ack is not set!");
-        }
-    },
+		// prepare scanning for beacons
+		noble.on("stateChange", (state) => {
+			switch (state) {
+				case "poweredOn":
+					startScanning();
+					break;
+				case "poweredOff":
+					stopScanning();
+					break;
+			}
+		});
+		if (noble.state === "poweredOn") startScanning();
+	},
 
-    // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
-    // requires the property to be configured in io-package.json
-    message: (obj) => {
-        if (typeof obj === "object" && obj.message) {
-            if (obj.command === "send") {
-                // e.g. send email or pushover or whatever
-                console.log("send command");
+	// is called when adapter shuts down - callback has to be called under any circumstances!
+	unload: (callback) => {
+		try {
+			stopScanning();
+			noble.removeAllListeners("stateChange");
+			callback();
+		} catch (e) {
+			callback();
+		}
+	},
 
-                // Send response in callback if required
-                if (obj.callback) adapter.sendTo(obj.from, obj.command, "Message received", obj.callback);
-            }
-        }
-    },
+	// is called if a subscribed object changes
+	objectChange: (id, obj) => {
+		// Warning, obj can be null if it was deleted
+		adapter.log.info("objectChange " + id + " " + JSON.stringify(obj));
+	},
+
+	// is called if a subscribed state changes
+	stateChange: (id, state) => {
+		// Warning, state can be null if it was deleted
+		adapter.log.info("stateChange " + id + " " + JSON.stringify(state));
+
+		// you can use the ack flag to detect if it is status (true) or command (false)
+		if (state && !state.ack) {
+			adapter.log.info("ack is not set!");
+		}
+	},
+
+	// Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
+	// requires the property to be configured in io-package.json
+	message: (obj) => {
+		if (typeof obj === "object" && obj.message) {
+			if (obj.command === "send") {
+				// e.g. send email or pushover or whatever
+				console.log("send command");
+
+				// Send response in callback if required
+				if (obj.callback) adapter.sendTo(obj.from, obj.command, "Message received", obj.callback);
+			}
+		}
+	},
 });
 
-function main() {
+// =========================
 
-    // The adapters config (in the instance object everything under the attribute "native") is accessible via
-    // adapter.config:
-    adapter.log.info("config test1: " + adapter.config.test1);
-    adapter.log.info("config test1: " + adapter.config.test2);
+function fixServiceName(name: string): string {
+	if (name == null) return "";
+	// No whitespace
+	for (const char of ["\r", "\n", "\t", " "]) {
+		name = name.replace(char, "");
+	}
+	// No leading 0x
+	name = name.replace(/^0x/, "");
+	// lowerCase
+	return name.toLowerCase();
+}
 
-    /**
-     *
-     *      For every state in the system there has to be also an object of type state
-     *
-     *      Here a simple template for a boolean variable named "testVariable"
-     *
-     *      Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-     *
-     */
+/**
+ * Update the state with the given ID or create it if it doesn't exist
+ * @param stateId ID of the state to update or create
+ * @param value The value to store
+ */
+async function updateState(stateId, value, ack) {
+	// TODO: Check if this is ok
+	const val = (await adapter.$getState(stateId)).val;
+	if (val == null) {
+		await adapter.$createState(stateId, value);
+	} else {
+		await adapter.$setStateChanged(stateId, value, ack);
+	}
+}
 
-    adapter.setObject("testVariable", {
-        type: "state",
-        common: {
-            name: "testVariable",
-            type: "boolean",
-            role: "indicator",
-            read: true,
-            write: true,
-        },
-        native: {},
-    });
+const onDiscover = (p) => {
+	// TODO: create better object structures
+	if (!(p && p.advertisement && p.advertisement.serviceData)) return;
+	const stateId_name = `BLE.${p.address}.name`;
+	createState(`BLE.${p.address}.name`, p.advertisement.localName);
+	for (const entry of p.advertisement.serviceData) {
+		const uuid = entry.uuid;
+		let data = entry.data;
+		if (data.type === "Buffer") {
+			data = Buffer.from(data.data);
+		}
+		if (data.length === 1) {
+			// single byte
+			data = data[0];
+		} else { // not supported yet
+			continue;
+		}
 
-    // in this template all states changes inside the adapters namespace are subscribed
-    adapter.subscribeStates("*");
+		updateState(`BLE.${p.address}.${uuid}`, data, true);
+	}
+};
 
-    /**
-     *   setState examples
-     *
-     *   you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-     *
-     */
-
-    // the variable testVariable is set to true as command (ack=false)
-    adapter.setState("testVariable", true);
-
-    // same thing, but the value is flagged "ack"
-    // ack should be always set to true if the value is received from or acknowledged from the target system
-    adapter.setState("testVariable", {val: true, ack: true});
-
-    // same thing, but the state is deleted after 30s (getState will return null afterwards)
-    adapter.setState("testVariable", {val: true, ack: true, expire: 30});
-
-    // examples for the checkPassword/checkGroup functions
-    adapter.checkPassword("admin", "iobroker", (res) => {
-        console.log("check user admin pw ioboker: " + res);
-    });
-
-    adapter.checkGroup("admin", "admin", (res) => {
-        console.log("check group user admin group admin: " + res);
-    });
-
+let isScanning = false;
+function startScanning() {
+	if (isScanning) return;
+	noble.on("discover", onDiscover);
+	noble.startScanning(services, true);
+	isScanning = true;
+}
+function stopScanning() {
+	if (!isScanning) return;
+	noble.removeAllListeners("discover");
+	noble.stopScanning();
+	isScanning = false;
 }
