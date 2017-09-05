@@ -1,86 +1,135 @@
 <html>
 
-<!-- these 4 files always have to be included -->
-<link rel="stylesheet" type="text/css" href="../../lib/css/themes/jquery-ui/redmond/jquery-ui.min.css"/>
-<script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
-<script type="text/javascript" src="../../lib/js/jquery-ui-1.10.3.full.min.js"></script>
+<head>
+
+	<!-- these 4 files always have to be included -->
+	<link rel="stylesheet" type="text/css" href="../../lib/css/themes/jquery-ui/redmond/jquery-ui.min.css" />
+	<script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="../../lib/js/jquery-ui-1.10.3.full.min.js"></script>
 
 
-<!-- optional: use jqGrid
-<link rel="stylesheet" type="text/css" href="../../lib/css/jqGrid/ui.jqgrid-4.5.4.css"/>
-<script type="text/javascript" src="../../lib/js/jqGrid/jquery.jqGrid-4.5.4.min.js"></script>
-<script type="text/javascript" src="../../lib/js/jqGrid/i18n/grid.locale-all.js"></script>
--->
+	<!-- optional: use jqGrid
+	<link rel="stylesheet" type="text/css" href="../../lib/css/jqGrid/ui.jqgrid-4.5.4.css"/>
+	<script type="text/javascript" src="../../lib/js/jqGrid/jquery.jqGrid-4.5.4.min.js"></script>
+	<script type="text/javascript" src="../../lib/js/jqGrid/i18n/grid.locale-all.js"></script>
+	-->
+	<!-- optional: use multiselect
+	<link rel="stylesheet" type="text/css" href="../../lib/css/jquery.multiselect-1.13.css"/>
+	<script type="text/javascript" src="../../lib/js/jquery.multiselect-1.13.min.js"></script>
+	-->
+	<!-- these two file always have to be included -->
+	<link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+	<script type="text/javascript" src="../../js/translate.js"></script>
+	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+	<script type="text/javascript" src="words.js"></script>
 
-<!-- optional: use multiselect
-<link rel="stylesheet" type="text/css" href="../../lib/css/jquery.multiselect-1.13.css"/>
-<script type="text/javascript" src="../../lib/js/jquery.multiselect-1.13.min.js"></script>
--->
+	<style type="text/css">
+		* {
+			box-sizing: border-box
+		}
+		#adapter-container {
+			font-size: initial;
+			padding: 0 0.5em;
+		}
+		#adapter-container > * {
+			width: 100%;
+		}
+		[data-role="adapter-name"] {
+			min-height: 64px;
+			padding-left: 80px;
+			vertical-align: middle;
+			background-image: url(ble.png);
+			background-size: 64px auto;
+			background-position: left center;
+			background-repeat: no-repeat;
+		}
+		[data-role="adapter-name"]::before {
+			content: "";
+			display: inline-block;
+			height: 64px;
+			vertical-align: middle;
+		}
+		.settings-table > * {
+			display: inline-block;
+		}
+		.settings-table > label {
+			width: 15%;
+			white-space: nowrap;
+			padding-right: 1em;
+		}		
+		.settings-table > label ~ span {
+			font-size: 80%;
+		}
+	</style>
 
-<!-- these two file always have to be included -->
-<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
-<script type="text/javascript" src="../../js/translate.js"></script>
-<script type="text/javascript" src="../../js/adapter-settings.js"></script>
-<script type="text/javascript" src="words.js"></script>
 
+	<!-- you have to define 2 functions in the global scope: -->
+	<script type="text/javascript">
 
-<!-- you have to define 2 functions in the global scope: -->
-<script type="text/javascript">
+		var namespace = "ble." + instance;
+		var namespaceLen = namespace.length;
 
-    // the function loadSettings has to exist ...
-    function load(settings, onChange) {
-        // example: select elements with id=key and class=value and insert value
-        for (var key in settings) {
-            // example: select elements with id=key and class=value and insert value
-			var value = $('#' + key + '.value');
-            if (value.attr('type') === 'checkbox') {
-                value.prop('checked', settings[key]).change(function () {
-					onChange();
-				});
-            } else {
-                value.val(settings[key]).change(function () {
-					onChange();
-				}).keyup(function () {
-					$(this).trigger('change');
-				});
-            }
-        }
-        // Signal to admin, that no changes yet
-        onChange(false);
-    }
-
-    // ... and the function save has to exist.
-    // you have to make sure the callback is called with the settings object as first param!
-    function save(callback) {
-        // example: select elements with class=value and build settings object
-        var obj = {};
-        $('.value').each(function () {
-            var $this = $(this);
-			if ($this.attr('type') === 'checkbox') {
-				obj[$this.attr('id')] = $this.prop('checked');
-			} else {
-				obj[$this.attr('id')] = $this.val();
+		// the function loadSettings has to exist ...
+		function load(settings, onChange) {
+			// example: select elements with id=key and class=value and insert value
+			for (var key in settings) {
+				// example: select elements with id=key and class=value and insert value
+				var value = $('#' + key + '.value');
+				if (value.attr('type') === 'checkbox') {
+					value.prop('checked', settings[key]).change(function () {
+						onChange();
+					});
+				} else {
+					value.val(settings[key]).change(function () {
+						onChange();
+					}).keyup(function () {
+						$(this).trigger('change');
+					});
+				}
 			}
-        });
-        callback(obj);
-    }
-</script>
 
-<!-- you have to put your config page in a div with id adapter-container -->
-<div id="adapter-container">
+			// Signal to admin, that no changes yet
+			onChange(false);
+		}
 
-    <table><tr>
-        <td><img src="ble.png"/></td>
-        <td><h3 class="translate">template adapter settings</h3></td>
-    </tr></table>
-    <p>
-        <span><label for="test1" class="translate">test1</label></span><input class="value" id="test1"/><br>
-        <span><label for="test2" class="translate">test2</label></span><input class="value" id="test2"/><br>
-    </p>
+		// ... and the function save has to exist.
+		// you have to make sure the callback is called with the settings object as first param!
+		function save(callback) {
+			// example: select elements with class=value and build settings object
+			var obj = {};
+			$('.value').each(function () {
+				var $this = $(this);
+				if ($this.attr('type') === 'checkbox') {
+					obj[$this.attr('id')] = $this.prop('checked');
+				} else {
+					obj[$this.attr('id')] = $this.val();
+				}
+			});
+			callback(obj);
+		}
 
-    <p class="translate">on save adapter restarts with new config immediately</p>
+	</script>
 
-</div>
+</head>
+
+<body>
+
+	<!-- you have to put your config page in a div with id adapter-container -->
+	<div id="adapter-container" style="font-size: initial">
+		
+		<h3 class="translate" data-role="adapter-name">BLE adapter settings</h3>
+
+		<h4 class="translate">Settings</h4>
+		<p class="settings-table">
+            <label for="services" class="translate">Monitored Services:</label><br />
+            <textarea class="value" id="services" rows="3" style="width: 100%" /><br />
+			<span class="translate">Service characteristics as HEX codes or UUID, comma separated.</span>
+		</p>
+		<p class="translate" style="font-size: 70%">on save adapter restarts with new config immediately</p>
+		
+	</div>
+
+</body>
 
 </html>
