@@ -8,3 +8,14 @@ test
 .travis.yml
 appveyor.yml
 /src
+travis/
+obj/
+bin/
+.vs*/
+tslint.json
+tsconfig.json
+*.sln
+*.njsproj*
+iobroker.*.tgz
+build/**/*.map
+Thumbs.db

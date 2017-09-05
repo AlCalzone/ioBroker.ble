@@ -6,8 +6,8 @@ Monitor Bluetooth Low Energy (BLE) beacons and record their information.
 
 ## Changelog
 
-#### 0.0.0
-* (AlCalzone) not ready yet
+#### 0.0.1
+* (AlCalzone) initial release
 
 ## License
 The MIT License (MIT)
