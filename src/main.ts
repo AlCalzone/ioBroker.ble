@@ -70,19 +70,19 @@ let adapter: ExtendedAdapter = utils.adapter({
 
 	},
 
-	// Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
-	// requires the property to be configured in io-package.json
-	message: (obj) => {
-		if (typeof obj === "object" && obj.message) {
-			if (obj.command === "send") {
-				// e.g. send email or pushover or whatever
-				console.log("send command");
+	//// Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
+	//// requires the property to be configured in io-package.json
+	//message: (obj) => {
+	//	if (typeof obj === "object" && obj.message) {
+	//		if (obj.command === "send") {
+	//			// e.g. send email or pushover or whatever
+	//			console.log("send command");
 
-				// Send response in callback if required
-				if (obj.callback) adapter.sendTo(obj.from, obj.command, "Message received", obj.callback);
-			}
-		}
-	},
+	//			// Send response in callback if required
+	//			if (obj.callback) adapter.sendTo(obj.from, obj.command, "Message received", obj.callback);
+	//		}
+	//	}
+	//},
 }) as ExtendedAdapter;
 
 // =========================

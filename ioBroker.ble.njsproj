@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="admin\words.js" />
     <Compile Include="Gruntfile.js" />
+    <Compile Include="main.js" />
     <Compile Include="tasks\jscs.js" />
     <Compile Include="tasks\jscsRules.js" />
     <Compile Include="tasks\jshint.js" />
