@@ -1,19 +1,19 @@
 // Dictionary (systemDictionary is global variable from adapter-settings.js)
 systemDictionary = {
 	"BLE adapter settings": {
-		"de": "Einstellungen f?r BLE Adapter"
+		"de": "Einstellungen fГјr BLE Adapter"
 	},
 	"Settings": {
 		"de": "Einstellungen"
 	},
 	"Monitored Services:": {
-		"de": "?berwachte Dienste:"
+		"de": "Гњberwachte Dienste:"
 	},
 	"Service characteristics as HEX codes or UUID, comma separated.": {
 		"de": "Dienstcharakteristiken als HEX oder UUID, durch Komma getrennt."
 	},
 	"on save adapter restarts with new config immediately": {
 		"de": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
-		"ru": "Сразу после сохранения настроек драйвер перезапуститься с новыми значениями"
+		"ru": "РЎСЂР°Р·Сѓ РїРѕСЃР»Рµ СЃРѕС…СЂР°РЅРµРЅРёСЏ РЅР°СЃС‚СЂРѕРµРє РґСЂР°Р№РІРµСЂ РїРµСЂРµР·Р°РїСѓСЃС‚РёС‚СЊСЃСЏ СЃ РЅРѕРІС‹РјРё Р·РЅР°С‡РµРЅРёСЏРјРё"
 	}
 };
