@@ -1,0 +1,42 @@
+{
+    "common": {
+        "name": "ble",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial adapter",
+                "de": "Initiale Version",
+                "ru": "Первоначальный адаптер",
+                "pt": "Versão inicial",
+                "fr": "Version initiale",
+                "nl": "Eerste release"
+            }
+        },
+        "title": "Javascript/Node.js based template adapter for TypeScript",
+        "desc": {
+            "en": "ioBroker template Adapter",
+            "de": "ioBroker Template Adapter",
+            "ru": "ioBroker Template драйвер как образец",
+            "pt": "Modelo de adaptador para o ioBroker",
+            "fr": "ioBroker adaptateur modèle",
+            "nl": "ioBroker Template Adapter"
+        },
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "icon": "ble.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
+        "keywords": ["template", "vis", "GUI", "graphical", "scada"],
+        "readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
+        "loglevel": "info",
+        "type": "general",
+        "restartAdapters": ["vis"]
+    },
+    "native": {
+        "test1": true,
+        "test2": 42
+    },
+    "objects": [
+
+    ]
+}

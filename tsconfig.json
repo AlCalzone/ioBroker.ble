@@ -1,0 +1,26 @@
+{
+    "compileOnSave": true,          // Automatically build files in Visual Studio (Code), in combination with the watch option
+    "compilerOptions": {
+        "declaration": true,        // emit d.ts files
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noEmitOnError": false,     // dont compile faulty code
+        "noImplicitAny": false,     // set to true for stricter type checking
+        "outDir": "build/",
+        "removeComments": false,
+
+        // Source maps are for debugging
+        // use *EITHER* sourceMap = true (generates .map file)
+        // or inlineSourceMap = true (includes map files in js files)
+        // *NOT* both.
+        // if you have problems finding the right lines while debugging, 
+        // try switching the source map types
+        // you can also disable them for less output.
+        "sourceMap": false,
+        "inlineSourceMap": true,
+        "sourceRoot": "src/",
+        "target": "es5",    // Compile to "old" JavaScript, you can choose target "es6" for NodeJS 6+
+        "lib": [ "es6" ],   // This is for the native Promise-support in Node4, not needed for target es6+
+        "watch": true
+    }
+}

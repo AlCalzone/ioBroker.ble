@@ -1,0 +1,29 @@
+{
+    "enable": true,
+    "extends": [
+        "tslint:recommended"
+    ],
+    "rules": {
+        "indent": [true, "tabs", 4],
+        "object-literal-sort-keys": false,
+        "object-literal-shorthand": false,
+        "array-type": ["array"],
+        "max-line-length": [false],
+        "interface-name": [false],
+        "variable-name": [
+            true, 
+            "ban-keywords", 
+            "check-format", "allow-leading-underscore", "allow-trailing-underscore"
+        ],
+        "member-ordering": [false],
+        "curly": [true, "ignore-same-line"],
+        "triple-equals": [true, "allow-undefined-check", "allow-null-check"],
+        "arrow-parens": false,
+        "no-bitwise": false,
+        "quotemark": [true, "double", "avoid-escape"], // change "double" to "single" if you prefer ' over "
+        // development:
+        "no-console": [false]
+        // production:
+        // "no-console": [true, "log", "error"]
+    }
+}
