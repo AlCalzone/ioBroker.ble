@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.0.2",
+        "version": "0.1.0",
         "news": {
+            "0.1.0": {
+                "en": "Support Bluetooth device selection",
+                "de": "Auswahl von Bluetooth-Geräten unterstützt"
+            },
             "0.0.2": {
                 "en": "Store more information, improved object structure.",
                 "de": "Mehr Informationen speichern, bessere Objektstruktur."

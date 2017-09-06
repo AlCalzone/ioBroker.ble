@@ -11,6 +11,9 @@ Monitor Bluetooth Low Energy (BLE) beacons and record their information.
 
 ## Changelog
 
+#### 0.1.0 (2017-09-06)
+* (AlCalzone) Support selection of bluetooth devices
+
 #### 0.0.2 (2017-09-06)
 * (AlCalzone) Store more information, improved object structure.
 
