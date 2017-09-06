@@ -1,5 +1,3 @@
-// TODO: WTF happened with the merged PR?
-
 // tslint:disable:unified-signatures
 // tslint:disable:no-var-requires
 import * as fs from "fs";

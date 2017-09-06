@@ -64,6 +64,7 @@
     <Compile Include="test\testPackageFiles.js" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="src\lib\ble.d.ts" />
     <TypeScriptCompile Include="src\lib\global.ts" />
     <TypeScriptCompile Include="src\lib\ioBroker.d.ts" />
     <TypeScriptCompile Include="src\lib\object-polyfill.ts" />
