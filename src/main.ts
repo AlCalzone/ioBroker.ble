@@ -106,8 +106,7 @@ function fixServiceName(name: string): string {
  * @param value The value to store
  */
 async function updateAdvertisement(deviceID: string, uuid: string, value: any, ack: boolean) {
-	// TODO: Check if this is ok
-	const stateID = `${deviceID}.${uuid}`;
+	const stateID = `${deviceID}.services.${uuid}`;
 	const state = await adapter.$getState(stateID);
 	if (state == null) {
 		await adapter.$createState(deviceID, "services", uuid, {
@@ -161,6 +160,8 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 			"read": true,
 			"write": false
 		});
+
+		knownDevices.push(deviceName);
 	}
 	// update RSSI information
 	await adapter.$setStateChanged(`${deviceName}.rssi`, peripheral.rssi, true);
@@ -168,13 +169,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	for (const entry of peripheral.advertisement.serviceData) {
 		const uuid = entry.uuid;
 		// parse the data
-		let data: Buffer | number | string;
-		if (entry.data.type === "Buffer") {
-			data = Buffer.from(entry.data.data);
-		} else {
-			_.log(`data type not supported: ${entry.data.type}`, {severity: _.severity.warn});
-			continue;
-		}
+		let data: Buffer | string | number = entry.data;
 		if (data.length === 1) {
 			// single byte
 			data = data[0];
@@ -204,3 +199,14 @@ function stopScanning() {
 	adapter.setState("info.connection", false, true);
 	isScanning = false;
 }
+
+
+// Unbehandelte Fehler tracen
+process.on("unhandledRejection", r => {
+	adapter.log.error("unhandled promise rejection: " + r);
+});
+process.on("uncaughtException", err => {
+	adapter.log.error("unhandled exception:" + err.message);
+	adapter.log.error("> stack: " + err.stack);
+	process.exit(1);
+});

@@ -1,4 +1,4 @@
-declare const _default: {
+declare var _default: {
     readonly controllerDir: string;
     getConfig(): string;
     adapter(adapterName: string): ioBroker.Adapter;

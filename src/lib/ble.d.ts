@@ -18,7 +18,7 @@ declare global {
             /** Dictionary of advertised service data */
             serviceData: {
                 uuid: string, 
-                data: { type: "Buffer", data: any[]} | {type: string, data: any}
+                data: Buffer
             }[],          
         }
 
