@@ -32,7 +32,8 @@
         "type": "hardware"
     },
     "native": {
-        "services": ""
+        "services": "",
+        "hciDevice": 0
     },
     "objects": [
 

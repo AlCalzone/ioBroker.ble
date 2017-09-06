@@ -6,6 +6,9 @@ systemDictionary = {
 	"Settings": {
 		"de": "Einstellungen"
 	},
+	"Select USB device:": {
+		"de": "USB-Gerät auswählen"
+	},
 	"Monitored Services:": {
 		"de": "Überwachte Dienste:"
 	},

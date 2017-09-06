@@ -1,10 +1,12 @@
 import { ExtendedAdapter, Global as _ } from "./lib/global";
-import * as noble from "noble";
 import utils from "./lib/utils";
 
 /** MAC addresses of known devices */
 let knownDevices: string[] = [];
 let services: string[] = [];
+
+// noble-Treiber-Instanz
+let noble;
 
 // Adapter-Objekt erstellen
 let adapter: ExtendedAdapter = utils.adapter({
@@ -32,6 +34,10 @@ let adapter: ExtendedAdapter = utils.adapter({
 		knownDevices = Object.keys(
 			await _.$$(`${adapter.namespace}.*`, "device"),
 		);
+
+		// load noble driver with the correct device selected
+		process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
+		noble = require("noble");
 
 		// prepare scanning for beacons
 		noble.on("stateChange", (state) => {
@@ -61,28 +67,24 @@ let adapter: ExtendedAdapter = utils.adapter({
 	},
 
 	// is called if a subscribed object changes
-	objectChange: (id, obj) => {
-
-	},
+	objectChange: (id, obj) => { /* TODO */ },
 
 	// is called if a subscribed state changes
-	stateChange: (id, state) => {
-
-	},
+	stateChange: (id, state) => { /* TODO */ },
 
 	//// Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
 	//// requires the property to be configured in io-package.json
-	//message: (obj) => {
-	//	if (typeof obj === "object" && obj.message) {
-	//		if (obj.command === "send") {
-	//			// e.g. send email or pushover or whatever
-	//			console.log("send command");
+	// message: (obj) => {
+	// 	if (typeof obj === "object" && obj.message) {
+	// 		if (obj.command === "send") {
+	// 			// e.g. send email or pushover or whatever
+	// 			console.log("send command");
 
-	//			// Send response in callback if required
-	//			if (obj.callback) adapter.sendTo(obj.from, obj.command, "Message received", obj.callback);
-	//		}
-	//	}
-	//},
+	// 			// Send response in callback if required
+	// 			if (obj.callback) adapter.sendTo(obj.from, obj.command, "Message received", obj.callback);
+	// 		}
+	// 	}
+	// },
 }) as ExtendedAdapter;
 
 // =========================
@@ -182,7 +184,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		// and store it
 		updateAdvertisement(deviceName, uuid, data, true);
 	}
-};
+}
 
 let isScanning = false;
 function startScanning() {
