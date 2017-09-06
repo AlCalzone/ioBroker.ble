@@ -54,12 +54,16 @@
 			display: inline-block;
 		}
 		.settings-table > label {
-			width: 15%;
+			min-width: 15%;
 			white-space: nowrap;
 			padding-right: 1em;
 		}		
 		.settings-table > label ~ span {
 			font-size: 80%;
+		}
+		select#hciDevice + span,
+		select#hciDevice + span + span {
+			display: none;
 		}
 	</style>
 
@@ -88,6 +92,24 @@
 					});
 				}
 			}
+
+			// try to get a dropdown for the ports
+			sendTo(null, "getHCIPorts", null, function (obj) {
+				if (obj.error || !obj.result || !obj.result.length) return; // just a normal textbox
+				var dropdown =
+					$('<select id="hciDevice" class="value">')
+						.change(onChange)
+					;
+				for (var i = 0; i < obj.result.length; i++) {
+					var port = obj.result[i];
+					$('<option value="' + port.index + '">')
+						.text(port.bus)
+						.appendTo(dropdown)
+					;
+				}
+				$("#hciDevice").replaceWith(dropdown);
+				dropdown.val(settings.hciDevice);
+			});
 
 			// Signal to admin, that no changes yet
 			onChange(false);
@@ -122,11 +144,13 @@
 
 		<h4 class="translate">Settings</h4>
 		<p class="settings-table">
-			<label for="hciDevice" class="translate">Select USB device:</label>
-			<input class="value" type="number" id="hciDevice" min="0" /><br />
+			<label for="hciDevice" class="translate">Select device:</label>
+			<input class="value" type="number" id="hciDevice" min="0" />
+			<span class="translate">On linux this can be determined with `hciconfig`:</span> <span>hci<b>&lt;X&gt;</b></span>
+			<br />
 				
-            <label for="services" class="translate">Monitored Services:</label><br />
-            <textarea class="value" id="services" rows="3" style="width: 100%" /><br />
+			<label for="services" class="translate">Monitored Services:</label><br />
+			<textarea class="value" id="services" rows="3" style="width: 100%" /><br />
 			<span class="translate">Service characteristics as HEX codes or UUID, comma separated.</span>
 		</p>
 		<p class="translate" style="font-size: 70%">on save adapter restarts with new config immediately</p>
