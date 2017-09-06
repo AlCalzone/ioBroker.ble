@@ -29,10 +29,12 @@
         "keywords": ["bluetooth", "BLE", "beacon"],
         "readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
         "loglevel": "info",
-        "type": "hardware"
+        "type": "hardware",
+        "messagebox": true
     },
     "native": {
-        "services": ""
+        "services": "",
+        "hciDevice": 0
     },
     "objects": [
 

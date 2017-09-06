@@ -1,10 +1,13 @@
 import { ExtendedAdapter, Global as _ } from "./lib/global";
-import * as noble from "noble";
 import utils from "./lib/utils";
+import { exec } from "child_process";
 
 /** MAC addresses of known devices */
 let knownDevices: string[] = [];
 let services: string[] = [];
+
+// noble-Treiber-Instanz
+let noble;
 
 // Adapter-Objekt erstellen
 let adapter: ExtendedAdapter = utils.adapter({
@@ -32,6 +35,10 @@ let adapter: ExtendedAdapter = utils.adapter({
 		knownDevices = Object.keys(
 			await _.$$(`${adapter.namespace}.*`, "device"),
 		);
+
+		// load noble driver with the correct device selected
+		process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
+		noble = require("noble");
 
 		// prepare scanning for beacons
 		noble.on("stateChange", (state) => {
@@ -61,28 +68,73 @@ let adapter: ExtendedAdapter = utils.adapter({
 	},
 
 	// is called if a subscribed object changes
-	objectChange: (id, obj) => {
-
-	},
+	objectChange: (id, obj) => { /* TODO */ },
 
 	// is called if a subscribed state changes
-	stateChange: (id, state) => {
+	stateChange: (id, state) => { /* TODO */ },
 
+	message: async (obj) => {
+		// responds to the adapter that sent the original message
+		function respond(response) {
+			if (obj.callback)
+				adapter.sendTo(obj.from, obj.command, response, obj.callback);
+		}
+		// some predefined responses so we only have to define them once
+		var predefinedResponses = {
+			ACK: { error: null },
+			OK: { error: null, result: 'ok' },
+			ERROR_UNKNOWN_COMMAND: { error: 'Unknown command!' },
+			MISSING_PARAMETER: function (paramName) {
+				return { error: 'missing parameter "' + paramName + '"!' };
+			},
+			COMMAND_RUNNING: { error: 'command running' }
+		};
+		// make required parameters easier
+		function requireParams(params) {
+			if (!(params && params.length)) return true;
+			for (var i = 0; i < params.length; i++) {
+				if (!(obj.message && obj.message.hasOwnProperty(params[i]))) {
+					respond(predefinedResponses.MISSING_PARAMETER(params[i]));
+					return false;
+				}
+			}
+			return true;
+		}
+
+		// handle the message
+		if (obj) {
+			switch (obj.command) {
+				case "getHCIPorts":
+					exec("hciconfig | grep hci", (error, stdout, stderr) => {
+						//hci1:   Type: BR/EDR  Bus: USB
+						//hci0:   Type: BR/EDR  Bus: UART
+						if (error != null) {
+							_.log(JSON.stringify(error));
+							respond({ error });
+							return;
+						}
+						// parse index and bus type
+						const ports: { index: number, bus: string }[] = [];
+						const regex = /^hci(\d+)\:.+Bus\:\s(\w+)$/gm;
+						let result: RegExpExecArray;
+
+						while (true) {
+							result = regex.exec(stdout);
+							if (!(result && result.length)) break;
+							const port = { index: +result[1], bus: result[2] };
+							_.log(JSON.stringify(port));
+							ports.push(port);
+						}
+						respond({ error: null, result: ports });
+					});
+					return;
+				default:
+					respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
+					return;
+			}
+		}
 	},
 
-	//// Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
-	//// requires the property to be configured in io-package.json
-	//message: (obj) => {
-	//	if (typeof obj === "object" && obj.message) {
-	//		if (obj.command === "send") {
-	//			// e.g. send email or pushover or whatever
-	//			console.log("send command");
-
-	//			// Send response in callback if required
-	//			if (obj.callback) adapter.sendTo(obj.from, obj.command, "Message received", obj.callback);
-	//		}
-	//	}
-	//},
 }) as ExtendedAdapter;
 
 // =========================
@@ -182,7 +234,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		// and store it
 		updateAdvertisement(deviceName, uuid, data, true);
 	}
-};
+}
 
 let isScanning = false;
 function startScanning() {
