@@ -100,18 +100,19 @@ function fixServiceName(name: string): string {
 }
 
 /**
- * Update the state with the given ID or create it if it doesn't exist
+ * Update or create the stored service data for a given device and UUID
  * @param stateId ID of the state to update or create
+ * @param uuid GATT UUID of the advertised service data
  * @param value The value to store
  */
-async function updateCharacteristic(deviceID: string, characteristic: string, value: any, ack: boolean) {
+async function updateAdvertisement(deviceID: string, uuid: string, value: any, ack: boolean) {
 	// TODO: Check if this is ok
-	const stateID = `${deviceID}.${characteristic}`
+	const stateID = `${deviceID}.${uuid}`;
 	const state = await adapter.$getState(stateID);
 	if (state == null) {
-		await adapter.$createState(deviceID, null, characteristic, {
+		await adapter.$createState(deviceID, "services", uuid, {
 			"role": "value",
-			"name": "BLE characteristic " + characteristic,
+			"name": "Advertised service " + uuid, // TODO: create readable names
 			"desc": "",
 			"type": "mixed",
 			"read": true,
@@ -123,20 +124,56 @@ async function updateCharacteristic(deviceID: string, characteristic: string, va
 	}
 }
 
-async function onDiscover(peripheral) {
+async function onDiscover(peripheral: BLE.Peripheral) {
 	if (!(peripheral && peripheral.advertisement && peripheral.advertisement.serviceData)) return;
 
-	if (knownDevices.indexOf(peripheral.address) === -1) {
+	const deviceName: string = peripheral.address;
+
+	if (knownDevices.indexOf(deviceName) === -1) {
 		// need to create device first
-		await adapter.$createDevice(peripheral.address, {
+		await adapter.$createDevice(deviceName, {
+			// common
 			name: peripheral.advertisement.localName,
+		}, { 
+			// native
+			id: peripheral.id,
+			address: peripheral.address,
+			addressType: peripheral.addressType,
+			connectable: peripheral.connectable
+		});
+		// also create channels for information
+		await adapter.$createChannel(deviceName, "services", {
+			// common
+			name: "Advertised services",
+			role: "info"
+		});
+		// TODO: Enable this when supported
+		// await adapter.$createChannel(deviceName, "characteristics", {
+		// 	// common
+		// 	name: "Characteristics",
+		// 	role: "info"
+		// });
+		await adapter.$createState(deviceName, null, "rssi", {
+			"role": "indicator",
+			"name": "signal strength (RSSI)",
+			"desc": "Signal strength of the device",
+			"type": "number",
+			"read": true,
+			"write": false
 		});
 	}
+	// update RSSI information
+	await adapter.$setStateChanged(`${deviceName}.rssi`, peripheral.rssi, true);
+	// update service information
 	for (const entry of peripheral.advertisement.serviceData) {
 		const uuid = entry.uuid;
-		let data = entry.data;
-		if (data.type === "Buffer") {
-			data = Buffer.from(data.data);
+		// parse the data
+		let data: Buffer | number | string;
+		if (entry.data.type === "Buffer") {
+			data = Buffer.from(entry.data.data);
+		} else {
+			_.log(`data type not supported: ${entry.data.type}`, {severity: _.severity.warn});
+			continue;
 		}
 		if (data.length === 1) {
 			// single byte
@@ -147,8 +184,8 @@ async function onDiscover(peripheral) {
 		} else { // not supported yet
 			continue;
 		}
-
-		updateCharacteristic(peripheral.address, uuid, data, true);
+		// and store it
+		updateAdvertisement(deviceName, uuid, data, true);
 	}
 };
 
