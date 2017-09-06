@@ -8,6 +8,9 @@ node_js:
   - '4'
   - '6'
   - '8'
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = 'osx' ]; then export PATH=/usr/bin:$PATH; fi
+
 before_script:
   - npm install winston@2.3.1
   - 'npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production'
@@ -19,3 +22,7 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+      - bluetooth
+      - bluez
+      - libbluetooth-dev
+      - libudev-dev      
