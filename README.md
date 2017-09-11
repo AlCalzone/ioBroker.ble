@@ -1,5 +1,4 @@
-![Logo](admin/ble.png)
-ioBroker.ble
+<img src="admin/ble.png" height="48" /> ioBroker.ble
 =================
 
 **Tests:** Linux/Mac: [![Build Status](https://travis-ci.org/AlCalzone/ioBroker.ble.svg?branch=master)](https://travis-ci.org/AlCalzone/ioBroker.ble) 
@@ -7,7 +6,17 @@ Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/AlCalzo
 
 ================
 
-Monitor Bluetooth Low Energy (BLE) beacons and record their information.
+Monitor Bluetooth Low Energy (BLE) beacons and record their information. 
+Currently, only recording *advertised* service data is supported. You can monitor which services are advertised by using the nRF Connect app (service data UUIDs).
+Connecting and reading/writing service chararcteristics will be supported in a future version.
+
+## Installation
+This adapter needs additional libraries to compile. See https://github.com/sandeepmistry/noble#prerequisites for detailed instructions.
+On Raspberry Pi and similar, this should do it: `sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev`
+
+## Configuration
+If you have multiple bluetooth devices on your system, select the one to use from the dropdown.
+In the textbox below, enter all UUIDs of the advertised services you want to record (as found in the nRF Connect app).
 
 ## Changelog
 
