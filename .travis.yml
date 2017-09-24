@@ -3,13 +3,11 @@ os:
   - osx
 language: node_js
 node_js:
-  - '0.12'
   - '4'
   - '6'
   - '8'
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = 'osx' ]; then export PATH=/usr/bin:$PATH; fi
-
+  - 'if [ "$TRAVIS_OS_NAME" = ''osx'' ]; then export PATH=/usr/bin:$PATH; fi'
 before_script:
   - npm install winston@2.3.1
   - 'npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production'
@@ -24,4 +22,4 @@ addons:
       - bluetooth
       - bluez
       - libbluetooth-dev
-      - libudev-dev      
+      - libudev-dev
