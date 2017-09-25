@@ -1,15 +1,15 @@
 {
     "common": {
-        "name": "template",
-        "version": "0.5.0",
+        "name": "enocean",
+        "version": "0.1.0",
         "news": {
-            "0.5.0": {
-                "en": "beta version",
-                "de": "Betaversion",
-                "ru": "Бета версия",
-                "pt": "Versão beta",
-                "fr": "Version bêta",
-                "nl": "Beta versie"
+            "0.1.0": {
+                "en": "alpha version",
+                "de": "Alphaversion",
+                "ru": "Альфа-версия",
+                "pt": "versión alfa",
+                "fr": "version alpha",
+                "nl": "alfaversie"
             },
             "0.0.1": {
                 "en": "initial adapter",
@@ -20,25 +20,24 @@
                 "nl": "Eerste release"
             }
         },
-        "title": "Javascript/Node.js based template adapter",
+        "title": "Javascript/Node.js based EnOcean adapter",
         "desc": {
-            "en": "ioBroker template Adapter",
-            "de": "ioBroker Template Adapter",
-            "ru": "ioBroker Template драйвер как образец",
-            "pt": "Modelo de adaptador para o ioBroker",
-            "fr": "ioBroker adaptateur modèle",
-            "nl": "ioBroker Template Adapter"
+            "en": "ioBroker EnOcean Adapter",
+            "de": "ioBroker EnOcean Adapter",
+            "ru": "ioBroker EnOcean драйвер как образец",
+            "pt": "EnOcean de adaptador para o ioBroker",
+            "fr": "ioBroker adaptateur EnOcean",
+            "nl": "ioBroker EnOcean Adapter"
         },
         "platform": "Javascript/Node.js",
         "mode": "daemon",
-        "icon": "template.png",
+        "icon": "EnOcean.png",
         "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.template/master/admin/template.png",
-        "keywords": ["template", "vis", "GUI", "graphical", "scada"],
-        "readme": "https://github.com/ioBroker/ioBroker.template/blob/master/README.md",
+        "extIcon": "https://raw.githubusercontent.com/jey-cee/ioBroker.enocean/master/admin/EnOcean.png",
+        "keywords": ["EnOcean", "vis", "GUI", "graphical", "scada"],
+        "readme": "https://github.com/jey-cee/ioBroker.enocean/blob/master/README.md",
         "loglevel": "info",
-        "type": "general",
-        "restartAdapters": ["vis"]
+        "type": "hardware"
     },
     "native": {
         "test1": true,

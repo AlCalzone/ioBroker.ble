@@ -1,30 +1,31 @@
 {
-  "name": "iobroker.template",
-  "version": "0.5.0",
-  "description": "ioBroker template Adapter",
+  "name": "iobroker.enocean",
+  "version": "0.1.0",
+  "description": "ioBroker EnOcean Adapter",
   "author": {
-    "name": "@@Author@@",
-    "email": "@@email@@"
+    "name": "Jey Cee",
+    "email": "jey-cee@live.com"
   },
   "contributors": [
     {
-      "name": "@@Author@@",
-      "email": "@@email@@"
+      "name": "Jey Cee",
+      "email": "jey-cee@live.com"
     }
   ],
-  "homepage": "https://github.com/ioBroker/ioBroker.template",
+  "homepage": "https://github.com/jey-cee/ioBroker.enocean",
   "license": "MIT",
   "keywords": [
     "ioBroker",
-    "template",
+    "enocean",
     "Smart Home",
     "home automation"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ioBroker/ioBroker.template"
+    "url": "https://github.com/jey-cee/ioBroker.enocean"
   },
   "dependencies": {
+      "node-enocean": "3.1.1"
   },
   "devDependencies": {
       "grunt": "^0.4.5",
@@ -40,7 +41,7 @@
     "test": "node node_modules/mocha/bin/mocha"
   },
   "bugs": {
-    "url": "https://github.com/ioBroker/ioBroker.template/issues"
+    "url": "https://github.com/jey-cee/ioBroker.enocean/issues"
   },
   "readmeFilename": "README.md"
 }
