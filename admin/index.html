@@ -31,22 +31,22 @@
     // the function loadSettings has to exist ...
     function load(settings, onChange) {
         // example: select elements with id=key and class=value and insert value
-        for (var key in settings) {
-            // example: select elements with id=key and class=value and insert value
-			var value = $('#' + key + '.value');
-            if (value.attr('type') === 'checkbox') {
-                value.prop('checked', settings[key]).change(function () {
-					onChange();
-				});
+        if (!settings) return;
+        $('.value').each(function () {
+            var key = $(this).attr('id');
+            var $key = $('#' + key + '.value');
+            if ($key.attr('type') === 'checkbox') {
+                $key.prop('checked', settings[key]).change(function() {
+                    onChange();
+                });
             } else {
-                value.val(settings[key]).change(function () {
-					onChange();
-				}).keyup(function () {
-					$(this).trigger('change');
-				});
+                $key.val(settings[key]).change(function() {
+                    onChange();
+                }).keyup(function() {
+                    onChange();
+                });
             }
-        }
-        // Signal to admin, that no changes yet
+        });
         onChange(false);
     }
 
@@ -71,14 +71,22 @@
 <div id="adapter-container">
 
     <table><tr>
-        <td><img src="template.png"/></td>
-        <td><h3 class="translate">template adapter settings</h3></td>
-    </tr></table>
-    <p>
-        <span><label for="test1" class="translate">test1</label></span><input class="value" id="test1"/><br>
-        <span><label for="test2" class="translate">test2</label></span><input class="value" id="test2"/><br>
-    </p>
-
+        <td><img src="EnOcean.png"/></td>
+        <td><h3 class="translate">EnOcean adapter settings</h3></td>
+    </tr>
+        <tr>
+            <td><label for="teachMode" class="translate">teachIn</label></td>
+            <td><input class="value" id="teachMode" type="checkbox"/></td>
+        </tr>
+        <tr>
+            <td><label for="timeout" class="translate">Timeout</label></td>
+            <td><input class="value" id="timeout" type="input"/></td>
+        </tr>
+        <tr>
+            <td><label for="serialport" class="translate">Serialport</label></td>
+            <td><input class="value" id="serialport" type="input"/></td>
+        </tr>
+    </table>
     <p class="translate">on save adapter restarts with new config immediately</p>
 
 </div>

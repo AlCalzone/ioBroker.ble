@@ -38,7 +38,7 @@ var utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.template.0
 var adapter = utils.adapter('enocean');
 
-var enocean      = require("node-enocean");
+var eo      = require("node-enocean")();
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function (callback) {
@@ -65,6 +65,7 @@ adapter.on('stateChange', function (id, state) {
     if (state && !state.ack) {
         adapter.log.info('ack is not set!');
     }
+
 });
 
 // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
@@ -84,9 +85,127 @@ adapter.on('message', function (obj) {
 // start here!
 adapter.on('ready', function () {
     main();
+    eo.listen(adapter.config.serialport);
+
 });
 
 function main() {
 
 
 }
+
+eo.on("ready", function(data){
+    //Start Teach mode if activated in setting
+    if(adapter.config.teachMode === true){
+        eo.startLearning();
+        //eo.timeout=adapter.config.timeout;
+        adapter.log.debug('Teach mode activated for ' + adapter.config.timeout + ' seconds');
+        teachModeCounter();
+    }
+});
+
+function teachModeCounter(){
+    var x = adapter.config.timeout;
+    setTimeout(function(){
+        adapter.extendForeignObject('system.adapter.' + adapter.namespace, {native: {teachMode: false}});
+        adapter.log.info('Teach mode deactivated');
+    }, x*1000)
+}
+
+eo.on("learned",function(data){
+    adapter.log.info('New device registered: ' + JSON.stringify(data));
+    if(adapter.config.teachMode === true){
+        eo.startLearning();
+    }
+});
+
+eo.on("known-data",function(data) {
+    adapter.log.debug('Recived data that are known: ' + JSON.stringify(data));
+    var senderID = data['senderId'];
+    var rssi = data['rssi'];
+    var sensor = data['sensor'];
+    var nrOfValues = data['values'].length;
+    var nrOfData = data['sensor'].length;
+
+
+    adapter.setObjectNotExists(senderID, {
+        type: 'device',
+        common: {
+            name: senderID
+        },
+        native: sensor
+    });
+
+    adapter.setObjectNotExists(senderID + '.rssi', {
+        type: 'state',
+        common: {
+            name: senderID + ' rssi',
+            role: 'value.rssi',
+            type: 'number'
+        },
+        native: {}
+    });
+
+    adapter.setState(senderID + '.rssi', {val: rssi, ack: true});
+
+    //write values transmitted by device
+    for (nrOfValues = nrOfValues - 1; nrOfValues >= 0; nrOfValues--) {
+        var name = data['values'][nrOfValues]['type'];
+        var patt = new RegExp(/\s/g);
+        name = name.replace(patt, '_');
+        var varValue = data['values'][nrOfValues]['value'];
+
+        //adapter.log.debug('Value: ' + data['values'][nrOfValues]['value']);
+
+        adapter.setObjectNotExists(senderID + '.' + name, {
+            type: 'state',
+            common: {
+                name: name,
+                role: 'value',
+                type: 'mixed',
+                unit: data['values'][nrOfValues]['unit']
+            },
+            native: {}
+        });
+        adapter.setState(senderID + '.' + name, {val: varValue, ack: true});
+    }
+
+    //write data transmitted by device
+    Object.keys(data['data']).forEach(function (k) {
+        adapter.log.info(k + ' - ' + data['data'][k]);
+        var key = k;
+        var name = data['data'][k]['name'];
+        var patt = new RegExp(/\s/g);
+        name = name.replace(patt, '_');
+        var unit = "";
+        var desc = "";
+        try {
+            unit = data['data'][k]['unit']
+        } catch (err) {
+        }
+        try {
+            desc = data['data'][k]['desc']
+        } catch (err) {
+        }
+        var varValue = data['data'][k]['value'];
+
+        adapter.setObjectNotExists(senderID + '.' + key, {
+            type: 'state',
+            common: {
+                name: name,
+                role: 'value',
+                type: 'mixed',
+                unit: unit,
+                desc: desc
+            },
+            native: {}
+        });
+        adapter.setState(senderID + '.' + key, {val: varValue, ack: true});
+    });
+});
+
+
+
+eo.on("data",function(data){
+    //adapter.log.debug('Recived data: ' + JSON.stringify(data));
+});

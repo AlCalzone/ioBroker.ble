@@ -40,8 +40,9 @@
         "type": "hardware"
     },
     "native": {
-        "test1": true,
-        "test2": 42
+        "teachMode": false,
+        "timeout": 60,
+        "serialport": "/dev/ttyUSB0"
     },
     "objects": [
 
