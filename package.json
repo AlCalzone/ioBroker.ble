@@ -11,9 +11,9 @@
   "license": "MIT",
   "keywords": [
     "ioBroker",
-    "template",
-    "Smart Home",
-    "home automation"
+    "bluetooth", 
+    "BLE", 
+    "beacon"
   ],
   "repository": {
     "type": "git",
