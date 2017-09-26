@@ -18,6 +18,11 @@ On Raspberry Pi and similar, this should do it: `sudo apt-get install bluetooth 
 If you have multiple bluetooth devices on your system, select the one to use from the dropdown.
 In the textbox below, enter all UUIDs of the advertised services you want to record (as found in the nRF Connect app).
 
+## Plugin system
+The adapter supports extension via plugins. Those define which advertised services should be listened to and how to translate the data. The plugin structure is defined in https://github.com/AlCalzone/ioBroker.ble/blob/master/src/plugins/plugin.ts and an example of a working plugin is defined here https://github.com/AlCalzone/ioBroker.ble/blob/master/src/plugins/_default.ts
+
+If you have any device transmitting specially encoded information via advertisements, feel free to create a PR with a new plugin for that.
+
 ## Changelog
 
 #### 0.2.0 (2017-09-26)
