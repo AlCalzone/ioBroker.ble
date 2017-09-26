@@ -37,6 +37,7 @@
     <Content Include="admin\ble.png" />
     <Content Include="admin\index.html" />
     <Content Include="appveyor.yml" />
+    <Content Include="deploy_password.json" />
     <Content Include="io-package.json" />
     <Content Include="LICENSE" />
     <Content Include="package.json" />
@@ -48,22 +49,19 @@
     <Folder Include="admin\" />
     <Folder Include="src\" />
     <Folder Include="src\lib\" />
-    <Folder Include="tasks\" />
+    <Folder Include="src\plugins\" />
     <Folder Include="test\" />
     <Folder Include="test\lib\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="admin\words.js" />
-    <Compile Include="Gruntfile.js" />
     <Compile Include="main.js" />
-    <Compile Include="tasks\jscs.js" />
-    <Compile Include="tasks\jscsRules.js" />
-    <Compile Include="tasks\jshint.js" />
     <Compile Include="test\lib\setup.js" />
     <Compile Include="test\testAdapter.js" />
     <Compile Include="test\testPackageFiles.js" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="src\deploy_local.ts" />
     <TypeScriptCompile Include="src\lib\ble.d.ts" />
     <TypeScriptCompile Include="src\lib\global.ts" />
     <TypeScriptCompile Include="src\lib\ioBroker.d.ts" />
@@ -71,6 +69,18 @@
     <TypeScriptCompile Include="src\lib\promises.ts" />
     <TypeScriptCompile Include="src\lib\utils.ts" />
     <TypeScriptCompile Include="src\main.ts" />
+    <TypeScriptCompile Include="src\plugins\index.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\plugins\mi-flora.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\plugins\plugin.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\plugins\_default.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />

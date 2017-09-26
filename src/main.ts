@@ -2,6 +2,11 @@ import { ExtendedAdapter, Global as _ } from "./lib/global";
 import utils from "./lib/utils";
 import { exec } from "child_process";
 
+// Load all registered plugins
+import { Plugin } from "./plugins/plugin";
+import plugins from "./plugins";
+let enabledPlugins: Plugin[];
+
 /** MAC addresses of known devices */
 let knownDevices: string[] = [];
 let services: string[] = [];
@@ -21,12 +26,31 @@ let adapter: ExtendedAdapter = utils.adapter({
 		adapter = _.extend(adapter);
 		_.adapter = adapter;
 
-		// Bring the monitored service names into the correct form
-		services = adapter.config.services
+		// Workaround für fehlende InstanceObjects nach update
+		await _.ensureInstanceObjects();
+
+		// Plugins laden
+		_.log(`loaded plugins: ${plugins.map(p => p.name).join(", ")}`);
+		const enabledPluginNames: string[] = (adapter.config.plugins || "")
 			.split(",")
-			.map(s => fixServiceName(s))
-			.filter(s => s != null)
+			.map(p => p.trim())
 			;
+		enabledPlugins = plugins.filter(p => enabledPluginNames.indexOf(p.name));
+		_.log(`enabled plugins: ${enabledPlugins.map(p => p.name).join(", ")}`);
+
+		// Bring the monitored service names into the correct form
+		const allServices =
+			(adapter.config.services as string).split(",")	// get manually defined services
+				.concat(...plugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
+				.reduce((acc, s) => acc.concat(s), [])		// flatten the arrays
+				.map(s => fixServiceName(s))				// cleanup the names
+				.filter(s => s != null)
+				.reduce((acc: any[], s) => {				// filter out duplicates
+					if (acc.indexOf(s) === -1) acc.push(s)
+					return acc
+				}, [])
+			;
+		_.log(`monitored services: ${allServices.join(", ")}`);
 
 		adapter.subscribeStates("*");
 		adapter.subscribeObjects("*");
@@ -141,6 +165,7 @@ let adapter: ExtendedAdapter = utils.adapter({
 
 function fixServiceName(name: string): string {
 	if (name == null) return "";
+	name = name.trim();
 	// No whitespace
 	for (const char of ["\r", "\n", "\t", " "]) {
 		name = name.replace(char, "");
@@ -151,88 +176,101 @@ function fixServiceName(name: string): string {
 	return name.toLowerCase();
 }
 
-/**
- * Update or create the stored service data for a given device and UUID
- * @param stateId ID of the state to update or create
- * @param uuid GATT UUID of the advertised service data
- * @param value The value to store
- */
-async function updateAdvertisement(deviceID: string, uuid: string, value: any, ack: boolean) {
-	const stateID = `${deviceID}.services.${uuid}`;
-	const state = await adapter.$getState(stateID);
-	if (state == null) {
-		await adapter.$createState(deviceID, "services", uuid, {
-			"role": "value",
-			"name": "Advertised service " + uuid, // TODO: create readable names
-			"desc": "",
-			"type": "mixed",
-			"read": true,
-			"write": false,
-			"def": value
-		});
-	} else {
-		await adapter.$setStateChanged(stateID, value, ack);
-	}
-}
-
 async function onDiscover(peripheral: BLE.Peripheral) {
-	if (!(peripheral && peripheral.advertisement && peripheral.advertisement.serviceData)) return;
+	if (!(peripheral && peripheral.advertisement && peripheral.advertisement.serviceData && peripheral.advertisement.serviceData.length > 0)) return;
 
-	const deviceName: string = peripheral.address;
+	// find out which plugin is handling this
+	let plugin: Plugin;
+	for (const p of enabledPlugins) {
+		if (p.isHandling(peripheral)) {
+			plugin = p;
+			break;
+		} else {
+		}
+	}
+	if (!plugin) {
+		_.log(`no handling plugin found for peripheral ${peripheral.id}`, "warn");
+		return
+	}
 
-	if (knownDevices.indexOf(deviceName) === -1) {
-		// need to create device first
-		await adapter.$createDevice(deviceName, {
-			// common
-			name: peripheral.advertisement.localName,
-		}, { 
-			// native
-			id: peripheral.id,
-			address: peripheral.address,
-			addressType: peripheral.addressType,
-			connectable: peripheral.connectable
+	const deviceId = peripheral.address;
+
+	// if this peripheral is unknown, create the objects
+	if (knownDevices.indexOf(deviceId) === -1) {
+		const objects = plugin.defineObjects(peripheral);
+
+		// create the device object
+		await adapter.$setObject(deviceId, {
+			type: "device",
+			common: Object.assign(
+				{
+					name: peripheral.advertisement.localName,
+				},
+				objects.device.common || {}
+			),
+			native: Object.assign(
+				{
+					id: peripheral.id,
+					address: peripheral.address,
+					addressType: peripheral.addressType,
+					connectable: peripheral.connectable,
+				},
+				objects.device.native || {}
+			),
 		});
-		// also create channels for information
-		await adapter.$createChannel(deviceName, "services", {
-			// common
-			name: "Advertised services",
-			role: "info"
-		});
-		// TODO: Enable this when supported
-		// await adapter.$createChannel(deviceName, "characteristics", {
-		// 	// common
-		// 	name: "Characteristics",
-		// 	role: "info"
-		// });
-		await adapter.$createState(deviceName, null, "rssi", {
-			"role": "indicator",
-			"name": "signal strength (RSSI)",
-			"desc": "Signal strength of the device",
-			"type": "number",
-			"read": true,
-			"write": false
+		// create all channel objects
+		if (objects.channels != null && objects.channels.length > 0) { // channels are optional
+			await Promise.all(
+				objects.channels.map((c) => {
+					return adapter.$setObject(deviceId + "." + c.id, {
+						type: "channel",
+						common: c.common,
+						native: c.native || {},
+					});
+				})
+			);
+		}
+		// create all state objects
+		await Promise.all(
+			objects.states.map((s) => {
+				return adapter.$setObject(deviceId + "." + s.id, {
+					type: "state",
+					common: s.common,
+					native: s.native || {},
+				});
+			})
+		);
+		// also create device information states
+		await adapter.$setObject(`${deviceId}.rssi`, {
+			type: "device",
+			common: {
+				"role": "indicator",
+				"name": "signal strength (RSSI)",
+				"desc": "Signal strength of the device",
+				"type": "number",
+				"read": true,
+				"write": false
+			},
+			native: {},
 		});
 
-		knownDevices.push(deviceName);
+		knownDevices.push(deviceId);
 	}
 	// update RSSI information
-	await adapter.$setStateChanged(`${deviceName}.rssi`, peripheral.rssi, true);
-	// update service information
-	for (const entry of peripheral.advertisement.serviceData) {
-		const uuid = entry.uuid;
-		// parse the data
-		let data: Buffer | string | number = entry.data;
-		if (data.length === 1) {
-			// single byte
-			data = data[0];
-		} else if (data instanceof Buffer) {
-			// Output hex value
-			data = data.toString("hex");
-		} else { // not supported yet
-			continue;
+	await adapter.$setStateChanged(`${deviceId}.rssi`, peripheral.rssi, true);
+
+	// get values from plugin
+	const values = plugin.getValues(peripheral);
+	_.log(`${deviceId} > got values: ${JSON.stringify(values)}`, "debug");
+	for (let stateId of Object.keys(values)) {
+		// set the value if there's an object for the state
+		const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
+		if (await adapter.$getObject(iobStateId) != null) {
+			_.log(`setting state ${iobStateId}`, "debug");
+			await adapter.$setStateChanged(iobStateId, values[stateId], true);
+		} else {
+			_.log(`skipping state ${iobStateId}`, "debug");
 		}
-		// and store it
-		updateAdvertisement(deviceName, uuid, data, true);
 	}
 }
 

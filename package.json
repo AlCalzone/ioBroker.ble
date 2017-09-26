@@ -1,6 +1,6 @@
 {
   "name": "iobroker.ble",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ioBroker adapter to monitor Bluetooth Low Energy (BLE) beacons",
   "author": {
     "name": "AlCalzone",
@@ -11,8 +11,8 @@
   "license": "MIT",
   "keywords": [
     "ioBroker",
-    "bluetooth", 
-    "BLE", 
+    "bluetooth",
+    "BLE",
     "beacon"
   ],
   "repository": {
@@ -28,6 +28,7 @@
     "@types/node": "^6.0.88",
     "chai": "^4.1.2",
     "mocha": "^3.5.3",
+    "node-ssh": "^5.0.0",
     "nyc": "^11.2.1",
     "tslint": "^5.7.0",
     "typescript": "^2.5.2"
@@ -36,7 +37,8 @@
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha",
     "lint": "npm run tslint \"src/**/*.ts\"",
-    "tslint": "tslint"
+    "tslint": "tslint",
+    "deploy_local": "node build/deploy_local.js"
   },
   "bugs": {
     "url": "https://github.com/AlCalzone/ioBroker.ble/issues"

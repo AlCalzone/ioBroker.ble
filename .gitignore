@@ -289,3 +289,6 @@ __pycache__/
 
 iobroker.*.tgz
 Thumbs.db
+
+# Local debugging password
+*_password.json

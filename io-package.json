@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "news": {
+            "0.2.0": {
+                "en": "Modularized the adapter code into a plugin system",
+                "de": "Adapter-Code in ein Pluginsystem modularisiert"
+            },
             "0.1.0": {
                 "en": "Support Bluetooth device selection",
                 "de": "Auswahl von Bluetooth-Geräten unterstützt"
@@ -38,7 +42,8 @@
     },
     "native": {
         "services": "",
-        "hciDevice": 0
+        "hciDevice": 0,
+        "plugins": ""
     },
     "objects": [
 
