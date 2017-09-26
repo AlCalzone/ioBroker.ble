@@ -22,6 +22,7 @@ In the textbox below, enter all UUIDs of the advertised services you want to rec
 
 #### 0.2.0 (2017-09-26)
 * (AlCalzone) Modularized the adapter code into a plugin system
+* (AlCalzone) Added Mi-Flora plugin
 
 #### 0.1.0 (2017-09-06)
 * (AlCalzone) Support selection of bluetooth devices
