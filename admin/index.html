@@ -28,6 +28,37 @@
 <!-- you have to define 2 functions in the global scope: -->
 <script type="text/javascript">
 
+    var timeout;
+
+    function getComPorts(actualValue) {
+        timeout = setTimeout(function () {
+            getComPorts(actualValue);
+        }, 2000);
+        sendTo(null, 'listUart', null, function (list) {
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
+            if (!list || !list.length) {
+                setTimeout(function () {
+                    getComPorts(actualValue);
+                }, 1000);
+                return;
+            }
+            var text = '<option value="">' + _('Select port') + '</option>';
+            for (var j = 0; j < list.length; j++) {
+                if (list[j].comName === 'Not available') {
+                    text += '<option value="" selected>' + _('Not available') + '</option>';
+                    $('#usb').prop('disabled', true);
+                    break;
+                } else {
+                    text += '<option value="' + list[j].comName + '" ' + ((actualValue === list[j].comName) ? 'selected' : '') + '>' + list[j].comName + '</option>';
+                }
+            }
+            $('#usb').html(text);
+        });
+    }
+
     // the function loadSettings has to exist ...
     function load(settings, onChange) {
         // example: select elements with id=key and class=value and insert value
@@ -65,6 +96,7 @@
         });
         callback(obj);
     }
+
 </script>
 
 <!-- you have to put your config page in a div with id adapter-container -->
@@ -81,6 +113,11 @@
         <tr>
             <td><label for="timeout" class="translate">Timeout</label></td>
             <td><input class="value" id="timeout" type="input"/></td>
+        </tr>
+        <tr>
+            <td><label  class="translate" for="usb">USB name:</label></td>
+            <td class="admin-icon"></td>
+            <td id="_usb"><select class="value" id="usb"></select></td>
         </tr>
         <tr>
             <td><label for="serialport" class="translate">Serialport</label></td>

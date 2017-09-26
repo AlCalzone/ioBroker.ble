@@ -36,9 +36,30 @@ var utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
 // you have to call the adapter function and pass a options object
 // name has to be set and has to be equal to adapters folder name and main file name excluding extension
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.template.0
-var adapter = utils.adapter('enocean');
+var adapter = utils.adapter({
+    name: 'enocean',
+
+    message: function (obj) {
+        // handle the message
+        if (obj) {
+            switch (obj.command) {
+
+                case 'listUart':
+                    if (obj.callback) {
+                        var ports = listSerial();
+                        adapter.log.info('List of ports: ' + JSON.stringify(ports));
+                        respond(ports);
+                    }
+                    break;
+            }
+        }
+    }
+});
 
 var eo      = require("node-enocean")();
+
+var path;
+var fs;
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function (callback) {
@@ -85,12 +106,12 @@ adapter.on('message', function (obj) {
 // start here!
 adapter.on('ready', function () {
     main();
-    eo.listen(adapter.config.serialport);
+
 
 });
 
 function main() {
-
+    eo.listen(adapter.config.serialport);
 
 }
 
@@ -172,7 +193,7 @@ eo.on("known-data",function(data) {
 
     //write data transmitted by device
     Object.keys(data['data']).forEach(function (k) {
-        adapter.log.info(k + ' - ' + data['data'][k]);
+        //adapter.log.info(k + ' - ' + data['data'][k]);
         var key = k;
         var name = data['data'][k]['name'];
         var patt = new RegExp(/\s/g);
@@ -204,7 +225,30 @@ eo.on("known-data",function(data) {
     });
 });
 
+function listSerial() {
+    path = path || require('path');
+    fs   = fs   || require('fs');
 
+    // Filter out the devices that aren't serial ports
+    var devDirName = '/dev';
+
+    var result;
+    try {
+        result = fs
+            .readdirSync(devDirName)
+            .map(function (file) {
+                return path.join(devDirName, file);
+            })
+            .filter(filterSerialPorts)
+            .map(function (port) {
+                return {comName: port};
+            });
+    } catch (e) {
+        adapter.log.error('Cannot read "' + devDirName + '": ' + e);
+        result = [];
+    }
+    return result;
+}
 
 eo.on("data",function(data){
     //adapter.log.debug('Recived data: ' + JSON.stringify(data));
