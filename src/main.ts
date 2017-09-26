@@ -31,11 +31,12 @@ let adapter: ExtendedAdapter = utils.adapter({
 
 		// Plugins laden
 		_.log(`loaded plugins: ${plugins.map(p => p.name).join(", ")}`);
-		const enabledPluginNames: string[] = (adapter.config.plugins || "")
+		const enabledPluginNames: string[] = (adapter.config.plugins as string || "")
 			.split(",")
-			.map(p => p.trim())
+			.map((p: string) => p.trim().toLowerCase())
+			.concat("_default")
 			;
-		enabledPlugins = plugins.filter(p => enabledPluginNames.indexOf(p.name));
+		enabledPlugins = plugins.filter(p => enabledPluginNames.indexOf(p.name.toLowerCase()) > -1);
 		_.log(`enabled plugins: ${enabledPlugins.map(p => p.name).join(", ")}`);
 
 		// Bring the monitored service names into the correct form
@@ -44,7 +45,7 @@ let adapter: ExtendedAdapter = utils.adapter({
 				.concat(...plugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
 				.reduce((acc, s) => acc.concat(s), [])		// flatten the arrays
 				.map(s => fixServiceName(s))				// cleanup the names
-				.filter(s => s != null)
+				.filter(s => s != null && s != "")
 				.reduce((acc: any[], s) => {				// filter out duplicates
 					if (acc.indexOf(s) === -1) acc.push(s)
 					return acc

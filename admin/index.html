@@ -147,16 +147,16 @@
 			<label for="hciDevice" class="translate">Select device:</label>
 			<input class="value" type="number" id="hciDevice" min="0" />
 			<span class="translate">On linux this can be determined with `hciconfig`:</span> <span>hci<b>&lt;X&gt;</b></span>
-			<br />
-				
-			<label for="services" class="translate">Monitored Services:</label><br />
-			<textarea class="value" id="services" rows="3" style="width: 100%" /><br />
+		</p>
+		<p class="settings-table">
+			<label for="services" class="translate">Monitored services:</label><br />
+			<textarea class="value" id="services" rows="3" style="width: 100%"></textarea><br />
 			<span class="translate">Service characteristics as HEX codes or UUID, comma separated.</span>
-			<br />
-
-			<label for="plugins" class="translate">Active Plugins:</label><br />
-			<textarea class="value" id="plugins" rows="3" style="width: 100%" /><br />
-			<span class="translate">Plugin names, comma separated</span>
+		</p>
+		<p class="settings-table">
+			<label for="plugins" class="translate">Active plugins:</label><br />
+			<textarea class="value" id="plugins" rows="3" style="width: 100%"></textarea><br />
+			<span class="translate">Plugin names, comma separated.</span>
 		</p>
 		<p class="translate" style="font-size: 70%">on save adapter restarts with new config immediately</p>
 		

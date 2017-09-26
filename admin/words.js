@@ -12,11 +12,17 @@ systemDictionary = {
 	"On linux this can be determined with `hciconfig`:": {
 		"de": "Unter Linux kann der Index mit `hciconfig` ermittelt werden:",
 	},
-	"Monitored Services:": {
+	"Monitored services:": {
 		"de": "Überwachte Dienste:",
 	},
 	"Service characteristics as HEX codes or UUID, comma separated.": {
 		"de": "Dienstcharakteristiken als HEX oder UUID, durch Komma getrennt.",
+	},
+	"Active plugins:": {
+		"de": "Aktive Plugins:",
+	},
+	"Plugin names, comma separated.": {
+		"de": "Plugin-Namen durch Komma getrennt.",
 	},
 	"on save adapter restarts with new config immediately": {
 		"de": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
