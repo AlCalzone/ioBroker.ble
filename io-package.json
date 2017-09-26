@@ -42,7 +42,8 @@
     "native": {
         "teachMode": false,
         "timeout": 60,
-        "usb": ""
+        "usb": "",
+        "serialport": ""
     },
     "objects": [
 
