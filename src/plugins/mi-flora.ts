@@ -115,15 +115,29 @@ const plugin: Plugin = {
 		}
 		if (data == null) return;
 
+		_.log(`mi-flora >> got data: ${data.toString("hex")}`, "debug");
+
 		// do some basic checks
 		// Data length must be 15 bytes plus data[14]
-		if (data.length < 15) return;
-		if (data.length !== 15 + data[14]) return;
+		if (data.length < 15) {
+			_.log(`mi-flora >> incomplete packet`, "debug");
+			return;
+		}
 		// Data must start with the prefix
-		if (!bufferEquals(data.slice(0, 4), PREFIX)) return;
+		if (!bufferEquals(data.slice(0, 4), PREFIX)) {
+			_.log(`mi-flora >> prefix missing`, "debug");
+			return;
+		}
+		if (data.length !== 15 + data[14]) {
+			_.log(`mi-flora >> data is too short`, "debug");
+			return;
+		}
 		// Data must contain the reversed MAC at index 5
 		const mac = peripheral.address.replace(/\:/g, "").toLowerCase();
-		if (reverseBuffer(data.slice(5, 5 + 6)).toString("hex") !== mac) return;
+		if (reverseBuffer(data.slice(5, 5 + 6)).toString("hex") !== mac) {
+			_.log(`mi-flora >> data doesn't contain the mac address`, "debug");
+			return;
+		}
 
 		// parse data
 		const type = data[12];
@@ -150,6 +164,8 @@ const plugin: Plugin = {
 				stateId = "fertility";
 				break;
 		}
+
+		_.log(`mi-flora >> {{green|got ${stateId} update => ${value}}}`, "debug");
 
 		const ret = {};
 		ret[stateId] = value;
