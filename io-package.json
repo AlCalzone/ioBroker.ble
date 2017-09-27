@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.2.2",
+        "version": "0.3.0",
         "news": {
+            "0.3.0": {
+                "en": "Support throttling of RSSI updates",
+                "de": "Frequenz von RSSI-Aktualisierungen kann begrenzt werden"
+            },
             "0.2.2": {
                 "en": "Bugfixes",
                 "de": "Bugfixes"
@@ -47,7 +51,8 @@
     "native": {
         "services": "",
         "hciDevice": 0,
-        "plugins": ""
+        "plugins": "",
+        "rssiThrottle": 0
     },
     "objects": [
 

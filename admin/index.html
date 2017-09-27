@@ -36,30 +36,33 @@
 			width: 100%;
 		}
 		[data-role="adapter-name"] {
-			min-height: 64px;
+			min-height: 48px;
 			padding-left: 80px;
 			vertical-align: middle;
 			background-image: url(ble.png);
-			background-size: 64px auto;
+			background-size: 48px auto;
 			background-position: left center;
 			background-repeat: no-repeat;
 		}
 		[data-role="adapter-name"]::before {
 			content: "";
 			display: inline-block;
-			height: 64px;
+			height: 48px;
 			vertical-align: middle;
 		}
 		.settings-table > * {
 			display: inline-block;
 		}
 		.settings-table > label {
-			min-width: 15%;
+			min-width: 27%;
 			white-space: nowrap;
 			padding-right: 1em;
 		}		
 		.settings-table > label ~ span {
 			font-size: 80%;
+		}
+		#hciDevice {
+			min-width: 10em;
 		}
 		select#hciDevice + span,
 		select#hciDevice + span + span {
@@ -147,15 +150,20 @@
 			<label for="hciDevice" class="translate">Select device:</label>
 			<input class="value" type="number" id="hciDevice" min="0" />
 			<span class="translate">On linux this can be determined with `hciconfig`:</span> <span>hci<b>&lt;X&gt;</b></span>
+			<br />
+
+			<label for="rssiThrottle" class="translate">RSSI update interval [ms]:</label>
+			<input class="value" type="number" id="rssiThrottle" min="0" max="10000" />
+			<span class="translate">Too frequent updates can slow down the admin.</span>
 		</p>
 		<p class="settings-table">
 			<label for="services" class="translate">Monitored services:</label><br />
-			<textarea class="value" id="services" rows="3" style="width: 100%"></textarea><br />
+			<textarea class="value" id="services" style="width: 100%; height: 3em;"></textarea><br />
 			<span class="translate">Service characteristics as HEX codes or UUID, comma separated.</span>
 		</p>
 		<p class="settings-table">
 			<label for="plugins" class="translate">Active plugins:</label><br />
-			<textarea class="value" id="plugins" rows="3" style="width: 100%"></textarea><br />
+			<textarea class="value" id="plugins" style="width: 100%; height: 3em;"></textarea><br />
 			<span class="translate">Plugin names, comma separated.</span>
 		</p>
 		<p class="translate" style="font-size: 70%">on save adapter restarts with new config immediately</p>

@@ -11,6 +11,9 @@ let services: string[] = [];
 /** MAC addresses of known devices */
 let knownDevices: string[] = [];
 
+/** How frequent the RSSI of devices should be updated */
+let rssiUpdateInterval: number = 0;
+
 // noble-Treiber-Instanz
 let noble;
 
@@ -52,6 +55,11 @@ let adapter: ExtendedAdapter = utils.adapter({
 				}, [])
 			;
 		_.log(`monitored services: ${services.join(", ")}`);
+
+		// Limit RSSI updates
+		if (adapter.config.rssiThrottle != null) {
+			rssiUpdateInterval = Math.max(0, Math.min(10000, adapter.config.rssiThrottle));
+		}
 
 		adapter.subscribeStates("*");
 		adapter.subscribeObjects("*");
@@ -256,7 +264,13 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		knownDevices.push(deviceId);
 	}
 	// update RSSI information
-	await adapter.$setStateChanged(`${deviceId}.rssi`, peripheral.rssi, true);
+	const rssiState = await adapter.$getState(`${deviceId}.rssi`);
+	if (
+		rssiState.val !== peripheral.rssi &&				// only save changes
+		rssiState.lc + rssiUpdateInterval < Date.now()	// and dont update too frequently
+	) {
+		await adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);
+	}
 
 	// get values from plugin
 	const values = plugin.getValues(peripheral);

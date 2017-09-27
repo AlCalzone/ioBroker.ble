@@ -24,6 +24,12 @@ systemDictionary = {
 	"Plugin names, comma separated.": {
 		"de": "Plugin-Namen durch Komma getrennt.",
 	},
+	"RSSI update interval [ms]:": {
+		"de": "RSSI Update-Intervall [ms]:",
+	},
+	"Too frequent updates can slow down the admin.": {
+		"de": "Zu häufige Updates können den Admin verlangsamen.",
+	},
 	"on save adapter restarts with new config immediately": {
 		"de": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
 		"ru": "Сразу после сохранения настроек драйвер перезапуститься с новыми значениями",
