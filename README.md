@@ -25,6 +25,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.2.1 (2017-09-27)
+* (AlCalzone) Bugfix: last patch broke the service filtering
+
 #### 0.2.0 (2017-09-26)
 * (AlCalzone) Modularized the adapter code into a plugin system
 * (AlCalzone) Added Mi-Flora plugin

@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "news": {
             "0.2.0": {
                 "en": "Modularized the adapter code into a plugin system",
