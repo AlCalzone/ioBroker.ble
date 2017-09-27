@@ -10,14 +10,20 @@ export declare type StateObjectDefinition = Pick<ioBroker.StateObject, "common" 
  * RSSI is created by default
  */
 export interface PeripheralObjectStructure {
-    /** How the device object should look like.
-    May be null if the plugin knows that the object exists */
+    /**
+     * How the device object should look like.
+     * May be null if the plugin knows that the object exists.
+     */
     device: DeviceObjectDefinition;
-    /** Which channels to create.
-    May be null if the plugin knows that the objects exist or none should be created */
+    /**
+     * Which channels to create.
+     * May be null if the plugin knows that the objects exist or none should be created.
+     */
     channels: ChannelObjectDefinition[];
-    /** Which states to create.
-    May be null if the plugin knows that the objects exist */
+    /**
+     * Which states to create.
+     * May be null if the plugin knows that the objects exist.
+     */
     states: StateObjectDefinition[];
 }
 /** Defines the interface a plugin has to expose */

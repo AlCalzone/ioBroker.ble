@@ -1,15 +1,15 @@
+import { exec } from "child_process";
 import { ExtendedAdapter, Global as _ } from "./lib/global";
 import utils from "./lib/utils";
-import { exec } from "child_process";
 
 // Load all registered plugins
-import { Plugin } from "./plugins/plugin";
 import plugins from "./plugins";
+import { Plugin } from "./plugins/plugin";
 let enabledPlugins: Plugin[];
+let services: string[] = [];
 
 /** MAC addresses of known devices */
 let knownDevices: string[] = [];
-let services: string[] = [];
 
 // noble-Treiber-Instanz
 let noble;
@@ -26,7 +26,7 @@ let adapter: ExtendedAdapter = utils.adapter({
 		adapter = _.extend(adapter);
 		_.adapter = adapter;
 
-		// Workaround für fehlende InstanceObjects nach update
+		// Workaround fÃ¼r fehlende InstanceObjects nach update
 		await _.ensureInstanceObjects();
 
 		// Plugins laden
@@ -40,18 +40,18 @@ let adapter: ExtendedAdapter = utils.adapter({
 		_.log(`enabled plugins: ${enabledPlugins.map(p => p.name).join(", ")}`);
 
 		// Bring the monitored service names into the correct form
-		const allServices =
+		services =
 			(adapter.config.services as string).split(",")	// get manually defined services
 				.concat(...plugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
 				.reduce((acc, s) => acc.concat(s), [])		// flatten the arrays
 				.map(s => fixServiceName(s))				// cleanup the names
-				.filter(s => s != null && s != "")
+				.filter(s => s != null && s !== "")
 				.reduce((acc: any[], s) => {				// filter out duplicates
-					if (acc.indexOf(s) === -1) acc.push(s)
-					return acc
+					if (acc.indexOf(s) === -1) acc.push(s);
+					return acc;
 				}, [])
 			;
-		_.log(`monitored services: ${allServices.join(", ")}`);
+		_.log(`monitored services: ${services.join(", ")}`);
 
 		adapter.subscribeStates("*");
 		adapter.subscribeObjects("*");
@@ -101,25 +101,24 @@ let adapter: ExtendedAdapter = utils.adapter({
 	message: async (obj) => {
 		// responds to the adapter that sent the original message
 		function respond(response) {
-			if (obj.callback)
-				adapter.sendTo(obj.from, obj.command, response, obj.callback);
+			if (obj.callback) adapter.sendTo(obj.from, obj.command, response, obj.callback);
 		}
 		// some predefined responses so we only have to define them once
-		var predefinedResponses = {
+		const predefinedResponses = {
 			ACK: { error: null },
-			OK: { error: null, result: 'ok' },
-			ERROR_UNKNOWN_COMMAND: { error: 'Unknown command!' },
-			MISSING_PARAMETER: function (paramName) {
+			OK: { error: null, result: "ok" },
+			ERROR_UNKNOWN_COMMAND: { error: "Unknown command!" },
+			MISSING_PARAMETER: (paramName) => {
 				return { error: 'missing parameter "' + paramName + '"!' };
 			},
-			COMMAND_RUNNING: { error: 'command running' }
+			COMMAND_RUNNING: { error: "command running" },
 		};
 		// make required parameters easier
 		function requireParams(params) {
 			if (!(params && params.length)) return true;
-			for (var i = 0; i < params.length; i++) {
-				if (!(obj.message && obj.message.hasOwnProperty(params[i]))) {
-					respond(predefinedResponses.MISSING_PARAMETER(params[i]));
+			for (const param of params) {
+				if (!(obj.message && obj.message.hasOwnProperty(param))) {
+					respond(predefinedResponses.MISSING_PARAMETER(param));
 					return false;
 				}
 			}
@@ -131,8 +130,8 @@ let adapter: ExtendedAdapter = utils.adapter({
 			switch (obj.command) {
 				case "getHCIPorts":
 					exec("hciconfig | grep hci", (error, stdout, stderr) => {
-						//hci1:   Type: BR/EDR  Bus: USB
-						//hci0:   Type: BR/EDR  Bus: UART
+						// hci1:   Type: BR/EDR  Bus: USB
+						// hci0:   Type: BR/EDR  Bus: UART
 						if (error != null) {
 							_.log(JSON.stringify(error));
 							respond({ error });
@@ -186,12 +185,11 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		if (p.isHandling(peripheral)) {
 			plugin = p;
 			break;
-		} else {
 		}
 	}
 	if (!plugin) {
 		_.log(`no handling plugin found for peripheral ${peripheral.id}`, "warn");
-		return
+		return;
 	}
 
 	const deviceId = peripheral.address;
@@ -207,7 +205,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 				{
 					name: peripheral.advertisement.localName,
 				},
-				objects.device.common || {}
+				objects.device.common || {},
 			),
 			native: Object.assign(
 				{
@@ -216,7 +214,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 					addressType: peripheral.addressType,
 					connectable: peripheral.connectable,
 				},
-				objects.device.native || {}
+				objects.device.native || {},
 			),
 		});
 		// create all channel objects
@@ -228,7 +226,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 						common: c.common,
 						native: c.native || {},
 					});
-				})
+				}),
 			);
 		}
 		// create all state objects
@@ -239,18 +237,18 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 					common: s.common,
 					native: s.native || {},
 				});
-			})
+			}),
 		);
 		// also create device information states
 		await adapter.$setObject(`${deviceId}.rssi`, {
 			type: "device",
 			common: {
-				"role": "indicator",
-				"name": "signal strength (RSSI)",
-				"desc": "Signal strength of the device",
-				"type": "number",
-				"read": true,
-				"write": false
+				role: "indicator",
+				name: "signal strength (RSSI)",
+				desc: "Signal strength of the device",
+				type: "number",
+				read: true,
+				write: false,
 			},
 			native: {},
 		});
@@ -263,7 +261,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	// get values from plugin
 	const values = plugin.getValues(peripheral);
 	_.log(`${deviceId} > got values: ${JSON.stringify(values)}`, "debug");
-	for (let stateId of Object.keys(values)) {
+	for (const stateId of Object.keys(values)) {
 		// set the value if there's an object for the state
 		const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
 		if (await adapter.$getObject(iobStateId) != null) {
@@ -290,7 +288,6 @@ function stopScanning() {
 	adapter.setState("info.connection", false, true);
 	isScanning = false;
 }
-
 
 // Unbehandelte Fehler tracen
 process.on("unhandledRejection", r => {

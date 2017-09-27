@@ -1,5 +1,5 @@
-﻿import { Plugin, PeripheralObjectStructure, DeviceObjectDefinition, ChannelObjectDefinition, StateObjectDefinition } from "./plugin";
-import { Global as _ } from "../lib/global";
+﻿import { Global as _ } from "../lib/global";
+import { ChannelObjectDefinition, DeviceObjectDefinition, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "./plugin";
 
 function parseData(raw: Buffer): string | number {
 	if (raw.length === 1) {
@@ -21,36 +21,36 @@ const plugin: Plugin = {
 
 	defineObjects: (peripheral: BLE.Peripheral): PeripheralObjectStructure => {
 
-		let deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
+		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
 			common: null,
 			native: null,
 		};
 
 		const channelId = `services`;
-		let channelObject: ChannelObjectDefinition = {
+		const channelObject: ChannelObjectDefinition = {
 			id: channelId,
 			common: {
 				// common
 				name: "Advertised services",
-				role: "info"
+				role: "info",
 			},
 			native: null,
 		};
 
-		let stateObjects: StateObjectDefinition[] = [];
+		const stateObjects: StateObjectDefinition[] = [];
 		for (const entry of peripheral.advertisement.serviceData) {
 			const uuid = entry.uuid;
-			const stateId = `services.${uuid}`;
+			const stateId = `${channelId}.${uuid}`;
 
 			stateObjects.push({
 				id: stateId,
 				common: {
-					"role": "value",
-					"name": "Advertised service " + uuid, // TODO: create readable names
-					"desc": "",
-					"type": "mixed",
-					"read": true,
-					"write": false,
+					role: "value",
+					name: "Advertised service " + uuid, // TODO: create readable names
+					desc: "",
+					type: "mixed",
+					read: true,
+					write: false,
 				},
 				native: null,
 			});
@@ -65,16 +65,16 @@ const plugin: Plugin = {
 	},
 
 	getValues: (peripheral: BLE.Peripheral): { [id: string]: any } => {
-		let ret: { [id: string]: any } = {};
+		const ret: { [id: string]: any } = {};
 		for (const entry of peripheral.advertisement.serviceData) {
 			const uuid = entry.uuid;
 			const stateId = `services.${uuid}`;
 			// remember the transmitted data
 			ret[stateId] = parseData(entry.data);
 		}
-		
+
 		return ret;
-	}
+	},
 };
 
 export = plugin;

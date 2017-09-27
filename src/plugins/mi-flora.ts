@@ -1,11 +1,11 @@
-﻿import { Plugin, PeripheralObjectStructure, DeviceObjectDefinition, ChannelObjectDefinition, StateObjectDefinition } from "./plugin";
-import { Global as _ } from "../lib/global";
+﻿import { Global as _ } from "../lib/global";
+import { ChannelObjectDefinition, DeviceObjectDefinition, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "./plugin";
 
 /**
  * Checks if two buffers or arrays are equal
  */
 function bufferEquals(buf1: Buffer | number[], buf2: Buffer | number[]): boolean {
-	if (buf1.length !== buf2.length) return false
+	if (buf1.length !== buf2.length) return false;
 	for (let i = 0; i < buf1.length; i++) {
 		if (buf1[i] !== buf2[i]) return false;
 	}
@@ -21,7 +21,6 @@ function reverseBuffer(buf: Buffer): Buffer {
 
 const PREFIX = [0x71, 0x20, 0x98, 0x00];
 
-
 const plugin: Plugin = {
 	name: "Mi-Flora",
 	description: "Xiaomi Mi Pflanzensensor",
@@ -31,67 +30,67 @@ const plugin: Plugin = {
 		if (!p.address.toLowerCase().startsWith("c4:7c:8d")) return false;
 		for (const entry of p.advertisement.serviceData) {
 			if (entry.uuid === "fe95") return true;
-		}		
+		}
 		return false;
 	},
 
 	defineObjects: (peripheral: BLE.Peripheral): PeripheralObjectStructure => {
 
-		let deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
+		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
 			common: null,
 			native: null,
 		};
 
 		// no channels
 
-		let stateObjects: StateObjectDefinition[] = [
+		const stateObjects: StateObjectDefinition[] = [
 			{
 				id: "fertility",
 				common: {
-					"role": "value",
-					"name": "Fertility",
-					"desc": "Fertility of the soil",
-					"type": "number",
-					"unit": "µS/cm",
-					"read": true,
-					"write": false,
+					role: "value",
+					name: "Fertility",
+					desc: "Fertility of the soil",
+					type: "number",
+					unit: "µS/cm",
+					read: true,
+					write: false,
 				},
 				native: null,
 			},
 			{
 				id: "brightness",
 				common: {
-					"role": "value",
-					"name": "Brightness",
-					"type": "number",
-					"unit": "lux",
-					"read": true,
-					"write": false,
+					role: "value",
+					name: "Brightness",
+					type: "number",
+					unit: "lux",
+					read: true,
+					write: false,
 				},
 				native: null,
 			},
 			{
 				id: "humidity",
 				common: {
-					"role": "value",
-					"name": "Humidity",
-					"desc": "Humidity of the soil",
-					"type": "number",
-					"unit": "%",
-					"read": true,
-					"write": false,
+					role: "value",
+					name: "Humidity",
+					desc: "Humidity of the soil",
+					type: "number",
+					unit: "%",
+					read: true,
+					write: false,
 				},
 				native: null,
 			},
 			{
 				id: "temperature",
 				common: {
-					"role": "value",
-					"name": "Temperature",
-					"type": "number",
-					"unit": "°C",
-					"read": true,
-					"write": false,
+					role: "value",
+					name: "Temperature",
+					type: "number",
+					unit: "°C",
+					read: true,
+					write: false,
 				},
 				native: null,
 			},
@@ -155,7 +154,7 @@ const plugin: Plugin = {
 		const ret = {};
 		ret[stateId] = value;
 		return ret;
-	}
+	},
 };
 
 export = plugin;
