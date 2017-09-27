@@ -25,6 +25,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.2.2 (2017-09-27)
+* (AlCalzone) Bugfix: Only monitor services from _enabled_ plugins
+
 #### 0.2.1 (2017-09-27)
 * (AlCalzone) Bugfix: last patch broke the service filtering
 

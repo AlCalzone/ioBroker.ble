@@ -42,7 +42,7 @@ let adapter: ExtendedAdapter = utils.adapter({
 		// Bring the monitored service names into the correct form
 		services =
 			(adapter.config.services as string).split(",")	// get manually defined services
-				.concat(...plugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
+				.concat(...enabledPlugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
 				.reduce((acc, s) => acc.concat(s), [])		// flatten the arrays
 				.map(s => fixServiceName(s))				// cleanup the names
 				.filter(s => s != null && s !== "")
