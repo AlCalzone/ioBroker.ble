@@ -1,3 +1,9 @@
 /.idea
 /node_modules
 /nbproject
+
+# Visual Studio rubbish
+.vs*/
+
+# npm package files
+iobroker.*.tgz
