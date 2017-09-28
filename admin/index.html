@@ -28,39 +28,48 @@
 <!-- you have to define 2 functions in the global scope: -->
 <script type="text/javascript">
 
-    var timeout;
+    // remember the onChange handler
+    var _onChange;
 
-    function getComPorts(actualValue) {
-        timeout = setTimeout(function () {
-            getComPorts(actualValue);
-        }, 2000);
-        sendTo(null, 'listUart', null, function (list) {
-            if (timeout) {
-                clearTimeout(timeout);
-                timeout = null;
-            }
-            if (!list || !list.length) {
-                setTimeout(function () {
-                    getComPorts(actualValue);
-                }, 1000);
+
+    function getComPorts() {
+        sendTo(null, 'listSerial', null, function (list) {
+            if (list == null || list.result == null) {
                 return;
             }
-            var text = '<option value="">' + _('Select port') + '</option>';
+            list = list.result;
+
+            var element = $('#serialport');
+            var dropdown = $('<select class="value" id="serialport">')
+                .change(_onChange)
+                .append(
+                    $('<option value="">')
+                        .text(_('Select port'))
+                    )
+                ;
             for (var j = 0; j < list.length; j++) {
                 if (list[j].comName === 'Not available') {
-                    text += '<option value="" selected>' + _('Not available') + '</option>';
-                    $('#usb').prop('disabled', true);
+                    dropdown.append(
+                        $('<option value="" selected>').text(_('Not available'))
+                    );
+                    dropdown.attr('disabled', 'disabled');
                     break;
                 } else {
-                    text += '<option value="' + list[j].comName + '" ' + ((actualValue === list[j].comName) ? 'selected' : '') + '>' + list[j].comName + '</option>';
+                    dropdown.append(
+                        $('<option ' + ((element.val() === list[j].comName) ? 'selected' : '') + '>')
+                            .attr('value', list[j].comName)
+                            .text(list[j].comName)
+                    );
                 }
             }
-            $('#usb').html(text);
+            element.replaceWith(dropdown);
         });
     }
 
     // the function loadSettings has to exist ...
     function load(settings, onChange) {
+        // remember the onChange handler
+        _onChange = onChange;
         // example: select elements with id=key and class=value and insert value
         if (!settings) return;
         $('.value').each(function () {
@@ -78,6 +87,10 @@
                 });
             }
         });
+
+        // Populate the dropdown for USB/COM ports instead of
+        getComPorts();
+
         onChange(false);
     }
 
@@ -88,11 +101,11 @@
         var obj = {};
         $('.value').each(function () {
             var $this = $(this);
-			if ($this.attr('type') === 'checkbox') {
-				obj[$this.attr('id')] = $this.prop('checked');
-			} else {
-				obj[$this.attr('id')] = $this.val();
-			}
+            if ($this.attr('type') === 'checkbox') {
+                obj[$this.attr('id')] = $this.prop('checked');
+            } else {
+                obj[$this.attr('id')] = $this.val();
+            }
         });
         callback(obj);
     }
@@ -112,16 +125,11 @@
         </tr>
         <tr>
             <td><label for="timeout" class="translate">Timeout</label></td>
-            <td><input class="value" id="timeout" type="input"/></td>
+            <td><input class="value" id="timeout" type="text"/></td>
         </tr>
         <tr>
-            <td><label  class="translate" for="usb">USB name:</label></td>
-            <td class="admin-icon"></td>
-            <td id="_usb"><select class="value" id="usb"></select></td>
-        </tr>
-        <tr>
-            <td><label for="serialport" class="translate">Serialport</label></td>
-            <td><input class="value" id="serialport" type="input"/></td>
+            <td><label for="serialport" class="translate">Serial port:</label></td>
+            <td><input class="value" id="serialport" type="text" /></td>
         </tr>
     </table>
     <p class="translate">on save adapter restarts with new config immediately</p>

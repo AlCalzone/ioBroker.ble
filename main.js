@@ -91,15 +91,46 @@ adapter.on('stateChange', function (id, state) {
 
 // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
 adapter.on('message', function (obj) {
-    if (typeof obj == 'object' && obj.message) {
-        if (obj.command == 'send') {
-            // e.g. send email or pushover or whatever
-            console.log('send command');
 
-            // Send response in callback if required
-            if (obj.callback) adapter.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+    // responds to the adapter that sent the original message
+    function respond(response) {
+        if (obj.callback)
+            adapter.sendTo(obj.from, obj.command, response, obj.callback);
+    }
+    // some predefined responses so we only have to define them once
+    var predefinedResponses = {
+        ACK: { error: null },
+        OK: { error: null, result: 'ok' },
+        ERROR_UNKNOWN_COMMAND: { error: 'Unknown command!' },
+        ERROR_NOT_RUNNING: { error: 'EnOcean driver is not running!' },
+        MISSING_PARAMETER: function (paramName) {
+            return { error: 'missing parameter "' + paramName + '"!' };
+        },
+        COMMAND_RUNNING: { error: 'command running' }
+    };
+    // make required parameters easier
+    function requireParams(params) {
+        if (!(params && params.length)) return true;
+        for (var i = 0; i < params.length; i++) {
+            if (!(obj.message && obj.message.hasOwnProperty(params[i]))) {
+                respond(predefinedResponses.MISSING_PARAMETER(params[i]));
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    // handle the message
+    if (obj) {
+        switch (obj.command) {
+            case "listSerial":
+                // enumerate serial ports for admin interface
+                respond({ error: null, result: listSerial() });
+                break;
         }
     }
+
 });
 
 // is called when databases are connected and adapter received configuration.
@@ -225,9 +256,21 @@ eo.on("known-data",function(data) {
     });
 });
 
-function listUart() {
+function filterSerialPorts(path) {
+    // get only USB port names
+    if (!(/ttyUSB/).test(path)) return false;
+    // TODO: if UART devices should be supported, use these 2 lines instead of the 2 above:
+    // get only serial port names
+    // if (!(/(tty(S|ACM|USB|AMA|MFD)|rfcomm)/).test(path)) return false;
+
+    return fs
+        .statSync(path)
+        .isCharacterDevice();
+}
+
+function listSerial() {
     path = path || require('path');
-    fs   = fs   || require('fs');
+    fs = fs || require('fs');
 
     // Filter out the devices that aren't serial ports
     var devDirName = '/dev';
@@ -241,7 +284,7 @@ function listUart() {
             })
             .filter(filterSerialPorts)
             .map(function (port) {
-                return {comName: port};
+                return { comName: port };
             });
     } catch (e) {
         adapter.log.error('Cannot read "' + devDirName + '": ' + e);

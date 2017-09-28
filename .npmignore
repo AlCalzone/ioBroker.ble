@@ -7,3 +7,9 @@ node_modules
 test
 .travis.yml
 appveyor.yml
+
+# npm pack files
+iobroker.*.tgz
+
+# Visual Studio rubbish
+.vs*/
