@@ -44,7 +44,7 @@
         "teachMode": false,
         "timeout": 60,
         "usb": "",
-        "serialport": ""
+        "serialport": "/dev/ttyUSB0"
     },
     "objects": [
 
