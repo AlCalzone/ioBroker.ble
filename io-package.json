@@ -37,7 +37,8 @@
         "keywords": ["EnOcean", "vis", "GUI", "graphical", "scada"],
         "readme": "https://github.com/jey-cee/ioBroker.enocean/blob/master/README.md",
         "loglevel": "info",
-        "type": "hardware"
+        "type": "hardware",
+        "messagebox": true
     },
     "native": {
         "teachMode": false,
