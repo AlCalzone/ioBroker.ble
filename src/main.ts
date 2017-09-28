@@ -266,8 +266,9 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	// update RSSI information
 	const rssiState = await adapter.$getState(`${deviceId}.rssi`);
 	if (
-		rssiState.val !== peripheral.rssi &&				// only save changes
-		rssiState.lc + rssiUpdateInterval < Date.now()	// and dont update too frequently
+		rssiState == null ||
+		(rssiState.val !== peripheral.rssi &&				// only save changes
+		rssiState.lc + rssiUpdateInterval < Date.now())	// and dont update too frequently
 	) {
 		await adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);
 	}

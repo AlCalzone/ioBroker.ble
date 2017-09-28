@@ -25,6 +25,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.3.1 (2017-09-27)
+* (AlCalzone) Bugfix: don't throw error when RSSI state doens't exist
+
 #### 0.3.0 (2017-09-27)
 * (AlCalzone) Support throttling of RSSI updates
 
