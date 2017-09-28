@@ -225,7 +225,7 @@ eo.on("known-data",function(data) {
     });
 });
 
-function listSerial() {
+function listUart() {
     path = path || require('path');
     fs   = fs   || require('fs');
 
