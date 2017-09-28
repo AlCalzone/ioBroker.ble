@@ -43,7 +43,6 @@
     "native": {
         "teachMode": false,
         "timeout": 60,
-        "usb": "",
         "serialport": "/dev/ttyUSB0"
     },
     "objects": [
