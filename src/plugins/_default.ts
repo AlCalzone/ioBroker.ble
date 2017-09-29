@@ -71,6 +71,7 @@ const plugin: Plugin = {
 			const stateId = `services.${uuid}`;
 			// remember the transmitted data
 			ret[stateId] = parseData(entry.data);
+			_.log(`_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`, "debug");
 		}
 
 		return ret;

@@ -185,12 +185,27 @@ function fixServiceName(name: string): string {
 }
 
 async function onDiscover(peripheral: BLE.Peripheral) {
-	if (!(peripheral && peripheral.advertisement && peripheral.advertisement.serviceData && peripheral.advertisement.serviceData.length > 0)) return;
+
+	if (peripheral == null) return;
+
+	_.log(`discovered peripheral ${peripheral.address}`, "debug");
+	_.log(`  has advertisement: ${peripheral.advertisement != null}`, "debug");
+	if (peripheral.advertisement != null) {
+		_.log(`  has serviceData: ${peripheral.advertisement.serviceData != null}`, "debug");
+		if (peripheral.advertisement.serviceData != null) {
+			_.log(`  serviceData = ${JSON.stringify(peripheral.advertisement.serviceData)}`, "debug");
+		}
+	}
+
+	if (!(peripheral.advertisement && peripheral.advertisement.serviceData && peripheral.advertisement.serviceData.length > 0)) return;
+
+	const deviceId = peripheral.address;
 
 	// find out which plugin is handling this
 	let plugin: Plugin;
 	for (const p of enabledPlugins) {
 		if (p.isHandling(peripheral)) {
+			_.log(`plugin ${p.name} is handling ${deviceId}`, "debug");
 			plugin = p;
 			break;
 		}
@@ -200,10 +215,9 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		return;
 	}
 
-	const deviceId = peripheral.address;
-
 	// if this peripheral is unknown, create the objects
 	if (knownDevices.indexOf(deviceId) === -1) {
+		_.log(`adding objects for ${deviceId}`, "debug");
 		const objects = plugin.defineObjects(peripheral);
 
 		// create the device object
@@ -270,6 +284,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		(rssiState.val !== peripheral.rssi &&				// only save changes
 		rssiState.lc + rssiUpdateInterval < Date.now())	// and dont update too frequently
 	) {
+		_.log(`updating rssi state for ${deviceId}`, "debug");
 		await adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);
 	}
 
@@ -293,12 +308,14 @@ function startScanning() {
 	if (isScanning) return;
 	adapter.setState("info.connection", true, true);
 	noble.on("discover", onDiscover);
+	_.log(`starting scan for services ${JSON.stringify(services)}`);
 	noble.startScanning(services, true);
 	isScanning = true;
 }
 function stopScanning() {
 	if (!isScanning) return;
 	noble.removeAllListeners("discover");
+	_.log(`stopping scan`);
 	noble.stopScanning();
 	adapter.setState("info.connection", false, true);
 	isScanning = false;
