@@ -43,18 +43,23 @@ let adapter: ExtendedAdapter = utils.adapter({
 		_.log(`enabled plugins: ${enabledPlugins.map(p => p.name).join(", ")}`);
 
 		// Bring the monitored service names into the correct form
-		services =
-			(adapter.config.services as string).split(",")	// get manually defined services
-				.concat(...enabledPlugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
-				.reduce((acc, s) => acc.concat(s), [])		// flatten the arrays
-				.map(s => fixServiceName(s))				// cleanup the names
-				.filter(s => s != null && s !== "")
-				.reduce((acc: any[], s) => {				// filter out duplicates
-					if (acc.indexOf(s) === -1) acc.push(s);
-					return acc;
-				}, [])
-			;
-		_.log(`monitored services: ${services.join(", ")}`);
+		if (adapter.config.services === "*") {
+			services = [];
+			_.log(`monitoring all services`);
+		} else {
+			services =
+				(adapter.config.services as string).split(",")	// get manually defined services
+					.concat(...enabledPlugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
+					.reduce((acc, s) => acc.concat(s), [])		// flatten the arrays
+					.map(s => fixServiceName(s))				// cleanup the names
+					.filter(s => s != null && s !== "")
+					.reduce((acc: any[], s) => {				// filter out duplicates
+						if (acc.indexOf(s) === -1) acc.push(s);
+						return acc;
+					}, [])
+				;
+			_.log(`monitored services: ${services.join(", ")}`);
+		}
 
 		// Limit RSSI updates
 		if (adapter.config.rssiThrottle != null) {
@@ -197,7 +202,16 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		}
 	}
 
-	if (!(peripheral.advertisement && peripheral.advertisement.serviceData && peripheral.advertisement.serviceData.length > 0)) return;
+	// don't create devices for peripherals without advertised data
+	if (peripheral.advertisement == null) return;
+	// create devices if we selected to allow empty devices
+	// or the peripheral transmits serviceData
+	if (!(
+		adapter.config.allowEmptyDevices ||
+		(peripheral.advertisement.serviceData != null && peripheral.advertisement.serviceData.length > 0)
+	)) {
+		return;
+	}
 
 	const deviceId = peripheral.address;
 

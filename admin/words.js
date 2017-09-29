@@ -12,8 +12,8 @@ systemDictionary = {
 	"On linux this can be determined with `hciconfig`:": {
 		"de": "Unter Linux kann der Index mit `hciconfig` ermittelt werden:",
 	},
-	"Monitored services:": {
-		"de": "Überwachte Dienste:",
+	"Monitored services, * for all services:": {
+		"de": "Überwachte Dienste, * für alle Dienste:",
 	},
 	"Service characteristics as HEX codes or UUID, comma separated.": {
 		"de": "Dienstcharakteristiken als HEX oder UUID, durch Komma getrennt.",
@@ -29,6 +29,9 @@ systemDictionary = {
 	},
 	"Too frequent updates can slow down the admin.": {
 		"de": "Zu häufige Updates können den Admin verlangsamen.",
+	},
+	"Allow creation of devices without service data": {
+		"de": "Erfassen von Geräten ohne service data erlauben",
 	},
 	"on save adapter restarts with new config immediately": {
 		"de": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",

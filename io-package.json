@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.3.1",
+        "version": "0.3.2",
         "news": {
+            "0.3.2": {
+                "en": "Add * wildcard for \"all services\"",
+                "de": "Platzhalter * für \"alle Dienste\" hinzugefügt"
+            },
             "0.3.1": {
                 "en": "Support throttling of RSSI updates",
                 "de": "Frequenz von RSSI-Aktualisierungen kann begrenzt werden"
@@ -52,6 +56,7 @@
         "services": "",
         "hciDevice": 0,
         "plugins": "",
+        "allowEmptyDevices": false,
         "rssiThrottle": 0
     },
     "objects": [
