@@ -41,6 +41,9 @@
             "en": "Monitor Bluetooth Low Energy (BLE) beacons",
             "de": "Überwacht Bluetooth Low Energy (BLE) beacons"
         },
+        "authors": [
+            "AlCalzone <d.griesel@gmx.net>"
+        ],
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "icon": "ble.png",
