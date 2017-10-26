@@ -11,7 +11,7 @@ clone_folder: 'c:\projects\%APPVEYOR_PROJECT_NAME%'
 install:
   - ps: 'Install-Product node $env:nodejs_version $env:platform'
   # Fix random EPERM on NJS 8 when installing fsevents
-  - IF "%nodejs_version:~0,1%"=="8" npm install npm@5.3 -g
+  - IF "%nodejs_version:~0,1%"=="8" npm install npm@3 -g
   - npm install
   - npm install winston@2.3.1
   - 'npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production'
