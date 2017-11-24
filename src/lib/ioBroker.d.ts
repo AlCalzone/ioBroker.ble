@@ -795,6 +795,8 @@ declare global {
 		} // end interface Objects
 
 		interface Logger {
+			/** log message with silly level */
+			silly(message: string): void;
 			/** log message with debug level */
 			debug(message: string): void;
 			/** log message with info level (default output level for all adapters) */
@@ -803,6 +805,9 @@ declare global {
 			warn(message: string): void;
 			/** log message with error severity */
 			error(message: string): void;
+
+			/** Verbosity of the log output */
+			level: "silly" | "debug" | "info" | "warn" | "error";
 		}
 
 		interface Certificates {
@@ -972,8 +977,11 @@ declare global {
 
 			/**
 			 * Sends a message to a specific instance or all instances of some specific adapter.
+			 * @param instanceName The instance to send this message to.
 			 * If the ID of an instance is given (e.g. "admin.0"), only this instance will receive the message.
 			 * If the name of an adapter is given (e.g. "admin"), all instances of this adapter will receive it.
+			 * @param command (optional) Command name of the target instance. Default: "send"
+			 * @param message The message (e.g. params) to send.
 			 */
 			sendTo(instanceName: string, message: string | object, callback?: MessageCallback | MessageCallbackInfo): void;
 			sendTo(instanceName: string, command: string, message: string | object, callback?: MessageCallback | MessageCallbackInfo): void;

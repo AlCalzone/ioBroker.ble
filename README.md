@@ -25,6 +25,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.3.3 (2017-11-24)
+* (AlCalzone) Enable logging of RSSI
+
 #### 0.3.2 (2017-09-27)
 * (AlCalzone) Add * wildcard for "all services"
 

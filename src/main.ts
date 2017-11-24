@@ -277,9 +277,9 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		);
 		// also create device information states
 		await adapter.$setObject(`${deviceId}.rssi`, {
-			type: "device",
+			type: "state",
 			common: {
-				role: "indicator",
+				role: "value.rssi",
 				name: "signal strength (RSSI)",
 				desc: "Signal strength of the device",
 				type: "number",

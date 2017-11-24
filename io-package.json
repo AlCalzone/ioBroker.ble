@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.3.2",
+        "version": "0.3.3",
         "news": {
+            "0.3.3": {
+                "en": "Fix logging of RSSI",
+                "de": "Logging von RSSI gefixt"
+            },
             "0.3.2": {
                 "en": "Add * wildcard for \"all services\"",
                 "de": "Platzhalter * für \"alle Dienste\" hinzugefügt"
