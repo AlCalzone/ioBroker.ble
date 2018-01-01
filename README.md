@@ -25,6 +25,10 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.3.4 (2018-01-01)
+* (AlCalzone) Bugfix: Keep `history` settings by not overriding existing objects
+* (AlCalzone) Bugfix: When plugins return `undefined`, ignore the packet
+
 #### 0.3.3 (2017-11-24)
 * (AlCalzone) Enable logging of RSSI
 

@@ -235,7 +235,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		const objects = plugin.defineObjects(peripheral);
 
 		// create the device object
-		await adapter.$setObject(deviceId, {
+		await adapter.$extendObject(deviceId, {
 			type: "device",
 			common: Object.assign(
 				{
@@ -257,7 +257,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		if (objects.channels != null && objects.channels.length > 0) { // channels are optional
 			await Promise.all(
 				objects.channels.map((c) => {
-					return adapter.$setObject(deviceId + "." + c.id, {
+					return adapter.$extendObject(deviceId + "." + c.id, {
 						type: "channel",
 						common: c.common,
 						native: c.native || {},
@@ -268,7 +268,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		// create all state objects
 		await Promise.all(
 			objects.states.map((s) => {
-				return adapter.$setObject(deviceId + "." + s.id, {
+				return adapter.$extendObject(deviceId + "." + s.id, {
 					type: "state",
 					common: s.common,
 					native: s.native || {},
@@ -276,7 +276,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 			}),
 		);
 		// also create device information states
-		await adapter.$setObject(`${deviceId}.rssi`, {
+		await adapter.$extendObject(`${deviceId}.rssi`, {
 			type: "state",
 			common: {
 				role: "value.rssi",
@@ -304,16 +304,20 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 
 	// get values from plugin
 	const values = plugin.getValues(peripheral);
-	_.log(`${deviceId} > got values: ${JSON.stringify(values)}`, "debug");
-	for (const stateId of Object.keys(values)) {
-		// set the value if there's an object for the state
-		const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
-		if (await adapter.$getObject(iobStateId) != null) {
-			_.log(`setting state ${iobStateId}`, "debug");
-			await adapter.$setStateChanged(iobStateId, values[stateId], true);
-		} else {
-			_.log(`skipping state ${iobStateId}`, "debug");
+	if (values != null) {
+		_.log(`${deviceId} > got values: ${JSON.stringify(values)}`, "debug");
+		for (const stateId of Object.keys(values)) {
+			// set the value if there's an object for the state
+			const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
+			if (await adapter.$getObject(iobStateId) != null) {
+				_.log(`setting state ${iobStateId}`, "debug");
+				await adapter.$setStateChanged(iobStateId, values[stateId], true);
+			} else {
+				_.log(`skipping state ${iobStateId}`, "debug");
+			}
 		}
+	} else {
+		_.log(`${deviceId} > got no values`, "debug");
 	}
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "iobroker.ble",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "ioBroker adapter to monitor Bluetooth Low Energy (BLE) beacons",
   "author": {
     "name": "AlCalzone",
@@ -23,18 +23,19 @@
     "noble": "^1.8.1"
   },
   "devDependencies": {
-    "@types/chai": "^4.0.4",
-    "@types/mocha": "^2.2.43",
+    "@types/chai": "^4.0.10",
+    "@types/mocha": "^2.2.45",
     "@types/node": "^6.0.88",
     "chai": "^4.1.2",
-    "mocha": "^3.5.3",
+    "mocha": "^4.1.0",
     "node-ssh": "^5.0.0",
-    "nyc": "^11.2.1",
-    "tslint": "^5.7.0",
-    "typescript": "^2.5.2"
+    "nyc": "^11.4.1",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2"
   },
   "main": "build/main.js",
   "scripts": {
+    "test:package": "node node_modules/mocha/bin/mocha test/testPackageFiles.js",
     "test": "node node_modules/mocha/bin/mocha",
     "lint": "npm run tslint \"src/**/*.ts\"",
     "tslint": "tslint",
