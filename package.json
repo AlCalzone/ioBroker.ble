@@ -36,7 +36,7 @@
   "main": "build/main.js",
   "scripts": {
     "test:package": "node node_modules/mocha/bin/mocha test/testPackageFiles.js",
-    "test": "node node_modules/mocha/bin/mocha",
+    "test": "node node_modules/mocha/bin/mocha --exit",
     "lint": "npm run tslint \"src/**/*.ts\"",
     "tslint": "tslint",
     "deploy_local": "node build/deploy_local.js"
