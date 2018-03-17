@@ -1,6 +1,6 @@
 {
   "name": "iobroker.ble",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "ioBroker adapter to monitor Bluetooth Low Energy (BLE) beacons",
   "author": {
     "name": "AlCalzone",

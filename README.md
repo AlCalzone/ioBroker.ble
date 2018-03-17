@@ -25,6 +25,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.3.5 (2018-03-18)
+* (AlCalzone) Bugfix: Next attempt at preserving object properties like history and name
+
 #### 0.3.4 (2018-01-01)
 * (AlCalzone) Bugfix: Keep `history` settings by not overriding existing objects
 * (AlCalzone) Bugfix: When plugins return `undefined`, ignore the packet
