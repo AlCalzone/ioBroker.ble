@@ -38,6 +38,7 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var child_process_1 = require("child_process");
 var global_1 = require("./lib/global");
+var iobroker_objects_1 = require("./lib/iobroker-objects");
 var utils_1 = require("./lib/utils");
 // Load all registered plugins
 var plugins_1 = require("./plugins");
@@ -264,47 +265,24 @@ function onDiscover(peripheral) {
                     global_1.Global.log("adding objects for " + deviceId, "debug");
                     objects = plugin.defineObjects(peripheral);
                     // create the device object
-                    return [4 /*yield*/, adapter.$extendObject(deviceId, {
-                            type: "device",
-                            common: Object.assign({
-                                name: peripheral.advertisement.localName,
-                            }, objects.device.common || {}),
-                            native: Object.assign({
-                                id: peripheral.id,
-                                address: peripheral.address,
-                                addressType: peripheral.addressType,
-                                connectable: peripheral.connectable,
-                            }, objects.device.native || {}),
-                        })];
+                    return [4 /*yield*/, iobroker_objects_1.extendDevice(deviceId, peripheral, objects.device)];
                 case 1:
                     // create the device object
                     _c.sent();
                     if (!(objects.channels != null && objects.channels.length > 0)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, Promise.all(objects.channels.map(function (c) {
-                            return adapter.$extendObject(deviceId + "." + c.id, {
-                                type: "channel",
-                                common: c.common,
-                                native: c.native || {},
-                            });
-                        }))];
+                    return [4 /*yield*/, Promise.all(objects.channels.map(function (c) { return iobroker_objects_1.extendChannel(deviceId + "." + c.id, c); }))];
                 case 2:
                     _c.sent();
                     _c.label = 3;
                 case 3: 
                 // create all state objects
-                return [4 /*yield*/, Promise.all(objects.states.map(function (s) {
-                        return adapter.$extendObject(deviceId + "." + s.id, {
-                            type: "state",
-                            common: s.common,
-                            native: s.native || {},
-                        });
-                    }))];
+                return [4 /*yield*/, Promise.all(objects.states.map(function (s) { return iobroker_objects_1.extendState(deviceId + "." + s.id, s); }))];
                 case 4:
                     // create all state objects
                     _c.sent();
                     // also create device information states
-                    return [4 /*yield*/, adapter.$extendObject(deviceId + ".rssi", {
-                            type: "state",
+                    return [4 /*yield*/, iobroker_objects_1.extendState(deviceId + ".rssi", {
+                            id: "rssi",
                             common: {
                                 role: "value.rssi",
                                 name: "signal strength (RSSI)",

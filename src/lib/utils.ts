@@ -1,31 +1,26 @@
 // tslint:disable:unified-signatures
 // tslint:disable:no-var-requires
 import * as fs from "fs";
+import * as path from "path";
 
 // Get js-controller directory to load libs
-function getControllerDir(isInstall): string {
-    // Find the js-controller location
-    var controllerDir: string | string[] = __dirname.replace(/\\/g, '/');
-    controllerDir = controllerDir.split('/');
-    if (controllerDir[controllerDir.length - 4] === 'adapter') {
-        controllerDir.splice(controllerDir.length - 4, 4);
-        controllerDir = controllerDir.join('/');
-    } else if (controllerDir[controllerDir.length - 4] === 'node_modules') {
-        controllerDir.splice(controllerDir.length - 4, 4);
-        controllerDir = controllerDir.join('/');
-        if (fs.existsSync(controllerDir + '/node_modules/iobroker.js-controller')) {
-            controllerDir += '/node_modules/iobroker.js-controller';
-        } else if (fs.existsSync(controllerDir + '/node_modules/ioBroker.js-controller')) {
-			controllerDir += '/node_modules/ioBroker.js-controller';
-		} else if (!fs.existsSync(controllerDir + '/controller.js')) {
-			if (!isInstall) {
-				console.log("Cannot find js-controller");
-				process.exit(10);
-			} else {
-				process.exit();
+function getControllerDir(isInstall: boolean): string {
+	// Find the js-controller location
+	const possibilities = [
+		"iobroker.js-controller",
+		"ioBroker.js-controller",
+	];
+	let controllerPath: string;
+	for (const pkg of possibilities) {
+		try {
+			const possiblePath = require.resolve(pkg);
+			if (fs.existsSync(possiblePath)) {
+				controllerPath = possiblePath;
+				break;
 			}
-		}
-	} else {
+		} catch { /* not found */ }
+	}
+	if (controllerPath == null) {
 		if (!isInstall) {
 			console.log("Cannot find js-controller");
 			process.exit(10);
@@ -33,16 +28,19 @@ function getControllerDir(isInstall): string {
 			process.exit();
 		}
 	}
-	return controllerDir as string;
+	// we found the controller
+	return path.dirname(controllerPath);
 }
 
 // Read controller configuration file
 const controllerDir = getControllerDir(typeof process !== "undefined" && process.argv && process.argv.indexOf("--install") !== -1);
 function getConfig() {
-	return JSON.parse(fs.readFileSync(controllerDir + "/conf/iobroker.json", "utf8"));
+	return JSON.parse(
+		fs.readFileSync(path.join(controllerDir, "conf/iobroker.json"), "utf8"),
+	);
 }
 
-const adapter = require(controllerDir + "/lib/adapter.js");
+const adapter = require(path.join(controllerDir, "lib/adapter.js"));
 
 export default {
 	controllerDir: controllerDir,

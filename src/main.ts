@@ -1,10 +1,12 @@
 import { exec } from "child_process";
 import { ExtendedAdapter, Global as _ } from "./lib/global";
+import { extendChannel, extendDevice, extendState } from "./lib/iobroker-objects";
 import utils from "./lib/utils";
 
 // Load all registered plugins
 import plugins from "./plugins";
 import { Plugin } from "./plugins/plugin";
+
 let enabledPlugins: Plugin[];
 let services: string[] = [];
 
@@ -235,49 +237,24 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		const objects = plugin.defineObjects(peripheral);
 
 		// create the device object
-		await adapter.$extendObject(deviceId, {
-			type: "device",
-			common: Object.assign(
-				{
-					name: peripheral.advertisement.localName,
-				},
-				objects.device.common || {},
-			),
-			native: Object.assign(
-				{
-					id: peripheral.id,
-					address: peripheral.address,
-					addressType: peripheral.addressType,
-					connectable: peripheral.connectable,
-				},
-				objects.device.native || {},
-			),
-		});
+		await extendDevice(deviceId, peripheral, objects.device);
 		// create all channel objects
 		if (objects.channels != null && objects.channels.length > 0) { // channels are optional
 			await Promise.all(
-				objects.channels.map((c) => {
-					return adapter.$extendObject(deviceId + "." + c.id, {
-						type: "channel",
-						common: c.common,
-						native: c.native || {},
-					});
-				}),
+				objects.channels.map(
+					c => extendChannel(deviceId + "." + c.id, c),
+				),
 			);
 		}
 		// create all state objects
 		await Promise.all(
-			objects.states.map((s) => {
-				return adapter.$extendObject(deviceId + "." + s.id, {
-					type: "state",
-					common: s.common,
-					native: s.native || {},
-				});
-			}),
+			objects.states.map(
+				s => extendState(deviceId + "." + s.id, s),
+			),
 		);
 		// also create device information states
-		await adapter.$extendObject(`${deviceId}.rssi`, {
-			type: "state",
+		await extendState(`${deviceId}.rssi`, {
+			id: "rssi",
 			common: {
 				role: "value.rssi",
 				name: "signal strength (RSSI)",
@@ -295,7 +272,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	const rssiState = await adapter.$getState(`${deviceId}.rssi`);
 	if (
 		rssiState == null ||
-		(rssiState.val !== peripheral.rssi &&				// only save changes
+		(rssiState.val !== peripheral.rssi &&			// only save changes
 		rssiState.lc + rssiUpdateInterval < Date.now())	// and dont update too frequently
 	) {
 		_.log(`updating rssi state for ${deviceId}`, "debug");

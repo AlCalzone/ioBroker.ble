@@ -794,6 +794,7 @@ declare global {
 
 		} // end interface Objects
 
+		type LogLevel = "silly" | "debug" | "info" | "warn" | "error";
 		interface Logger {
 			/** log message with silly level */
 			silly(message: string): void;
@@ -807,7 +808,7 @@ declare global {
 			error(message: string): void;
 
 			/** Verbosity of the log output */
-			level: "silly" | "debug" | "info" | "warn" | "error";
+			level: LogLevel;
 		}
 
 		interface Certificates {
