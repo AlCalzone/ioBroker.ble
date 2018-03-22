@@ -1,74 +1,65 @@
-﻿"use strict";
+"use strict";
 var global_1 = require("../lib/global");
-
-const FRAME_CONTROL = {
-	MAC_INCLUDE: 0b10000,
-	CAPABILITY_INCLUDE: 0b100000,
-	EVENT_INCLUDE: 0b1000000,
+var eventParsers = {
+    4106: function (buffer, offset) { return ({ bat: buffer.readUInt8(offset) }); },
+    4109: function (buffer, offset) { return ({
+        tmp: buffer.readUInt16LE(offset) / 10,
+        hum: buffer.readUInt16LE(offset + 2) / 10,
+    }); },
+    4102: function (buffer, offset) { return ({ hum: buffer.readUInt16LE(offset) / 10 }); },
+    4100: function (buffer, offset) { return ({ tmp: buffer.readUInt16LE(offset) / 10 }); },
 };
-
-const EVENT_ID = {
-	4106: (buffer, offset) => ({bat: buffer.readUInt8(offset)}), // BATTERY
-	4109: (buffer, offset) => ({
-		tmp: buffer.readUInt16LE(offset) / 10,
-		hum: buffer.readUInt16LE(offset + 2) /10,
-	}), // TEMP_HUM
-	4102: (buffer, offset) => ({hum: buffer.readUInt16LE(offset) /10}), // HUM
-	4100: (buffer, offset) => ({tmp: buffer.readUInt16LE(offset) /10}), // TEMP
-};
-
 function readServiceData(data) {
-	if (data.length < 5) return null;
-	const buff = Buffer.from(data);
-	const result = {};
-	let offset = 0;
-
-	const frameControl = ((buff.readUInt8(1) << 8) + buff.readUInt8(0));
-	result.productId = buff.readUInt16LE(2);
-	result.counter = buff.readUInt8(4);
-
-	offset = 5;
-
-	result.frameControl = Object.keys(FRAME_CONTROL).map(id => {
-		return (FRAME_CONTROL[id] & frameControl) && id;
-	}).filter(Boolean);
-
-	if (frameControl & FRAME_CONTROL.MAC_INCLUDE) {
-		if (data.length < offset + 6) return null;
-		result.mac = buff.toString('hex', offset, offset + 5);
-		offset += 6;
-	}
-
-	if (frameControl & FRAME_CONTROL.CAPABILITY_INCLUDE) {
-		if (data.length < offset + 1) return null;
-		result.capability = buff.readUInt8(offset);
-		offset++;
-	}
-
-	if (frameControl & FRAME_CONTROL.EVENT_INCLUDE) {
-		if (data.length < offset + 3) return null;
-		result.event = readEventData(buff, offset);
-	}
-
-	return result;
+    if (data.length < 5)
+        return null;
+    var offset = 0;
+    var frameControl = data.readUInt16LE(0);
+    var productId = data.readUInt16LE(2);
+    var frameCounter = data.readUInt8(4);
+    offset = 5;
+    var mac;
+    var capability;
+    var event;
+    if (frameControl & 16 /* MAC_INCLUDE */) {
+        if (data.length < offset + 6)
+            return null;
+        mac = data.toString("hex", offset, offset + 5);
+        offset += 6;
+    }
+    if (frameControl & 32 /* CAPABILITY_INCLUDE */) {
+        if (data.length < offset + 1)
+            return null;
+        capability = data.readUInt8(offset);
+        offset++;
+    }
+    if (frameControl & 64 /* EVENT_INCLUDE */) {
+        if (data.length < offset + 3)
+            return null;
+        event = readEventData(data, offset);
+    }
+    return {
+        productId: productId,
+        frameCounter: frameCounter,
+        mac: mac,
+        capability: capability,
+        event: event,
+    };
 }
-
-function readEventData(buffer, offset = 0) {
-	const eventID = buffer.readUInt16LE(offset);
-	const length = buffer.readUInt8(offset + 2);
-	let data;
-
-	if (EVENT_ID[eventID] && buffer.length >= (offset + 3 + length)) {
-		data = EVENT_ID[eventID](buffer, offset + 3);
-	}
-
-	return {
-		eventID, length,
-		raw: buffer.toString('hex', offset + 3, (offset + 3 + length)),
-		data,
-	}
+function readEventData(buffer, offset) {
+    if (offset === void 0) { offset = 0; }
+    var eventID = buffer.readUInt16LE(offset);
+    var length = buffer.readUInt8(offset + 2);
+    var data;
+    if (eventParsers[eventID] && buffer.length >= (offset + 3 + length)) {
+        data = eventParsers[eventID](buffer, offset + 3);
+    }
+    return {
+        eventID: eventID,
+        length: length,
+        rawHex: buffer.toString("hex", offset + 3, (offset + 3 + length)),
+        data: data,
+    };
 }
-
 var plugin = {
     name: "Mi-Temperature",
     description: "Xiaomi Mi Temperatursensor",
@@ -88,7 +79,7 @@ var plugin = {
             common: null,
             native: null,
         };
-
+        // no channels
         var stateObjects = [
             {
                 id: "battery",
@@ -135,35 +126,34 @@ var plugin = {
         };
     },
     getValues: function (peripheral) {
-        var data, temperature, humidity;
-		var ret = {};
-		
-		const {advertisement, id, rssi, address} = peripheral;
-		const {localName, serviceData, serviceUuids} = advertisement;
-		let xiaomiData = null;
-
-		for (let i in serviceData) {
-			if (serviceData[i].uuid.toString('hex') === 'fe95') {
-				xiaomiData = serviceData[i].data;
-			}
-		}
-		xiaomiData = readServiceData(xiaomiData);
-
-		global_1.Global.log("mi-temperature >> xiaomiData: " + JSON.stringify(xiaomiData["event"]["data"]), "debug");
-		
-		var data = xiaomiData["event"]["data"];
-		if(data.hasOwnProperty("hum")) {
-			ret["humidity"] = data["hum"];
-		}
-		if(data.hasOwnProperty("tmp")) {
-			ret["temperature"] = data["tmp"];
-		}
-		if(data.hasOwnProperty("bat")) {
-			ret["battery"] = data["bat"];
-		}
-
+        var data;
+        for (var _i = 0, _a = peripheral.advertisement.serviceData; _i < _a.length; _i++) {
+            var entry = _a[_i];
+            var uuid = entry.uuid;
+            if (entry.uuid === "fe95") {
+                data = entry.data;
+                break;
+            }
+        }
+        if (data == null)
+            return;
+        global_1.Global.log("mi-temperature >> got data: " + data.toString("hex"), "debug");
+        var serviceData = readServiceData(data);
+        if (!(serviceData && serviceData.event && serviceData.event.data)) {
+            global_1.Global.log("mi-temperature >> could not parse data", "debug");
+        }
+        var eventData = serviceData.event.data;
+        var ret = {};
+        if (eventData.hasOwnProperty("hum")) {
+            ret.humidity = eventData.hum;
+        }
+        if (eventData.hasOwnProperty("tmp")) {
+            ret.temperature = eventData.tmp;
+        }
+        if (eventData.hasOwnProperty("bat")) {
+            ret.battery = eventData.bat;
+        }
         return ret;
     },
 };
 module.exports = plugin;
-
