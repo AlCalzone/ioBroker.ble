@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.3.5",
+        "version": "0.4.0",
         "news": {
+            "0.4.0": {
+                "en": "Support for Mi Temperature sensor using the `mi-temperature` plugin",
+                "de": "Unterstützung für den Mi Temperatur-Sensor durch das `mi-temperature`-Plugin"
+            },
             "0.3.5": {
                 "en": "Bugfixes",
                 "de": "Bugfixes"

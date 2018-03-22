@@ -1,12 +1,14 @@
 {
   "name": "iobroker.ble",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "ioBroker adapter to monitor Bluetooth Low Energy (BLE) beacons",
   "author": {
     "name": "AlCalzone",
     "email": "d.griesel@gmx.net"
   },
-  "contributors": [],
+  "contributors": [
+    "zuvielx9 (https://github.com/zuvielx9)"
+  ],
   "homepage": "https://github.com/AlCalzone/ioBroker.ble",
   "license": "MIT",
   "keywords": [
@@ -20,7 +22,7 @@
     "url": "https://github.com/AlCalzone/ioBroker.ble"
   },
   "dependencies": {
-    "noble": "~1.9.1"
+    "noble": "^1.9.1"
   },
   "devDependencies": {
     "@types/chai": "^4.1.2",
