@@ -231,6 +231,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		return;
 	}
 
+	// TODO: update dynamically
 	// if this peripheral is unknown, create the objects
 	if (knownDevices.indexOf(deviceId) === -1) {
 		_.log(`adding objects for ${deviceId}`, "debug");

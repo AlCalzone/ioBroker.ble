@@ -1,3 +1,4 @@
+/// <reference types="node" />
 export declare type DeviceObjectDefinition = Pick<ioBroker.DeviceObject, "common" | "native">;
 export declare type ChannelObjectDefinition = Pick<ioBroker.ChannelObject, "common" | "native"> & {
     id: string;
@@ -43,3 +44,6 @@ export interface Plugin {
         [id: string]: any;
     };
 }
+export declare function getServiceData(peripheral: BLE.Peripheral, uuid: string): Buffer | null;
+/** Aliases an existing plugin with a new name */
+export declare function alias(newName: string, oldPlugin: Plugin): Plugin;

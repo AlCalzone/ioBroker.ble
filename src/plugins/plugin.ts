@@ -42,3 +42,20 @@ export interface Plugin {
 	/** Returns the values extracted from the peripheral */
 	getValues: (peripheral: BLE.Peripheral) => { [id: string]: any };
 }
+
+// TODO: provide a way for the plugin to store some context
+
+export function getServiceData(peripheral: BLE.Peripheral, uuid: string): Buffer | null {
+	for (const entry of peripheral.advertisement.serviceData) {
+		if (entry.uuid === "fe95") return entry.data;
+	}
+}
+
+/** Aliases an existing plugin with a new name */
+export function alias(newName: string, oldPlugin: Plugin): Plugin {
+	const {name, ...plugin} = oldPlugin;
+	return {
+		name: newName,
+		...plugin,
+	};
+}

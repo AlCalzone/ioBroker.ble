@@ -1,0 +1,65 @@
+ 0 1  2 3  4  5 6 7 8 9 0  1  2 3  4 5
+7120 9800 b0 795d658d7cc4 0d 0810 010e
+
+2 = version: 2
+071 = flags: 
+X X 9 8 7 6 5 4 3 2 1 0
+0 0 0 0 0 1 1 1 0 0 0 1
+0 = FLAG_NEW_FACTORY +
+1 = FLAG_CONNECTED   -
+2 = FLAG_CENTRAL     -
+3 = FLAG_ENCRYPTED   -
+4 = FLAG_MAC_ADDRESS +
+5 = FLAG_CAPABILITY  +
+6 = FLAG_EVENT       +
+7 = FLAG_CUSTOM_DATA -
+8 = FLAG_SUBTITLE    -
+9 = FLAG_BINDING     -
+
+b0 = counter
+
+0098 = productID
+
+795d658d7cc4 = MAC
+
+0d = capability:
+7 6 5 4 3 2 1 0
+0 0 0 0 1 1 0 1
+0 = CAPABILITY_CONNECTABLE +
+1 = CAPABILITY_CENTRAL     -
+2 = CAPABILITY_ENCRYPT     +
+4/3 = CAPABILITY_IO        ?
+
+1008 = event ID
+
+01 0e = event data (length 1, value 0e)
+
+-----------
+ 0 1  2 3  4  5 6 7 8 9 0  1
+3102 9800 06 dab4618d7cc4 0d
+0 = version
+231 = flags:
+X X 9 8 7 6 5 4 3 2 1 0
+0 0 1 0 0 0 1 1 0 0 0 1
+FLAG_NEW_FACTORY, FLAG_MAC_ADDRESS, FLAG_CAPABILITY, FLAG_BINDING
+
+0098 = productID
+
+06 = counter
+
+dab4618d7cc4 = mac
+
+0d = capability:
+7 6 5 4 3 2 1 0
+0 0 0 0 1 1 0 1
+0 = CAPABILITY_CONNECTABLE +
+1 = CAPABILITY_CENTRAL     -
+2 = CAPABILITY_ENCRYPT     +
+4/3 = CAPABILITY_IO        ?
+
+---
+
+
+71209800b1795d658d7cc40d0910023200
+
+71209800b2795d658d7cc40d041002e100
