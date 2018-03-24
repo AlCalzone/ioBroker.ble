@@ -31,7 +31,11 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
-#### 0.4.0 (2018-03-22)
+#### 0.4.1 (2018-03-24)
+* (AlCalzone) Forgot to load legacy `mi-flora` plugin
+* (AlCalzone) Fixed an error when a plugin defines no objects
+
+#### 0.4.0 (2018-03-24)
 * (zuvielx9 & AlCalzone) Support for all Xiaomi bluetooth sensors using the `xiaomi` plugin
 * (AlCalzone) reworked plugin system slightly
 
