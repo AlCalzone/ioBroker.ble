@@ -30,7 +30,16 @@ export async function extendDevice(
 		),
 	};
 
-	await _.adapter.$setObject(deviceId, updated);
+	// check if we have to update anything
+	if (
+		original == null
+		|| JSON.stringify(original.common) !== JSON.stringify(updated.common)
+		|| JSON.stringify(original.native) !== JSON.stringify(updated.native)
+	) {
+		_.log(`${original == null ? "creating" : "updating"} device object ${deviceId}`, "debug");
+		await _.adapter.$setObject(deviceId, updated);
+	}
+
 }
 
 export async function extendChannel(
@@ -54,7 +63,15 @@ export async function extendChannel(
 		),
 	};
 
-	await _.adapter.$setObject(channelId, updated);
+	// check if we have to update anything
+	if (
+		original == null
+		|| JSON.stringify(original.common) !== JSON.stringify(updated.common)
+		|| JSON.stringify(original.native) !== JSON.stringify(updated.native)
+	) {
+		_.log(`${original == null ? "creating" : "updating"} channel object ${channelId}`, "debug");
+		await _.adapter.$setObject(channelId, updated);
+	}
 }
 
 export async function extendState(
@@ -75,5 +92,13 @@ export async function extendState(
 		),
 	};
 
-	await _.adapter.$setObject(stateId, updated);
+	// check if we have to update anything
+	if (
+		original == null
+		|| JSON.stringify(original.common) !== JSON.stringify(updated.common)
+		|| JSON.stringify(original.native) !== JSON.stringify(updated.native)
+	) {
+		_.log(`${original == null ? "creating" : "updating"} state object ${stateId}`, "debug");
+		await _.adapter.$setObject(stateId, updated);
+	}
 }

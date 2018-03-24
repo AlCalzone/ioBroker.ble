@@ -57,10 +57,15 @@ function extendDevice(deviceId, peripheral, object) {
                             connectable: peripheral.connectable,
                         }, object.native || {}, (original && original.native) || {}),
                     };
+                    if (!(original == null
+                        || JSON.stringify(original.common) !== JSON.stringify(updated.common)
+                        || JSON.stringify(original.native) !== JSON.stringify(updated.native))) return [3 /*break*/, 3];
+                    global_1.Global.log((original == null ? "creating" : "updating") + " device object " + deviceId, "debug");
                     return [4 /*yield*/, global_1.Global.adapter.$setObject(deviceId, updated)];
                 case 2:
                     _a.sent();
-                    return [2 /*return*/];
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     });
@@ -81,10 +86,15 @@ function extendChannel(channelId, object) {
                         }, object.common || {}, (original && original.common) || {}),
                         native: Object.assign(object.native || {}, (original && original.native) || {}),
                     };
+                    if (!(original == null
+                        || JSON.stringify(original.common) !== JSON.stringify(updated.common)
+                        || JSON.stringify(original.native) !== JSON.stringify(updated.native))) return [3 /*break*/, 3];
+                    global_1.Global.log((original == null ? "creating" : "updating") + " channel object " + channelId, "debug");
                     return [4 /*yield*/, global_1.Global.adapter.$setObject(channelId, updated)];
                 case 2:
                     _a.sent();
-                    return [2 /*return*/];
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     });
@@ -103,10 +113,15 @@ function extendState(stateId, object) {
                         common: Object.assign(object.common, (original && original.common) || {}),
                         native: Object.assign(object.native || {}, (original && original.native) || {}),
                     };
+                    if (!(original == null
+                        || JSON.stringify(original.common) !== JSON.stringify(updated.common)
+                        || JSON.stringify(original.native) !== JSON.stringify(updated.native))) return [3 /*break*/, 3];
+                    global_1.Global.log((original == null ? "creating" : "updating") + " state object " + stateId, "debug");
                     return [4 /*yield*/, global_1.Global.adapter.$setObject(stateId, updated)];
                 case 2:
                     _a.sent();
-                    return [2 /*return*/];
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     });

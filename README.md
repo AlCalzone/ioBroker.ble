@@ -25,6 +25,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.4.0 (2018-03-22)
+* (zuvielx9) Support for Mi Temperature sensor using the `mi-temperature` plugin
+
 #### 0.3.5 (2018-03-18)
 * (AlCalzone) Bugfix: Next attempt at preserving object properties like history and name
 

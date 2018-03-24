@@ -7,6 +7,7 @@ node_modules
 test
 .travis.yml
 appveyor.yml
+.circleci/
 /src
 travis/
 obj/
@@ -19,6 +20,9 @@ tsconfig.json
 iobroker.*.tgz
 build/**/*.map
 Thumbs.db
+.nyc_output/
+coverage/
+maintenance/
 
 # Local debugging password
 *_password.json

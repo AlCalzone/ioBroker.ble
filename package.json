@@ -1,12 +1,14 @@
 {
   "name": "iobroker.ble",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "ioBroker adapter to monitor Bluetooth Low Energy (BLE) beacons",
   "author": {
     "name": "AlCalzone",
     "email": "d.griesel@gmx.net"
   },
-  "contributors": [],
+  "contributors": [
+    "zuvielx9 (https://github.com/zuvielx9)"
+  ],
   "homepage": "https://github.com/AlCalzone/ioBroker.ble",
   "license": "MIT",
   "keywords": [
@@ -20,29 +22,65 @@
     "url": "https://github.com/AlCalzone/ioBroker.ble"
   },
   "dependencies": {
-    "noble": "~1.8.1"
+    "noble": "^1.9.1"
   },
   "devDependencies": {
-    "@types/chai": "^4.0.10",
-    "@types/mocha": "^2.2.45",
+    "@types/chai": "^4.1.2",
+    "@types/mocha": "^5.0.0",
     "@types/node": "^6.0.88",
     "chai": "^4.1.2",
-    "mocha": "^4.1.0",
-    "node-ssh": "^5.0.0",
-    "nyc": "^11.4.1",
-    "tslint": "^5.8.0",
+    "mocha": "^5.0.5",
+    "node-ssh": "^5.1.1",
+    "nyc": "^11.6.0",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.4",
+    "ts-node": "^5.0.1",
+    "tslint": "^5.9.1",
     "typescript": "^2.7.2"
   },
   "main": "build/main.js",
   "scripts": {
+    "build": "tsc",
+    "prebuild": "rimraf ./build",
+    "watch": "tsc --watch",
     "test:package": "node node_modules/mocha/bin/mocha test/testPackageFiles.js",
-    "test": "node node_modules/mocha/bin/mocha --exit",
-    "lint": "npm run tslint \"src/**/*.ts\"",
-    "tslint": "tslint",
-    "deploy_local": "node build/deploy_local.js"
+    "test:js": "node node_modules/mocha/bin/mocha test/testAdapter.js --exit",
+    "test:ts": "node_modules/.bin/mocha --opts ./test/mocha.ts.opts",
+    "test": "npm run test:ts && npm run test:package && npm run test:js",
+    "coverage": "node_modules/.bin/nyc npm run test:ts",
+    "show-coverage": "npm run coverage && start ./coverage/index.html",
+    "lint:ts": "tslint",
+    "lint": "npm run lint:ts \"src/**/*.ts\"",
+    "deploy_local": "node build/deploy_local.js",
+    "prepublishOnly": "npm run test:ts && npm run test:package"
   },
   "bugs": {
     "url": "https://github.com/AlCalzone/ioBroker.ble/issues"
+  },
+  "nyc": {
+    "all": false,
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "build/**",
+      "src/**/*.test.ts",
+      "node_modules/**"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html",
+      "lcov"
+    ],
+    "sourceMap": true,
+    "instrument": true
   },
   "readmeFilename": "README.md"
 }

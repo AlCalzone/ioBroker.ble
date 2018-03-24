@@ -44,8 +44,8 @@ var utils_1 = require("./lib/utils");
 var plugins_1 = require("./plugins");
 var enabledPlugins;
 var services = [];
-/** MAC addresses of known devices */
-var knownDevices = [];
+// /** MAC addresses of known devices */
+// let knownDevices: string[] = [];
 /** How frequent the RSSI of devices should be updated */
 var rssiUpdateInterval = 0;
 // noble-Treiber-Instanz
@@ -56,9 +56,9 @@ var adapter = utils_1.default.adapter({
     // is called when databases are connected and adapter received configuration.
     // start here!
     ready: function () { return __awaiter(_this, void 0, void 0, function () {
-        var enabledPluginNames, _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var enabledPluginNames, _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     // Adapter-Instanz global machen
                     adapter = global_1.Global.extend(adapter);
@@ -67,7 +67,7 @@ var adapter = utils_1.default.adapter({
                     return [4 /*yield*/, global_1.Global.ensureInstanceObjects()];
                 case 1:
                     // Workaround für fehlende InstanceObjects nach update
-                    _d.sent();
+                    _b.sent();
                     // Plugins laden
                     global_1.Global.log("loaded plugins: " + plugins_1.default.map(function (p) { return p.name; }).join(", "));
                     enabledPluginNames = (adapter.config.plugins || "")
@@ -83,8 +83,8 @@ var adapter = utils_1.default.adapter({
                     }
                     else {
                         services =
-                            (_c = adapter.config.services.split(",")) // get manually defined services
-                            .concat.apply(_c, enabledPlugins.map(function (p) { return p.advertisedServices; })).reduce(function (acc, s) { return acc.concat(s); }, []) // flatten the arrays
+                            (_a = adapter.config.services.split(",")) // get manually defined services
+                            .concat.apply(_a, enabledPlugins.map(function (p) { return p.advertisedServices; })).reduce(function (acc, s) { return acc.concat(s); }, []) // flatten the arrays
                                 .map(function (s) { return fixServiceName(s); }) // cleanup the names
                                 .filter(function (s) { return s != null && s !== ""; })
                                 .reduce(function (acc, s) {
@@ -100,11 +100,6 @@ var adapter = utils_1.default.adapter({
                     }
                     adapter.subscribeStates("*");
                     adapter.subscribeObjects("*");
-                    _b = (_a = Object).keys;
-                    return [4 /*yield*/, global_1.Global.$$(adapter.namespace + ".*", "device")];
-                case 2:
-                    // Find all known devices
-                    knownDevices = _b.apply(_a, [_d.sent()]);
                     // load noble driver with the correct device selected
                     process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
                     noble = require("noble");
@@ -225,7 +220,7 @@ function fixServiceName(name) {
 }
 function onDiscover(peripheral) {
     return __awaiter(this, void 0, void 0, function () {
-        var deviceId, plugin, _i, enabledPlugins_1, p, objects, rssiState, values, _a, _b, stateId, iobStateId;
+        var deviceId, plugin, _i, enabledPlugins_1, p, rssiState, context, objects, values, _a, _b, stateId, iobStateId;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -261,26 +256,7 @@ function onDiscover(peripheral) {
                         global_1.Global.log("no handling plugin found for peripheral " + peripheral.id, "warn");
                         return [2 /*return*/];
                     }
-                    if (!(knownDevices.indexOf(deviceId) === -1)) return [3 /*break*/, 6];
-                    global_1.Global.log("adding objects for " + deviceId, "debug");
-                    objects = plugin.defineObjects(peripheral);
-                    // create the device object
-                    return [4 /*yield*/, iobroker_objects_1.extendDevice(deviceId, peripheral, objects.device)];
-                case 1:
-                    // create the device object
-                    _c.sent();
-                    if (!(objects.channels != null && objects.channels.length > 0)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, Promise.all(objects.channels.map(function (c) { return iobroker_objects_1.extendChannel(deviceId + "." + c.id, c); }))];
-                case 2:
-                    _c.sent();
-                    _c.label = 3;
-                case 3: 
-                // create all state objects
-                return [4 /*yield*/, Promise.all(objects.states.map(function (s) { return iobroker_objects_1.extendState(deviceId + "." + s.id, s); }))];
-                case 4:
-                    // create all state objects
-                    _c.sent();
-                    // also create device information states
+                    // Always ensure the rssi state exists and gets a value
                     return [4 /*yield*/, iobroker_objects_1.extendState(deviceId + ".rssi", {
                             id: "rssi",
                             common: {
@@ -293,52 +269,68 @@ function onDiscover(peripheral) {
                             },
                             native: {},
                         })];
-                case 5:
-                    // also create device information states
+                case 1:
+                    // Always ensure the rssi state exists and gets a value
                     _c.sent();
-                    knownDevices.push(deviceId);
-                    _c.label = 6;
-                case 6: return [4 /*yield*/, adapter.$getState(deviceId + ".rssi")];
-                case 7:
+                    return [4 /*yield*/, adapter.$getState(deviceId + ".rssi")];
+                case 2:
                     rssiState = _c.sent();
                     if (!(rssiState == null ||
                         (rssiState.val !== peripheral.rssi && // only save changes
                             rssiState.lc + rssiUpdateInterval < Date.now())) // and dont update too frequently
-                    ) return [3 /*break*/, 9]; // and dont update too frequently
+                    ) return [3 /*break*/, 4]; // and dont update too frequently
                     global_1.Global.log("updating rssi state for " + deviceId, "debug");
                     return [4 /*yield*/, adapter.$setState(deviceId + ".rssi", peripheral.rssi, true)];
-                case 8:
+                case 3:
                     _c.sent();
-                    _c.label = 9;
-                case 9:
-                    values = plugin.getValues(peripheral);
-                    if (!(values != null)) return [3 /*break*/, 16];
+                    _c.label = 4;
+                case 4:
+                    context = plugin.createContext(peripheral);
+                    objects = plugin.defineObjects(context);
+                    values = plugin.getValues(context);
+                    // Ensure the device object exists
+                    return [4 /*yield*/, iobroker_objects_1.extendDevice(deviceId, peripheral, objects.device)];
+                case 5:
+                    // Ensure the device object exists
+                    _c.sent();
+                    if (!(objects.channels != null && objects.channels.length > 0)) return [3 /*break*/, 7];
+                    return [4 /*yield*/, Promise.all(objects.channels.map(function (c) { return iobroker_objects_1.extendChannel(deviceId + "." + c.id, c); }))];
+                case 6:
+                    _c.sent();
+                    _c.label = 7;
+                case 7: 
+                // Ensure the state objects exist. These might change in every advertisement frame
+                return [4 /*yield*/, Promise.all(objects.states.map(function (s) { return iobroker_objects_1.extendState(deviceId + "." + s.id, s); }))];
+                case 8:
+                    // Ensure the state objects exist. These might change in every advertisement frame
+                    _c.sent();
+                    if (!(values != null)) return [3 /*break*/, 15];
                     global_1.Global.log(deviceId + " > got values: " + JSON.stringify(values), "debug");
                     _a = 0, _b = Object.keys(values);
-                    _c.label = 10;
-                case 10:
-                    if (!(_a < _b.length)) return [3 /*break*/, 15];
+                    _c.label = 9;
+                case 9:
+                    if (!(_a < _b.length)) return [3 /*break*/, 14];
                     stateId = _b[_a];
                     iobStateId = adapter.namespace + "." + deviceId + "." + stateId;
                     return [4 /*yield*/, adapter.$getObject(iobStateId)];
-                case 11:
-                    if (!((_c.sent()) != null)) return [3 /*break*/, 13];
+                case 10:
+                    if (!((_c.sent()) != null)) return [3 /*break*/, 12];
                     global_1.Global.log("setting state " + iobStateId, "debug");
                     return [4 /*yield*/, adapter.$setStateChanged(iobStateId, values[stateId], true)];
-                case 12:
+                case 11:
                     _c.sent();
-                    return [3 /*break*/, 14];
+                    return [3 /*break*/, 13];
+                case 12:
+                    global_1.Global.log("skipping state " + iobStateId + " because the object does not exist", "warn");
+                    _c.label = 13;
                 case 13:
-                    global_1.Global.log("skipping state " + iobStateId, "debug");
-                    _c.label = 14;
-                case 14:
                     _a++;
-                    return [3 /*break*/, 10];
-                case 15: return [3 /*break*/, 17];
-                case 16:
+                    return [3 /*break*/, 9];
+                case 14: return [3 /*break*/, 16];
+                case 15:
                     global_1.Global.log(deviceId + " > got no values", "debug");
-                    _c.label = 17;
-                case 17: return [2 /*return*/];
+                    _c.label = 16;
+                case 16: return [2 /*return*/];
             }
         });
     });

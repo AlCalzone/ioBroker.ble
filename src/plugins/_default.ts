@@ -19,6 +19,9 @@ const plugin: Plugin = {
 	advertisedServices: [],
 	isHandling: (p) => true,
 
+	// No special context necessary. Return the peripheral, so it gets passed to the other methods.
+	createContext: (peripheral: BLE.Peripheral) => peripheral,
+
 	defineObjects: (peripheral: BLE.Peripheral): PeripheralObjectStructure => {
 
 		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
@@ -64,8 +67,8 @@ const plugin: Plugin = {
 
 	},
 
-	getValues: (peripheral: BLE.Peripheral): { [id: string]: any } => {
-		const ret: { [id: string]: any } = {};
+	getValues: (peripheral: BLE.Peripheral) => {
+		const ret = {};
 		for (const entry of peripheral.advertisement.serviceData) {
 			const uuid = entry.uuid;
 			const stateId = `services.${uuid}`;

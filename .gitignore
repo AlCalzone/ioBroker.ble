@@ -287,6 +287,11 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
+# compiled test-files
+*.test.js
+/.nyc_output
+coverage/
+
 iobroker.*.tgz
 Thumbs.db
 
