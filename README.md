@@ -23,10 +23,17 @@ The adapter supports extension via plugins. Those define which advertised servic
 
 If you have any device transmitting specially encoded information via advertisements, feel free to create a PR with a new plugin for that.
 
+### Supported plugins
+* `"xiaomi"`: All xiaomi bluetooth sensors, including 
+  * [Flower Care plant sensor](https://xiaomi-mi.com/sockets-and-sensors/xiaomi-huahuacaocao-flower-care-smart-monitor/)
+  * [Mijia Temperature and Humidity sensor](https://www.banggood.com/Xiaomi-Mijia-Bluetooth-Thermometer-Hygrometer-with-LCD-Screen-Magnetic-Suction-Wall-Stickers-p-1232396.html?cur_warehouse=USA)
+* `"mi-flora"`: Origiinal plugin for the flower care plant sensor, now aliased to `"xiaomi"`
+
 ## Changelog
 
 #### 0.4.0 (2018-03-22)
-* (zuvielx9) Support for Mi Temperature sensor using the `mi-temperature` plugin
+* (zuvielx9 & AlCalzone) Support for all Xiaomi bluetooth sensors using the `xiaomi` plugin
+* (AlCalzone) reworked plugin system slightly
 
 #### 0.3.5 (2018-03-18)
 * (AlCalzone) Bugfix: Next attempt at preserving object properties like history and name
