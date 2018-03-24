@@ -288,6 +288,9 @@ function onDiscover(peripheral) {
                     context = plugin.createContext(peripheral);
                     objects = plugin.defineObjects(context);
                     values = plugin.getValues(context);
+                    // We can't do anything without objects
+                    if (objects == null)
+                        return [2 /*return*/];
                     // Ensure the device object exists
                     return [4 /*yield*/, iobroker_objects_1.extendDevice(deviceId, peripheral, objects.device)];
                 case 5:

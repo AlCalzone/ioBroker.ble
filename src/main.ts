@@ -255,6 +255,9 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	const objects = plugin.defineObjects(context);
 	const values = plugin.getValues(context);
 
+	// We can't do anything without objects
+	if (objects == null) return;
+
 	// Ensure the device object exists
 	await extendDevice(deviceId, peripheral, objects.device);
 	// Ensure the channel objects exist (optional)

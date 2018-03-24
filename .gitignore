@@ -295,5 +295,8 @@ coverage/
 iobroker.*.tgz
 Thumbs.db
 
+# TODO: find out if this actually helps
+package-lock.json
+
 # Local debugging password
 *_password.json

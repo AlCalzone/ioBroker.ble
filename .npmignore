@@ -24,5 +24,8 @@ Thumbs.db
 coverage/
 maintenance/
 
+# TODO: find out if this actually helps
+package-lock.json
+
 # Local debugging password
 *_password.json
