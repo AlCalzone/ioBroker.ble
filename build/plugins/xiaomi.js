@@ -6,6 +6,24 @@ var global_1 = require("../lib/global");
 var object_polyfill_1 = require("../lib/object-polyfill");
 var xiaomi_protocol_1 = require("../lib/xiaomi_protocol");
 var plugin_1 = require("./plugin");
+function parseAdvertisementEvent(data) {
+    // try to parse the data
+    var advertisement;
+    try {
+        advertisement = new xiaomi_protocol_1.XiaomiAdvertisement(data);
+    }
+    catch (e) {
+        global_1.Global.log("xiaomi >> failed to parse data", "debug");
+        return;
+    }
+    if (!advertisement.hasEvent || advertisement.isBindingFrame) {
+        global_1.Global.log("xiaomi >> The device is not fully initialized.", "debug");
+        global_1.Global.log("xiaomi >> Use its app to complete the initialization.", "debug");
+        return;
+    }
+    // succesful - return it
+    return advertisement.event;
+}
 var plugin = {
     name: "Xiaomi",
     description: "Xiaomi devices",
@@ -16,7 +34,19 @@ var plugin = {
             return false;
         return p.advertisement.serviceData.some(function (entry) { return entry.uuid === "fe95"; });
     },
-    defineObjects: function (peripheral) {
+    createContext: function (peripheral) {
+        var data = plugin_1.getServiceData(peripheral, "fe95");
+        if (data == null)
+            return;
+        global_1.Global.log("xiaomi >> got data: " + data.toString("hex"), "debug");
+        var event = parseAdvertisementEvent(plugin_1.getServiceData(peripheral, "fe95"));
+        if (event == null)
+            return;
+        return { event: event };
+    },
+    defineObjects: function (context) {
+        if (context == null || context.event == null)
+            return;
         var deviceObject = {
             common: null,
             native: null,
@@ -28,17 +58,8 @@ var plugin = {
             channels: null,
             states: stateObjects,
         };
-        var data = plugin_1.getServiceData(peripheral, "fe95");
-        var advertisement;
-        if (data != null) {
-            // try to parse the data
-            try {
-                advertisement = new xiaomi_protocol_1.XiaomiAdvertisement(data);
-            }
-            catch (e) { }
-        }
-        if (advertisement != null && advertisement.hasEvent) {
-            var event = advertisement.event;
+        var event = context.event;
+        if (event != null) {
             if ("temperature" in event) {
                 stateObjects.push({
                     id: "temperature",
@@ -129,31 +150,15 @@ var plugin = {
         }
         return ret;
     },
-    getValues: function (peripheral) {
-        var data = plugin_1.getServiceData(peripheral, "fe95");
-        if (data == null)
+    getValues: function (context) {
+        if (context == null || context.event == null)
             return;
-        global_1.Global.log("xiaomi >> got data: " + data.toString("hex"), "debug");
-        // try to parse the data
-        var advertisement;
-        try {
-            advertisement = new xiaomi_protocol_1.XiaomiAdvertisement(data);
-        }
-        catch (e) {
-            global_1.Global.log("xiaomi >> failed to parse data", "debug");
-            return;
-        }
-        if (!advertisement.hasEvent || advertisement.isBindingFrame) {
-            global_1.Global.log("xiaomi >> The device is not fully initialized.", "debug");
-            global_1.Global.log("xiaomi >> Use its app to complete the initialization.", "debug");
-            return;
-        }
-        // succesful - return it
-        for (var _i = 0, _a = object_polyfill_1.entries(advertisement.event); _i < _a.length; _i++) {
+        for (var _i = 0, _a = object_polyfill_1.entries(context.event); _i < _a.length; _i++) {
             var _b = _a[_i], prop = _b[0], value = _b[1];
             global_1.Global.log("xiaomi >> {{green|got " + prop + " update => " + value + "}}", "debug");
         }
-        return advertisement.event;
+        // The event is simply the value dictionary itself
+        return context.event;
     },
 };
 module.exports = plugin;

@@ -4,10 +4,34 @@
 
 import { Global as _ } from "../lib/global";
 import { entries } from "../lib/object-polyfill";
-import { MacPrefixes, XiaomiAdvertisement } from "../lib/xiaomi_protocol";
+import { MacPrefixes, XiaomiAdvertisement, XiaomiEvent } from "../lib/xiaomi_protocol";
 import { ChannelObjectDefinition, DeviceObjectDefinition, getServiceData, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "./plugin";
 
-const plugin: Plugin = {
+interface XiaomiContext {
+	event?: XiaomiEvent;
+}
+
+function parseAdvertisementEvent(data: Buffer): XiaomiEvent | null {
+	// try to parse the data
+	let advertisement: XiaomiAdvertisement;
+	try {
+		advertisement = new XiaomiAdvertisement(data);
+	} catch (e) {
+		_.log(`xiaomi >> failed to parse data`, "debug");
+		return;
+	}
+
+	if (!advertisement.hasEvent || advertisement.isBindingFrame) {
+		_.log(`xiaomi >> The device is not fully initialized.`, "debug");
+		_.log(`xiaomi >> Use its app to complete the initialization.`, "debug");
+		return;
+	}
+
+	// succesful - return it
+	return advertisement.event;
+}
+
+const plugin: Plugin<XiaomiContext> = {
 	name: "Xiaomi",
 	description: "Xiaomi devices",
 
@@ -18,7 +42,22 @@ const plugin: Plugin = {
 		return p.advertisement.serviceData.some(entry => entry.uuid === "fe95");
 	},
 
-	defineObjects: (peripheral: BLE.Peripheral): PeripheralObjectStructure => {
+	createContext: (peripheral: BLE.Peripheral) => {
+		const data: Buffer = getServiceData(peripheral, "fe95");
+		if (data == null) return;
+
+		_.log(`xiaomi >> got data: ${data.toString("hex")}`, "debug");
+
+		const event: XiaomiEvent = parseAdvertisementEvent(getServiceData(peripheral, "fe95"));
+		if (event == null) return;
+
+		return { event };
+
+	},
+
+	defineObjects: (context: XiaomiContext): PeripheralObjectStructure => {
+
+		if (context == null || context.event == null) return;
 
 		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
 			common: null,
@@ -35,16 +74,8 @@ const plugin: Plugin = {
 			states: stateObjects,
 		};
 
-		const data: Buffer = getServiceData(peripheral, "fe95");
-		let advertisement: XiaomiAdvertisement;
-		if (data != null) {
-			// try to parse the data
-			try {
-				advertisement = new XiaomiAdvertisement(data);
-			} catch (e) { /* okee */ }
-		}
-		if (advertisement != null && advertisement.hasEvent) {
-			const event = advertisement.event;
+		const event = context.event;
+		if (event != null) {
 			if ("temperature" in event) {
 				stateObjects.push({
 					id: "temperature",
@@ -137,33 +168,15 @@ const plugin: Plugin = {
 		return ret;
 
 	},
-	getValues: (peripheral: BLE.Peripheral): Record<string, any> => {
-		const data: Buffer = getServiceData(peripheral, "fe95");
-		if (data == null) return;
+	getValues: (context: XiaomiContext): Record<string, any> => {
+		if (context == null || context.event == null) return;
 
-		_.log(`xiaomi >> got data: ${data.toString("hex")}`, "debug");
-
-		// try to parse the data
-		let advertisement: XiaomiAdvertisement;
-		try {
-			advertisement = new XiaomiAdvertisement(data);
-		} catch (e) {
-			_.log(`xiaomi >> failed to parse data`, "debug");
-			return;
-		}
-
-		if (!advertisement.hasEvent || advertisement.isBindingFrame) {
-			_.log(`xiaomi >> The device is not fully initialized.`, "debug");
-			_.log(`xiaomi >> Use its app to complete the initialization.`, "debug");
-			return;
-		}
-
-		// succesful - return it
-		for (const [prop, value] of entries(advertisement.event)) {
+		for (const [prop, value] of entries(context.event)) {
 			_.log(`xiaomi >> {{green|got ${prop} update => ${value}}}`, "debug");
 		}
-		return advertisement.event;
+		// The event is simply the value dictionary itself
+		return context.event;
 	},
 };
 
-export = plugin;
+export = plugin as Plugin;

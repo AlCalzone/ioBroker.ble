@@ -28,7 +28,7 @@ export interface PeripheralObjectStructure {
     states: StateObjectDefinition[];
 }
 /** Defines the interface a plugin has to expose */
-export interface Plugin {
+export interface Plugin<TContext = any> {
     /** Name of the plugin */
     name: string;
     /** Description of the plugin */
@@ -37,12 +37,12 @@ export interface Plugin {
     advertisedServices: string[];
     /** Determines whether this plugin is handling a peripheral or not */
     isHandling: (peripheral: BLE.Peripheral) => boolean;
+    /** Creates an object used by @see{defineObjects} and @see{getValues} to create their return values */
+    createContext: (peripheral: BLE.Peripheral) => TContext;
     /** Defines the object structure for a handled peripheral. */
-    defineObjects: (peripheral: BLE.Peripheral) => PeripheralObjectStructure;
+    defineObjects: (context: TContext) => PeripheralObjectStructure;
     /** Returns the values extracted from the peripheral */
-    getValues: (peripheral: BLE.Peripheral) => {
-        [id: string]: any;
-    };
+    getValues: (context: TContext) => Record<string, any>;
 }
 export declare function getServiceData(peripheral: BLE.Peripheral, uuid: string): Buffer | null;
 /** Aliases an existing plugin with a new name */

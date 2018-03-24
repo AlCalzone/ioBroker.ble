@@ -16,6 +16,8 @@ var plugin = {
     // Just handle all services we receive already
     advertisedServices: [],
     isHandling: function (p) { return true; },
+    // No special context necessary. Return the peripheral, so it gets passed to the other methods.
+    createContext: function (peripheral) { return peripheral; },
     defineObjects: function (peripheral) {
         var deviceObject = {
             common: null,

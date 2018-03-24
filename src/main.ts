@@ -10,8 +10,8 @@ import { Plugin } from "./plugins/plugin";
 let enabledPlugins: Plugin[];
 let services: string[] = [];
 
-/** MAC addresses of known devices */
-let knownDevices: string[] = [];
+// /** MAC addresses of known devices */
+// let knownDevices: string[] = [];
 
 /** How frequent the RSSI of devices should be updated */
 let rssiUpdateInterval: number = 0;
@@ -70,11 +70,6 @@ let adapter: ExtendedAdapter = utils.adapter({
 
 		adapter.subscribeStates("*");
 		adapter.subscribeObjects("*");
-
-		// Find all known devices
-		knownDevices = Object.keys(
-			await _.$$(`${adapter.namespace}.*`, "device"),
-		);
 
 		// load noble driver with the correct device selected
 		process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
@@ -231,44 +226,19 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		return;
 	}
 
-	// TODO: update dynamically
-	// if this peripheral is unknown, create the objects
-	if (knownDevices.indexOf(deviceId) === -1) {
-		_.log(`adding objects for ${deviceId}`, "debug");
-		const objects = plugin.defineObjects(peripheral);
-
-		// create the device object
-		await extendDevice(deviceId, peripheral, objects.device);
-		// create all channel objects
-		if (objects.channels != null && objects.channels.length > 0) { // channels are optional
-			await Promise.all(
-				objects.channels.map(
-					c => extendChannel(deviceId + "." + c.id, c),
-				),
-			);
-		}
-		// create all state objects
-		await Promise.all(
-			objects.states.map(
-				s => extendState(deviceId + "." + s.id, s),
-			),
-		);
-		// also create device information states
-		await extendState(`${deviceId}.rssi`, {
-			id: "rssi",
-			common: {
-				role: "value.rssi",
-				name: "signal strength (RSSI)",
-				desc: "Signal strength of the device",
-				type: "number",
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		knownDevices.push(deviceId);
-	}
+	// Always ensure the rssi state exists and gets a value
+	await extendState(`${deviceId}.rssi`, {
+		id: "rssi",
+		common: {
+			role: "value.rssi",
+			name: "signal strength (RSSI)",
+			desc: "Signal strength of the device",
+			type: "number",
+			read: true,
+			write: false,
+		},
+		native: {},
+	});
 	// update RSSI information
 	const rssiState = await adapter.$getState(`${deviceId}.rssi`);
 	if (
@@ -280,8 +250,29 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		await adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);
 	}
 
-	// get values from plugin
-	const values = plugin.getValues(peripheral);
+	// Now update device-specific objects and states
+	const context = plugin.createContext(peripheral);
+	const objects = plugin.defineObjects(context);
+	const values = plugin.getValues(context);
+
+	// Ensure the device object exists
+	await extendDevice(deviceId, peripheral, objects.device);
+	// Ensure the channel objects exist (optional)
+	if (objects.channels != null && objects.channels.length > 0) {
+		await Promise.all(
+			objects.channels.map(
+				c => extendChannel(deviceId + "." + c.id, c),
+			),
+		);
+	}
+	// Ensure the state objects exist. These might change in every advertisement frame
+	await Promise.all(
+		objects.states.map(
+			s => extendState(deviceId + "." + s.id, s),
+		),
+	);
+
+	// Now fill the states with values
 	if (values != null) {
 		_.log(`${deviceId} > got values: ${JSON.stringify(values)}`, "debug");
 		for (const stateId of Object.keys(values)) {
@@ -291,12 +282,13 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 				_.log(`setting state ${iobStateId}`, "debug");
 				await adapter.$setStateChanged(iobStateId, values[stateId], true);
 			} else {
-				_.log(`skipping state ${iobStateId}`, "debug");
+				_.log(`skipping state ${iobStateId} because the object does not exist`, "warn");
 			}
 		}
 	} else {
 		_.log(`${deviceId} > got no values`, "debug");
 	}
+
 }
 
 let isScanning = false;
