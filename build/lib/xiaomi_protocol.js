@@ -201,7 +201,7 @@ var XiaomiEventIDs_Internal;
 var valueTransforms = {
     // by default just pass the value through
     default: function (val, eventID) {
-        return (_a = {}, _a[XiaomiEventIDs_Internal[eventID]] = val, _a);
+        return (_a = {}, _a[XiaomiEventIDs_Internal[eventID].toLowerCase()] = val, _a);
         var _a;
     },
     Temperature: function (val) { return ({ temperature: val / 10 }); },
@@ -220,7 +220,7 @@ function reverseBuffer(buf) {
 }
 function parseNumberLE(buf, offset, length) {
     if (offset === void 0) { offset = 0; }
-    if (length === void 0) { length = 1; }
+    if (length === void 0) { length = buf.length; }
     // read <length> bytes in LE order
     var value = 0;
     for (var i = offset + length - 1; i >= offset; i--) {

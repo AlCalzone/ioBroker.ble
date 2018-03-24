@@ -200,7 +200,7 @@ const valueTransforms: Partial<
 	>
 > & {"default": ValueTransform} = {
 	// by default just pass the value through
-	default: (val, eventID) => ({[XiaomiEventIDs_Internal[eventID]]: val}),
+	default: (val, eventID) => ({[XiaomiEventIDs_Internal[eventID].toLowerCase()]: val}),
 	Temperature: (val) => ({temperature: val / 10}),
 	Humidity: (val) => ({humidity: val / 10}),
 	TemperatureAndHumidity: (val) => ({
@@ -217,7 +217,7 @@ function reverseBuffer(buf: Buffer): Buffer {
 	return ret;
 }
 
-function parseNumberLE(buf: Buffer, offset: number = 0, length: number = 1): number {
+function parseNumberLE(buf: Buffer, offset: number = 0, length: number = buf.length): number {
 	// read <length> bytes in LE order
 	let value = 0;
 	for (let i = offset + length - 1; i >= offset; i--) {
