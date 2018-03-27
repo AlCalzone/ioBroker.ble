@@ -27,9 +27,13 @@ If you have any device transmitting specially encoded information via advertisem
 * `"xiaomi"`: All xiaomi bluetooth sensors, including 
   * [Flower Care plant sensor](https://xiaomi-mi.com/sockets-and-sensors/xiaomi-huahuacaocao-flower-care-smart-monitor/)
   * [Mijia Temperature and Humidity sensor](https://www.banggood.com/Xiaomi-Mijia-Bluetooth-Thermometer-Hygrometer-with-LCD-Screen-Magnetic-Suction-Wall-Stickers-p-1232396.html?cur_warehouse=USA)
-* `"mi-flora"`: Origiinal plugin for the flower care plant sensor, now aliased to `"xiaomi"`
+* `"mi-flora"`: Original plugin for the flower care plant sensor, now aliased to `"xiaomi"`
+* `"ruuvi-tag"`: [Ruuvi Tag](https://tag.ruuvi.com/) multisensor with firmware versions v1 and v2. **Untested, please give feedback!** 
 
 ## Changelog
+
+#### 0.5.0 (2018-03-27)
+* (JonasR & AlCalzone) Added support for the Ruuvi Tag with the `ruuvi-tag` plugin
 
 #### 0.4.2 (2018-03-27)
 * (AlCalzone) Fixed the parsing of temperature+humidity packets from the Xiaomi temperature sensor
