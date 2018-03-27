@@ -17,11 +17,10 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// TODO: provide a way for the plugin to store some context
 function getServiceData(peripheral, uuid) {
     for (var _i = 0, _a = peripheral.advertisement.serviceData; _i < _a.length; _i++) {
         var entry = _a[_i];
-        if (entry.uuid === "fe95")
+        if (entry.uuid === uuid)
             return entry.data;
     }
 }

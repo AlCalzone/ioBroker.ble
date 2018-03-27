@@ -45,11 +45,9 @@ export interface Plugin<TContext = any> {
 	getValues: (context: TContext) => Record<string, any>;
 }
 
-// TODO: provide a way for the plugin to store some context
-
 export function getServiceData(peripheral: BLE.Peripheral, uuid: string): Buffer | null {
 	for (const entry of peripheral.advertisement.serviceData) {
-		if (entry.uuid === "fe95") return entry.data;
+		if (entry.uuid === uuid) return entry.data;
 	}
 }
 
