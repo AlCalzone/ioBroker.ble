@@ -1,6 +1,6 @@
 ﻿import * as fs from "fs";
 import * as path from "path";
-import { DictionaryLike, entries, filter as objFilter } from "./object-polyfill";
+import { entries, filter as objFilter } from "./object-polyfill";
 import { promisify, promisifyNoError } from "./promises";
 
 // ==================================
@@ -39,7 +39,7 @@ export interface ExtendedAdapter extends ioBroker.Adapter {
 	/** Reads an object from the object db */
 	$getObject(id: string, options?: any): Promise<ioBroker.Object>;
 	/** Get all states, channels and devices of this adapter */
-	$getAdapterObjects(): Promise<DictionaryLike<ioBroker.Object>>;
+	$getAdapterObjects(): Promise<Record<string, ioBroker.Object>>;
 	/** Creates or overwrites an object in the object db */
 	$setObject(id: string, obj: ioBroker.Object, options?: any): Promise<{ id: string }>;
 	/** Creates an object in the object db if it doesn't exist yet */
@@ -55,7 +55,7 @@ export interface ExtendedAdapter extends ioBroker.Adapter {
 	/** Extends an object in the object (which might not belong to this adapter) db */
 	$extendForeignObject(id: string, obj: ioBroker.PartialObject, options?: any): Promise<{ id: string }>;
 	/** Get foreign objects by pattern, by specific type and resolve their enums. */
-	$getForeignObjects(pattern: string, type?: ioBroker.ObjectType, enums?: ioBroker.EnumList, options?: any): Promise<DictionaryLike<ioBroker.Object>>;
+	$getForeignObjects(pattern: string, type?: ioBroker.ObjectType, enums?: ioBroker.EnumList, options?: any): Promise<Record<string, ioBroker.Object>>;
 
 	/** creates an object with type device */
 	$createDevice(deviceName: string, common?: ioBroker.ObjectCommon, native?: any, options?: any): Promise<{ id: string }>;
@@ -70,7 +70,7 @@ export interface ExtendedAdapter extends ioBroker.Adapter {
 	/** Read a value from the states DB. */
 	$getState(id: string, options?: any): Promise<ioBroker.State>;
 	/** Read all states of this adapter which match the given pattern */
-	$getStates(pattern: string, options?: any): Promise<DictionaryLike<ioBroker.State>>;
+	$getStates(pattern: string, options?: any): Promise<Record<string, ioBroker.State>>;
 	/** Writes a value into the states DB. */
 	$setState(id: string, state: string | number | boolean | ioBroker.State, ack?: boolean, options?: any): Promise<string>;
 	/** Writes a value into the states DB only if it has changed. */

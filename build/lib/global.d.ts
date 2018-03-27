@@ -1,10 +1,9 @@
-import { DictionaryLike } from "./object-polyfill";
 export interface ExtendedAdapter extends ioBroker.Adapter {
     __isExtended: boolean;
     /** Reads an object from the object db */
     $getObject(id: string, options?: any): Promise<ioBroker.Object>;
     /** Get all states, channels and devices of this adapter */
-    $getAdapterObjects(): Promise<DictionaryLike<ioBroker.Object>>;
+    $getAdapterObjects(): Promise<Record<string, ioBroker.Object>>;
     /** Creates or overwrites an object in the object db */
     $setObject(id: string, obj: ioBroker.Object, options?: any): Promise<{
         id: string;
@@ -32,7 +31,7 @@ export interface ExtendedAdapter extends ioBroker.Adapter {
         id: string;
     }>;
     /** Get foreign objects by pattern, by specific type and resolve their enums. */
-    $getForeignObjects(pattern: string, type?: ioBroker.ObjectType, enums?: ioBroker.EnumList, options?: any): Promise<DictionaryLike<ioBroker.Object>>;
+    $getForeignObjects(pattern: string, type?: ioBroker.ObjectType, enums?: ioBroker.EnumList, options?: any): Promise<Record<string, ioBroker.Object>>;
     /** creates an object with type device */
     $createDevice(deviceName: string, common?: ioBroker.ObjectCommon, native?: any, options?: any): Promise<{
         id: string;
@@ -49,7 +48,7 @@ export interface ExtendedAdapter extends ioBroker.Adapter {
     /** Read a value from the states DB. */
     $getState(id: string, options?: any): Promise<ioBroker.State>;
     /** Read all states of this adapter which match the given pattern */
-    $getStates(pattern: string, options?: any): Promise<DictionaryLike<ioBroker.State>>;
+    $getStates(pattern: string, options?: any): Promise<Record<string, ioBroker.State>>;
     /** Writes a value into the states DB. */
     $setState(id: string, state: string | number | boolean | ioBroker.State, ack?: boolean, options?: any): Promise<string>;
     /** Writes a value into the states DB only if it has changed. */
@@ -105,7 +104,7 @@ export declare class Global {
      * Kurzschreibweise für die Ermittlung mehrerer Objekte
      * @param id
      */
-    static $$(pattern: string, type: ioBroker.ObjectType, role?: string): Promise<DictionaryLike<ioBroker.Object>>;
+    static $$(pattern: string, type: ioBroker.ObjectType, role?: string): Promise<Record<string, ioBroker.Object>>;
     static isdef(value: any): boolean;
     static subscribeStates: (pattern: string | RegExp, callback: (id: string, state: ioBroker.State) => void) => string;
     static unsubscribeStates: (id: string) => void;

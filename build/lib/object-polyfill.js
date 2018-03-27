@@ -20,6 +20,10 @@ function filter(obj, predicate) {
     return ret;
 }
 exports.filter = filter;
+/**
+ * Kombinierte mehrere Key-Value-Paare zu einem Objekt
+ * @param properties Die Key-Value-Paare, die zu einem Objekt kombiniert werden sollen
+ */
 function composeObject(properties) {
     return properties.reduce(function (acc, _a) {
         var key = _a[0], value = _a[1];
@@ -28,6 +32,8 @@ function composeObject(properties) {
     }, {});
 }
 exports.composeObject = composeObject;
+// Gräbt in einem Objekt nach dem Property-Pfad.
+// Bsps: (obj, "common.asdf.qwer") => obj.common.asdf.qwer
 function dig(object, path) {
     function _dig(obj, pathArr) {
         // are we there yet? then return obj
@@ -44,6 +50,7 @@ function dig(object, path) {
     return _dig(object, path.split("."));
 }
 exports.dig = dig;
+// Vergräbt eine Eigenschaft in einem Objekt (Gegenteil von dig)
 function bury(object, path, value) {
     function _bury(obj, pathArr) {
         // are we there yet? then return obj
