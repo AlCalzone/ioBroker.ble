@@ -31,6 +31,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.4.2 (2018-03-27)
+* (AlCalzone) Fixed the parsing of temperature+humidity packets from the Xiaomi temperature sensor
+
 #### 0.4.1 (2018-03-24)
 * (AlCalzone) Forgot to load legacy `mi-flora` plugin
 * (AlCalzone) Fixed an error when a plugin defines no objects

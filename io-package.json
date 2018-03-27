@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.4.1",
+        "version": "0.4.2",
         "news": {
+            "0.4.2": {
+                "en": "Fixed the parsing of temperature+humidity packets from the Xiaomi temperature sensor",
+                "de": "Parsen von Temperatur+Feuchtigkeits-Paketen des Xiaomi Temperatursensors gefixt"
+            },
             "0.4.1": {
                 "en": "Bugfixes",
                 "de": "Bugfixes"
@@ -65,7 +69,11 @@
         "icon": "ble.png",
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
-        "keywords": ["bluetooth", "BLE", "beacon"],
+        "keywords": [
+            "bluetooth",
+            "BLE",
+            "beacon"
+        ],
         "readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
         "loglevel": "info",
         "type": "hardware",
@@ -78,9 +86,7 @@
         "allowEmptyDevices": false,
         "rssiThrottle": 0
     },
-    "objects": [
-
-    ],
+    "objects": [],
     "instanceObjects": [
         {
             "_id": "info",
@@ -117,6 +123,5 @@
             },
             "native": {}
         }
-
     ]
 }
