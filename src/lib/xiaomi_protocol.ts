@@ -177,7 +177,7 @@ export enum XiaomiEventIDs_Internal {
 	Moisture = 0x1008,
 	Fertility = 0x1009,
 	Battery = 0x100A,
-	TemperatureAndHumidity = 0x100D, // 1 byte temperature / 10, 1 byte humidity / 10
+	TemperatureAndHumidity = 0x100D, // 2 byte temperature / 10, 2 byte humidity / 10
 }
 
 export type XiaomiEventIDs =
@@ -204,8 +204,10 @@ const valueTransforms: Partial<
 	Temperature: (val) => ({temperature: val / 10}),
 	Humidity: (val) => ({humidity: val / 10}),
 	TemperatureAndHumidity: (val) => ({
-		temperature: (val >>> 8) / 10,
-		humidity: (val & 0xff) / 10,
+		// the data is read in little-endian (reverse) order,
+		// so val = 0xHHHHTTTT
+		humidity: (val >>> 16) / 10,
+		temperature: (val & 0xffff) / 10,
 	}),
 };
 

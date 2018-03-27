@@ -10,6 +10,7 @@ import { XiaomiAdvertisement } from "./xiaomi_protocol";
 type OperationModes =
 	"mi-flora-normal"
 	| "mi-flora-uninitialized"
+	| "temp-sensor-normal"
 	;
 function assertFlags(operationMode: OperationModes, parsed: XiaomiAdvertisement) {
 	if (operationMode === "mi-flora-normal") {
@@ -34,23 +35,34 @@ function assertFlags(operationMode: OperationModes, parsed: XiaomiAdvertisement)
 		parsed.hasCustomData.should.be.false;
 		parsed.hasSubtitle.should.be.false;
 		parsed.isBindingFrame.should.be.true;
+	} else if (operationMode === "temp-sensor-normal") {
+		parsed.isNewFactory.should.be.false;
+		parsed.isConnected.should.be.false;
+		parsed.isCentral.should.be.false;
+		parsed.isEncrypted.should.be.false;
+		parsed.hasMacAddress.should.be.true;
+		parsed.hasCapabilities.should.be.false;
+		parsed.hasEvent.should.be.true;
+		parsed.hasCustomData.should.be.false;
+		parsed.hasSubtitle.should.be.false;
+		parsed.isBindingFrame.should.be.false;
 	}
 }
 
 function assertVersion(actual: number, expected: number) {
-	actual.should.equal(expected, "the version was wrong");
+	expect(actual).to.equal(expected, "the version was wrong");
 }
 function assertProductID(actual: number, expected: number) {
-	actual.should.equal(expected, "the product id was wrong");
+	expect(actual).to.equal(expected, "the product id was wrong");
 }
 function assertFrameCounter(actual: number, expected: number) {
-	actual.should.equal(expected, "the frame counter was wrong");
+	expect(actual).to.equal(expected, "the frame counter was wrong");
 }
 function assertMacAddress(actual: string, expected: string) {
-	actual.should.equal(expected, "the mac address was wrong");
+	expect(actual).to.equal(expected, "the mac address was wrong");
 }
 function assertCapabilities(actual: number, expected: number) {
-	actual.should.equal(expected, "the capabilities were wrong");
+	expect(actual).to.equal(expected, "the capabilities were wrong");
 }
 
 describe("xiaomi protocol => ", () => {
@@ -139,20 +151,51 @@ describe("xiaomi protocol => ", () => {
 			assertCapabilities(parsed.capabilities, 0x0d);
 			expect(parsed.event).to.be.undefined;
 		});
+
+		it("Temperature sensor: temperature and humidity", () => {
+			const frame = Buffer.from("5020aa01cae802d2a8654c0d1004c3003602", "hex");
+			const parsed = new XiaomiAdvertisement(frame);
+
+			assertFlags("temp-sensor-normal", parsed);
+			assertVersion(parsed.version, 2);
+			assertProductID(parsed.productID, 0x01AA);
+			assertFrameCounter(parsed.frameCounter, 0xca);
+			assertMacAddress(parsed.macAddress, "4c65a8d202e8");
+			assertCapabilities(parsed.capabilities, undefined);
+			parsed.event.should.deep.equal({
+				temperature: 19.5,
+				humidity: 56.6,
+			});
+		})
+
+		it("Temperature sensor: battery", () => {
+			const frame = Buffer.from("5020aa01c8e802d2a8654c0a100164", "hex");
+			const parsed = new XiaomiAdvertisement(frame);
+
+			assertFlags("temp-sensor-normal", parsed);
+			assertVersion(parsed.version, 2);
+			assertProductID(parsed.productID, 0x01AA);
+			assertFrameCounter(parsed.frameCounter, 0xc8);
+			assertMacAddress(parsed.macAddress, "4c65a8d202e8");
+			assertCapabilities(parsed.capabilities, undefined);
+			parsed.event.should.deep.equal({
+				battery: 100,
+			});
+		})
+
+		it("Temperature sensor: humidity", () => {
+			const frame = Buffer.from("5020aa01c7e802d2a8654c0610023602", "hex");
+			const parsed = new XiaomiAdvertisement(frame);
+
+			assertFlags("temp-sensor-normal", parsed);
+			assertVersion(parsed.version, 2);
+			assertProductID(parsed.productID, 0x01AA);
+			assertFrameCounter(parsed.frameCounter, 0xc7);
+			assertMacAddress(parsed.macAddress, "4c65a8d202e8");
+			assertCapabilities(parsed.capabilities, undefined);
+			parsed.event.should.deep.equal({
+				humidity: 56.6,
+			});
+		})
 	});
 });
-
-// temperature should be 27.4
-// 71209800da795d658d7cc40d0410021201
-
-// fertility should be 46
-// 71209800 d9 795d658d7cc40d0910022e00
-
-// moisture should be 13
-// 71209800d8795d658d7cc40d0810010d
-
-// illuminance should be 19710
-// 71209800ef795d658d7cc40d071003fe4c00
-
-// should be un-initialized
-// 3102980006dab4618d7cc40d

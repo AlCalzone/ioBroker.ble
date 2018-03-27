@@ -207,8 +207,10 @@ var valueTransforms = {
     Temperature: function (val) { return ({ temperature: val / 10 }); },
     Humidity: function (val) { return ({ humidity: val / 10 }); },
     TemperatureAndHumidity: function (val) { return ({
-        temperature: (val >>> 8) / 10,
-        humidity: (val & 0xff) / 10,
+        // the data is read in little-endian (reverse) order,
+        // so val = 0xHHHHTTTT
+        humidity: (val >>> 16) / 10,
+        temperature: (val & 0xffff) / 10,
     }); },
 };
 function reverseBuffer(buf) {
