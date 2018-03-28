@@ -7,8 +7,8 @@ declare global {
 		/** Contains information advertised BLE data */
 		interface Advertisement {
 			/** The name of the broadcasting device */
-			localName: string;
-			txPowerLevel: number;
+			localName?: string;
+			txPowerLevel?: number;
 			/** List of services UUIDs this device offers */
 			serviceUuids: string[];
 			/** List of services UUIDs this device would like to consume */
@@ -36,6 +36,7 @@ declare global {
 			advertisement: Advertisement;
 			/** Signal strength of the device */
 			rssi: number;
+			state?: "disconnected" | "connected";
 		}
 	}
 }

@@ -11,6 +11,10 @@ import { ChannelObjectDefinition, DeviceObjectDefinition, getServiceData, Periph
 
 const serviceUUID = "feaa";
 
+// remember tested peripherals by their ID for 1h
+const testValidity = 1000 * 3600;
+const testedPeripherals = new Map<string, {timestamp: number, result: boolean}>();
+
 const plugin: Plugin<RuuviContext> = {
 	name: "ruuvi-tag",
 	description: "Ruuvi Tag",
@@ -18,12 +22,25 @@ const plugin: Plugin<RuuviContext> = {
 	advertisedServices: [serviceUUID],
 
 	isHandling: (peripheral: BLE.Peripheral) => {
-		if (!peripheral.advertisement.localName.startsWith("Ruuvi")) return false;
-		// variant 1: data in feaa service data
-		if (peripheral.advertisement.serviceData.some(entry => entry.uuid === serviceUUID)) return true;
-		// variant 2: data in manufacturerData
-		// TODO: do we need to discover it in a different way?
-		if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0) return true;
+		if (
+			testedPeripherals.has(peripheral.id)
+			&& testedPeripherals.get(peripheral.id).timestamp >= Date.now()
+		) {
+			// we have a recent test result, return it
+			return testedPeripherals.get(peripheral.id).result;
+		}
+		// we have no quick check, so try to create a context
+		let ret: boolean = false;
+		try {
+			const ctx = plugin.createContext(peripheral);
+			ret = ctx != null;
+		} catch (e) { /* all good */ }
+		// store the test result
+		testedPeripherals.set(peripheral.id, {
+			timestamp: Date.now(),
+			result: ret,
+		});
+		return ret;
 	},
 
 	createContext: (peripheral: BLE.Peripheral) => {

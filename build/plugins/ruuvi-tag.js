@@ -17,20 +17,32 @@ var global_1 = require("../lib/global");
 var ruuvi_tag_protocol_1 = require("./lib/ruuvi-tag_protocol");
 var plugin_1 = require("./plugin");
 var serviceUUID = "feaa";
+// remember tested peripherals by their ID for 1h
+var testValidity = 1000 * 3600;
+var testedPeripherals = new Map();
 var plugin = {
     name: "ruuvi-tag",
     description: "Ruuvi Tag",
     advertisedServices: [serviceUUID],
     isHandling: function (peripheral) {
-        if (!peripheral.advertisement.localName.startsWith("Ruuvi"))
-            return false;
-        // variant 1: data in feaa service data
-        if (peripheral.advertisement.serviceData.some(function (entry) { return entry.uuid === serviceUUID; }))
-            return true;
-        // variant 2: data in manufacturerData
-        // TODO: do we need to discover it in a different way?
-        if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0)
-            return true;
+        if (testedPeripherals.has(peripheral.id)
+            && testedPeripherals.get(peripheral.id).timestamp >= Date.now()) {
+            // we have a recent test result, return it
+            return testedPeripherals.get(peripheral.id).result;
+        }
+        // we have no quick check, so try to create a context
+        var ret = false;
+        try {
+            var ctx = plugin.createContext(peripheral);
+            ret = ctx != null;
+        }
+        catch (e) { }
+        // store the test result
+        testedPeripherals.set(peripheral.id, {
+            timestamp: Date.now(),
+            result: ret,
+        });
+        return ret;
     },
     createContext: function (peripheral) {
         var data = plugin_1.getServiceData(peripheral, serviceUUID);

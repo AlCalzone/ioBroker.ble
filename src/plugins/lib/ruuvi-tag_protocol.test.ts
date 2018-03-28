@@ -19,27 +19,26 @@ describe("ruuvi-tag protocol => ", () => {
 	// a real packet:
 	const peripheral: BLE.Peripheral = {
 		id: "c0cd266001a0",
-		address: "c0:cd:26:xxxxx",
+		address: "c0:cd:26:60:01:a0",
 		addressType: "random",
 		connectable: false,
 		advertisement: {
-			localName: "foo",
-			txPowerLevel: 0,
 			serviceData: [
 				{
 					uuid: "feaa",
-					data: Buffer.from([16, 249, 3, 114, 117, 117, 46, 118, 105, 47, 35, 66, 76, 103, 67, 65, 77, 73, 107, 70])
+					data: Buffer.from([16, 249, 3, 114, 117, 117, 46, 118, 105, 47, 35, 66, 76, 103, 67, 65, 77, 73, 107, 70]),
 				},
 			],
 			serviceUuids: ["feaa"],
-			// solicitationServiceUuids: [],
 			serviceSolicitationUuids: [],
 		},
 		rssi: -91,
-		// state: "disconnected",
+		state: "disconnected",
 	};
-	it("should not crash", () => {
-		plugin.createContext(peripheral);
+	it("should be handling the packet", () => {
+		plugin.isHandling(peripheral).should.be.true;
+		// also for repeated tests
+		plugin.isHandling(peripheral).should.be.true;
 	});
 	// describe("packets should be parsed correctly => ", () => {
 
