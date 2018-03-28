@@ -4,7 +4,7 @@
 
 import { Global as _ } from "../lib/global";
 import { entries } from "../lib/object-polyfill";
-import { MacPrefixes, XiaomiAdvertisement, XiaomiEvent } from "../lib/xiaomi_protocol";
+import { MacPrefixes, XiaomiAdvertisement, XiaomiEvent } from "./lib/xiaomi_protocol";
 import { ChannelObjectDefinition, DeviceObjectDefinition, getServiceData, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "./plugin";
 
 interface XiaomiContext {

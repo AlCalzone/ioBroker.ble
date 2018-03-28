@@ -4,7 +4,7 @@
  */
 var global_1 = require("../lib/global");
 var object_polyfill_1 = require("../lib/object-polyfill");
-var xiaomi_protocol_1 = require("../lib/xiaomi_protocol");
+var xiaomi_protocol_1 = require("./lib/xiaomi_protocol");
 var plugin_1 = require("./plugin");
 function parseAdvertisementEvent(data) {
     // try to parse the data

@@ -84,3 +84,11 @@ function extend(target, source) {
     return target;
 }
 exports.extend = extend;
+function stripUndefinedProperties(obj) {
+    return composeObject(entries(obj)
+        .filter(function (_a) {
+        var key = _a[0], value = _a[1];
+        return value != null;
+    }));
+}
+exports.stripUndefinedProperties = stripUndefinedProperties;

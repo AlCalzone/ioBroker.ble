@@ -24,3 +24,4 @@ export declare function composeObject<T = any>(properties: KeyValuePair<T>[]): R
 export declare function dig<T = any>(object: Record<string, T>, path: string): any;
 export declare function bury<T = any>(object: Record<string, T>, path: string, value: any): void;
 export declare function extend(target: any, source: any): any;
+export declare function stripUndefinedProperties<T = any>(obj: Record<string, T>): Record<string, T>;
