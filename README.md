@@ -32,6 +32,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.5.2 (2018-03-28)
+* (AlCalzone) Fixed `isHandling` for the `ruuvi-tag` plugin
+
 #### 0.5.1 (2018-03-28)
 * (AlCalzone) Restored accidentally deleted `mi-flora` plugin.
 
