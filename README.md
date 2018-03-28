@@ -32,6 +32,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.5.1 (2018-03-28)
+* (AlCalzone) Restored accidentally deleted `mi-flora` plugin.
+
 #### 0.5.0 (2018-03-27)
 * (JonasR & AlCalzone) Added support for the Ruuvi Tag with the `ruuvi-tag` plugin
 
