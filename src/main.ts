@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 import { ExtendedAdapter, Global as _ } from "./lib/global";
-import { extendChannel, extendDevice, extendState } from "./lib/iobroker-objects";
+import { extendChannelObject, extendDeviceObject, extendStateObject } from "./lib/iobroker-objects";
 import utils from "./lib/utils";
 
 // Load all registered plugins
@@ -226,29 +226,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		return;
 	}
 
-	// Always ensure the rssi state exists and gets a value
-	await extendState(`${deviceId}.rssi`, {
-		id: "rssi",
-		common: {
-			role: "value.rssi",
-			name: "signal strength (RSSI)",
-			desc: "Signal strength of the device",
-			type: "number",
-			read: true,
-			write: false,
-		},
-		native: {},
-	});
-	// update RSSI information
-	const rssiState = await adapter.$getState(`${deviceId}.rssi`);
-	if (
-		rssiState == null ||
-		(rssiState.val !== peripheral.rssi &&			// only save changes
-		rssiState.lc + rssiUpdateInterval < Date.now())	// and dont update too frequently
-	) {
-		_.log(`updating rssi state for ${deviceId}`, "debug");
-		await adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);
-	}
+	await updateMetadata(deviceId, peripheral);
 
 	// Now update device-specific objects and states
 	const context = plugin.createContext(peripheral);
@@ -259,19 +237,19 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	if (objects == null) return;
 
 	// Ensure the device object exists
-	await extendDevice(deviceId, peripheral, objects.device);
+	await extendDeviceObject(deviceId, peripheral, objects.device);
 	// Ensure the channel objects exist (optional)
 	if (objects.channels != null && objects.channels.length > 0) {
 		await Promise.all(
 			objects.channels.map(
-				c => extendChannel(deviceId + "." + c.id, c),
+				c => extendChannelObject(deviceId + "." + c.id, c),
 			),
 		);
 	}
 	// Ensure the state objects exist. These might change in every advertisement frame
 	await Promise.all(
 		objects.states.map(
-			s => extendState(deviceId + "." + s.id, s),
+			s => extendStateObject(deviceId + "." + s.id, s),
 		),
 	);
 
@@ -292,6 +270,31 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		_.log(`${deviceId} > got no values`, "debug");
 	}
 
+}
+
+async function updateMetadata(deviceId: string, peripheral: BLE.Peripheral) {
+	// Always ensure the rssi state exists and gets a value
+	await extendStateObject(`${deviceId}.rssi`, {
+		id: "rssi",
+		common: {
+			role: "value.rssi",
+			name: "signal strength (RSSI)",
+			desc: "Signal strength of the device",
+			type: "number",
+			read: true,
+			write: false,
+		},
+		native: {},
+	});
+	// update RSSI information
+	const rssiState = await adapter.$getState(`${deviceId}.rssi`);
+	if (rssiState == null ||
+		(rssiState.val !== peripheral.rssi && // only save changes
+			rssiState.lc + rssiUpdateInterval < Date.now()) // and dont update too frequently
+	) {
+		_.log(`updating rssi state for ${deviceId}`, "debug");
+		await adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);
+	}
 }
 
 let isScanning = false;

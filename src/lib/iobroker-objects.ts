@@ -2,7 +2,7 @@ import { ChannelObjectDefinition, DeviceObjectDefinition, StateObjectDefinition 
 import { Global as _ } from "./global";
 
 /** Extends a device object in the ioBroker objects DB */
-export async function extendDevice(
+export async function extendDeviceObject(
 	deviceId: string,
 	peripheral: BLE.Peripheral,
 	object: DeviceObjectDefinition,
@@ -42,7 +42,7 @@ export async function extendDevice(
 
 }
 
-export async function extendChannel(
+export async function extendChannelObject(
 	channelId: string,
 	object: ChannelObjectDefinition,
 ) {
@@ -74,7 +74,7 @@ export async function extendChannel(
 	}
 }
 
-export async function extendState(
+export async function extendStateObject(
 	stateId: string,
 	object: StateObjectDefinition,
 ) {
