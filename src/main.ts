@@ -1,6 +1,7 @@
 import { exec } from "child_process";
 import { ExtendedAdapter, Global as _ } from "./lib/global";
 import { extendChannelObject, extendDeviceObject, extendStateObject } from "./lib/iobroker-objects";
+import { PresenceInfo } from "./lib/presence";
 import utils from "./lib/utils";
 
 // Load all registered plugins
@@ -15,6 +16,10 @@ let services: string[] = [];
 
 /** How frequent the RSSI of devices should be updated */
 let rssiUpdateInterval: number = 0;
+
+/** A map of all currently active devices */
+const presenceMap = new Map<string, PresenceInfo>();
+let expirePresenceMapTimer: NodeJS.Timer;
 
 // noble-Treiber-Instanz
 let noble;
@@ -89,17 +94,19 @@ let adapter: ExtendedAdapter = utils.adapter({
 		});
 		if (noble.state === "poweredOn") startScanning();
 		adapter.setState("info.driverState", noble.state, true);
+
+		// regularly expire the presence map
+		expirePresenceMapTimer = setInterval(expirePresenceMap, 10000);
 	},
 
 	// is called when adapter shuts down - callback has to be called under any circumstances!
 	unload: (callback) => {
 		try {
+			if (expirePresenceMapTimer) clearInterval(expirePresenceMapTimer);
 			stopScanning();
 			noble.removeAllListeners("stateChange");
-			callback();
-		} catch (e) {
-			callback();
-		}
+		} catch (e) { /* noop */ }
+		callback();
 	},
 
 	// is called if a subscribed object changes
@@ -210,7 +217,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		return;
 	}
 
-	const deviceId = peripheral.address;
+	const deviceId = getDeviceID(peripheral);
 
 	// find out which plugin is handling this
 	let plugin: Plugin;
@@ -272,6 +279,13 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 
 }
 
+/**
+ * Returns the device ID used for a peripheral
+ */
+function getDeviceID(peripheral: BLE.Peripheral) {
+	return peripheral.address;
+}
+
 async function updateMetadata(deviceId: string, peripheral: BLE.Peripheral) {
 	// Always ensure the rssi state exists and gets a value
 	await extendStateObject(`${deviceId}.rssi`, {
@@ -294,6 +308,56 @@ async function updateMetadata(deviceId: string, peripheral: BLE.Peripheral) {
 	) {
 		_.log(`updating rssi state for ${deviceId}`, "debug");
 		await adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);
+	}
+
+	// Ensure the channel for meta information exists
+	await extendChannelObject(`${deviceId}.meta`, {
+		id: "meta",
+		common: {
+			name: "meta information",
+			desc: "Meta information about this device",
+			role: "meta",
+		},
+		native: {},
+	});
+	// TODO: where to put the isKnownDevice flag? On the channel object?
+
+	// Ensure the following state objects exist and have a value
+	// Presence counter
+	await extendStateObject(`${deviceId}.meta.presenceCounter`, {
+		id: "presenceCounter",
+		common: {
+			name: "presence counter",
+			desc: "Internally, this is used to determine whether a device is present or not",
+			role: "meta",
+			type: "number",
+			read: true,
+			write: false,
+			def: 0,
+		},
+		native: {},
+	});
+	// TODO: Update presence counter value... When to increase it? When to decrease it?
+	await extendStateObject(`${deviceId}.meta.isPresent`, {
+		id: "isPresent",
+		common: {
+			name: "is present",
+			desc: "Whether this device is present or not",
+			role: "meta",
+			type: "boolean",
+			read: true,
+			write: false,
+			def: false,
+		},
+		native: {},
+	});
+	// TODO: Update isPresent state (dependent on presence counter value)
+}
+
+/** Checks all entries of the presence map and removes them if necessary */
+function expirePresenceMap() {
+	for (const [deviceID, p] of presenceMap.entries()) {
+		if (p.expire()) presenceMap.delete(deviceID);
 	}
 }
 
