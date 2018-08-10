@@ -2,8 +2,8 @@
 /*!
  * Plugin for Xiaomi devices using the fe95 characteristic
  */
+var objects_1 = require("alcalzone-shared/objects");
 var global_1 = require("../lib/global");
-var object_polyfill_1 = require("../lib/object-polyfill");
 var xiaomi_protocol_1 = require("./lib/xiaomi_protocol");
 var plugin_1 = require("./plugin");
 function parseAdvertisementEvent(data) {
@@ -153,7 +153,7 @@ var plugin = {
     getValues: function (context) {
         if (context == null || context.event == null)
             return;
-        for (var _i = 0, _a = object_polyfill_1.entries(context.event); _i < _a.length; _i++) {
+        for (var _i = 0, _a = objects_1.entries(context.event); _i < _a.length; _i++) {
             var _b = _a[_i], prop = _b[0], value = _b[1];
             global_1.Global.log("xiaomi >> {{green|got " + prop + " update => " + value + "}}", "debug");
         }

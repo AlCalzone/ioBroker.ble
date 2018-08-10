@@ -1,9 +1,7 @@
 // tslint:disable:no-unused-expression
 // tslint:disable:no-console
 
-import { assert, expect, should } from "chai";
-// enable the should interface with sinon
-should();
+import { assert, expect } from "chai";
 
 import { XiaomiAdvertisement } from "./xiaomi_protocol";
 
@@ -166,7 +164,7 @@ describe("xiaomi protocol => ", () => {
 				temperature: 19.5,
 				humidity: 56.6,
 			});
-		})
+		});
 
 		it("Temperature sensor: battery", () => {
 			const frame = Buffer.from("5020aa01c8e802d2a8654c0a100164", "hex");
@@ -181,7 +179,7 @@ describe("xiaomi protocol => ", () => {
 			parsed.event.should.deep.equal({
 				battery: 100,
 			});
-		})
+		});
 
 		it("Temperature sensor: humidity", () => {
 			const frame = Buffer.from("5020aa01c7e802d2a8654c0610023602", "hex");
@@ -196,6 +194,6 @@ describe("xiaomi protocol => ", () => {
 			parsed.event.should.deep.equal({
 				humidity: 56.6,
 			});
-		})
+		});
 	});
 });

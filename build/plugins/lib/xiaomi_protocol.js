@@ -201,8 +201,8 @@ var XiaomiEventIDs_Internal;
 var valueTransforms = {
     // by default just pass the value through
     default: function (val, eventID) {
-        return (_a = {}, _a[XiaomiEventIDs_Internal[eventID].toLowerCase()] = val, _a);
         var _a;
+        return (_a = {}, _a[XiaomiEventIDs_Internal[eventID].toLowerCase()] = val, _a);
     },
     Temperature: function (val) { return ({ temperature: val / 10 }); },
     Humidity: function (val) { return ({ humidity: val / 10 }); },

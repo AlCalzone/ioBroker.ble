@@ -36,7 +36,7 @@ var plugin = {
             var ctx = plugin.createContext(peripheral);
             ret = ctx != null;
         }
-        catch (e) { }
+        catch (e) { /* all good */ }
         // store the test result
         testedPeripherals.set(peripheral.id, {
             timestamp: Date.now(),

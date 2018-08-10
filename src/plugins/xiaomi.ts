@@ -2,8 +2,8 @@
  * Plugin for Xiaomi devices using the fe95 characteristic
  */
 
+import { entries } from "alcalzone-shared/objects";
 import { Global as _ } from "../lib/global";
-import { entries } from "../lib/object-polyfill";
 import { MacPrefixes, XiaomiAdvertisement, XiaomiEvent } from "./lib/xiaomi_protocol";
 import { ChannelObjectDefinition, DeviceObjectDefinition, getServiceData, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "./plugin";
 

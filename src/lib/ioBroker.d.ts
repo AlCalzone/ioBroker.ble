@@ -1018,6 +1018,7 @@ declare global {
 			 * Deletes an object from the object db
 			 * @param id - The id of the object without namespace
 			 */
+			delObject(id: string, callback?: ErrorCallback): void;
 			delObject(id: string, options?: any, callback?: ErrorCallback): void;
 
 			// ==============================
@@ -1266,7 +1267,7 @@ declare global {
 		// TODO: Redefine callbacks as subclass of GenericCallback
 		type GenericCallback<T> = (err: string | null, result?: T) => void;
 
-		type SetObjectCallback = (err: string | null, obj: { id: string }) => void;
+		type SetObjectCallback = (err: string | null, obj?: { id: string }) => void;
 		type GetObjectCallback = (err: string | null, obj: ioBroker.Object) => void;
 		type GetEnumCallback = (err: string | null, enums: DictionaryLike<Enum>, requestedEnum: string) => void;
 		type GetEnumsCallback = (

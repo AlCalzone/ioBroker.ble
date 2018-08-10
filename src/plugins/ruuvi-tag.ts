@@ -5,7 +5,6 @@
 
 import * as nodeUrl from "url";
 import { Global as _ } from "../lib/global";
-import { composeObject, entries, stripUndefinedProperties } from "../lib/object-polyfill";
 import { parseDataFormat2or4, parseDataFormat3, parseDataFormat5, RuuviContext } from "./lib/ruuvi-tag_protocol";
 import { ChannelObjectDefinition, DeviceObjectDefinition, getServiceData, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "./plugin";
 

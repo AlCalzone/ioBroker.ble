@@ -1,37 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function entries(obj) {
-    return Object.keys(obj)
-        .map(function (key) { return [key, obj[key]]; });
-}
-exports.entries = entries;
-function values(obj) {
-    return Object.keys(obj)
-        .map(function (key) { return obj[key]; });
-}
-exports.values = values;
-function filter(obj, predicate) {
-    var ret = {};
-    for (var _i = 0, _a = entries(obj); _i < _a.length; _i++) {
-        var _b = _a[_i], key = _b[0], val = _b[1];
-        if (predicate(val))
-            ret[key] = val;
-    }
-    return ret;
-}
-exports.filter = filter;
-/**
- * Kombinierte mehrere Key-Value-Paare zu einem Objekt
- * @param properties Die Key-Value-Paare, die zu einem Objekt kombiniert werden sollen
- */
-function composeObject(properties) {
-    return properties.reduce(function (acc, _a) {
-        var key = _a[0], value = _a[1];
-        acc[key] = value;
-        return acc;
-    }, {});
-}
-exports.composeObject = composeObject;
+var objects_1 = require("alcalzone-shared/objects");
 // Gräbt in einem Objekt nach dem Property-Pfad.
 // Bsps: (obj, "common.asdf.qwer") => obj.common.asdf.qwer
 function dig(object, path) {
@@ -69,23 +38,8 @@ function bury(object, path, value) {
     _bury(object, path.split("."));
 }
 exports.bury = bury;
-// Kopiert Eigenschaften rekursiv von einem Objekt auf ein anderes
-function extend(target, source) {
-    target = target || {};
-    for (var _i = 0, _a = entries(source); _i < _a.length; _i++) {
-        var _b = _a[_i], prop = _b[0], val = _b[1];
-        if (val instanceof Object) {
-            target[prop] = extend(target[prop], val);
-        }
-        else {
-            target[prop] = val;
-        }
-    }
-    return target;
-}
-exports.extend = extend;
 function stripUndefinedProperties(obj) {
-    return composeObject(entries(obj)
+    return objects_1.composeObject(objects_1.entries(obj)
         .filter(function (_a) {
         var key = _a[0], value = _a[1];
         return value != null;

@@ -61,10 +61,14 @@ export interface ExtendedAdapter extends ioBroker.Adapter {
     $deleteState(stateName: string, options?: any): Promise<void>;
     $deleteState(parentChannel: string, stateName: string, options?: any): Promise<void>;
     $deleteState(parentDevice: string, parentChannel: string, stateName: string, options?: any): Promise<void>;
+    /** Deletes a state from the states DB, but not the associated object. Consider using @link{$deleteState} instead */
+    $delState(id: string, options?: any): Promise<void>;
     /** Read a value (which might not belong to this adapter) from the states DB. */
     $getForeignState(id: string, options?: any): Promise<ioBroker.State>;
     /** Writes a value (which might not belong to this adapter) into the states DB. */
     $setForeignState(id: string, state: string | number | boolean | ioBroker.State, ack?: boolean, options?: any): Promise<string>;
+    /** Writes a value (which might not belong to this adapter) into the states DB, but only if it has changed. */
+    $setForeignStateChanged(id: string, state: string | number | boolean | ioBroker.State, ack?: boolean, options?: any): Promise<string>;
     $createOwnState(id: string, initialValue: any, ack?: boolean, commonType?: ioBroker.CommonType): Promise<void>;
     $createOwnStateEx(id: string, obj: ioBroker.Object, initialValue: any, ack?: boolean): Promise<void>;
     /**
@@ -94,7 +98,7 @@ export declare class Global {
     private static _loglevel;
     static loglevel: number;
     static extend(adapter: ioBroker.Adapter): ExtendedAdapter;
-    static log(message: string, level?: "info" | "debug" | "warn" | "error"): void;
+    static log(message: string, level?: ioBroker.LogLevel): void;
     /**
      * Kurzschreibweise für die Ermittlung eines Objekts
      * @param id

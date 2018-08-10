@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -35,10 +35,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var async_1 = require("alcalzone-shared/async");
+var objects_1 = require("alcalzone-shared/objects");
 var fs = require("fs");
 var path = require("path");
-var object_polyfill_1 = require("./object-polyfill");
-var promises_1 = require("./promises");
 // ==================================
 var colors = {
     red: "#db3340",
@@ -86,30 +86,33 @@ var Global = /** @class */ (function () {
         var _this = this;
         var ret = adapter;
         if (!ret.__isExtended) {
+            ret.objects.$getObjectList = async_1.promisify(adapter.objects.getObjectList, adapter.objects);
             ret = Object.assign(ret, {
-                $getObject: promises_1.promisify(adapter.getObject, adapter),
-                $setObject: promises_1.promisify(adapter.setObject, adapter),
-                $setObjectNotExists: promises_1.promisify(adapter.setObjectNotExists, adapter),
-                $extendObject: promises_1.promisify(adapter.extendObject, adapter),
-                $getAdapterObjects: promises_1.promisify(adapter.getAdapterObjects, adapter),
-                $getForeignObject: promises_1.promisify(adapter.getForeignObject, adapter),
-                $setForeignObject: promises_1.promisify(adapter.setForeignObject, adapter),
-                $setForeignObjectNotExists: promises_1.promisify(adapter.setForeignObjectNotExists, adapter),
-                $extendForeignObject: promises_1.promisify(adapter.extendForeignObject, adapter),
-                $getForeignObjects: promises_1.promisify(adapter.getForeignObjects, adapter),
-                $createDevice: promises_1.promisify(adapter.createDevice, adapter),
-                $deleteDevice: promises_1.promisify(adapter.deleteDevice, adapter),
-                $createChannel: promises_1.promisify(adapter.createChannel, adapter),
-                $deleteChannel: promises_1.promisify(adapter.deleteChannel, adapter),
-                $getState: promises_1.promisify(adapter.getState, adapter),
-                $getStates: promises_1.promisify(adapter.getStates, adapter),
-                $setState: promises_1.promisify(adapter.setState, adapter),
-                $setStateChanged: promises_1.promisify(adapter.setStateChanged, adapter),
-                $createState: promises_1.promisify(adapter.createState, adapter),
-                $deleteState: promises_1.promisify(adapter.deleteState, adapter),
-                $getForeignState: promises_1.promisify(adapter.getForeignState, adapter),
-                $setForeignState: promises_1.promisify(adapter.setForeignState, adapter),
-                $sendTo: promises_1.promisifyNoError(adapter.sendTo, adapter),
+                $getObject: async_1.promisify(adapter.getObject, adapter),
+                $setObject: async_1.promisify(adapter.setObject, adapter),
+                $setObjectNotExists: async_1.promisify(adapter.setObjectNotExists, adapter),
+                $extendObject: async_1.promisify(adapter.extendObject, adapter),
+                $getAdapterObjects: async_1.promisify(adapter.getAdapterObjects, adapter),
+                $getForeignObject: async_1.promisify(adapter.getForeignObject, adapter),
+                $setForeignObject: async_1.promisify(adapter.setForeignObject, adapter),
+                $setForeignObjectNotExists: async_1.promisify(adapter.setForeignObjectNotExists, adapter),
+                $extendForeignObject: async_1.promisify(adapter.extendForeignObject, adapter),
+                $getForeignObjects: async_1.promisify(adapter.getForeignObjects, adapter),
+                $createDevice: async_1.promisify(adapter.createDevice, adapter),
+                $deleteDevice: async_1.promisify(adapter.deleteDevice, adapter),
+                $createChannel: async_1.promisify(adapter.createChannel, adapter),
+                $deleteChannel: async_1.promisify(adapter.deleteChannel, adapter),
+                $getState: async_1.promisify(adapter.getState, adapter),
+                $getStates: async_1.promisify(adapter.getStates, adapter),
+                $setState: async_1.promisify(adapter.setState, adapter),
+                $setStateChanged: async_1.promisify(adapter.setStateChanged, adapter),
+                $createState: async_1.promisify(adapter.createState, adapter),
+                $deleteState: async_1.promisify(adapter.deleteState, adapter),
+                $delState: async_1.promisify(adapter.delState, adapter),
+                $getForeignState: async_1.promisify(adapter.getForeignState, adapter),
+                $setForeignState: async_1.promisify(adapter.setForeignState, adapter),
+                $setForeignStateChanged: async_1.promisify(adapter.setForeignStateChanged, adapter),
+                $sendTo: async_1.promisifyNoError(adapter.sendTo, adapter),
             });
         }
         ret.$createOwnState = function (id, initialValue, ack, commonType) {
@@ -172,16 +175,18 @@ var Global = /** @class */ (function () {
             return;
         if (message) {
             // Farben und Formatierungen
-            for (var _i = 0, _a = object_polyfill_1.entries(replacements); _i < _a.length; _i++) {
+            for (var _i = 0, _a = objects_1.entries(replacements); _i < _a.length; _i++) {
                 var _b = _a[_i], _c = _b[1], regex = _c[0], repl = _c[1];
                 if (typeof repl === "string") {
                     message = message.replace(regex, repl);
                 }
-                else {
+                else { // a bit verbose, but TS doesn't get the overload thingy here
                     message = message.replace(regex, repl);
                 }
             }
         }
+        if (level === "silly" && !(level in Global._adapter.log))
+            level = "debug";
         Global._adapter.log[level](message);
     };
     /**
@@ -211,7 +216,7 @@ var Global = /** @class */ (function () {
                     case 1:
                         objects = _a.sent();
                         if (role) {
-                            return [2 /*return*/, object_polyfill_1.filter(objects, function (o) { return o.common.role === role; })];
+                            return [2 /*return*/, objects_1.filter(objects, function (o) { return o.common.role === role; })];
                         }
                         else {
                             return [2 /*return*/, objects];

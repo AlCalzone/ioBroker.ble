@@ -4,9 +4,7 @@
 // tslint:disable:no-unused-expression
 // tslint:disable:no-console
 
-import { assert, expect, should } from "chai";
-// enable the should interface with sinon
-should();
+import { assert, expect } from "chai";
 
 import * as nodeUrl from "url";
 import { ChannelObjectDefinition, DeviceObjectDefinition, getServiceData, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "../plugin";

@@ -1,7 +1,7 @@
-﻿import * as fs from "fs";
+﻿import { promisify, promisifyNoError } from "alcalzone-shared/async";
+import { entries, filter as objFilter } from "alcalzone-shared/objects";
+import * as fs from "fs";
 import * as path from "path";
-import { entries, filter as objFilter } from "./object-polyfill";
-import { promisify, promisifyNoError } from "./promises";
 
 // ==================================
 
@@ -12,20 +12,22 @@ const colors = {
 	blue: "#0087cb",
 };
 
+type Replacer = (substring: string, ...args: any[]) => string;
+
 const replacements: {
-	[id: string]: [RegExp, string | ((substring: string, ...args: any[]) => string)];
+	[id: string]: [RegExp, string | Replacer];
 } = {
 	bold: [/\*{2}(.*?)\*{2}/g, "<b>$1</b>"],
 	italic: [/#{2}(.*?)#{2}/g, "<i>$1</i>"],
 	underline: [/_{2}(.*?)_{2}/g, "<u>$1</u>"],
 	strikethrough: [/\~{2}(.*?)\~{2}/g, "<s>$1</s>"],
-	color: [/\{{2}(\w+)\|(.*?)\}{2}/, (str, p1, p2) => {
+	color: [/\{{2}(\w+)\|(.*?)\}{2}/, (str, p1: keyof typeof colors, p2) => {
 		const color = colors[p1];
 		if (!color) return str;
 
 		return `<span style="color: ${color}">${p2}</span>`;
 	}],
-	fullcolor: [/^\{{2}(\w+)\}{2}(.*?)$/, (str, p1, p2) => {
+	fullcolor: [/^\{{2}(\w+)\}{2}(.*?)$/, (str, p1: keyof typeof colors, p2) => {
 		const color = colors[p1];
 		if (!color) return str;
 
@@ -81,11 +83,15 @@ export interface ExtendedAdapter extends ioBroker.Adapter {
 	$deleteState(stateName: string, options?: any): Promise<void>;
 	$deleteState(parentChannel: string, stateName: string, options?: any): Promise<void>;
 	$deleteState(parentDevice: string, parentChannel: string, stateName: string, options?: any): Promise<void>;
+	/** Deletes a state from the states DB, but not the associated object. Consider using @link{$deleteState} instead */
+	$delState(id: string, options?: any): Promise<void>;
 
 	/** Read a value (which might not belong to this adapter) from the states DB. */
 	$getForeignState(id: string, options?: any): Promise<ioBroker.State>;
 	/** Writes a value (which might not belong to this adapter) into the states DB. */
 	$setForeignState(id: string, state: string | number | boolean | ioBroker.State, ack?: boolean, options?: any): Promise<string>;
+	/** Writes a value (which might not belong to this adapter) into the states DB, but only if it has changed. */
+	$setForeignStateChanged(id: string, state: string | number | boolean | ioBroker.State, ack?: boolean, options?: any): Promise<string>;
 
 	$createOwnState(id: string, initialValue: any, ack?: boolean, commonType?: ioBroker.CommonType): Promise<void>;
 	$createOwnStateEx(id: string, obj: ioBroker.Object, initialValue: any, ack?: boolean): Promise<void>;
@@ -100,7 +106,6 @@ export interface ExtendedAdapter extends ioBroker.Adapter {
 	 */
 	$sendTo(instanceName: string, message: string | object): Promise<any>;
 	$sendTo(instanceName: string, command: string, message: string | object): Promise<any>;
-
 }
 
 export class Global {
@@ -123,6 +128,7 @@ export class Global {
 
 		let ret = adapter as ExtendedAdapter;
 		if (!ret.__isExtended) {
+			(ret.objects as any).$getObjectList = promisify(adapter.objects.getObjectList, adapter.objects);
 			ret = Object.assign(ret, {
 				$getObject: promisify<ioBroker.Object>(adapter.getObject, adapter),
 				$setObject: promisify<{ id: string }>(adapter.setObject, adapter),
@@ -147,9 +153,11 @@ export class Global {
 				$setStateChanged: promisify<string>(adapter.setStateChanged, adapter),
 				$createState: promisify<{ id: string }>(adapter.createState, adapter),
 				$deleteState: promisify<void>(adapter.deleteState, adapter),
+				$delState: promisify<void>(adapter.delState, adapter),
 
 				$getForeignState: promisify<ioBroker.State>(adapter.getForeignState, adapter),
 				$setForeignState: promisify<string>(adapter.setForeignState, adapter),
+				$setForeignStateChanged: promisify<string>(adapter.setForeignStateChanged, adapter),
 
 				$sendTo: promisifyNoError<any>(adapter.sendTo, adapter),
 			});
@@ -181,20 +189,21 @@ export class Global {
 		**fett**, ##kursiv##, __unterstrichen__, ~~durchgestrichen~~
 		schwarz{{farbe|bunt}}schwarz, {{farbe}}bunt
 	*/
-	public static log(message: string, level: "info" | "debug" | "warn" | "error" = "info") {
+	public static log(message: string, level: ioBroker.LogLevel = "info") {
 		if (!Global.adapter) return;
 
 		if (message) {
 			// Farben und Formatierungen
 			for (const [/*key*/, [regex, repl]] of entries(replacements)) {
 				if (typeof repl === "string") {
-					message = message.replace(regex, repl);
+					message = message.replace(regex, repl as string);
 				} else { // a bit verbose, but TS doesn't get the overload thingy here
-					message = message.replace(regex, repl);
+					message = message.replace(regex, repl as Replacer);
 				}
 			}
 		}
 
+		if (level === "silly" && !(level in Global._adapter.log)) level = "debug";
 		Global._adapter.log[level](message);
 	}
 
@@ -213,7 +222,7 @@ export class Global {
 	public static async $$(pattern: string, type: ioBroker.ObjectType, role?: string) {
 		const objects = await Global._adapter.$getForeignObjects(pattern, type);
 		if (role) {
-			return objFilter(objects, o => (o.common as any).role === role);
+			return objFilter(objects, o => o.common.role === role);
 		} else {
 			return objects;
 		}

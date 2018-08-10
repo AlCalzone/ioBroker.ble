@@ -22,5 +22,6 @@ test_script:
   - echo %cd%
   - node --version
   - npm --version
-  - npm test
+  - npm run test:package
+  - npm run test:iobroker
 build: 'off'

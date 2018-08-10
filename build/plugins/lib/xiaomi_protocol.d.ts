@@ -3,10 +3,10 @@ export declare enum CapabilityFlags {
     Connectable = 1,
     Central = 2,
     Encrypt = 4,
-    IO = 24,
+    IO = 24
 }
 export declare enum ProductIDs {
-    MiFlora = 152,
+    MiFlora = 152
 }
 export declare const MacPrefixes: Record<keyof typeof ProductIDs, string>;
 export declare class XiaomiAdvertisement {
@@ -53,7 +53,7 @@ export declare enum XiaomiEventIDs_Internal {
     Moisture = 4104,
     Fertility = 4105,
     Battery = 4106,
-    TemperatureAndHumidity = 4109,
+    TemperatureAndHumidity = 4109
 }
 export declare type XiaomiEventIDs = "temperature" | "humidity" | "illuminance" | "moisture" | "fertility" | "battery";
 export declare type XiaomiEvent = Partial<Record<XiaomiEventIDs, number>>;

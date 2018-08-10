@@ -10,8 +10,7 @@
         "removeComments": false,
         "stripInternal": true,
         "target": "es5",
-        "lib": [ "es6" ],
-        "strictPropertyInitialization": true
+        "lib": [ "es6" ]
         //"watch": true
     },
     "include": [
