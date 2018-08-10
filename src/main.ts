@@ -6,6 +6,7 @@ import utils from "./lib/utils";
 // Load all registered plugins
 import plugins from "./plugins";
 import { Plugin } from "./plugins/plugin";
+import { applyCustomObjectSubscriptions, applyCustomStateSubscriptions } from "./lib/custom-subscriptions";
 
 let enabledPlugins: Plugin[];
 let services: string[] = [];
@@ -68,6 +69,7 @@ let adapter: ExtendedAdapter = utils.adapter({
 			rssiUpdateInterval = Math.max(0, Math.min(10000, adapter.config.rssiThrottle));
 		}
 
+		// monitor our own states and objects
 		adapter.subscribeStates("*");
 		adapter.subscribeObjects("*");
 
@@ -103,10 +105,16 @@ let adapter: ExtendedAdapter = utils.adapter({
 	},
 
 	// is called if a subscribed object changes
-	objectChange: (id, obj) => { /* TODO */ },
+	objectChange: (id, obj) => {
+		// apply additional subscriptions we've defined
+		applyCustomObjectSubscriptions(id, obj);
+	},
 
 	// is called if a subscribed state changes
-	stateChange: (id, state) => { /* TODO */ },
+	stateChange: (id, state) => {
+		// apply additional subscriptions we've defined
+		applyCustomStateSubscriptions(id, state);
+	},
 
 	message: async (obj) => {
 		// responds to the adapter that sent the original message
@@ -244,7 +252,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	if (
 		rssiState == null ||
 		(rssiState.val !== peripheral.rssi &&			// only save changes
-		rssiState.lc + rssiUpdateInterval < Date.now())	// and dont update too frequently
+			rssiState.lc + rssiUpdateInterval < Date.now())	// and dont update too frequently
 	) {
 		_.log(`updating rssi state for ${deviceId}`, "debug");
 		await adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);

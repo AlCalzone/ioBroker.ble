@@ -34,6 +34,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var child_process_1 = require("child_process");
@@ -42,6 +72,7 @@ var iobroker_objects_1 = require("./lib/iobroker-objects");
 var utils_1 = require("./lib/utils");
 // Load all registered plugins
 var plugins_1 = require("./plugins");
+var custom_subscriptions_1 = require("./lib/custom-subscriptions");
 var enabledPlugins;
 var services = [];
 // /** MAC addresses of known devices */
@@ -84,7 +115,7 @@ var adapter = utils_1.default.adapter({
                     else {
                         services =
                             (_a = adapter.config.services.split(",")) // get manually defined services
-                            .concat.apply(_a, enabledPlugins.map(function (p) { return p.advertisedServices; })).reduce(function (acc, s) { return acc.concat(s); }, []) // flatten the arrays
+                            .concat.apply(_a, __spread(enabledPlugins.map(function (p) { return p.advertisedServices; }))).reduce(function (acc, s) { return acc.concat(s); }, []) // flatten the arrays
                                 .map(function (s) { return fixServiceName(s); }) // cleanup the names
                                 .filter(function (s) { return s != null && s !== ""; })
                                 .reduce(function (acc, s) {
@@ -98,6 +129,7 @@ var adapter = utils_1.default.adapter({
                     if (adapter.config.rssiThrottle != null) {
                         rssiUpdateInterval = Math.max(0, Math.min(10000, adapter.config.rssiThrottle));
                     }
+                    // monitor our own states and objects
                     adapter.subscribeStates("*");
                     adapter.subscribeObjects("*");
                     // load noble driver with the correct device selected
@@ -134,9 +166,15 @@ var adapter = utils_1.default.adapter({
         }
     },
     // is called if a subscribed object changes
-    objectChange: function (id, obj) { },
+    objectChange: function (id, obj) {
+        // apply additional subscriptions we've defined
+        custom_subscriptions_1.applyCustomObjectSubscriptions(id, obj);
+    },
     // is called if a subscribed state changes
-    stateChange: function (id, state) { },
+    stateChange: function (id, state) {
+        // apply additional subscriptions we've defined
+        custom_subscriptions_1.applyCustomStateSubscriptions(id, state);
+    },
     message: function (obj) { return __awaiter(_this, void 0, void 0, function () {
         // responds to the adapter that sent the original message
         function respond(response) {
@@ -145,14 +183,24 @@ var adapter = utils_1.default.adapter({
         }
         // make required parameters easier
         function requireParams(params) {
+            var e_1, _a;
             if (!(params && params.length))
                 return true;
-            for (var _i = 0, params_1 = params; _i < params_1.length; _i++) {
-                var param = params_1[_i];
-                if (!(obj.message && obj.message.hasOwnProperty(param))) {
-                    respond(predefinedResponses.MISSING_PARAMETER(param));
-                    return false;
+            try {
+                for (var params_1 = __values(params), params_1_1 = params_1.next(); !params_1_1.done; params_1_1 = params_1.next()) {
+                    var param = params_1_1.value;
+                    if (!(obj.message && obj.message.hasOwnProperty(param))) {
+                        respond(predefinedResponses.MISSING_PARAMETER(param));
+                        return false;
+                    }
                 }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (params_1_1 && !params_1_1.done && (_a = params_1.return)) _a.call(params_1);
+                }
+                finally { if (e_1) throw e_1.error; }
             }
             return true;
         }
@@ -205,13 +253,23 @@ var adapter = utils_1.default.adapter({
 });
 // =========================
 function fixServiceName(name) {
+    var e_2, _a;
     if (name == null)
         return "";
     name = name.trim();
-    // No whitespace
-    for (var _i = 0, _a = ["\r", "\n", "\t", " "]; _i < _a.length; _i++) {
-        var char = _a[_i];
-        name = name.replace(char, "");
+    try {
+        // No whitespace
+        for (var _b = __values(["\r", "\n", "\t", " "]), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var char = _c.value;
+            name = name.replace(char, "");
+        }
+    }
+    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+    finally {
+        try {
+            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+        }
+        finally { if (e_2) throw e_2.error; }
     }
     // No leading 0x
     name = name.replace(/^0x/, "");
@@ -220,9 +278,9 @@ function fixServiceName(name) {
 }
 function onDiscover(peripheral) {
     return __awaiter(this, void 0, void 0, function () {
-        var deviceId, plugin, _i, enabledPlugins_1, p, rssiState, context, objects, values, _a, _b, stateId, iobStateId;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var e_3, _a, e_4, _b, deviceId, plugin, enabledPlugins_1, enabledPlugins_1_1, p, rssiState, context, objects, values, _c, _d, stateId, iobStateId, e_4_1;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     if (peripheral == null)
                         return [2 /*return*/];
@@ -244,13 +302,22 @@ function onDiscover(peripheral) {
                         return [2 /*return*/];
                     }
                     deviceId = peripheral.address;
-                    for (_i = 0, enabledPlugins_1 = enabledPlugins; _i < enabledPlugins_1.length; _i++) {
-                        p = enabledPlugins_1[_i];
-                        if (p.isHandling(peripheral)) {
-                            global_1.Global.log("plugin " + p.name + " is handling " + deviceId, "debug");
-                            plugin = p;
-                            break;
+                    try {
+                        for (enabledPlugins_1 = __values(enabledPlugins), enabledPlugins_1_1 = enabledPlugins_1.next(); !enabledPlugins_1_1.done; enabledPlugins_1_1 = enabledPlugins_1.next()) {
+                            p = enabledPlugins_1_1.value;
+                            if (p.isHandling(peripheral)) {
+                                global_1.Global.log("plugin " + p.name + " is handling " + deviceId, "debug");
+                                plugin = p;
+                                break;
+                            }
                         }
+                    }
+                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                    finally {
+                        try {
+                            if (enabledPlugins_1_1 && !enabledPlugins_1_1.done && (_a = enabledPlugins_1.return)) _a.call(enabledPlugins_1);
+                        }
+                        finally { if (e_3) throw e_3.error; }
                     }
                     if (!plugin) {
                         global_1.Global.log("no handling plugin found for peripheral " + peripheral.id, "warn");
@@ -271,10 +338,10 @@ function onDiscover(peripheral) {
                         })];
                 case 1:
                     // Always ensure the rssi state exists and gets a value
-                    _c.sent();
+                    _e.sent();
                     return [4 /*yield*/, adapter.$getState(deviceId + ".rssi")];
                 case 2:
-                    rssiState = _c.sent();
+                    rssiState = _e.sent();
                     if (!(rssiState == null ||
                         (rssiState.val !== peripheral.rssi && // only save changes
                             rssiState.lc + rssiUpdateInterval < Date.now())) // and dont update too frequently
@@ -282,8 +349,8 @@ function onDiscover(peripheral) {
                     global_1.Global.log("updating rssi state for " + deviceId, "debug");
                     return [4 /*yield*/, adapter.$setState(deviceId + ".rssi", peripheral.rssi, true)];
                 case 3:
-                    _c.sent();
-                    _c.label = 4;
+                    _e.sent();
+                    _e.label = 4;
                 case 4:
                     context = plugin.createContext(peripheral);
                     objects = plugin.defineObjects(context);
@@ -295,45 +362,59 @@ function onDiscover(peripheral) {
                     return [4 /*yield*/, iobroker_objects_1.extendDevice(deviceId, peripheral, objects.device)];
                 case 5:
                     // Ensure the device object exists
-                    _c.sent();
+                    _e.sent();
                     if (!(objects.channels != null && objects.channels.length > 0)) return [3 /*break*/, 7];
                     return [4 /*yield*/, Promise.all(objects.channels.map(function (c) { return iobroker_objects_1.extendChannel(deviceId + "." + c.id, c); }))];
                 case 6:
-                    _c.sent();
-                    _c.label = 7;
+                    _e.sent();
+                    _e.label = 7;
                 case 7: 
                 // Ensure the state objects exist. These might change in every advertisement frame
                 return [4 /*yield*/, Promise.all(objects.states.map(function (s) { return iobroker_objects_1.extendState(deviceId + "." + s.id, s); }))];
                 case 8:
                     // Ensure the state objects exist. These might change in every advertisement frame
-                    _c.sent();
-                    if (!(values != null)) return [3 /*break*/, 15];
+                    _e.sent();
+                    if (!(values != null)) return [3 /*break*/, 19];
                     global_1.Global.log(deviceId + " > got values: " + JSON.stringify(values), "debug");
-                    _a = 0, _b = Object.keys(values);
-                    _c.label = 9;
+                    _e.label = 9;
                 case 9:
-                    if (!(_a < _b.length)) return [3 /*break*/, 14];
-                    stateId = _b[_a];
+                    _e.trys.push([9, 16, 17, 18]);
+                    _c = __values(Object.keys(values)), _d = _c.next();
+                    _e.label = 10;
+                case 10:
+                    if (!!_d.done) return [3 /*break*/, 15];
+                    stateId = _d.value;
                     iobStateId = adapter.namespace + "." + deviceId + "." + stateId;
                     return [4 /*yield*/, adapter.$getObject(iobStateId)];
-                case 10:
-                    if (!((_c.sent()) != null)) return [3 /*break*/, 12];
+                case 11:
+                    if (!((_e.sent()) != null)) return [3 /*break*/, 13];
                     global_1.Global.log("setting state " + iobStateId, "debug");
                     return [4 /*yield*/, adapter.$setStateChanged(iobStateId, values[stateId], true)];
-                case 11:
-                    _c.sent();
-                    return [3 /*break*/, 13];
                 case 12:
-                    global_1.Global.log("skipping state " + iobStateId + " because the object does not exist", "warn");
-                    _c.label = 13;
+                    _e.sent();
+                    return [3 /*break*/, 14];
                 case 13:
-                    _a++;
-                    return [3 /*break*/, 9];
-                case 14: return [3 /*break*/, 16];
-                case 15:
+                    global_1.Global.log("skipping state " + iobStateId + " because the object does not exist", "warn");
+                    _e.label = 14;
+                case 14:
+                    _d = _c.next();
+                    return [3 /*break*/, 10];
+                case 15: return [3 /*break*/, 18];
+                case 16:
+                    e_4_1 = _e.sent();
+                    e_4 = { error: e_4_1 };
+                    return [3 /*break*/, 18];
+                case 17:
+                    try {
+                        if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
+                    }
+                    finally { if (e_4) throw e_4.error; }
+                    return [7 /*endfinally*/];
+                case 18: return [3 /*break*/, 20];
+                case 19:
                     global_1.Global.log(deviceId + " > got no values", "debug");
-                    _c.label = 16;
-                case 16: return [2 /*return*/];
+                    _e.label = 20;
+                case 20: return [2 /*return*/];
             }
         });
     });

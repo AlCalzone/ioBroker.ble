@@ -2,6 +2,7 @@
     "compileOnSave": true,          // Automatically build files in Visual Studio (Code), in combination with the watch option
     "compilerOptions": {
         "declaration": true,        // emit d.ts files
+        "downlevelIteration": true,
         "module": "commonjs",
         "moduleResolution": "node",
         "noEmitOnError": true,
