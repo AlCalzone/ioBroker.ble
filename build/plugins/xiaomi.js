@@ -2,6 +2,32 @@
 /*!
  * Plugin for Xiaomi devices using the fe95 characteristic
  */
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 var objects_1 = require("alcalzone-shared/objects");
 var global_1 = require("../lib/global");
 var xiaomi_protocol_1 = require("./lib/xiaomi_protocol");
@@ -151,11 +177,21 @@ var plugin = {
         return ret;
     },
     getValues: function (context) {
+        var e_1, _a;
         if (context == null || context.event == null)
             return;
-        for (var _i = 0, _a = objects_1.entries(context.event); _i < _a.length; _i++) {
-            var _b = _a[_i], prop = _b[0], value = _b[1];
-            global_1.Global.log("xiaomi >> {{green|got " + prop + " update => " + value + "}}", "debug");
+        try {
+            for (var _b = __values(objects_1.entries(context.event)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                var _d = __read(_c.value, 2), prop = _d[0], value = _d[1];
+                global_1.Global.log("xiaomi >> {{green|got " + prop + " update => " + value + "}}", "debug");
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+            }
+            finally { if (e_1) throw e_1.error; }
         }
         // The event is simply the value dictionary itself
         return context.event;
