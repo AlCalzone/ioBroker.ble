@@ -1,12 +1,13 @@
 import { exec } from "child_process";
+import { applyCustomObjectSubscriptions, applyCustomStateSubscriptions } from "./lib/custom-subscriptions";
 import { ExtendedAdapter, Global as _ } from "./lib/global";
 import { extendChannel, extendDevice, extendState } from "./lib/iobroker-objects";
+import { ObjectCache } from "./lib/object-cache";
 import utils from "./lib/utils";
 
 // Load all registered plugins
 import plugins from "./plugins";
 import { Plugin } from "./plugins/plugin";
-import { applyCustomObjectSubscriptions, applyCustomStateSubscriptions } from "./lib/custom-subscriptions";
 
 let enabledPlugins: Plugin[];
 let services: string[] = [];
@@ -31,6 +32,9 @@ let adapter: ExtendedAdapter = utils.adapter({
 		// Adapter-Instanz global machen
 		adapter = _.extend(adapter);
 		_.adapter = adapter;
+
+		// Cache objects for 1 minute
+		_.objectCache = new ObjectCache(60000);
 
 		// Workaround für fehlende InstanceObjects nach update
 		await _.ensureInstanceObjects();
@@ -106,6 +110,8 @@ let adapter: ExtendedAdapter = utils.adapter({
 
 	// is called if a subscribed object changes
 	objectChange: (id, obj) => {
+		// Update the cached object
+		_.objectCache.updateObject(obj);
 		// apply additional subscriptions we've defined
 		applyCustomObjectSubscriptions(id, obj);
 	},
@@ -289,7 +295,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		for (const stateId of Object.keys(values)) {
 			// set the value if there's an object for the state
 			const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
-			if (await adapter.$getObject(iobStateId) != null) {
+			if (await _.objectCache.getObject(iobStateId) != null) {
 				_.log(`setting state ${iobStateId}`, "debug");
 				await adapter.$setStateChanged(iobStateId, values[stateId], true);
 			} else {

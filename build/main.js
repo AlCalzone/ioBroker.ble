@@ -67,12 +67,13 @@ var __values = (this && this.__values) || function (o) {
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var child_process_1 = require("child_process");
+var custom_subscriptions_1 = require("./lib/custom-subscriptions");
 var global_1 = require("./lib/global");
 var iobroker_objects_1 = require("./lib/iobroker-objects");
+var object_cache_1 = require("./lib/object-cache");
 var utils_1 = require("./lib/utils");
 // Load all registered plugins
 var plugins_1 = require("./plugins");
-var custom_subscriptions_1 = require("./lib/custom-subscriptions");
 var enabledPlugins;
 var services = [];
 // /** MAC addresses of known devices */
@@ -94,6 +95,8 @@ var adapter = utils_1.default.adapter({
                     // Adapter-Instanz global machen
                     adapter = global_1.Global.extend(adapter);
                     global_1.Global.adapter = adapter;
+                    // Cache objects for 1 minute
+                    global_1.Global.objectCache = new object_cache_1.ObjectCache(60000);
                     // Workaround für fehlende InstanceObjects nach update
                     return [4 /*yield*/, global_1.Global.ensureInstanceObjects()];
                 case 1:
@@ -167,6 +170,8 @@ var adapter = utils_1.default.adapter({
     },
     // is called if a subscribed object changes
     objectChange: function (id, obj) {
+        // Update the cached object
+        global_1.Global.objectCache.updateObject(obj);
         // apply additional subscriptions we've defined
         custom_subscriptions_1.applyCustomObjectSubscriptions(id, obj);
     },
@@ -385,7 +390,7 @@ function onDiscover(peripheral) {
                     if (!!_d.done) return [3 /*break*/, 15];
                     stateId = _d.value;
                     iobStateId = adapter.namespace + "." + deviceId + "." + stateId;
-                    return [4 /*yield*/, adapter.$getObject(iobStateId)];
+                    return [4 /*yield*/, global_1.Global.objectCache.getObject(iobStateId)];
                 case 11:
                     if (!((_e.sent()) != null)) return [3 /*break*/, 13];
                     global_1.Global.log("setting state " + iobStateId, "debug");

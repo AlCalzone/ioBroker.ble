@@ -7,7 +7,7 @@ export async function extendDevice(
 	peripheral: BLE.Peripheral,
 	object: DeviceObjectDefinition,
 ) {
-	const original = await _.adapter.$getObject(deviceId);
+	const original = await _.objectCache.getObject(deviceId);
 	// update the object while preserving the existing properties
 	const updated: ioBroker.DeviceObject = {
 		type: "device",
@@ -46,7 +46,7 @@ export async function extendChannel(
 	channelId: string,
 	object: ChannelObjectDefinition,
 ) {
-	const original = await _.adapter.$getObject(channelId);
+	const original = await _.objectCache.getObject(channelId);
 	// update the object while preserving the existing properties
 	const updated: ioBroker.ChannelObject = {
 		type: "channel",
@@ -78,7 +78,7 @@ export async function extendState(
 	stateId: string,
 	object: StateObjectDefinition,
 ) {
-	const original = await _.adapter.$getObject(stateId);
+	const original = await _.objectCache.getObject(stateId);
 	// update the object while preserving the existing properties
 	const updated: ioBroker.StateObject = {
 		type: "state",

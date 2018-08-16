@@ -42,7 +42,7 @@ function extendDevice(deviceId, peripheral, object) {
         var original, updated;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, global_1.Global.adapter.$getObject(deviceId)];
+                case 0: return [4 /*yield*/, global_1.Global.objectCache.getObject(deviceId)];
                 case 1:
                     original = _a.sent();
                     updated = {
@@ -76,7 +76,7 @@ function extendChannel(channelId, object) {
         var original, updated;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, global_1.Global.adapter.$getObject(channelId)];
+                case 0: return [4 /*yield*/, global_1.Global.objectCache.getObject(channelId)];
                 case 1:
                     original = _a.sent();
                     updated = {
@@ -105,7 +105,7 @@ function extendState(stateId, object) {
         var original, updated;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, global_1.Global.adapter.$getObject(stateId)];
+                case 0: return [4 /*yield*/, global_1.Global.objectCache.getObject(stateId)];
                 case 1:
                     original = _a.sent();
                     updated = {

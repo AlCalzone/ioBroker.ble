@@ -101,6 +101,14 @@ var Global = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(Global, "objectCache", {
+        get: function () { return Global._objectCache; },
+        set: function (cache) {
+            Global._objectCache = cache;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(Global, "loglevel", {
         get: function () { return Global._loglevel; },
         set: function (value) { Global._loglevel = value; },
