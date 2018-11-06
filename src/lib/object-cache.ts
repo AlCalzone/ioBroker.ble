@@ -16,13 +16,13 @@ export class ObjectCache {
 
 	private cache = new Map<string, ioBroker.Object>();
 	private expireTimestamps = new SortedList<ExpireTimestamp>();
-	private expireTimer: NodeJS.Timer;
+	private expireTimer: NodeJS.Timer | undefined;
 
 	/**
 	 * Retrieves an object from the cache or queries the database if it is not cached yet
 	 * @param id The id of the object to retrieve
 	 */
-	public async getObject(id: string): Promise<ioBroker.Object> {
+	public async getObject(id: string): Promise<ioBroker.Object | undefined> {
 		if (!this.cache.has(id)) {
 			// retrieve the original object from the DB
 			const ret = await _.adapter.$getForeignObject(id);
@@ -34,13 +34,13 @@ export class ObjectCache {
 
 	private storeObject(obj: ioBroker.Object) {
 		const clone = extend({}, obj) as ioBroker.Object;
-		this.cache.set(clone._id, clone);
-		this.rememberForExpiry(clone._id);
+		this.cache.set(clone._id!, clone);
+		this.rememberForExpiry(clone._id!);
 	}
 
-	private retrieveObject(id: string): ioBroker.Object {
+	private retrieveObject(id: string): ioBroker.Object | undefined {
 		if (this.cache.has(id)) {
-			return extend({}, this.cache.get(id)) as ioBroker.Object;
+			return extend({}, this.cache.get(id)!) as ioBroker.Object;
 		}
 	}
 
@@ -63,7 +63,7 @@ export class ObjectCache {
 	}
 
 	private expire() {
-		this.expireTimer = null;
+		this.expireTimer = undefined;
 		if (this.expireTimestamps.length === 0) return;
 
 		const nextTimestamp = this.expireTimestamps.shift();
@@ -111,9 +111,9 @@ export class ObjectCache {
 	}
 
 	public dispose() {
-		if (this.expireTimer != null) {
+		if (this.expireTimer != undefined) {
 			clearTimeout(this.expireTimer);
-			this.expireTimer = null;
+			this.expireTimer = undefined;
 		}
 		this.cache.clear();
 	}

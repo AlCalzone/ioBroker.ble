@@ -37,8 +37,7 @@ function checkPattern(pattern) {
         }
     }
     catch (e) {
-        global_1.Global.log("cannot subscribe with this pattern. reason: " + e);
-        return null;
+        throw new Error("cannot subscribe with this pattern. reason: " + e);
     }
 }
 function applyCustomStateSubscriptions(id, state) {
@@ -105,8 +104,6 @@ exports.applyCustomObjectSubscriptions = applyCustomObjectSubscriptions;
  */
 function subscribeStates(pattern, callback) {
     pattern = checkPattern(pattern);
-    if (!pattern)
-        return;
     var newCounter = (++customStateSubscriptions.counter);
     var id = "" + newCounter;
     customStateSubscriptions.subscriptions.set(id, { pattern: pattern, callback: callback });
@@ -131,8 +128,6 @@ exports.unsubscribeStates = unsubscribeStates;
  */
 function subscribeObjects(pattern, callback) {
     pattern = checkPattern(pattern);
-    if (!pattern)
-        return;
     var newCounter = (++customObjectSubscriptions.counter);
     var id = "" + newCounter;
     customObjectSubscriptions.subscriptions.set(id, { pattern: pattern, callback: callback });

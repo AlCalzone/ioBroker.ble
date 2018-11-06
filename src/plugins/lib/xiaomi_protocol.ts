@@ -124,7 +124,7 @@ export class XiaomiAdvertisement {
 		return this._hasMacAddress;
 	}
 
-	private _macAddress: string;
+	private _macAddress: string | undefined;
 	public get macAddress() {
 		return this._macAddress;
 	}
@@ -134,7 +134,7 @@ export class XiaomiAdvertisement {
 		return this._hasCapabilities;
 	}
 
-	private _capabilities: number;
+	private _capabilities: number | undefined;
 	public get capabilities() {
 		return this._capabilities;
 	}
@@ -154,7 +154,7 @@ export class XiaomiAdvertisement {
 		return this._hasCustomData;
 	}
 
-	private _customData: Buffer;
+	private _customData: Buffer | undefined;
 	public get customData() {
 		return this._customData;
 	}

@@ -49,7 +49,7 @@ describe.only("lib/object-cache", () => {
 			mocks.database.publishObject(theObject);
 
 			const retrievedObject = await cache.getObject("whatever");
-			retrievedObject.common.role.should.equal(theObject.common.role);
+			expect(retrievedObject!.common.role).to.equal(theObject.common!.role);
 		});
 
 		it("should return the cached object even if the database changed", async () => {
@@ -71,7 +71,7 @@ describe.only("lib/object-cache", () => {
 
 			const retrievedObject = await cache.getObject("whatever");
 			// we expect the original object
-			retrievedObject.common.role.should.equal(obj1.common.role);
+			expect(retrievedObject!.common.role).to.equal(obj1.common!.role);
 		});
 
 		it("if an object does not exist, nothing should be cached", async () => {
@@ -116,7 +116,7 @@ describe.only("lib/object-cache", () => {
 
 			const retrievedObject = await cache.getObject("whatever");
 			// now we want the updated object
-			retrievedObject.common.role.should.equal(obj2.common.role);
+			expect(retrievedObject!.common.role).to.equal(obj2.common!.role);
 		});
 	});
 
@@ -135,12 +135,12 @@ describe.only("lib/object-cache", () => {
 			const original = await cache.getObject("whatever");
 
 			// cache an updated copy
-			const obj2 = extend({}, original, { common: { role: "updated" } }) as ioBroker.Object;
+			const obj2 = extend({}, original!, { common: { role: "updated" } }) as ioBroker.Object;
 			cache.updateObject(obj2);
 
 			const retrievedObject = await cache.getObject("whatever");
 			// now we want the updated object
-			retrievedObject.common.role.should.equal(obj2.common.role);
+			expect(retrievedObject!.common.role).to.equal(obj2.common.role);
 		});
 
 		it("should not cause getObject() to re-query the database", async () => {
@@ -157,7 +157,7 @@ describe.only("lib/object-cache", () => {
 			const original = await cache.getObject("whatever");
 
 			// cache an updated copy
-			const obj2 = extend({}, original, { common: { role: "cached" } }) as ioBroker.Object;
+			const obj2 = extend({}, original!, { common: { role: "cached" } }) as ioBroker.Object;
 			cache.updateObject(obj2);
 
 			// publish an updated copy
@@ -166,7 +166,7 @@ describe.only("lib/object-cache", () => {
 
 			const retrievedObject = await cache.getObject("whatever");
 			// now we want the cached object
-			retrievedObject.common.role.should.equal("cached");
+			expect(retrievedObject!.common.role).to.equal("cached");
 		});
 	});
 
@@ -205,13 +205,13 @@ describe.only("lib/object-cache", () => {
 
 			// The full duration hasn't elapsed, we expect the original object
 			const notExpired = await cache.getObject("whatever");
-			notExpired.should.deep.equal(original);
+			notExpired!.should.deep.equal(original);
 
 			clock.tick(DURATION / 2);
 
 			// now it has, expect the updated object
 			const expired = await cache.getObject("whatever");
-			expired.should.not.deep.equal(original);
+			expired!.should.not.deep.equal(original);
 
 		});
 

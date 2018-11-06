@@ -38,7 +38,7 @@ export class MockDatabase {
 		if (obj.type == null) throw new Error("An object must have a type");
 
 		const completeObject = extend({}, objectTemplate, obj) as ioBroker.Object;
-		this.objects.set(obj._id, completeObject);
+		this.objects.set(obj._id!, completeObject);
 	}
 	public publishObjects(...objects: ioBroker.PartialObject[]) {
 		objects.forEach(this.publishObject);
@@ -65,7 +65,7 @@ export class MockDatabase {
 	public deleteObject(obj: ioBroker.PartialObject);
 	public deleteObject(objID: string);
 	public deleteObject(objOrID: string | ioBroker.PartialObject) {
-		this.objects.delete(typeof objOrID === "string" ? objOrID : objOrID._id);
+		this.objects.delete(typeof objOrID === "string" ? objOrID : objOrID._id!);
 	}
 
 	public publishState(id: string, state: Partial<ioBroker.State>) {
@@ -88,9 +88,9 @@ export class MockDatabase {
 		return this.objects.has(id);
 	}
 
-	public getObject(id: string): ioBroker.Object;
-	public getObject(namespace: string, id: string): ioBroker.Object;
-	public getObject(namespaceOrId: string, id?: string): ioBroker.Object {
+	public getObject(id: string): ioBroker.Object | undefined;
+	public getObject(namespace: string, id: string): ioBroker.Object | undefined;
+	public getObject(namespaceOrId: string, id?: string): ioBroker.Object | undefined {
 		// combines getObject and getForeignObject into one
 		id = namespaceOrId + (id ? "." + id : "");
 		return this.objects.get(id);
@@ -103,9 +103,9 @@ export class MockDatabase {
 		return this.states.has(id);
 	}
 
-	public getState(id: string): ioBroker.State;
-	public getState(namespace: string, id: string): ioBroker.State;
-	public getState(namespaceOrId: string, id?: string): ioBroker.State {
+	public getState(id: string): ioBroker.State | undefined;
+	public getState(namespace: string, id: string): ioBroker.State | undefined;
+	public getState(namespaceOrId: string, id?: string): ioBroker.State | undefined {
 		// combines getObject and getForeignObject into one
 		id = namespaceOrId + (id ? "." + id : "");
 		return this.states.get(id);
@@ -113,12 +113,12 @@ export class MockDatabase {
 
 	public getObjects(pattern: string, type?: ioBroker.ObjectType);
 	public getObjects(namespace: string, pattern: string, type?: ioBroker.ObjectType);
-	public getObjects(namespaceOrPattern: string, patternOrType: string | ioBroker.ObjectType, type?: ioBroker.ObjectType) {
+	public getObjects(namespaceOrPattern: string, patternOrType?: string | ioBroker.ObjectType, type?: ioBroker.ObjectType) {
 		// combines getObjects and getForeignObjects into one
 		let pattern: string;
-		if (type != null) {
+		if (type != undefined) {
 			pattern = namespaceOrPattern + (patternOrType ? "." + patternOrType : "");
-		} else if (patternOrType != null) {
+		} else if (patternOrType != undefined) {
 			if (["state", "channel", "device"].indexOf(patternOrType) > -1) {
 				type = patternOrType as ioBroker.ObjectType;
 				pattern = namespaceOrPattern;
@@ -130,15 +130,7 @@ export class MockDatabase {
 		}
 
 		const idRegExp = str2regex(pattern);
-		// console.log("getObjects(regex = " + idRegExp + ", type = " + type + ")");
-		// let ret = [...this.objects.entries()];
-		// console.log(`entries = ${ret}`);
-		// ret = ret.filter(([id]) => idRegExp.test(id));
-		// console.log(`after id filter = ${ret}`);
-		// ret = ret.filter(([, obj]) => type == null || obj.type === type);
-		// console.log(`after type filter = ${ret}`);
 
-		// return composeObject(ret) as Record<string, ioBroker.Object>;
 		return composeObject(
 			[...this.objects.entries()]
 				.filter(([id]) => idRegExp.test(id))
@@ -157,7 +149,7 @@ export class MockDatabase {
 }
 
 export function createAsserts(db: MockDatabase, adapter: MockAdapter) {
-	function normalizeID(prefix: string, suffix: string) {
+	function normalizeID(prefix: string, suffix?: string) {
 		let id = `${prefix}${suffix ? "." + suffix : ""}`;
 		// Test if this ID is fully qualified
 		if (!/^[a-z0-9\-_]+\.\d+\./.test(id)) {
@@ -170,7 +162,7 @@ export function createAsserts(db: MockDatabase, adapter: MockAdapter) {
 			const id = normalizeID(prefix, suffix);
 			db.hasObject(id).should.equal(true, `The object "${adapter.namespace}.${id}" does not exist but it was expected to!`);
 		},
-		assertStateExists(prefix: string, suffix: string) {
+		assertStateExists(prefix: string, suffix?: string) {
 			const id = normalizeID(prefix, suffix);
 			db.hasState(id).should.equal(true, `The state "${adapter.namespace}.${id}" does not exist but it was expected to!`);
 		},
@@ -183,7 +175,7 @@ export function createAsserts(db: MockDatabase, adapter: MockAdapter) {
 		assertStateProperty(prefix: string, suffix: string, property: string, value: any) {
 			const id = normalizeID(prefix, suffix);
 			ret.assertStateExists(id, undefined);
-			db.getState(id)
+			db.getState(id)!
 				.should.be.an("object")
 				.that.has.property(property, value)
 				;
@@ -191,7 +183,7 @@ export function createAsserts(db: MockDatabase, adapter: MockAdapter) {
 		assertObjectCommon(prefix: string, suffix: string, common: ioBroker.ObjectCommon) {
 			const id = normalizeID(prefix, suffix);
 			ret.assertObjectExists(prefix, suffix);
-			const dbObj = db.getObject(id);
+			const dbObj = db.getObject(id)!;
 			dbObj.should.be.an("object")
 				.that.has.property("common");
 			dbObj.common.should.be.an("object")
@@ -200,7 +192,7 @@ export function createAsserts(db: MockDatabase, adapter: MockAdapter) {
 		assertObjectNative(prefix: string, suffix: string, native: object) {
 			const id = normalizeID(prefix, suffix);
 			ret.assertObjectExists(prefix, suffix);
-			const dbObj = db.getObject(id);
+			const dbObj = db.getObject(id)!;
 			dbObj.should.be.an("object")
 				.that.has.property("native");
 			dbObj.native.should.be.an("object")

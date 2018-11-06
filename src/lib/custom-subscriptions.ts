@@ -3,11 +3,11 @@ import { str2regex } from "./str2regex";
 
 export interface CustomStateSubscription {
 	pattern: RegExp;
-	callback: (id: string, state: ioBroker.State) => void;
+	callback: (id: string, state: ioBroker.State | null | undefined) => void;
 }
 export interface CustomObjectSubscription {
 	pattern: RegExp;
-	callback: (id: string, obj: ioBroker.Object) => void;
+	callback: (id: string, obj: ioBroker.Object | null | undefined) => void;
 }
 const customStateSubscriptions: {
 	subscriptions: Map<string, CustomStateSubscription>,
@@ -38,12 +38,11 @@ function checkPattern(pattern: string | RegExp): RegExp {
 			throw new Error("The pattern must be regex or string");
 		}
 	} catch (e) {
-		_.log("cannot subscribe with this pattern. reason: " + e);
-		return null;
+		throw new Error("cannot subscribe with this pattern. reason: " + e);
 	}
 }
 
-export function applyCustomStateSubscriptions(id: string, state: ioBroker.State | null) {
+export function applyCustomStateSubscriptions(id: string, state: ioBroker.State | null | undefined) {
 	try {
 		for (const sub of customStateSubscriptions.subscriptions.values()) {
 			if (
@@ -61,7 +60,7 @@ export function applyCustomStateSubscriptions(id: string, state: ioBroker.State 
 	}
 }
 
-export function applyCustomObjectSubscriptions(id: string, obj: ioBroker.Object | null) {
+export function applyCustomObjectSubscriptions(id: string, obj: ioBroker.Object | null | undefined) {
 	try {
 		for (const sub of customObjectSubscriptions.subscriptions.values()) {
 			if (
@@ -88,7 +87,6 @@ export function applyCustomObjectSubscriptions(id: string, obj: ioBroker.Object 
 export function subscribeStates(pattern: string | RegExp, callback: (id: string, state: ioBroker.State) => void): string {
 
 	pattern = checkPattern(pattern);
-	if (!pattern) return;
 
 	const newCounter = (++customStateSubscriptions.counter);
 	const id = "" + newCounter;
@@ -117,7 +115,6 @@ export function unsubscribeStates(id: string) {
 export function subscribeObjects(pattern: string | RegExp, callback: (id: string, object: ioBroker.Object) => void): string {
 
 	pattern = checkPattern(pattern);
-	if (!pattern) return;
 
 	const newCounter = (++customObjectSubscriptions.counter);
 	const id = "" + newCounter;

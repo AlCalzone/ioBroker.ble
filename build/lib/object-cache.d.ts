@@ -11,7 +11,7 @@ export declare class ObjectCache {
      * Retrieves an object from the cache or queries the database if it is not cached yet
      * @param id The id of the object to retrieve
      */
-    getObject(id: string): Promise<ioBroker.Object>;
+    getObject(id: string): Promise<ioBroker.Object | undefined>;
     private storeObject;
     private retrieveObject;
     private rememberForExpiry;

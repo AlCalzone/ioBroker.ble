@@ -120,7 +120,7 @@ var ObjectCache = /** @class */ (function () {
         }
     };
     ObjectCache.prototype.expire = function () {
-        this.expireTimer = null;
+        this.expireTimer = undefined;
         if (this.expireTimestamps.length === 0)
             return;
         var nextTimestamp = this.expireTimestamps.shift();
@@ -162,9 +162,9 @@ var ObjectCache = /** @class */ (function () {
         this.storeObject(obj);
     };
     ObjectCache.prototype.dispose = function () {
-        if (this.expireTimer != null) {
+        if (this.expireTimer != undefined) {
             clearTimeout(this.expireTimer);
-            this.expireTimer = null;
+            this.expireTimer = undefined;
         }
         this.cache.clear();
     };

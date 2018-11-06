@@ -13,7 +13,7 @@ export async function extendDevice(
 		type: "device",
 		common: Object.assign(
 			{
-				name: peripheral.advertisement.localName,
+				name: peripheral.advertisement.localName!,
 			},
 			object.common || {},
 			(original && original.common) || {},

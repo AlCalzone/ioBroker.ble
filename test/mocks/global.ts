@@ -33,7 +33,7 @@ const implementedMethodsDefaultCallback = [
 const implementedMethodsNoErrorCallback = [
 	"getAdapterObjects",
 ];
-const implementedMethods = [].concat(...implementedMethodsDefaultCallback).concat(...implementedMethodsNoErrorCallback);
+const implementedMethods = ([] as string[]).concat(...implementedMethodsDefaultCallback).concat(...implementedMethodsNoErrorCallback);
 
 export function createExtendedAdapterMock(db: MockDatabase) {
 	const ret: MockAdapter = {
@@ -87,7 +87,7 @@ export function createExtendedAdapterMock(db: MockDatabase) {
 		setObjectNotExists: ((id: string, obj: ioBroker.Object, callback?: ioBroker.SetObjectCallback) => {
 			if (!id.startsWith(ret.namespace)) id = ret.namespace + "." + id;
 			if (db.hasObject(id)) {
-				if (typeof callback === "function") callback(null);
+				if (typeof callback === "function") callback(null, { id });
 			} else {
 				ret.setObject(id, obj, callback);
 			}
@@ -100,12 +100,12 @@ export function createExtendedAdapterMock(db: MockDatabase) {
 			const existing = db.getObject(id) || {};
 			const target = extend({}, existing, obj) as ioBroker.Object;
 			db.publishObject(target);
-			if (typeof callback === "function") callback(null, { id: target._id, value: target }, id);
+			if (typeof callback === "function") callback(null, { id: target._id!, value: target }, id);
 		}) as sinon.SinonStub,
 		delObject: ((id: string, callback?: ioBroker.ErrorCallback) => {
 			if (!id.startsWith(ret.namespace)) id = ret.namespace + "." + id;
 			db.deleteObject(id);
-			if (typeof callback === "function") callback(null);
+			if (typeof callback === "function") callback(undefined);
 		}) as sinon.SinonStub,
 
 		getForeignObject: ((id: string, callback: ioBroker.GetObjectCallback) => {
@@ -113,7 +113,7 @@ export function createExtendedAdapterMock(db: MockDatabase) {
 		}) as sinon.SinonStub,
 		getForeignObjects: ((...args: any[] /*pattern: string, type: ioBroker.ObjectType */) => {
 			// tslint:disable-next-line:prefer-const
-			let [pattern, type] = args as any as [string, ioBroker.ObjectType];
+			let [pattern, type] = args as any as [string, ioBroker.ObjectType?];
 			const lastArg = args[args.length - 1];
 			const callback: ioBroker.GetObjectsCallback = typeof lastArg === "function" ? lastArg : undefined;
 			if (typeof type !== "string") type = undefined;
@@ -126,7 +126,7 @@ export function createExtendedAdapterMock(db: MockDatabase) {
 		}) as sinon.SinonStub,
 		setForeignObjectNotExists: ((id: string, obj: ioBroker.Object, callback?: ioBroker.SetObjectCallback) => {
 			if (db.hasObject(id)) {
-				if (typeof callback === "function") callback(null);
+				if (typeof callback === "function") callback(null, { id });
 			} else {
 				ret.setObject(id, obj, callback);
 			}
@@ -135,12 +135,12 @@ export function createExtendedAdapterMock(db: MockDatabase) {
 			const target = db.getObject(id) || {} as ioBroker.Object;
 			Object.assign(target, obj);
 			db.publishObject(target);
-			if (typeof callback === "function") callback(null, { id: target._id, value: target }, id);
+			if (typeof callback === "function") callback(null, { id: target._id!, value: target }, id);
 		}) as sinon.SinonStub,
 		findForeignObject: stub(),
 		delForeignObject: ((id: string, callback?: ioBroker.ErrorCallback) => {
 			db.deleteObject(id);
-			if (typeof callback === "function") callback(null);
+			if (typeof callback === "function") callback(undefined);
 		}) as sinon.SinonStub,
 
 		setState: ((...args: any[] /* id: string, state: any, ack?: boolean */) => {
@@ -227,11 +227,11 @@ export function createExtendedAdapterMock(db: MockDatabase) {
 		delState: ((id: string, callback?: ioBroker.ErrorCallback) => {
 			if (!id.startsWith(ret.namespace)) id = ret.namespace + "." + id;
 			db.deleteState(id);
-			if (typeof callback === "function") callback(null);
+			if (typeof callback === "function") callback(undefined);
 		}) as sinon.SinonStub,
 		delForeignState: ((id: string, callback?: ioBroker.ErrorCallback) => {
 			db.deleteState(id);
-			if (typeof callback === "function") callback(null);
+			if (typeof callback === "function") callback(undefined);
 		}) as sinon.SinonStub,
 
 		getHistory: stub(),

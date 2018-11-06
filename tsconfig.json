@@ -13,6 +13,7 @@
         "target": "es5",
         "lib": [ "es6" ],
         "strictNullChecks": true,
+        "strictPropertyInitialization": true
         //"watch": true
     },
     "include": [

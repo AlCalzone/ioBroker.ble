@@ -1,13 +1,13 @@
 export interface CustomStateSubscription {
     pattern: RegExp;
-    callback: (id: string, state: ioBroker.State) => void;
+    callback: (id: string, state: ioBroker.State | null | undefined) => void;
 }
 export interface CustomObjectSubscription {
     pattern: RegExp;
-    callback: (id: string, obj: ioBroker.Object) => void;
+    callback: (id: string, obj: ioBroker.Object | null | undefined) => void;
 }
-export declare function applyCustomStateSubscriptions(id: string, state: ioBroker.State | null): void;
-export declare function applyCustomObjectSubscriptions(id: string, obj: ioBroker.Object | null): void;
+export declare function applyCustomStateSubscriptions(id: string, state: ioBroker.State | null | undefined): void;
+export declare function applyCustomObjectSubscriptions(id: string, obj: ioBroker.Object | null | undefined): void;
 /**
  * Subscribe to some ioBroker states
  * @param pattern
