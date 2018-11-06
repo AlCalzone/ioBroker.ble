@@ -1,8 +1,8 @@
 ﻿import { ExtendedAdapter } from "../lib/global";
 
-export type DeviceObjectDefinition = Pick<ioBroker.DeviceObject, "common" | "native">;
-export type ChannelObjectDefinition = Pick<ioBroker.ChannelObject, "common" | "native"> & { id: string };
-export type StateObjectDefinition = Pick<ioBroker.StateObject, "common" | "native"> & { id: string };
+export type DeviceObjectDefinition = Partial<Pick<ioBroker.DeviceObject, "common" | "native">>;
+export type ChannelObjectDefinition = Partial<Pick<ioBroker.ChannelObject, "common" | "native">> & { id: string };
+export type StateObjectDefinition = Partial<Pick<ioBroker.StateObject, "common" | "native">> & { id: string };
 
 /**
  * Defines the object structure for a handled peripheral.
@@ -11,17 +11,15 @@ export type StateObjectDefinition = Pick<ioBroker.StateObject, "common" | "nativ
 export interface PeripheralObjectStructure {
 	/**
 	 * How the device object should look like.
-	 * May be null if the plugin knows that the object exists.
 	 */
 	device: DeviceObjectDefinition;
 	/**
 	 * Which channels to create.
-	 * May be null if the plugin knows that the objects exist or none should be created.
+	 * May be undefined if the plugin knows that the objects exist or none should be created.
 	 */
-	channels: ChannelObjectDefinition[];
+	channels: ChannelObjectDefinition[] | undefined;
 	/**
 	 * Which states to create.
-	 * May be null if the plugin knows that the objects exist.
 	 */
 	states: StateObjectDefinition[];
 }
@@ -38,14 +36,14 @@ export interface Plugin<TContext = any> {
 	/** Determines whether this plugin is handling a peripheral or not */
 	isHandling: (peripheral: BLE.Peripheral) => boolean;
 	/** Creates an object used by @see{defineObjects} and @see{getValues} to create their return values */
-	createContext: (peripheral: BLE.Peripheral) => TContext;
+	createContext: (peripheral: BLE.Peripheral) => TContext | undefined;
 	/** Defines the object structure for a handled peripheral. */
-	defineObjects: (context: TContext) => PeripheralObjectStructure;
+	defineObjects: (context: TContext) => PeripheralObjectStructure | undefined;
 	/** Returns the values extracted from the peripheral */
-	getValues: (context: TContext) => Record<string, any>;
+	getValues: (context: TContext) => Record<string, any> | undefined;
 }
 
-export function getServiceData(peripheral: BLE.Peripheral, uuid: string): Buffer | null {
+export function getServiceData(peripheral: BLE.Peripheral, uuid: string): Buffer | undefined {
 	for (const entry of peripheral.advertisement.serviceData) {
 		if (entry.uuid === uuid) return entry.data;
 	}

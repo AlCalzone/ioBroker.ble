@@ -4,10 +4,6 @@ import fs = require("fs");
 declare global {
 	namespace ioBroker {
 
-		interface DictionaryLike<T> {
-			[id: string]: T;
-		}
-
 		enum StateQuality {
 			good = 0x00, // or undefined or null
 			bad = 0x01,
@@ -236,7 +232,7 @@ declare global {
 		type ObjectType = "state" | "channel" | "device";
 		type CommonType = "number" | "string" | "boolean" | "array" | "object" | "mixed" | "file";
 
-		// Maybe this should extend DictionaryLike<any>,
+		// Maybe this should extend Record<string, any>,
 		// but the extra properties aren't defined anywhere,
 		// so I'd rather force the user to explicitly state
 		// he knows what he's doing by casting to any
@@ -285,7 +281,7 @@ declare global {
 			 * In old ioBroker versions, this could also be a string of the form
 			 * "val1:text1;val2:text2" (now deprecated)
 			 */
-			states?: DictionaryLike<string> | string;
+			states?: Record<string, string> | string;
 
 			/** ID of a helper state indicating if the handler of this state is working */
 			workingID?: string;
@@ -304,8 +300,8 @@ declare global {
 		interface BaseObject {
 			/** The ID of this object */
 			_id?: string;
-			native: DictionaryLike<any>;
-			enums?: DictionaryLike<string>;
+			native: Record<string, any>;
+			enums?: Record<string, string>;
 			type: string; // specified in the derived interfaces
 			common: ObjectCommon;
 			acl?: ObjectACL;
@@ -614,7 +610,7 @@ declare global {
 			 * @param options Mode of the access change as a number or hexadecimal string
 			 * @param callback Is called when the operation has finished (successfully or not)
 			 */
-			chmodFile(id: string, name: string, options: {mode: number | string} | DictionaryLike<any>, callback: ChownFileCallback): void;
+			chmodFile(id: string, name: string, options: {mode: number | string} | Record<string, any>, callback: ChownFileCallback): void;
 
 			// not documented. enabled = true seems to disable the cache
 			// enableFileCache(enabled, options, callback)
@@ -752,7 +748,7 @@ declare global {
 			 * @param callback Is called when the operation has finished (successfully or not)
 			 */
 			getObjectList(params: GetObjectListParams | null, callback: GetObjectListCallback): void;
-			getObjectList(params: GetObjectListParams | null, options: { sorted?: boolean } | DictionaryLike<any>, callback: GetObjectListCallback): void;
+			getObjectList(params: GetObjectListParams | null, options: { sorted?: boolean } | Record<string, any>, callback: GetObjectListCallback): void;
 
 			/**
 			 * Query a predefined object view (similar to SQL stored procedures) and return the results
@@ -1011,14 +1007,13 @@ declare global {
 			/** Creates an object in the object db. Existing objects are not overwritten. */
 			setObjectNotExists(id: string, obj: ioBroker.Object, options?: any, callback?: SetObjectCallback): void;
 			/** Get all states, channels and devices of this adapter */
-			getAdapterObjects(callback: (objects: DictionaryLike<ioBroker.Object>) => void): void;
+			getAdapterObjects(callback: (objects: Record<string, ioBroker.Object>) => void): void;
 			/** Extend an object and create it if it might not exist */
 			extendObject(id: string, objPart: PartialObject, options?: any, callback?: SetObjectCallback): void;
 			/**
 			 * Deletes an object from the object db
 			 * @param id - The id of the object without namespace
 			 */
-			delObject(id: string, callback?: ErrorCallback): void;
 			delObject(id: string, options?: any, callback?: ErrorCallback): void;
 
 			// ==============================
@@ -1247,7 +1242,7 @@ declare global {
 			 * @param options Mode of the access change as a number or hexadecimal string
 			 * @param callback Is called when the operation has finished (successfully or not)
 			 */
-			chmodFile(adapter: string | null, path: string, options: {mode: number | string} | DictionaryLike<any>, callback: ChownFileCallback): void;
+			chmodFile(adapter: string | null, path: string, options: {mode: number | string} | Record<string, any>, callback: ChownFileCallback): void;
 
 			// ==============================
 			// formatting
@@ -1267,16 +1262,16 @@ declare global {
 		// TODO: Redefine callbacks as subclass of GenericCallback
 		type GenericCallback<T> = (err: string | null, result?: T) => void;
 
-		type SetObjectCallback = (err: string | null, obj?: { id: string }) => void;
+		type SetObjectCallback = (err: string | null, obj: { id: string }) => void;
 		type GetObjectCallback = (err: string | null, obj: ioBroker.Object) => void;
-		type GetEnumCallback = (err: string | null, enums: DictionaryLike<Enum>, requestedEnum: string) => void;
+		type GetEnumCallback = (err: string | null, enums: Record<string, Enum>, requestedEnum: string) => void;
 		type GetEnumsCallback = (
 			err: string | null,
 			result: {
-				[groupName: string]: DictionaryLike<Enum>,
+				[groupName: string]: Record<string, Enum>,
 			},
 		) => void;
-		type GetObjectsCallback = (err: string | null, objects: DictionaryLike<ioBroker.Object>) => void;
+		type GetObjectsCallback = (err: string | null, objects: Record<string, ioBroker.Object>) => void;
 
 		type FindObjectCallback = (
 			/** If an error happened, this contains the message */
@@ -1297,7 +1292,7 @@ declare global {
 		type GetObjectsCallback3<T extends BaseObject> = (err: string | null, result?: GetObjectsItem<T>[]) => void;
 
 		type GetStateCallback = (err: string | null, state: State) => void;
-		type GetStatesCallback = (err: string | null, states: DictionaryLike<State>) => void;
+		type GetStatesCallback = (err: string | null, states: Record<string, State>) => void;
 		/** Version of the callback used by States.getStates */
 		type GetStatesCallback2 = (err: string | null, states: State[]) => void;
 		type GetBinaryStateCallback = (err: string | null, state?: Buffer) => void;

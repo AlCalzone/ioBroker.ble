@@ -40,16 +40,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __values = (this && this.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /*
     CONFIGURATION:
@@ -75,20 +65,17 @@ var sshConfig = require(path.join(rootDir, "deploy_password.json"));
 var remoteRoot = "/opt/iobroker/node_modules/iobroker." + ADAPTER_NAME;
 (function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var e_1, _a, e_2, _b, uploadDirs_1, uploadDirs_1_1, dir, e_1_1, uploadFiles_1, uploadFiles_1_1, file, e_2_1, execResult;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _i, uploadDirs_1, dir, _a, uploadFiles_1, file, execResult;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0: return [4 /*yield*/, ssh.connect(sshConfig)];
                 case 1:
-                    _c.sent();
-                    _c.label = 2;
+                    _b.sent();
+                    _i = 0, uploadDirs_1 = uploadDirs;
+                    _b.label = 2;
                 case 2:
-                    _c.trys.push([2, 7, 8, 9]);
-                    uploadDirs_1 = __values(uploadDirs), uploadDirs_1_1 = uploadDirs_1.next();
-                    _c.label = 3;
-                case 3:
-                    if (!!uploadDirs_1_1.done) return [3 /*break*/, 6];
-                    dir = uploadDirs_1_1.value;
+                    if (!(_i < uploadDirs_1.length)) return [3 /*break*/, 5];
+                    dir = uploadDirs_1[_i];
                     console.log("uploading " + dir + " dir from \"" + localRoot + "\" to \"" + remoteRoot + "\"...");
                     return [4 /*yield*/, ssh.putDirectory(path.join(localRoot, dir), path.join(remoteRoot, dir), {
                             recursive: true,
@@ -98,59 +85,36 @@ var remoteRoot = "/opt/iobroker/node_modules/iobroker." + ADAPTER_NAME;
                                 return !basename.startsWith("deploy_");
                             },
                         })];
+                case 3:
+                    _b.sent();
+                    _b.label = 4;
                 case 4:
-                    _c.sent();
-                    _c.label = 5;
+                    _i++;
+                    return [3 /*break*/, 2];
                 case 5:
-                    uploadDirs_1_1 = uploadDirs_1.next();
-                    return [3 /*break*/, 3];
-                case 6: return [3 /*break*/, 9];
-                case 7:
-                    e_1_1 = _c.sent();
-                    e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 9];
-                case 8:
-                    try {
-                        if (uploadDirs_1_1 && !uploadDirs_1_1.done && (_a = uploadDirs_1.return)) _a.call(uploadDirs_1);
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                    return [7 /*endfinally*/];
-                case 9:
-                    _c.trys.push([9, 14, 15, 16]);
-                    uploadFiles_1 = __values(uploadFiles), uploadFiles_1_1 = uploadFiles_1.next();
-                    _c.label = 10;
-                case 10:
-                    if (!!uploadFiles_1_1.done) return [3 /*break*/, 13];
-                    file = uploadFiles_1_1.value;
+                    _a = 0, uploadFiles_1 = uploadFiles;
+                    _b.label = 6;
+                case 6:
+                    if (!(_a < uploadFiles_1.length)) return [3 /*break*/, 9];
+                    file = uploadFiles_1[_a];
                     console.log("uploading " + file + " from \"" + localRoot + "\" to \"" + remoteRoot + "\"...");
                     return [4 /*yield*/, ssh.putFile(path.join(localRoot, file), path.join(remoteRoot, file))];
-                case 11:
-                    _c.sent();
-                    _c.label = 12;
-                case 12:
-                    uploadFiles_1_1 = uploadFiles_1.next();
-                    return [3 /*break*/, 10];
-                case 13: return [3 /*break*/, 16];
-                case 14:
-                    e_2_1 = _c.sent();
-                    e_2 = { error: e_2_1 };
-                    return [3 /*break*/, 16];
-                case 15:
-                    try {
-                        if (uploadFiles_1_1 && !uploadFiles_1_1.done && (_b = uploadFiles_1.return)) _b.call(uploadFiles_1);
-                    }
-                    finally { if (e_2) throw e_2.error; }
-                    return [7 /*endfinally*/];
-                case 16:
+                case 7:
+                    _b.sent();
+                    _b.label = 8;
+                case 8:
+                    _a++;
+                    return [3 /*break*/, 6];
+                case 9:
                     console.log("updating in-mem adapter");
                     return [4 /*yield*/, ssh.execCommand("iobroker upload " + ADAPTER_NAME)];
-                case 17:
-                    execResult = _c.sent();
+                case 10:
+                    execResult = _b.sent();
                     console.log(execResult.stdout);
                     console.log(execResult.stderr);
                     return [4 /*yield*/, ssh.execCommand("iobroker restart " + ADAPTER_NAME)];
-                case 18:
-                    execResult = _c.sent();
+                case 11:
+                    execResult = _b.sent();
                     console.log(execResult.stdout);
                     console.log(execResult.stderr);
                     console.log("done");

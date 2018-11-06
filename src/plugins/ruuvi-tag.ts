@@ -21,12 +21,10 @@ const plugin: Plugin<RuuviContext> = {
 	advertisedServices: [serviceUUID],
 
 	isHandling: (peripheral: BLE.Peripheral) => {
-		if (
-			testedPeripherals.has(peripheral.id)
-			&& testedPeripherals.get(peripheral.id).timestamp >= Date.now()
-		) {
+		const cached = testedPeripherals.get(peripheral.id);
+		if (cached && cached.timestamp >= Date.now()) {
 			// we have a recent test result, return it
-			return testedPeripherals.get(peripheral.id).result;
+			return cached.result;
 		}
 		// we have no quick check, so try to create a context
 		let ret: boolean = false;
@@ -43,13 +41,14 @@ const plugin: Plugin<RuuviContext> = {
 	},
 
 	createContext: (peripheral: BLE.Peripheral) => {
-		let data: Buffer = getServiceData(peripheral, serviceUUID);
-		if (data != null) {
+		let data = getServiceData(peripheral, serviceUUID);
+		if (data != undefined) {
 			const url = data.toString("utf8");
 			_.log(`ruuvi-tag >> got url: ${data.toString("utf8")}`, "debug");
 			// data format 2 or 4 - extract from URL hash
-			const hash = nodeUrl.parse(url).hash;
-			data = Buffer.from(hash, "base64");
+			const parsedUrl = nodeUrl.parse(url);
+			if (!(parsedUrl && parsedUrl.hash)) return;
+			data = Buffer.from(parsedUrl.hash, "base64");
 			return parseDataFormat2or4(data);
 		} else if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0) {
 			data = peripheral.advertisement.manufacturerData;
@@ -65,13 +64,13 @@ const plugin: Plugin<RuuviContext> = {
 		}
 	},
 
-	defineObjects: (context): PeripheralObjectStructure => {
+	defineObjects: (context) => {
 
-		if (context == null) return;
+		if (context == undefined) return;
 
 		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
-			common: null,
-			native: null,
+			common: undefined,
+			native: undefined,
 		};
 		if ("beaconID" in context) {
 			deviceObject.native = { beaconID: context.beaconID };
@@ -83,7 +82,7 @@ const plugin: Plugin<RuuviContext> = {
 
 		const ret = {
 			device: deviceObject,
-			channels: null,
+			channels: undefined,
 			states: stateObjects,
 		};
 
@@ -99,7 +98,7 @@ const plugin: Plugin<RuuviContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 			if ("humidity" in context) {
@@ -113,7 +112,7 @@ const plugin: Plugin<RuuviContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 			if ("pressure" in context) {
@@ -127,10 +126,10 @@ const plugin: Plugin<RuuviContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
-			if ("acceleration" in context) {
+			if (context.acceleration != undefined) {
 				if (context.acceleration.x != null) {
 					stateObjects.push({
 						id: "accelerationX",
@@ -142,7 +141,7 @@ const plugin: Plugin<RuuviContext> = {
 							read: true,
 							write: false,
 						},
-						native: null,
+						native: undefined,
 					});
 				}
 				if (context.acceleration.y != null) {
@@ -156,7 +155,7 @@ const plugin: Plugin<RuuviContext> = {
 							read: true,
 							write: false,
 						},
-						native: null,
+						native: undefined,
 					});
 				}
 				if (context.acceleration.z != null) {
@@ -170,7 +169,7 @@ const plugin: Plugin<RuuviContext> = {
 							read: true,
 							write: false,
 						},
-						native: null,
+						native: undefined,
 					});
 				}
 			}
@@ -186,7 +185,7 @@ const plugin: Plugin<RuuviContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 			if ("txPower" in context) {
@@ -201,7 +200,7 @@ const plugin: Plugin<RuuviContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 			if ("motionCounter" in context) {
@@ -215,7 +214,7 @@ const plugin: Plugin<RuuviContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 		}
@@ -223,7 +222,7 @@ const plugin: Plugin<RuuviContext> = {
 		return ret;
 
 	},
-	getValues: (context): Record<string, any> => {
+	getValues: (context) => {
 		if (context == null) return;
 
 		// strip out unnecessary properties

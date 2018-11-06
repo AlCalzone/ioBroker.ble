@@ -34,32 +34,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __values = (this && this.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var async_1 = require("alcalzone-shared/async");
 var objects_1 = require("alcalzone-shared/objects");
@@ -197,28 +171,18 @@ var Global = /** @class */ (function () {
     */
     Global.log = function (message, level) {
         if (level === void 0) { level = "info"; }
-        var e_1, _a;
         if (!Global.adapter)
             return;
         if (message) {
-            try {
-                // Farben und Formatierungen
-                for (var _b = __values(objects_1.entries(replacements)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var _d = __read(_c.value, 2), _e = __read(_d[1], 2), regex = _e[0], repl = _e[1];
-                    if (typeof repl === "string") {
-                        message = message.replace(regex, repl);
-                    }
-                    else { // a bit verbose, but TS doesn't get the overload thingy here
-                        message = message.replace(regex, repl);
-                    }
+            // Farben und Formatierungen
+            for (var _i = 0, _a = objects_1.entries(replacements); _i < _a.length; _i++) {
+                var _b = _a[_i], _c = _b[1], regex = _c[0], repl = _c[1];
+                if (typeof repl === "string") {
+                    message = message.replace(regex, repl);
                 }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                else { // a bit verbose, but TS doesn't get the overload thingy here
+                    message = message.replace(regex, repl);
                 }
-                finally { if (e_1) throw e_1.error; }
             }
         }
         if (level === "silly" && !(level in Global._adapter.log))

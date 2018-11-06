@@ -25,10 +25,10 @@ var plugin = {
     description: "Ruuvi Tag",
     advertisedServices: [serviceUUID],
     isHandling: function (peripheral) {
-        if (testedPeripherals.has(peripheral.id)
-            && testedPeripherals.get(peripheral.id).timestamp >= Date.now()) {
+        var cached = testedPeripherals.get(peripheral.id);
+        if (cached && cached.timestamp >= Date.now()) {
             // we have a recent test result, return it
-            return testedPeripherals.get(peripheral.id).result;
+            return cached.result;
         }
         // we have no quick check, so try to create a context
         var ret = false;
@@ -46,12 +46,14 @@ var plugin = {
     },
     createContext: function (peripheral) {
         var data = plugin_1.getServiceData(peripheral, serviceUUID);
-        if (data != null) {
+        if (data != undefined) {
             var url = data.toString("utf8");
             global_1.Global.log("ruuvi-tag >> got url: " + data.toString("utf8"), "debug");
             // data format 2 or 4 - extract from URL hash
-            var hash = nodeUrl.parse(url).hash;
-            data = Buffer.from(hash, "base64");
+            var parsedUrl = nodeUrl.parse(url);
+            if (!(parsedUrl && parsedUrl.hash))
+                return;
+            data = Buffer.from(parsedUrl.hash, "base64");
             return ruuvi_tag_protocol_1.parseDataFormat2or4(data);
         }
         else if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0) {
@@ -70,11 +72,11 @@ var plugin = {
         }
     },
     defineObjects: function (context) {
-        if (context == null)
+        if (context == undefined)
             return;
         var deviceObject = {
-            common: null,
-            native: null,
+            common: undefined,
+            native: undefined,
         };
         if ("beaconID" in context) {
             deviceObject.native = { beaconID: context.beaconID };
@@ -83,7 +85,7 @@ var plugin = {
         var stateObjects = [];
         var ret = {
             device: deviceObject,
-            channels: null,
+            channels: undefined,
             states: stateObjects,
         };
         if (context != null) {
@@ -98,7 +100,7 @@ var plugin = {
                         read: true,
                         write: false,
                     },
-                    native: null,
+                    native: undefined,
                 });
             }
             if ("humidity" in context) {
@@ -112,7 +114,7 @@ var plugin = {
                         read: true,
                         write: false,
                     },
-                    native: null,
+                    native: undefined,
                 });
             }
             if ("pressure" in context) {
@@ -126,10 +128,10 @@ var plugin = {
                         read: true,
                         write: false,
                     },
-                    native: null,
+                    native: undefined,
                 });
             }
-            if ("acceleration" in context) {
+            if (context.acceleration != undefined) {
                 if (context.acceleration.x != null) {
                     stateObjects.push({
                         id: "accelerationX",
@@ -141,7 +143,7 @@ var plugin = {
                             read: true,
                             write: false,
                         },
-                        native: null,
+                        native: undefined,
                     });
                 }
                 if (context.acceleration.y != null) {
@@ -155,7 +157,7 @@ var plugin = {
                             read: true,
                             write: false,
                         },
-                        native: null,
+                        native: undefined,
                     });
                 }
                 if (context.acceleration.z != null) {
@@ -169,7 +171,7 @@ var plugin = {
                             read: true,
                             write: false,
                         },
-                        native: null,
+                        native: undefined,
                     });
                 }
             }
@@ -185,7 +187,7 @@ var plugin = {
                         read: true,
                         write: false,
                     },
-                    native: null,
+                    native: undefined,
                 });
             }
             if ("txPower" in context) {
@@ -200,7 +202,7 @@ var plugin = {
                         read: true,
                         write: false,
                     },
-                    native: null,
+                    native: undefined,
                 });
             }
             if ("motionCounter" in context) {
@@ -214,7 +216,7 @@ var plugin = {
                         read: true,
                         write: false,
                     },
-                    native: null,
+                    native: undefined,
                 });
             }
         }
