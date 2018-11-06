@@ -110,8 +110,13 @@ let adapter: ExtendedAdapter = utils.adapter({
 
 	// is called if a subscribed object changes
 	objectChange: (id, obj) => {
-		// Update the cached object
-		_.objectCache.updateObject(obj);
+		if (!!obj) {
+			// it has just been changed, so update the cached object
+			_.objectCache.updateObject(obj);
+		} else {
+			// it has been deleted, so delete it from the cache
+			_.objectCache.invalidateObject(id);
+		}
 		// apply additional subscriptions we've defined
 		applyCustomObjectSubscriptions(id, obj);
 	},

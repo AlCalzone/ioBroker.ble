@@ -170,8 +170,14 @@ var adapter = utils_1.default.adapter({
     },
     // is called if a subscribed object changes
     objectChange: function (id, obj) {
-        // Update the cached object
-        global_1.Global.objectCache.updateObject(obj);
+        if (!!obj) {
+            // it has just been changed, so update the cached object
+            global_1.Global.objectCache.updateObject(obj);
+        }
+        else {
+            // it has been deleted, so delete it from the cache
+            global_1.Global.objectCache.invalidateObject(id);
+        }
         // apply additional subscriptions we've defined
         custom_subscriptions_1.applyCustomObjectSubscriptions(id, obj);
     },

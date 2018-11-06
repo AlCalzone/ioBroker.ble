@@ -171,7 +171,7 @@ export function createExtendedAdapterMock(db: MockDatabase) {
 			}
 
 			if (!id.startsWith(ret.namespace)) id = ret.namespace + "." + id;
-			if (!db.hasState(id) || db.getState(id).val !== state) {
+			if (!db.hasState(id) || db.getState(id)!.val !== state) {
 				db.publishState(id, { val: state, ack });
 			}
 			if (typeof callback === "function") callback(null, id);
@@ -203,7 +203,7 @@ export function createExtendedAdapterMock(db: MockDatabase) {
 				state = state.val;
 			}
 
-			if (!db.hasState(id) || db.getState(id).val !== state) {
+			if (!db.hasState(id) || db.getState(id)!.val !== state) {
 				db.publishState(id, { val: state, ack });
 			}
 			if (typeof callback === "function") callback(null, id);
