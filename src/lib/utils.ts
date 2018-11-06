@@ -10,7 +10,7 @@ function getControllerDir(isInstall: boolean): string {
 		"iobroker.js-controller",
 		"ioBroker.js-controller",
 	];
-	let controllerPath: string;
+	let controllerPath: string | undefined;
 	for (const pkg of possibilities) {
 		try {
 			const possiblePath = require.resolve(pkg);
@@ -20,7 +20,7 @@ function getControllerDir(isInstall: boolean): string {
 			}
 		} catch { /* not found */ }
 	}
-	if (controllerPath == null) {
+	if (controllerPath == undefined) {
 		if (!isInstall) {
 			console.log("Cannot find js-controller");
 			process.exit(10);
@@ -29,7 +29,7 @@ function getControllerDir(isInstall: boolean): string {
 		}
 	}
 	// we found the controller
-	return path.dirname(controllerPath);
+	return path.dirname(controllerPath!);
 }
 
 // Read controller configuration file

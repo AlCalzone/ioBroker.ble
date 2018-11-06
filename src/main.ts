@@ -57,7 +57,7 @@ let adapter: ExtendedAdapter = utils.adapter({
 			services =
 				(adapter.config.services as string).split(",")	// get manually defined services
 					.concat(...enabledPlugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
-					.reduce((acc, s) => acc.concat(s), [])		// flatten the arrays
+					.reduce((acc, s) => acc.concat(s), [] as string[])		// flatten the arrays
 					.map(s => fixServiceName(s))				// cleanup the names
 					.filter(s => s != null && s !== "")
 					.reduce((acc: any[], s) => {				// filter out duplicates
@@ -164,7 +164,7 @@ let adapter: ExtendedAdapter = utils.adapter({
 						// parse index and bus type
 						const ports: { index: number, bus: string }[] = [];
 						const regex = /^hci(\d+)\:.+Bus\:\s(\w+)$/gm;
-						let result: RegExpExecArray;
+						let result: RegExpExecArray | null;
 
 						while (true) {
 							result = regex.exec(stdout);
@@ -227,7 +227,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	const deviceId = peripheral.address;
 
 	// find out which plugin is handling this
-	let plugin: Plugin;
+	let plugin: Plugin | undefined;
 	for (const p of enabledPlugins) {
 		if (p.isHandling(peripheral)) {
 			_.log(`plugin ${p.name} is handling ${deviceId}`, "debug");

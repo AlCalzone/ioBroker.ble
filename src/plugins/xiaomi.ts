@@ -11,7 +11,7 @@ interface XiaomiContext {
 	event?: XiaomiEvent;
 }
 
-function parseAdvertisementEvent(data: Buffer): XiaomiEvent | null {
+function parseAdvertisementEvent(data: Buffer): XiaomiEvent | undefined {
 	// try to parse the data
 	let advertisement: XiaomiAdvertisement;
 	try {
@@ -43,25 +43,24 @@ const plugin: Plugin<XiaomiContext> = {
 	},
 
 	createContext: (peripheral: BLE.Peripheral) => {
-		const data: Buffer = getServiceData(peripheral, "fe95");
-		if (data == null) return;
+		const data = getServiceData(peripheral, "fe95");
+		if (data == undefined) return;
 
 		_.log(`xiaomi >> got data: ${data.toString("hex")}`, "debug");
 
-		const event: XiaomiEvent = parseAdvertisementEvent(getServiceData(peripheral, "fe95"));
-		if (event == null) return;
+		const event = parseAdvertisementEvent(data);
+		if (event == undefined) return;
 
 		return { event };
-
 	},
 
-	defineObjects: (context: XiaomiContext): PeripheralObjectStructure => {
+	defineObjects: (context: XiaomiContext) => {
 
-		if (context == null || context.event == null) return;
+		if (context == undefined || context.event == undefined) return;
 
 		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
-			common: null,
-			native: null,
+			common: undefined,
+			native: undefined,
 		};
 
 		// no channels
@@ -70,12 +69,12 @@ const plugin: Plugin<XiaomiContext> = {
 
 		const ret = {
 			device: deviceObject,
-			channels: null,
+			channels: undefined,
 			states: stateObjects,
 		};
 
 		const event = context.event;
-		if (event != null) {
+		if (event != undefined) {
 			if ("temperature" in event) {
 				stateObjects.push({
 					id: "temperature",
@@ -87,7 +86,7 @@ const plugin: Plugin<XiaomiContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 			if ("humidity" in event) {
@@ -101,7 +100,7 @@ const plugin: Plugin<XiaomiContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 			if ("illuminance" in event) {
@@ -115,7 +114,7 @@ const plugin: Plugin<XiaomiContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 			if ("moisture" in event) {
@@ -130,7 +129,7 @@ const plugin: Plugin<XiaomiContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 			if ("fertility" in event) {
@@ -145,7 +144,7 @@ const plugin: Plugin<XiaomiContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 			if ("battery" in event) {
@@ -160,7 +159,7 @@ const plugin: Plugin<XiaomiContext> = {
 						read: true,
 						write: false,
 					},
-					native: null,
+					native: undefined,
 				});
 			}
 		}
@@ -168,7 +167,7 @@ const plugin: Plugin<XiaomiContext> = {
 		return ret;
 
 	},
-	getValues: (context: XiaomiContext): Record<string, any> => {
+	getValues: (context: XiaomiContext) => {
 		if (context == null || context.event == null) return;
 
 		for (const [prop, value] of entries(context.event)) {

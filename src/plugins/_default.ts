@@ -25,8 +25,8 @@ const plugin: Plugin = {
 	defineObjects: (peripheral: BLE.Peripheral): PeripheralObjectStructure => {
 
 		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
-			common: null,
-			native: null,
+			common: undefined,
+			native: undefined,
 		};
 
 		const channelId = `services`;
@@ -37,7 +37,7 @@ const plugin: Plugin = {
 				name: "Advertised services",
 				role: "info",
 			},
-			native: null,
+			native: undefined,
 		};
 
 		const stateObjects: StateObjectDefinition[] = [];
@@ -55,7 +55,7 @@ const plugin: Plugin = {
 					read: true,
 					write: false,
 				},
-				native: null,
+				native: undefined,
 			});
 		}
 

@@ -200,7 +200,7 @@ const valueTransforms: Partial<
 	>
 > & {"default": ValueTransform} = {
 	// by default just pass the value through
-	default: (val, eventID) => ({[XiaomiEventIDs_Internal[eventID].toLowerCase()]: val}),
+	default: (val, eventID) => ({[XiaomiEventIDs_Internal[eventID!].toLowerCase()]: val}),
 	Temperature: (val) => ({temperature: val / 10}),
 	Humidity: (val) => ({humidity: val / 10}),
 	TemperatureAndHumidity: (val) => ({

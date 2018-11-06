@@ -11,7 +11,8 @@
         "removeComments": false,
         "stripInternal": true,
         "target": "es5",
-        "lib": [ "es6" ]
+        "lib": [ "es6" ],
+        "strictNullChecks": true,
         //"watch": true
     },
     "include": [
