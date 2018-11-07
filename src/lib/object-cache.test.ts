@@ -27,7 +27,7 @@ const { ObjectCache } = proxyquire<typeof import("./object-cache")>("./object-ca
 	"../lib/global": mocks.global,
 });
 
-describe.only("lib/object-cache", () => {
+describe("lib/object-cache", () => {
 
 	afterEach(() => {
 		mocks.global.resetMockHistory();
