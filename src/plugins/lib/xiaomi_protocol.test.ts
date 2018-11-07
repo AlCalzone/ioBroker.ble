@@ -47,19 +47,19 @@ function assertFlags(operationMode: OperationModes, parsed: XiaomiAdvertisement)
 	}
 }
 
-function assertVersion(actual: number, expected: number) {
+function assertVersion(actual: number, expected: number | undefined) {
 	expect(actual).to.equal(expected, "the version was wrong");
 }
-function assertProductID(actual: number, expected: number) {
+function assertProductID(actual: number, expected: number | undefined) {
 	expect(actual).to.equal(expected, "the product id was wrong");
 }
-function assertFrameCounter(actual: number, expected: number) {
+function assertFrameCounter(actual: number, expected: number | undefined) {
 	expect(actual).to.equal(expected, "the frame counter was wrong");
 }
-function assertMacAddress(actual: string, expected: string) {
+function assertMacAddress(actual: string, expected: string | undefined) {
 	expect(actual).to.equal(expected, "the mac address was wrong");
 }
-function assertCapabilities(actual: number, expected: number) {
+function assertCapabilities(actual: number, expected: number | undefined) {
 	expect(actual).to.equal(expected, "the capabilities were wrong");
 }
 
@@ -85,9 +85,9 @@ describe("xiaomi protocol => ", () => {
 			assertVersion(parsed.version, 2);
 			assertProductID(parsed.productID, 0x0098);
 			assertFrameCounter(parsed.frameCounter, 0xda);
-			assertMacAddress(parsed.macAddress, "c47c8d655d79");
-			assertCapabilities(parsed.capabilities, 0x0d);
-			parsed.event.should.deep.equal({
+			assertMacAddress(parsed.macAddress!, "c47c8d655d79");
+			assertCapabilities(parsed.capabilities!, 0x0d);
+			parsed.event!.should.deep.equal({
 				temperature: 0x112 / 10,
 			});
 		});
@@ -100,9 +100,9 @@ describe("xiaomi protocol => ", () => {
 			assertVersion(parsed.version, 2);
 			assertProductID(parsed.productID, 0x0098);
 			assertFrameCounter(parsed.frameCounter, 0xd9);
-			assertMacAddress(parsed.macAddress, "c47c8d655d79");
-			assertCapabilities(parsed.capabilities, 0x0d);
-			parsed.event.should.deep.equal({
+			assertMacAddress(parsed.macAddress!, "c47c8d655d79");
+			assertCapabilities(parsed.capabilities!, 0x0d);
+			parsed.event!.should.deep.equal({
 				fertility: 0x2e,
 			});
 		});
@@ -115,9 +115,9 @@ describe("xiaomi protocol => ", () => {
 			assertVersion(parsed.version, 2);
 			assertProductID(parsed.productID, 0x0098);
 			assertFrameCounter(parsed.frameCounter, 0xd8);
-			assertMacAddress(parsed.macAddress, "c47c8d655d79");
-			assertCapabilities(parsed.capabilities, 0x0d);
-			parsed.event.should.deep.equal({
+			assertMacAddress(parsed.macAddress!, "c47c8d655d79");
+			assertCapabilities(parsed.capabilities!, 0x0d);
+			parsed.event!.should.deep.equal({
 				moisture: 0x0d,
 			});
 		});
@@ -130,9 +130,9 @@ describe("xiaomi protocol => ", () => {
 			assertVersion(parsed.version, 2);
 			assertProductID(parsed.productID, 0x0098);
 			assertFrameCounter(parsed.frameCounter, 0xef);
-			assertMacAddress(parsed.macAddress, "c47c8d655d79");
-			assertCapabilities(parsed.capabilities, 0x0d);
-			parsed.event.should.deep.equal({
+			assertMacAddress(parsed.macAddress!, "c47c8d655d79");
+			assertCapabilities(parsed.capabilities!, 0x0d);
+			parsed.event!.should.deep.equal({
 				illuminance: 0x4cfe,
 			});
 		});
@@ -145,8 +145,8 @@ describe("xiaomi protocol => ", () => {
 			assertVersion(parsed.version, 0);
 			assertProductID(parsed.productID, 0x0098);
 			assertFrameCounter(parsed.frameCounter, 0x06);
-			assertMacAddress(parsed.macAddress, "c47c8d61b4da");
-			assertCapabilities(parsed.capabilities, 0x0d);
+			assertMacAddress(parsed.macAddress!, "c47c8d61b4da");
+			assertCapabilities(parsed.capabilities!, 0x0d);
 			expect(parsed.event).to.be.undefined;
 		});
 
@@ -158,9 +158,9 @@ describe("xiaomi protocol => ", () => {
 			assertVersion(parsed.version, 2);
 			assertProductID(parsed.productID, 0x01AA);
 			assertFrameCounter(parsed.frameCounter, 0xca);
-			assertMacAddress(parsed.macAddress, "4c65a8d202e8");
-			assertCapabilities(parsed.capabilities, undefined);
-			parsed.event.should.deep.equal({
+			assertMacAddress(parsed.macAddress!, "4c65a8d202e8");
+			assertCapabilities(parsed.capabilities!, undefined);
+			parsed.event!.should.deep.equal({
 				temperature: 19.5,
 				humidity: 56.6,
 			});
@@ -174,9 +174,9 @@ describe("xiaomi protocol => ", () => {
 			assertVersion(parsed.version, 2);
 			assertProductID(parsed.productID, 0x01AA);
 			assertFrameCounter(parsed.frameCounter, 0xc8);
-			assertMacAddress(parsed.macAddress, "4c65a8d202e8");
-			assertCapabilities(parsed.capabilities, undefined);
-			parsed.event.should.deep.equal({
+			assertMacAddress(parsed.macAddress!, "4c65a8d202e8");
+			assertCapabilities(parsed.capabilities!, undefined);
+			parsed.event!.should.deep.equal({
 				battery: 100,
 			});
 		});
@@ -189,9 +189,9 @@ describe("xiaomi protocol => ", () => {
 			assertVersion(parsed.version, 2);
 			assertProductID(parsed.productID, 0x01AA);
 			assertFrameCounter(parsed.frameCounter, 0xc7);
-			assertMacAddress(parsed.macAddress, "4c65a8d202e8");
-			assertCapabilities(parsed.capabilities, undefined);
-			parsed.event.should.deep.equal({
+			assertMacAddress(parsed.macAddress!, "4c65a8d202e8");
+			assertCapabilities(parsed.capabilities!, undefined);
+			parsed.event!.should.deep.equal({
 				humidity: 56.6,
 			});
 		});

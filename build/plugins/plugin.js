@@ -19,12 +19,32 @@ var __rest = (this && this.__rest) || function (s, e) {
             t[p[i]] = s[p[i]];
     return t;
 };
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 function getServiceData(peripheral, uuid) {
-    for (var _i = 0, _a = peripheral.advertisement.serviceData; _i < _a.length; _i++) {
-        var entry = _a[_i];
-        if (entry.uuid === uuid)
-            return entry.data;
+    var e_1, _a;
+    try {
+        for (var _b = __values(peripheral.advertisement.serviceData), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var entry = _c.value;
+            if (entry.uuid === uuid)
+                return entry.data;
+        }
+    }
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try {
+            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+        }
+        finally { if (e_1) throw e_1.error; }
     }
 }
 exports.getServiceData = getServiceData;

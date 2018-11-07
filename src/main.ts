@@ -1,6 +1,8 @@
 import { exec } from "child_process";
+import { applyCustomObjectSubscriptions, applyCustomStateSubscriptions } from "./lib/custom-subscriptions";
 import { ExtendedAdapter, Global as _ } from "./lib/global";
 import { extendChannel, extendDevice, extendState } from "./lib/iobroker-objects";
+import { ObjectCache } from "./lib/object-cache";
 import utils from "./lib/utils";
 
 // Load all registered plugins
@@ -30,6 +32,9 @@ let adapter: ExtendedAdapter = utils.adapter({
 		// Adapter-Instanz global machen
 		adapter = _.extend(adapter);
 		_.adapter = adapter;
+
+		// Cache objects for 1 minute
+		_.objectCache = new ObjectCache(60000);
 
 		// Workaround für fehlende InstanceObjects nach update
 		await _.ensureInstanceObjects();
@@ -68,6 +73,7 @@ let adapter: ExtendedAdapter = utils.adapter({
 			rssiUpdateInterval = Math.max(0, Math.min(10000, adapter.config.rssiThrottle));
 		}
 
+		// monitor our own states and objects
 		adapter.subscribeStates("*");
 		adapter.subscribeObjects("*");
 
@@ -103,10 +109,23 @@ let adapter: ExtendedAdapter = utils.adapter({
 	},
 
 	// is called if a subscribed object changes
-	objectChange: (id, obj) => { /* TODO */ },
+	objectChange: (id, obj) => {
+		if (!!obj) {
+			// it has just been changed, so update the cached object
+			_.objectCache.updateObject(obj);
+		} else {
+			// it has been deleted, so delete it from the cache
+			_.objectCache.invalidateObject(id);
+		}
+		// apply additional subscriptions we've defined
+		applyCustomObjectSubscriptions(id, obj);
+	},
 
 	// is called if a subscribed state changes
-	stateChange: (id, state) => { /* TODO */ },
+	stateChange: (id, state) => {
+		// apply additional subscriptions we've defined
+		applyCustomStateSubscriptions(id, state);
+	},
 
 	message: async (obj) => {
 		// responds to the adapter that sent the original message
@@ -244,7 +263,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	if (
 		rssiState == null ||
 		(rssiState.val !== peripheral.rssi &&			// only save changes
-		rssiState.lc + rssiUpdateInterval < Date.now())	// and dont update too frequently
+			rssiState.lc + rssiUpdateInterval < Date.now())	// and dont update too frequently
 	) {
 		_.log(`updating rssi state for ${deviceId}`, "debug");
 		await adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);
@@ -281,7 +300,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		for (const stateId of Object.keys(values)) {
 			// set the value if there's an object for the state
 			const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
-			if (await adapter.$getObject(iobStateId) != null) {
+			if (await _.objectCache.getObject(iobStateId) != null) {
 				_.log(`setting state ${iobStateId}`, "debug");
 				await adapter.$setStateChanged(iobStateId, values[stateId], true);
 			} else {

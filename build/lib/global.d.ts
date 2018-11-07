@@ -1,3 +1,4 @@
+import { ObjectCache } from "./object-cache";
 export interface ExtendedAdapter extends ioBroker.Adapter {
     __isExtended: boolean;
     /** Reads an object from the object db */
@@ -95,6 +96,8 @@ export declare class Global {
     }>;
     private static _adapter;
     static adapter: ExtendedAdapter;
+    private static _objectCache;
+    static objectCache: ObjectCache;
     private static _loglevel;
     static loglevel: number;
     static extend(adapter: ioBroker.Adapter): ExtendedAdapter;

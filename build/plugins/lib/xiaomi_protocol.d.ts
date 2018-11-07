@@ -28,11 +28,11 @@ export declare class XiaomiAdvertisement {
     private _hasMacAddress;
     readonly hasMacAddress: boolean;
     private _macAddress;
-    readonly macAddress: string;
+    readonly macAddress: string | undefined;
     private _hasCapabilities;
     readonly hasCapabilities: boolean;
     private _capabilities;
-    readonly capabilities: number;
+    readonly capabilities: number | undefined;
     private _hasEvent;
     readonly hasEvent: boolean;
     private _event;
@@ -40,7 +40,7 @@ export declare class XiaomiAdvertisement {
     private _hasCustomData;
     readonly hasCustomData: boolean;
     private _customData;
-    readonly customData: Buffer;
+    readonly customData: Buffer | undefined;
     private _hasSubtitle;
     readonly hasSubtitle: boolean;
     private _isBindingFrame;

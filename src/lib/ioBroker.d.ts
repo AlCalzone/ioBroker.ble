@@ -1253,8 +1253,8 @@ declare global {
 			formatDate(dateObj: string | Date | number, isDuration: boolean | string, format: string): string;
 		} // end interface Adapter
 
-		type ObjectChangeHandler = (id: string, obj: ioBroker.Object) => void;
-		type StateChangeHandler = (id: string, obj: State) => void;
+		type ObjectChangeHandler = (id: string, obj: ioBroker.Object | null) => void;
+		type StateChangeHandler = (id: string, obj: State | null) => void;
 		type MessageHandler = (obj: Message) => void;
 
 		type EmptyCallback = () => void;
@@ -1263,7 +1263,7 @@ declare global {
 		type GenericCallback<T> = (err: string | null, result?: T) => void;
 
 		type SetObjectCallback = (err: string | null, obj: { id: string }) => void;
-		type GetObjectCallback = (err: string | null, obj: ioBroker.Object) => void;
+		type GetObjectCallback = (err: string | null, obj: ioBroker.Object | undefined) => void;
 		type GetEnumCallback = (err: string | null, enums: Record<string, Enum>, requestedEnum: string) => void;
 		type GetEnumsCallback = (
 			err: string | null,
@@ -1291,7 +1291,7 @@ declare global {
 		// This is a version used by GetDevices/GetChannelsOf/GetStatesOf
 		type GetObjectsCallback3<T extends BaseObject> = (err: string | null, result?: GetObjectsItem<T>[]) => void;
 
-		type GetStateCallback = (err: string | null, state: State) => void;
+		type GetStateCallback = (err: string | null, state: State | undefined) => void;
 		type GetStatesCallback = (err: string | null, states: Record<string, State>) => void;
 		/** Version of the callback used by States.getStates */
 		type GetStatesCallback2 = (err: string | null, states: State[]) => void;

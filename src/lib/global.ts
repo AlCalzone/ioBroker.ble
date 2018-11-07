@@ -2,6 +2,7 @@
 import { entries, filter as objFilter } from "alcalzone-shared/objects";
 import * as fs from "fs";
 import * as path from "path";
+import { ObjectCache } from "./object-cache";
 
 // ==================================
 
@@ -117,6 +118,12 @@ export class Global {
 	public static get adapter(): ExtendedAdapter { return Global._adapter; }
 	public static set adapter(adapter: ExtendedAdapter) {
 		Global._adapter = adapter;
+	}
+
+	private static _objectCache: ObjectCache;
+	public static get objectCache(): ObjectCache { return Global._objectCache; }
+	public static set objectCache(cache: ObjectCache) {
+		Global._objectCache = cache;
 	}
 
 	private static _loglevel = Global.loglevels.on;

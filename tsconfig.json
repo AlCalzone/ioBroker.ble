@@ -1,10 +1,11 @@
 {
-    "compileOnSave": true,          // Automatically build files in Visual Studio (Code), in combination with the watch option
+    "compileOnSave": true,
     "compilerOptions": {
-        "declaration": true,        // emit d.ts files
+        "noEmit": true,
+        "downlevelIteration": true,
         "module": "commonjs",
         "moduleResolution": "node",
-        "noEmitOnError": true,
+		"noEmitOnError": true,
         "noImplicitAny": false,
         "outDir": "build/",
         "removeComments": false,
@@ -12,13 +13,13 @@
         "target": "es5",
         "lib": [ "es6" ],
         "strictNullChecks": true,
-        //"watch": true
+        "strictPropertyInitialization": true
     },
     "include": [
-        "src/**/*.ts"
+        "**/*.ts"
     ],
     "exclude": [
-        "src/**/*.test.ts",
+        "src/**/*.d.ts",
         "build/**",
         "node_modules/**"
     ]

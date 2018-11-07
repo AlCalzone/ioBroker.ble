@@ -49,9 +49,9 @@
   },
   "main": "build/main.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p src/tsconfig.json",
     "prebuild": "rimraf ./build",
-    "watch": "tsc --watch",
+    "watch": "tsc -p src/tsconfig.json --watch",
     "test:package": "node_modules/.bin/mocha test/testPackageFiles.js --exit",
     "test:iobroker": "node_modules/.bin/mocha test/testAdapter.js --exit",
     "test:ts": "node_modules/.bin/mocha --opts test/mocha.typescript.opts",
