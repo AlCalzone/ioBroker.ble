@@ -18,6 +18,9 @@ let services: string[] = [];
 /** How frequent the RSSI of devices should be updated */
 let rssiUpdateInterval: number = 0;
 
+/** After which timespan inactive devices should be deleted */
+let deviceLifespan: number = 3600000; // 1h
+
 // noble-Treiber-Instanz
 let noble;
 
@@ -32,6 +35,12 @@ let adapter: ExtendedAdapter = utils.adapter({
 		// Adapter-Instanz global machen
 		adapter = _.extend(adapter);
 		_.adapter = adapter;
+
+		// Konfiguration für Geräte-Lebensdauer laden
+		if (typeof adapter.config.deviceLifespanHours === "number") {
+			deviceLifespan = adapter.config.deviceLifespanHours * 3600000;
+		}
+		// TODO: Threads starten
 
 		// Cache objects for 1 minute
 		_.objectCache = new ObjectCache(60000);
@@ -55,12 +64,17 @@ let adapter: ExtendedAdapter = utils.adapter({
 			_.log(`monitoring all services`);
 		} else {
 			services =
-				(adapter.config.services as string).split(",")	// get manually defined services
-					.concat(...enabledPlugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
-					.reduce((acc, s) => acc.concat(s), [] as string[])		// flatten the arrays
-					.map(s => fixServiceName(s))				// cleanup the names
+				// get manually defined services
+				(adapter.config.services as string).split(",")
+					// concat with plugin-defined ones
+					.concat(...enabledPlugins.map(p => p.advertisedServices))
+					// flatten the arrays
+					.reduce((acc, s) => acc.concat(s), [] as string[])
+					// cleanup the names
+					.map(s => fixServiceName(s))
 					.filter(s => s != null && s !== "")
-					.reduce((acc: any[], s) => {				// filter out duplicates
+					// filter out duplicates
+					.reduce((acc: any[], s) => {
 						if (acc.indexOf(s) === -1) acc.push(s);
 						return acc;
 					}, [])

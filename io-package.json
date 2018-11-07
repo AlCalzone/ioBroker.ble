@@ -92,7 +92,8 @@
         "hciDevice": 0,
         "plugins": "",
         "allowEmptyDevices": false,
-        "rssiThrottle": 0
+        "rssiThrottle": 0,
+        "deviceLifespanHours": 1
     },
     "objects": [],
     "instanceObjects": [

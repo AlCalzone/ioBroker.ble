@@ -80,6 +80,8 @@ var services = [];
 // let knownDevices: string[] = [];
 /** How frequent the RSSI of devices should be updated */
 var rssiUpdateInterval = 0;
+/** After which timespan inactive devices should be deleted */
+var deviceLifespan = 3600000; // 1h
 // noble-Treiber-Instanz
 var noble;
 // Adapter-Objekt erstellen
@@ -95,6 +97,11 @@ var adapter = utils_1.default.adapter({
                     // Adapter-Instanz global machen
                     adapter = global_1.Global.extend(adapter);
                     global_1.Global.adapter = adapter;
+                    // Konfiguration für Geräte-Lebensdauer laden
+                    if (typeof adapter.config.deviceLifespanHours === "number") {
+                        deviceLifespan = adapter.config.deviceLifespanHours * 3600000;
+                    }
+                    // TODO: Threads starten
                     // Cache objects for 1 minute
                     global_1.Global.objectCache = new object_cache_1.ObjectCache(60000);
                     // Workaround für fehlende InstanceObjects nach update
@@ -117,10 +124,12 @@ var adapter = utils_1.default.adapter({
                     }
                     else {
                         services =
-                            (_a = adapter.config.services.split(",")) // get manually defined services
-                            .concat.apply(_a, __spread(enabledPlugins.map(function (p) { return p.advertisedServices; }))).reduce(function (acc, s) { return acc.concat(s); }, []) // flatten the arrays
-                                .map(function (s) { return fixServiceName(s); }) // cleanup the names
+                            // get manually defined services
+                            (_a = adapter.config.services.split(",")).concat.apply(_a, __spread(enabledPlugins.map(function (p) { return p.advertisedServices; }))).reduce(function (acc, s) { return acc.concat(s); }, [])
+                                // cleanup the names
+                                .map(function (s) { return fixServiceName(s); })
                                 .filter(function (s) { return s != null && s !== ""; })
+                                // filter out duplicates
                                 .reduce(function (acc, s) {
                                 if (acc.indexOf(s) === -1)
                                     acc.push(s);

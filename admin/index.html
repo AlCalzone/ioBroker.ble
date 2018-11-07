@@ -158,6 +158,10 @@
 			<br />
 			
 			<input class="value" type="checkbox" id="allowEmptyDevices" />&nbsp;<label for="allowEmptyDevices" class="translate">Allow creation of devices without service data</label>
+			<br />
+
+			<label for="deviceLifespanHours" class="translate">Time before inactive devices are deleted [h]:</label>
+			<input class="value" type="number" id="deviceLifespanHours" min="1" max="168" />
 		</p>
 		<p class="settings-table">
 			<label for="services" class="translate">Monitored services, * for all services:</label><br />
