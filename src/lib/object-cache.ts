@@ -66,15 +66,12 @@ export class ObjectCache {
 		this.expireTimer = undefined;
 		if (this.expireTimestamps.length === 0) return;
 
-		const nextTimestamp = this.expireTimestamps.shift();
+		const nextTimestamp = this.expireTimestamps.peekStart();
 		const timeDelta = nextTimestamp.timestamp - Date.now();
 		if (timeDelta <= 0) {
 			// it has expired
 			this.invalidateObject(nextTimestamp.id);
-		} else {
-			// it hasn't, so re-add it
-			// TODO: We need a peek method in the sorted list
-			this.expireTimestamps.add(nextTimestamp);
+			this.expireTimestamps.remove(nextTimestamp);
 		}
 		this.setTimerForNextExpiry();
 	}
@@ -82,10 +79,7 @@ export class ObjectCache {
 	private setTimerForNextExpiry() {
 		if (this.expireTimestamps.length === 0) return;
 
-		// workaround for missing peek();
-		const nextTimestamp = this.expireTimestamps.shift();
-		this.expireTimestamps.add(nextTimestamp);
-
+		const nextTimestamp = this.expireTimestamps.peekStart();
 		const timeDelta = nextTimestamp.timestamp - Date.now();
 		this.expireTimer = setTimeout(
 			() => this.expire(),
