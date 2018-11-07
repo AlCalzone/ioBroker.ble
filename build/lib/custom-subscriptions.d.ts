@@ -14,7 +14,7 @@ export declare function applyCustomObjectSubscriptions(id: string, obj: ioBroker
  * @param callback
  * @returns a subscription ID
  */
-export declare function subscribeStates(pattern: string | RegExp, callback: (id: string, state: ioBroker.State) => void): string;
+export declare function subscribeStates(pattern: string | RegExp, callback: (id: string, state: ioBroker.State) => void): string | undefined;
 /**
  * Release the custom subscription with the given id
  * @param id The subscription ID returned by @link{subscribeStates}
@@ -26,7 +26,7 @@ export declare function unsubscribeStates(id: string): void;
  * @param callback
  * @returns a subscription ID
  */
-export declare function subscribeObjects(pattern: string | RegExp, callback: (id: string, object: ioBroker.Object) => void): string;
+export declare function subscribeObjects(pattern: string | RegExp, callback: (id: string, object: ioBroker.Object) => void): string | undefined;
 /**
  * Release the custom subscription with the given id
  * @param id The subscription ID returned by @link{subscribeObjects}

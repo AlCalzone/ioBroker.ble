@@ -27,7 +27,7 @@ const customObjectSubscriptions: {
 /**
  * Ensures the subscription pattern is valid
  */
-function checkPattern(pattern: string | RegExp): RegExp {
+function checkPattern(pattern: string | RegExp): RegExp | undefined {
 	try {
 		if (typeof pattern === "string") {
 			return str2regex(pattern);
@@ -38,7 +38,7 @@ function checkPattern(pattern: string | RegExp): RegExp {
 			throw new Error("The pattern must be regex or string");
 		}
 	} catch (e) {
-		throw new Error("cannot subscribe with this pattern. reason: " + e);
+		_.log("cannot subscribe with this pattern. reason: " + e, "error");
 	}
 }
 
@@ -84,14 +84,15 @@ export function applyCustomObjectSubscriptions(id: string, obj: ioBroker.Object 
  * @param callback
  * @returns a subscription ID
  */
-export function subscribeStates(pattern: string | RegExp, callback: (id: string, state: ioBroker.State) => void): string {
+export function subscribeStates(pattern: string | RegExp, callback: (id: string, state: ioBroker.State) => void): string | undefined {
 
-	pattern = checkPattern(pattern);
+	const checkedPattern = checkPattern(pattern);
+	if (checkedPattern == undefined) return;
 
 	const newCounter = (++customStateSubscriptions.counter);
 	const id = "" + newCounter;
 
-	customStateSubscriptions.subscriptions.set(id, { pattern, callback });
+	customStateSubscriptions.subscriptions.set(id, { pattern: checkedPattern, callback });
 
 	return id;
 }
@@ -112,14 +113,15 @@ export function unsubscribeStates(id: string) {
  * @param callback
  * @returns a subscription ID
  */
-export function subscribeObjects(pattern: string | RegExp, callback: (id: string, object: ioBroker.Object) => void): string {
+export function subscribeObjects(pattern: string | RegExp, callback: (id: string, object: ioBroker.Object) => void): string | undefined {
 
-	pattern = checkPattern(pattern);
+	const checkedPattern = checkPattern(pattern);
+	if (checkedPattern == undefined) return;
 
 	const newCounter = (++customObjectSubscriptions.counter);
 	const id = "" + newCounter;
 
-	customObjectSubscriptions.subscriptions.set(id, { pattern, callback });
+	customObjectSubscriptions.subscriptions.set(id, { pattern: checkedPattern, callback });
 
 	return id;
 }
