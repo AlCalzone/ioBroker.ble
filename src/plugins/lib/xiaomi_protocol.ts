@@ -187,7 +187,7 @@ export type XiaomiEventIDs =
 	| "moisture"
 	| "fertility"
 	| "battery"
-;
+	;
 
 export type XiaomiEvent = Partial<Record<XiaomiEventIDs, number>>;
 type ValueTransform = (val: number, eventID?: XiaomiEventIDs_Internal) => XiaomiEvent;
@@ -198,16 +198,17 @@ const valueTransforms: Partial<
 		keyof typeof XiaomiEventIDs_Internal,
 		ValueTransform
 	>
-> & {"default": ValueTransform} = {
+> & { "default": ValueTransform } = {
 	// by default just pass the value through
-	default: (val, eventID) => ({[XiaomiEventIDs_Internal[eventID!].toLowerCase()]: val}),
-	Temperature: (val) => ({temperature: val / 10}),
-	Humidity: (val) => ({humidity: val / 10}),
+	default: (val, eventID) => ({ [XiaomiEventIDs_Internal[eventID!].toLowerCase()]: val }),
+	// TODO: find a nicer way to specify the bit size of temperature - this information exists in the packet!
+	Temperature: (val) => ({ temperature: toSigned(val, 16) / 10 }),
+	Humidity: (val) => ({ humidity: val / 10 }),
 	TemperatureAndHumidity: (val) => ({
 		// the data is read in little-endian (reverse) order,
 		// so val = 0xHHHHTTTT
 		humidity: (val >>> 16) / 10,
-		temperature: (val & 0xffff) / 10,
+		temperature: toSigned((val & 0xffff), 16) / 10,
 	}),
 };
 
@@ -226,4 +227,14 @@ function parseNumberLE(buf: Buffer, offset: number = 0, length: number = buf.len
 		value = (value << 8) + buf[i];
 	}
 	return value;
+}
+
+/** Converts an unsigned number to a signed one (e.g. 0xffff = 65535 -> -1) */
+function toSigned(unsigned: number, size: number): number {
+	if (unsigned >>> (size - 1) === 1) {
+		// if the first bit is 1, we have a negative number
+		return unsigned - (1 << size);
+	} else {
+		return unsigned;
+	}
 }

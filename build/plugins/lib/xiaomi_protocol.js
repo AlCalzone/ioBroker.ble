@@ -204,13 +204,14 @@ var valueTransforms = {
         var _a;
         return (_a = {}, _a[XiaomiEventIDs_Internal[eventID].toLowerCase()] = val, _a);
     },
-    Temperature: function (val) { return ({ temperature: val / 10 }); },
+    // TODO: find a nicer way to specify the bit size of temperature - this information exists in the packet!
+    Temperature: function (val) { return ({ temperature: toSigned(val, 16) / 10 }); },
     Humidity: function (val) { return ({ humidity: val / 10 }); },
     TemperatureAndHumidity: function (val) { return ({
         // the data is read in little-endian (reverse) order,
         // so val = 0xHHHHTTTT
         humidity: (val >>> 16) / 10,
-        temperature: (val & 0xffff) / 10,
+        temperature: toSigned((val & 0xffff), 16) / 10,
     }); },
 };
 function reverseBuffer(buf) {
@@ -229,4 +230,14 @@ function parseNumberLE(buf, offset, length) {
         value = (value << 8) + buf[i];
     }
     return value;
+}
+/** Converts an unsigned number to a signed one (e.g. 0xffff = 65535 -> -1) */
+function toSigned(unsigned, size) {
+    if (unsigned >>> (size - 1) === 1) {
+        // if the first bit is 1, we have a negative number
+        return unsigned - (1 << size);
+    }
+    else {
+        return unsigned;
+    }
 }

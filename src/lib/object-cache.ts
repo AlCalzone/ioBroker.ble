@@ -1,10 +1,14 @@
 import { extend } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { Global as _ } from "./global";
+import { CompareResult } from "alcalzone-shared/comparable";
 
 interface ExpireTimestamp {
 	timestamp: number;
 	id: string;
+}
+function compareExpireTimestamp(a: ExpireTimestamp, b: ExpireTimestamp): CompareResult {
+	return Math.sign(b.timestamp - a.timestamp) as CompareResult;
 }
 
 export class ObjectCache {
@@ -15,7 +19,7 @@ export class ObjectCache {
 	constructor(private expiryDuration: number | false = false) { }
 
 	private cache = new Map<string, ioBroker.Object>();
-	private expireTimestamps = new SortedList<ExpireTimestamp>();
+	private expireTimestamps = new SortedList<ExpireTimestamp>(undefined, compareExpireTimestamp);
 	private expireTimer: NodeJS.Timer | undefined;
 
 	/**

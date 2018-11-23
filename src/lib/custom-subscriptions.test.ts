@@ -98,7 +98,7 @@ describe("lib/custom-subscriptions => ", () => {
 
 	it(`unsubscribeStates should work for existing subscriptions`, () => {
 		const id = subscribeStates("does-exist", null!);
-		unsubscribeStates(id);
+		unsubscribeStates(id!);
 	});
 
 	it(`unsubscribeObjects should work for non-existing subscriptions`, () => {
@@ -107,7 +107,7 @@ describe("lib/custom-subscriptions => ", () => {
 
 	it(`unsubscribeObjects should work for existing subscriptions`, () => {
 		const id = subscribeObjects("does-exist", null!);
-		unsubscribeObjects(id);
+		unsubscribeObjects(id!);
 	});
 
 	it(`applyCustomStateSubscriptions should call only the matching subscriptions`, () => {

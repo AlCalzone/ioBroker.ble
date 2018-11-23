@@ -58,6 +58,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var objects_1 = require("alcalzone-shared/objects");
 var sorted_list_1 = require("alcalzone-shared/sorted-list");
 var global_1 = require("./global");
+function compareExpireTimestamp(a, b) {
+    return Math.sign(b.timestamp - a.timestamp);
+}
 var ObjectCache = /** @class */ (function () {
     /**
      * @param expiryDuration The timespan after which cached objects are expired automatically
@@ -66,7 +69,7 @@ var ObjectCache = /** @class */ (function () {
         if (expiryDuration === void 0) { expiryDuration = false; }
         this.expiryDuration = expiryDuration;
         this.cache = new Map();
-        this.expireTimestamps = new sorted_list_1.SortedList();
+        this.expireTimestamps = new sorted_list_1.SortedList(undefined, compareExpireTimestamp);
     }
     /**
      * Retrieves an object from the cache or queries the database if it is not cached yet

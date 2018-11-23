@@ -92,6 +92,21 @@ describe("xiaomi protocol => ", () => {
 			});
 		});
 
+		it("Mi-Flora: negative temperature", () => {
+			const frame = Buffer.from("71209800da795d658d7cc40d041002e7ff", "hex");
+			const parsed = new XiaomiAdvertisement(frame);
+
+			assertFlags("mi-flora-normal", parsed);
+			assertVersion(parsed.version, 2);
+			assertProductID(parsed.productID, 0x0098);
+			assertFrameCounter(parsed.frameCounter, 0xda);
+			assertMacAddress(parsed.macAddress!, "c47c8d655d79");
+			assertCapabilities(parsed.capabilities!, 0x0d);
+			parsed.event!.should.deep.equal({
+				temperature: -2.5,
+			});
+		});
+
 		it("Mi-Flora: Fertility", () => {
 			const frame = Buffer.from("71209800d9795d658d7cc40d0910022e00", "hex");
 			const parsed = new XiaomiAdvertisement(frame);
@@ -151,6 +166,22 @@ describe("xiaomi protocol => ", () => {
 		});
 
 		it("Temperature sensor: temperature and humidity", () => {
+			const frame = Buffer.from("5020aa01cae802d2a8654c0d1004b5ff3602", "hex");
+			const parsed = new XiaomiAdvertisement(frame);
+
+			assertFlags("temp-sensor-normal", parsed);
+			assertVersion(parsed.version, 2);
+			assertProductID(parsed.productID, 0x01AA);
+			assertFrameCounter(parsed.frameCounter, 0xca);
+			assertMacAddress(parsed.macAddress!, "4c65a8d202e8");
+			assertCapabilities(parsed.capabilities!, undefined);
+			parsed.event!.should.deep.equal({
+				temperature: -7.5,
+				humidity: 56.6,
+			});
+		});
+
+		it("Temperature sensor: temperature (negative) and humidity", () => {
 			const frame = Buffer.from("5020aa01cae802d2a8654c0d1004c3003602", "hex");
 			const parsed = new XiaomiAdvertisement(frame);
 
