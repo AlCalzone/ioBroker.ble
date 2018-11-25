@@ -305,6 +305,9 @@ declare global {
 			type: string; // specified in the derived interfaces
 			common: ObjectCommon;
 			acl?: ObjectACL;
+			from?: string;
+			user?: string;
+			ts?: number;
 		}
 
 		interface StateObject extends BaseObject {
@@ -312,7 +315,7 @@ declare global {
 			common: StateCommon;
 			acl?: StateACL;
 		}
-		interface PartialStateObject extends Partial<Pick<StateObject, "_id" | "native" | "enums" | "type">> {
+		interface PartialStateObject extends Partial<Pick<StateObject, Exclude<keyof StateObject, "common" | "acl">>> {
 			common?: Partial<StateCommon>;
 			acl?: Partial<StateACL>;
 		}
@@ -321,7 +324,7 @@ declare global {
 			type: "channel";
 			common: ChannelCommon;
 		}
-		interface PartialChannelObject extends Partial<Pick<ChannelObject, "_id" | "native" | "enums" | "type" | "acl">> {
+		interface PartialChannelObject extends Partial<Pick<ChannelObject, Exclude<keyof ChannelObject, "common">>> {
 			common?: Partial<ChannelCommon>;
 		}
 
@@ -329,7 +332,7 @@ declare global {
 			type: "device";
 			common: ObjectCommon; // TODO: any definition for device?
 		}
-		interface PartialDeviceObject extends Partial<Pick<DeviceObject, "_id" | "native" | "enums" | "type" | "acl">> {
+		interface PartialDeviceObject extends Partial<Pick<DeviceObject, Exclude<keyof DeviceObject, "common">>> {
 			common?: Partial<ObjectCommon>;
 		}
 
@@ -337,7 +340,7 @@ declare global {
 			type: "adapter" | "config" | "enum" | "group" | "host" | "info" | "instance" | "meta" | "script" | "user";
 			common: OtherCommon;
 		}
-		interface PartialOtherObject extends Partial<Pick<OtherObject, "_id" | "native" | "enums" | "type" | "acl">> {
+		interface PartialOtherObject extends Partial<Pick<OtherObject, Exclude<keyof OtherObject, "common">>> {
 			common?: Partial<ObjectCommon>;
 		}
 

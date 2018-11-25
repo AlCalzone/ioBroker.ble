@@ -2,89 +2,63 @@
 /*!
  * Plugin for Xiaomi devices using the fe95 characteristic
  */
-var __values = (this && this.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var objects_1 = require("alcalzone-shared/objects");
-var global_1 = require("../lib/global");
-var xiaomi_protocol_1 = require("./lib/xiaomi_protocol");
-var plugin_1 = require("./plugin");
+const objects_1 = require("alcalzone-shared/objects");
+const global_1 = require("../lib/global");
+const xiaomi_protocol_1 = require("./lib/xiaomi_protocol");
+const plugin_1 = require("./plugin");
 function parseAdvertisementEvent(data) {
     // try to parse the data
-    var advertisement;
+    let advertisement;
     try {
         advertisement = new xiaomi_protocol_1.XiaomiAdvertisement(data);
     }
     catch (e) {
-        global_1.Global.log("xiaomi >> failed to parse data", "debug");
+        global_1.Global.log(`xiaomi >> failed to parse data`, "debug");
         return;
     }
     if (!advertisement.hasEvent || advertisement.isBindingFrame) {
-        global_1.Global.log("xiaomi >> The device is not fully initialized.", "debug");
-        global_1.Global.log("xiaomi >> Use its app to complete the initialization.", "debug");
+        global_1.Global.log(`xiaomi >> The device is not fully initialized.`, "debug");
+        global_1.Global.log(`xiaomi >> Use its app to complete the initialization.`, "debug");
         return;
     }
     // succesful - return it
     return advertisement.event;
 }
-var plugin = {
+const plugin = {
     name: "Xiaomi",
     description: "Xiaomi devices",
     advertisedServices: ["fe95"],
-    isHandling: function (p) {
-        var mac = p.address.toLowerCase();
-        if (!Object.keys(xiaomi_protocol_1.MacPrefixes).some(function (key) { return mac.startsWith(xiaomi_protocol_1.MacPrefixes[key]); }))
+    isHandling: (p) => {
+        const mac = p.address.toLowerCase();
+        if (!Object.keys(xiaomi_protocol_1.MacPrefixes).some(key => mac.startsWith(xiaomi_protocol_1.MacPrefixes[key])))
             return false;
-        return p.advertisement.serviceData.some(function (entry) { return entry.uuid === "fe95"; });
+        return p.advertisement.serviceData.some(entry => entry.uuid === "fe95");
     },
-    createContext: function (peripheral) {
-        var data = plugin_1.getServiceData(peripheral, "fe95");
+    createContext: (peripheral) => {
+        const data = plugin_1.getServiceData(peripheral, "fe95");
         if (data == undefined)
             return;
-        global_1.Global.log("xiaomi >> got data: " + data.toString("hex"), "debug");
-        var event = parseAdvertisementEvent(data);
+        global_1.Global.log(`xiaomi >> got data: ${data.toString("hex")}`, "debug");
+        const event = parseAdvertisementEvent(data);
         if (event == undefined)
             return;
-        return { event: event };
+        return { event };
     },
-    defineObjects: function (context) {
+    defineObjects: (context) => {
         if (context == undefined || context.event == undefined)
             return;
-        var deviceObject = {
+        const deviceObject = {
             common: undefined,
             native: undefined,
         };
         // no channels
-        var stateObjects = [];
-        var ret = {
+        const stateObjects = [];
+        const ret = {
             device: deviceObject,
             channels: undefined,
             states: stateObjects,
         };
-        var event = context.event;
+        const event = context.event;
         if (event != undefined) {
             if ("temperature" in event) {
                 stateObjects.push({
@@ -176,22 +150,11 @@ var plugin = {
         }
         return ret;
     },
-    getValues: function (context) {
-        var e_1, _a;
+    getValues: (context) => {
         if (context == null || context.event == null)
             return;
-        try {
-            for (var _b = __values(objects_1.entries(context.event)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var _d = __read(_c.value, 2), prop = _d[0], value = _d[1];
-                global_1.Global.log("xiaomi >> {{green|got " + prop + " update => " + value + "}}", "debug");
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
+        for (const [prop, value] of objects_1.entries(context.event)) {
+            global_1.Global.log(`xiaomi >> {{green|got ${prop} update => ${value}}}`, "debug");
         }
         // The event is simply the value dictionary itself
         return context.event;

@@ -10,7 +10,7 @@
         "outDir": "build/",
         "removeComments": false,
         "stripInternal": true,
-        "target": "es5",
+        "target": "es6",
         "lib": [ "es6" ],
         "strictNullChecks": true,
         "strictPropertyInitialization": true

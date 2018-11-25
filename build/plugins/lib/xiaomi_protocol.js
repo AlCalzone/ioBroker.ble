@@ -18,15 +18,15 @@ exports.MacPrefixes = Object.freeze({
     MiFlora: "c4:7c:8d",
     MiTemperature: "4c:65:a8",
 });
-var XiaomiAdvertisement = /** @class */ (function () {
-    function XiaomiAdvertisement(data) {
+class XiaomiAdvertisement {
+    constructor(data) {
         if (!data || data.length < 5) {
             throw new Error("A xiaomi advertisement frame must be at least 5 bytes long");
         }
         // 4 bit version, 12 bit flags
-        var frameControl = data.readUInt16LE(0);
+        const frameControl = data.readUInt16LE(0);
         this._version = frameControl >>> 12;
-        var flags = frameControl & 0xfff;
+        const flags = frameControl & 0xfff;
         this._isNewFactory = (flags & 1 /* NewFactory */) !== 0;
         this._isConnected = (flags & 2 /* Connected */) !== 0;
         this._isCentral = (flags & 4 /* Central */) !== 0;
@@ -40,7 +40,7 @@ var XiaomiAdvertisement = /** @class */ (function () {
         this._productID = data.readUInt16LE(2);
         this._frameCounter = data[4];
         // The actual packet content begins at offset 5
-        var offset = 5;
+        let offset = 5;
         if (this._hasMacAddress) {
             this._macAddress = reverseBuffer(data.slice(offset, offset + 6)).toString("hex");
             offset += 6;
@@ -50,11 +50,11 @@ var XiaomiAdvertisement = /** @class */ (function () {
             offset++;
         }
         if (this._hasEvent) {
-            var eventID = data.readUInt16LE(offset);
-            var eventName = XiaomiEventIDs_Internal[eventID];
-            var dataLength = data[offset + 2];
-            var eventData = data.slice(offset + 3, offset + 3 + dataLength);
-            var numericData = parseNumberLE(eventData);
+            const eventID = data.readUInt16LE(offset);
+            const eventName = XiaomiEventIDs_Internal[eventID];
+            const dataLength = data[offset + 2];
+            const eventData = data.slice(offset + 3, offset + 3 + dataLength);
+            const numericData = parseNumberLE(eventData);
             // check if there's a specialized value transform
             if (XiaomiEventIDs_Internal[eventID] in valueTransforms) {
                 this._event = valueTransforms[XiaomiEventIDs_Internal[eventID]](numericData);
@@ -64,127 +64,58 @@ var XiaomiAdvertisement = /** @class */ (function () {
             }
         }
     }
-    Object.defineProperty(XiaomiAdvertisement.prototype, "productID", {
-        get: function () {
-            return this._productID;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "version", {
-        get: function () {
-            return this._version;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "frameCounter", {
-        get: function () {
-            return this._frameCounter;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "isNewFactory", {
-        get: function () {
-            return this._isNewFactory;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "isConnected", {
-        get: function () {
-            return this._isConnected;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "isCentral", {
-        get: function () {
-            return this._isCentral;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "isEncrypted", {
-        get: function () {
-            return this._isEncrypted;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "hasMacAddress", {
-        get: function () {
-            return this._hasMacAddress;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "macAddress", {
-        get: function () {
-            return this._macAddress;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "hasCapabilities", {
-        get: function () {
-            return this._hasCapabilities;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "capabilities", {
-        get: function () {
-            return this._capabilities;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "hasEvent", {
-        get: function () {
-            return this._hasEvent;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "event", {
-        get: function () {
-            return this._event;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "hasCustomData", {
-        get: function () {
-            return this._hasCustomData;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "customData", {
-        get: function () {
-            return this._customData;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "hasSubtitle", {
-        get: function () {
-            return this._hasSubtitle;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(XiaomiAdvertisement.prototype, "isBindingFrame", {
-        get: function () {
-            return this._isBindingFrame;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return XiaomiAdvertisement;
-}());
+    get productID() {
+        return this._productID;
+    }
+    get version() {
+        return this._version;
+    }
+    get frameCounter() {
+        return this._frameCounter;
+    }
+    get isNewFactory() {
+        return this._isNewFactory;
+    }
+    get isConnected() {
+        return this._isConnected;
+    }
+    get isCentral() {
+        return this._isCentral;
+    }
+    get isEncrypted() {
+        return this._isEncrypted;
+    }
+    get hasMacAddress() {
+        return this._hasMacAddress;
+    }
+    get macAddress() {
+        return this._macAddress;
+    }
+    get hasCapabilities() {
+        return this._hasCapabilities;
+    }
+    get capabilities() {
+        return this._capabilities;
+    }
+    get hasEvent() {
+        return this._hasEvent;
+    }
+    get event() {
+        return this._event;
+    }
+    get hasCustomData() {
+        return this._hasCustomData;
+    }
+    get customData() {
+        return this._customData;
+    }
+    get hasSubtitle() {
+        return this._hasSubtitle;
+    }
+    get isBindingFrame() {
+        return this._isBindingFrame;
+    }
+}
 exports.XiaomiAdvertisement = XiaomiAdvertisement;
 var XiaomiEventIDs_Internal;
 (function (XiaomiEventIDs_Internal) {
@@ -198,35 +129,30 @@ var XiaomiEventIDs_Internal;
 })(XiaomiEventIDs_Internal = exports.XiaomiEventIDs_Internal || (exports.XiaomiEventIDs_Internal = {}));
 // value transforms translate the internal data structure to the external one
 // in most cases this is a 1:1 match
-var valueTransforms = {
+const valueTransforms = {
     // by default just pass the value through
-    default: function (val, eventID) {
-        var _a;
-        return (_a = {}, _a[XiaomiEventIDs_Internal[eventID].toLowerCase()] = val, _a);
-    },
+    default: (val, eventID) => ({ [XiaomiEventIDs_Internal[eventID].toLowerCase()]: val }),
     // TODO: find a nicer way to specify the bit size of temperature - this information exists in the packet!
-    Temperature: function (val) { return ({ temperature: toSigned(val, 16) / 10 }); },
-    Humidity: function (val) { return ({ humidity: val / 10 }); },
-    TemperatureAndHumidity: function (val) { return ({
+    Temperature: (val) => ({ temperature: toSigned(val, 16) / 10 }),
+    Humidity: (val) => ({ humidity: val / 10 }),
+    TemperatureAndHumidity: (val) => ({
         // the data is read in little-endian (reverse) order,
         // so val = 0xHHHHTTTT
         humidity: (val >>> 16) / 10,
         temperature: toSigned((val & 0xffff), 16) / 10,
-    }); },
+    }),
 };
 function reverseBuffer(buf) {
-    var ret = Buffer.allocUnsafe(buf.length);
-    for (var i = 0; i < buf.length; i++) {
+    const ret = Buffer.allocUnsafe(buf.length);
+    for (let i = 0; i < buf.length; i++) {
         ret[i] = buf[buf.length - 1 - i];
     }
     return ret;
 }
-function parseNumberLE(buf, offset, length) {
-    if (offset === void 0) { offset = 0; }
-    if (length === void 0) { length = buf.length; }
+function parseNumberLE(buf, offset = 0, length = buf.length) {
     // read <length> bytes in LE order
-    var value = 0;
-    for (var i = offset + length - 1; i >= offset; i--) {
+    let value = 0;
+    for (let i = offset + length - 1; i >= offset; i--) {
         value = (value << 8) + buf[i];
     }
     return value;

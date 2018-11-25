@@ -7,7 +7,7 @@ export async function extendDevice(
 	peripheral: BLE.Peripheral,
 	object: DeviceObjectDefinition,
 ) {
-	const original = await _.objectCache.getObject(deviceId);
+	const original = await _.objectCache.getObject(`${_.adapter.namespace}.${deviceId}`);
 	// update the object while preserving the existing properties
 	const updated: ioBroker.DeviceObject = {
 		type: "device",

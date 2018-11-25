@@ -1,22 +1,12 @@
 "use strict";
-var __values = (this && this.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var global_1 = require("./global");
-var str2regex_1 = require("./str2regex");
-var customStateSubscriptions = {
+const global_1 = require("./global");
+const str2regex_1 = require("./str2regex");
+const customStateSubscriptions = {
     subscriptions: new Map(),
     counter: 0,
 };
-var customObjectSubscriptions = {
+const customObjectSubscriptions = {
     subscriptions: new Map(),
     counter: 0,
 };
@@ -41,26 +31,15 @@ function checkPattern(pattern) {
     }
 }
 function applyCustomStateSubscriptions(id, state) {
-    var e_1, _a;
     try {
-        try {
-            for (var _b = __values(customStateSubscriptions.subscriptions.values()), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var sub = _c.value;
-                if (sub
-                    && sub.pattern
-                    && sub.pattern.test(id)
-                    && typeof sub.callback === "function") {
-                    // Wenn die ID zum aktuellen Pattern passt, dann Callback aufrufen
-                    sub.callback(id, state);
-                }
+        for (const sub of customStateSubscriptions.subscriptions.values()) {
+            if (sub
+                && sub.pattern
+                && sub.pattern.test(id)
+                && typeof sub.callback === "function") {
+                // Wenn die ID zum aktuellen Pattern passt, dann Callback aufrufen
+                sub.callback(id, state);
             }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
         }
     }
     catch (e) {
@@ -69,26 +48,15 @@ function applyCustomStateSubscriptions(id, state) {
 }
 exports.applyCustomStateSubscriptions = applyCustomStateSubscriptions;
 function applyCustomObjectSubscriptions(id, obj) {
-    var e_2, _a;
     try {
-        try {
-            for (var _b = __values(customObjectSubscriptions.subscriptions.values()), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var sub = _c.value;
-                if (sub
-                    && sub.pattern
-                    && sub.pattern.test(id)
-                    && typeof sub.callback === "function") {
-                    // Wenn die ID zum aktuellen Pattern passt, dann Callback aufrufen
-                    sub.callback(id, obj);
-                }
+        for (const sub of customObjectSubscriptions.subscriptions.values()) {
+            if (sub
+                && sub.pattern
+                && sub.pattern.test(id)
+                && typeof sub.callback === "function") {
+                // Wenn die ID zum aktuellen Pattern passt, dann Callback aufrufen
+                sub.callback(id, obj);
             }
-        }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_2) throw e_2.error; }
         }
     }
     catch (e) {
@@ -103,12 +71,12 @@ exports.applyCustomObjectSubscriptions = applyCustomObjectSubscriptions;
  * @returns a subscription ID
  */
 function subscribeStates(pattern, callback) {
-    var checkedPattern = checkPattern(pattern);
+    const checkedPattern = checkPattern(pattern);
     if (checkedPattern == undefined)
         return;
-    var newCounter = (++customStateSubscriptions.counter);
-    var id = "" + newCounter;
-    customStateSubscriptions.subscriptions.set(id, { pattern: checkedPattern, callback: callback });
+    const newCounter = (++customStateSubscriptions.counter);
+    const id = "" + newCounter;
+    customStateSubscriptions.subscriptions.set(id, { pattern: checkedPattern, callback });
     return id;
 }
 exports.subscribeStates = subscribeStates;
@@ -129,12 +97,12 @@ exports.unsubscribeStates = unsubscribeStates;
  * @returns a subscription ID
  */
 function subscribeObjects(pattern, callback) {
-    var checkedPattern = checkPattern(pattern);
+    const checkedPattern = checkPattern(pattern);
     if (checkedPattern == undefined)
         return;
-    var newCounter = (++customObjectSubscriptions.counter);
-    var id = "" + newCounter;
-    customObjectSubscriptions.subscriptions.set(id, { pattern: checkedPattern, callback: callback });
+    const newCounter = (++customObjectSubscriptions.counter);
+    const id = "" + newCounter;
+    customObjectSubscriptions.subscriptions.set(id, { pattern: checkedPattern, callback });
     return id;
 }
 exports.subscribeObjects = subscribeObjects;

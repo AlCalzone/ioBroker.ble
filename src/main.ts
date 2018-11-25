@@ -1,4 +1,5 @@
 import { exec } from "child_process";
+import { EventEmitter } from "events";
 import { applyCustomObjectSubscriptions, applyCustomStateSubscriptions } from "./lib/custom-subscriptions";
 import { ExtendedAdapter, Global as _ } from "./lib/global";
 import { extendChannel, extendDevice, extendState } from "./lib/iobroker-objects";
@@ -19,7 +20,7 @@ let services: string[] = [];
 let rssiUpdateInterval: number = 0;
 
 // noble-Treiber-Instanz
-let noble;
+let noble: typeof import("noble") & EventEmitter;
 
 // Adapter-Objekt erstellen
 let adapter: ExtendedAdapter = utils.adapter({

@@ -12,28 +12,28 @@ var __rest = (this && this.__rest) || function (s, e) {
             t[p[i]] = s[p[i]];
     return t;
 };
-var nodeUrl = require("url");
-var global_1 = require("../lib/global");
-var ruuvi_tag_protocol_1 = require("./lib/ruuvi-tag_protocol");
-var plugin_1 = require("./plugin");
-var serviceUUID = "feaa";
+const nodeUrl = require("url");
+const global_1 = require("../lib/global");
+const ruuvi_tag_protocol_1 = require("./lib/ruuvi-tag_protocol");
+const plugin_1 = require("./plugin");
+const serviceUUID = "feaa";
 // remember tested peripherals by their ID for 1h
-var testValidity = 1000 * 3600;
-var testedPeripherals = new Map();
-var plugin = {
+const testValidity = 1000 * 3600;
+const testedPeripherals = new Map();
+const plugin = {
     name: "ruuvi-tag",
     description: "Ruuvi Tag",
     advertisedServices: [serviceUUID],
-    isHandling: function (peripheral) {
-        var cached = testedPeripherals.get(peripheral.id);
+    isHandling: (peripheral) => {
+        const cached = testedPeripherals.get(peripheral.id);
         if (cached && cached.timestamp >= Date.now()) {
             // we have a recent test result, return it
             return cached.result;
         }
         // we have no quick check, so try to create a context
-        var ret = false;
+        let ret = false;
         try {
-            var ctx = plugin.createContext(peripheral);
+            const ctx = plugin.createContext(peripheral);
             ret = ctx != null;
         }
         catch (e) { /* all good */ }
@@ -44,13 +44,13 @@ var plugin = {
         });
         return ret;
     },
-    createContext: function (peripheral) {
-        var data = plugin_1.getServiceData(peripheral, serviceUUID);
+    createContext: (peripheral) => {
+        let data = plugin_1.getServiceData(peripheral, serviceUUID);
         if (data != undefined) {
-            var url = data.toString("utf8");
-            global_1.Global.log("ruuvi-tag >> got url: " + data.toString("utf8"), "debug");
+            const url = data.toString("utf8");
+            global_1.Global.log(`ruuvi-tag >> got url: ${data.toString("utf8")}`, "debug");
             // data format 2 or 4 - extract from URL hash
-            var parsedUrl = nodeUrl.parse(url);
+            const parsedUrl = nodeUrl.parse(url);
             if (!(parsedUrl && parsedUrl.hash))
                 return;
             data = Buffer.from(parsedUrl.hash, "base64");
@@ -59,7 +59,7 @@ var plugin = {
         else if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0) {
             data = peripheral.advertisement.manufacturerData;
             // data format 3 or 5 - extract from manufacturerData buffer
-            global_1.Global.log("ruuvi-tag >> got data: " + data.toString("hex"), "debug");
+            global_1.Global.log(`ruuvi-tag >> got data: ${data.toString("hex")}`, "debug");
             if (data[0] === 3) {
                 return ruuvi_tag_protocol_1.parseDataFormat3(data);
             }
@@ -67,14 +67,14 @@ var plugin = {
                 return ruuvi_tag_protocol_1.parseDataFormat5(data);
             }
             else {
-                global_1.Global.log("ruuvi-tag >> {{red|unsupported data format " + data[0] + "}}", "debug");
+                global_1.Global.log(`ruuvi-tag >> {{red|unsupported data format ${data[0]}}}`, "debug");
             }
         }
     },
-    defineObjects: function (context) {
+    defineObjects: (context) => {
         if (context == undefined)
             return;
-        var deviceObject = {
+        const deviceObject = {
             common: undefined,
             native: undefined,
         };
@@ -82,8 +82,8 @@ var plugin = {
             deviceObject.native = { beaconID: context.beaconID };
         }
         // no channels
-        var stateObjects = [];
-        var ret = {
+        const stateObjects = [];
+        const ret = {
             device: deviceObject,
             channels: undefined,
             states: stateObjects,
@@ -222,15 +222,15 @@ var plugin = {
         }
         return ret;
     },
-    getValues: function (context) {
+    getValues: (context) => {
         if (context == null)
             return;
         // strip out unnecessary properties
-        var dataFormat = context.dataFormat, beaconID = context.beaconID, macAddress = context.macAddress, sequenceNumber = context.sequenceNumber, remainder = __rest(context, ["dataFormat", "beaconID", "macAddress", "sequenceNumber"]);
+        const { dataFormat, beaconID, macAddress, sequenceNumber } = context, remainder = __rest(context, ["dataFormat", "beaconID", "macAddress", "sequenceNumber"]);
         // if acceleration exists, we need to rename the acceleration components
-        var acceleration = remainder.acceleration, ret = __rest(remainder, ["acceleration"]);
+        const { acceleration } = remainder, ret = __rest(remainder, ["acceleration"]);
         if (acceleration != null) {
-            var x = acceleration.x, y = acceleration.y, z = acceleration.z;
+            const { x, y, z } = acceleration;
             if (x != null)
                 ret.accelerationX = x;
             if (y != null)
