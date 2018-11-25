@@ -32,6 +32,13 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+#### 0.5.4 (2018-11-25)
+* (AlCalzone) Bugfix: Preserving object properties works again
+
+#### 0.5.3 (2018-11-23)
+* (AlCalzone) Cache objects for a short while instead of retrieving them from ioBroker all the time
+* (AlCalzone) Support negative temperatures from Xiaomi devices
+
 #### 0.5.2 (2018-03-28)
 * (AlCalzone) Fixed `isHandling` for the `ruuvi-tag` plugin
 

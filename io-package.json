@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.5.3",
+        "version": "0.5.4",
         "news": {
+            "0.5.4": {
+                "en": "Bugfixes",
+                "de": "Bugfixes"
+            },
             "0.5.3": {
                 "en": "Added support negative temperatures in the Xiaomi protocol",
                 "de": "Unterstützung für negative Temperaturen im Xiaomi-Protokoll hinzugefügt"
