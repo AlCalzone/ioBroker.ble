@@ -38,7 +38,7 @@ function extendDevice(deviceId, peripheral, object) {
 exports.extendDevice = extendDevice;
 function extendChannel(channelId, object) {
     return __awaiter(this, void 0, void 0, function* () {
-        const original = yield global_1.Global.objectCache.getObject(channelId);
+        const original = yield global_1.Global.objectCache.getObject(`${global_1.Global.adapter.namespace}.${channelId}`);
         // update the object while preserving the existing properties
         const updated = {
             type: "channel",
@@ -59,7 +59,7 @@ function extendChannel(channelId, object) {
 exports.extendChannel = extendChannel;
 function extendState(stateId, object) {
     return __awaiter(this, void 0, void 0, function* () {
-        const original = yield global_1.Global.objectCache.getObject(stateId);
+        const original = yield global_1.Global.objectCache.getObject(`${global_1.Global.adapter.namespace}.${stateId}`);
         // update the object while preserving the existing properties
         const updated = {
             type: "state",

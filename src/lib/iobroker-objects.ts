@@ -46,7 +46,7 @@ export async function extendChannel(
 	channelId: string,
 	object: ChannelObjectDefinition,
 ) {
-	const original = await _.objectCache.getObject(channelId);
+	const original = await _.objectCache.getObject(`${_.adapter.namespace}.${channelId}`);
 	// update the object while preserving the existing properties
 	const updated: ioBroker.ChannelObject = {
 		type: "channel",
@@ -78,7 +78,7 @@ export async function extendState(
 	stateId: string,
 	object: StateObjectDefinition,
 ) {
-	const original = await _.objectCache.getObject(stateId);
+	const original = await _.objectCache.getObject(`${_.adapter.namespace}.${stateId}`);
 	// update the object while preserving the existing properties
 	const updated: ioBroker.StateObject = {
 		type: "state",

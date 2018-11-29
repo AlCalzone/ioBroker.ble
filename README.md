@@ -32,7 +32,7 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
-#### 0.5.4 (2018-11-25)
+#### 0.5.5 (2018-11-29)
 * (AlCalzone) Bugfix: Preserving object properties works again
 
 #### 0.5.3 (2018-11-23)
