@@ -1,7 +1,7 @@
+import { CompareResult } from "alcalzone-shared/comparable";
 import { extend } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { Global as _ } from "./global";
-import { CompareResult } from "alcalzone-shared/comparable";
 
 interface ExpireTimestamp {
 	timestamp: number;
@@ -34,6 +34,13 @@ export class ObjectCache {
 			if (ret != null) this.storeObject(ret);
 		}
 		return this.retrieveObject(id);
+	}
+
+	public async objectExists(id: string): Promise<boolean> {
+		if (this.cache.has(id)) return true;
+		// Try to retrieve the original object from the DB
+		const ret = await _.adapter.$getForeignObject(id);
+		return ret != undefined;
 	}
 
 	private storeObject(obj: ioBroker.Object) {

@@ -13,6 +13,11 @@ import { Plugin } from "./plugins/plugin";
 let enabledPlugins: Plugin[];
 let services: string[] = [];
 
+/** Whether new devices may be recorded */
+let allowNewDevices: boolean = true;
+/** Cache of new devices we already ignored */
+const ignoredNewDeviceIDs = new Set<string>();
+
 // /** MAC addresses of known devices */
 // let knownDevices: string[] = [];
 
@@ -39,6 +44,9 @@ let adapter: ExtendedAdapter = utils.adapter({
 
 		// Workaround für fehlende InstanceObjects nach update
 		await _.ensureInstanceObjects();
+
+		// Prüfen, ob wir neue Geräte erfassen dürfen
+		allowNewDevices = !!(await adapter.$getState("options.allowNewDevices")).val;
 
 		// Plugins laden
 		_.log(`loaded plugins: ${plugins.map(p => p.name).join(", ")}`);
@@ -124,6 +132,13 @@ let adapter: ExtendedAdapter = utils.adapter({
 
 	// is called if a subscribed state changes
 	stateChange: (id, state) => {
+		if (/options\.allowNewDevices$/.test(id)) {
+			allowNewDevices = state ? !!state.val : false;
+			// Whenever allowNewDevices is set to true,
+			// forget all devices we previously ignored
+			if (allowNewDevices) ignoredNewDeviceIDs.clear();
+			return;
+		}
 		// apply additional subscriptions we've defined
 		applyCustomStateSubscriptions(id, state);
 	},
@@ -244,6 +259,19 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	if (!plugin) {
 		_.log(`no handling plugin found for peripheral ${peripheral.id}`, "warn");
 		return;
+	}
+
+	// Test if we may record this device
+	if (!allowNewDevices) {
+		// We may not. First test if we already ignored this device
+		if (ignoredNewDeviceIDs.has(deviceId)) return;
+		// If not, check if the RSSI object exists, as that exists for every one
+		if (!await _.objectCache.objectExists(`${_.adapter.namespace}.${deviceId}.rssi`)) {
+			// This is a new device. Remember that we need to ignore it
+			ignoredNewDeviceIDs.add(deviceId);
+			return;
+		}
+		// This is a known device
 	}
 
 	// Always ensure the rssi state exists and gets a value

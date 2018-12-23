@@ -18,6 +18,10 @@ const object_cache_1 = require("./lib/object-cache");
 const plugins_1 = require("./plugins");
 let enabledPlugins;
 let services = [];
+/** Whether new devices may be recorded */
+let allowNewDevices = true;
+/** Cache of new devices we already ignored */
+const ignoredNewDeviceIDs = new Set();
 // /** MAC addresses of known devices */
 // let knownDevices: string[] = [];
 /** How frequent the RSSI of devices should be updated */
@@ -37,6 +41,8 @@ let adapter = utils.adapter({
         global_1.Global.objectCache = new object_cache_1.ObjectCache(60000);
         // Workaround für fehlende InstanceObjects nach update
         yield global_1.Global.ensureInstanceObjects();
+        // Prüfen, ob wir neue Geräte erfassen dürfen
+        allowNewDevices = !!(yield adapter.$getState("options.allowNewDevices")).val;
         // Plugins laden
         global_1.Global.log(`loaded plugins: ${plugins_1.default.map(p => p.name).join(", ")}`);
         const enabledPluginNames = (adapter.config.plugins || "")
@@ -116,6 +122,14 @@ let adapter = utils.adapter({
     },
     // is called if a subscribed state changes
     stateChange: (id, state) => {
+        if (/options\.allowNewDevices$/.test(id)) {
+            allowNewDevices = state ? !!state.val : false;
+            // Whenever allowNewDevices is set to true,
+            // forget all devices we previously ignored
+            if (allowNewDevices)
+                ignoredNewDeviceIDs.clear();
+            return;
+        }
         // apply additional subscriptions we've defined
         custom_subscriptions_1.applyCustomStateSubscriptions(id, state);
     },
@@ -229,6 +243,19 @@ function onDiscover(peripheral) {
         if (!plugin) {
             global_1.Global.log(`no handling plugin found for peripheral ${peripheral.id}`, "warn");
             return;
+        }
+        // Test if we may record this device
+        if (!allowNewDevices) {
+            // We may not. First test if we already ignored this device
+            if (ignoredNewDeviceIDs.has(deviceId))
+                return;
+            // If not, check if the RSSI object exists, as that exists for every one
+            if (!(yield global_1.Global.objectCache.objectExists(`${global_1.Global.adapter.namespace}.${deviceId}.rssi`))) {
+                // This is a new device. Remember that we need to ignore it
+                ignoredNewDeviceIDs.add(deviceId);
+                return;
+            }
+            // This is a known device
         }
         // Always ensure the rssi state exists and gets a value
         yield iobroker_objects_1.extendState(`${deviceId}.rssi`, {

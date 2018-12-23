@@ -36,5 +36,9 @@ systemDictionary = {
 	"on save adapter restarts with new config immediately": {
 		"de": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
 		"ru": "Сразу после сохранения настроек драйвер перезапуститься с новыми значениями",
+	},
+	"New devices option": {
+		"de": "Mit dem State \"options.allowNewDevices\" (unter Objekte) kann kontrolliert werden, ob neue Geräte erfasst werden sollen",
+		"en": "Using the state \"options.allowNewDevices\" (in the objects tab) you can control if new devices should be recorded",
 	}
 };

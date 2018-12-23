@@ -1,6 +1,5 @@
 // tslint:disable:no-unused-expression
 // tslint:disable-next-line:no-reference
-/// <reference path="ioBroker.d.ts" />
 
 import { assert, expect } from "chai";
 import * as proxyquire from "proxyquire";

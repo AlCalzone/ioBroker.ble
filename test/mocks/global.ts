@@ -1,5 +1,4 @@
 // tslint:disable-next-line:no-reference
-/// <reference path="../../src/lib/ioBroker.d.ts" />
 
 import { spy, stub } from "sinon";
 
@@ -286,6 +285,11 @@ export function createExtendedAdapterMock(db: MockDatabase) {
 
 		formatValue: stub(),
 		formatDate: stub(),
+
+		// TODO: implement this at some point
+		on: stub(),
+		removeListener: stub(),
+		removeAllListeners: stub(),
 
 		__isExtended: true,
 		$getObject: stub(),

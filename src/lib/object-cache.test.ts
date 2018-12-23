@@ -170,6 +170,42 @@ describe("lib/object-cache", () => {
 		});
 	});
 
+	describe("objectExists() => ", () => {
+		it("should return false for non-existent objects", async () => {
+			const cache = new ObjectCache();
+			await cache.objectExists("does.not.exist").should.eventually.become(false);
+		});
+
+		it("should return true if the object is in the database", async () => {
+			const cache = new ObjectCache();
+
+			const obj1: ioBroker.PartialObject = {
+				_id: "whatever",
+				type: "state",
+				common: {
+					role: "whatever",
+				},
+			};
+			mocks.database.publishObject(obj1);
+			await cache.objectExists("whatever").should.eventually.become(true);
+		});
+
+		it("should return true if the object is cached", async () => {
+			const cache = new ObjectCache();
+
+			const obj1 = {
+				_id: "whatever",
+				type: "state",
+				common: {
+					role: "whatever",
+				},
+			} as ioBroker.Object;
+			cache.updateObject(obj1);
+
+			await cache.objectExists("whatever").should.eventually.become(true);
+		});
+	});
+
 	describe("automatic expiration =>", () => {
 
 		let clock: SinonFakeTimers;

@@ -13,6 +13,7 @@ export declare class ObjectCache {
      * @param id The id of the object to retrieve
      */
     getObject(id: string): Promise<ioBroker.Object | undefined>;
+    objectExists(id: string): Promise<boolean>;
     private storeObject;
     private retrieveObject;
     private rememberForExpiry;

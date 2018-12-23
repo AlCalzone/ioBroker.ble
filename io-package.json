@@ -142,6 +142,28 @@
                 "def": "poweredOff"
             },
             "native": {}
+        },
+        {
+            "_id": "options",
+            "type": "channel",
+            "common": {
+                "name": "Adapter-Optionen"
+            },
+            "native": {}
+        },
+        {
+            "_id": "options.allowNewDevices",
+            "type": "state",
+            "common": {
+                "role": "switch",
+                "name": "Allow new devices",
+                "desc": "Whether new devices should be recorded or not",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": true
+            },
+            "native": {}
         }
     ]
 }

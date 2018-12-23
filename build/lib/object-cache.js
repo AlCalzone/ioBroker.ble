@@ -39,6 +39,15 @@ class ObjectCache {
             return this.retrieveObject(id);
         });
     }
+    objectExists(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.cache.has(id))
+                return true;
+            // Try to retrieve the original object from the DB
+            const ret = yield global_1.Global.adapter.$getForeignObject(id);
+            return ret != undefined;
+        });
+    }
     storeObject(obj) {
         const clone = objects_1.extend({}, obj);
         this.cache.set(clone._id, clone);

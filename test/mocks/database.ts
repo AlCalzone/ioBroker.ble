@@ -1,6 +1,5 @@
 // tslint:disable:unified-signatures
 // tslint:disable-next-line:no-reference
-/// <reference path="../../src/lib/ioBroker.d.ts" />
 
 import { composeObject, extend, filter as objFilter } from "alcalzone-shared/objects";
 import { str2regex } from "../../src/lib/str2regex";
