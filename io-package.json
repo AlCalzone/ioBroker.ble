@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.5.5",
+        "version": "0.6.0",
         "news": {
+            "0.6.0": {
+                "en": "Added NodeJS 10 support",
+                "de": "Added NodeJS 10 support"
+            },
             "0.5.5": {
                 "en": "Bugfixes",
                 "de": "Bugfixes"

@@ -32,69 +32,72 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
-#### 0.5.5 (2018-11-29)
+### 0.6.0 (unreleased)
+* (AlCalzone) Add NodeJS 10 support
+
+### 0.5.5 (2018-11-29)
 * (AlCalzone) Bugfix: Preserving object properties works again
 
-#### 0.5.3 (2018-11-23)
+### 0.5.3 (2018-11-23)
 * (AlCalzone) Cache objects for a short while instead of retrieving them from ioBroker all the time
 * (AlCalzone) Support negative temperatures from Xiaomi devices
 
-#### 0.5.2 (2018-03-28)
+### 0.5.2 (2018-03-28)
 * (AlCalzone) Fixed `isHandling` for the `ruuvi-tag` plugin
 
-#### 0.5.1 (2018-03-28)
+### 0.5.1 (2018-03-28)
 * (AlCalzone) Restored accidentally deleted `mi-flora` plugin.
 
-#### 0.5.0 (2018-03-27)
+### 0.5.0 (2018-03-27)
 * (JonasR & AlCalzone) Added support for the Ruuvi Tag with the `ruuvi-tag` plugin
 
-#### 0.4.2 (2018-03-27)
+### 0.4.2 (2018-03-27)
 * (AlCalzone) Fixed the parsing of temperature+humidity packets from the Xiaomi temperature sensor
 
-#### 0.4.1 (2018-03-24)
+### 0.4.1 (2018-03-24)
 * (AlCalzone) Forgot to load legacy `mi-flora` plugin
 * (AlCalzone) Fixed an error when a plugin defines no objects
 
-#### 0.4.0 (2018-03-24)
+### 0.4.0 (2018-03-24)
 * (zuvielx9 & AlCalzone) Support for all Xiaomi bluetooth sensors using the `xiaomi` plugin
 * (AlCalzone) reworked plugin system slightly
 
-#### 0.3.5 (2018-03-18)
+### 0.3.5 (2018-03-18)
 * (AlCalzone) Bugfix: Next attempt at preserving object properties like history and name
 
-#### 0.3.4 (2018-01-01)
+### 0.3.4 (2018-01-01)
 * (AlCalzone) Bugfix: Keep `history` settings by not overriding existing objects
 * (AlCalzone) Bugfix: When plugins return `undefined`, ignore the packet
 
-#### 0.3.3 (2017-11-24)
+### 0.3.3 (2017-11-24)
 * (AlCalzone) Enable logging of RSSI
 
-#### 0.3.2 (2017-09-27)
+### 0.3.2 (2017-09-27)
 * (AlCalzone) Add * wildcard for "all services"
 
-#### 0.3.1 (2017-09-27)
+### 0.3.1 (2017-09-27)
 * (AlCalzone) Bugfix: don't throw error when RSSI state doens't exist
 
-#### 0.3.0 (2017-09-27)
+### 0.3.0 (2017-09-27)
 * (AlCalzone) Support throttling of RSSI updates
 
-#### 0.2.2 (2017-09-27)
+### 0.2.2 (2017-09-27)
 * (AlCalzone) Bugfix: Only monitor services from _enabled_ plugins
 
-#### 0.2.1 (2017-09-27)
+### 0.2.1 (2017-09-27)
 * (AlCalzone) Bugfix: last patch broke the service filtering
 
-#### 0.2.0 (2017-09-26)
+### 0.2.0 (2017-09-26)
 * (AlCalzone) Modularized the adapter code into a plugin system
 * (AlCalzone) Added Mi-Flora plugin
 
-#### 0.1.0 (2017-09-06)
+### 0.1.0 (2017-09-06)
 * (AlCalzone) Support selection of bluetooth devices
 
-#### 0.0.2 (2017-09-06)
+### 0.0.2 (2017-09-06)
 * (AlCalzone) Store more information, improved object structure.
 
-#### 0.0.1
+### 0.0.1
 * (AlCalzone) initial release
 
 ## License
