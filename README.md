@@ -32,8 +32,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
-### 0.6.0 (unreleased)
+### 0.6.0 (2018-12-23)
 * (AlCalzone) Add NodeJS 10 support
+* (AlCalzone) Add an option to disallow new devices
 
 ### 0.5.5 (2018-11-29)
 * (AlCalzone) Bugfix: Preserving object properties works again

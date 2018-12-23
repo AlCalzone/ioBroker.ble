@@ -4,8 +4,8 @@
         "version": "0.6.0",
         "news": {
             "0.6.0": {
-                "en": "Added NodeJS 10 support",
-                "de": "Added NodeJS 10 support"
+                "en": "* Added NodeJS 10 support\n* Added an option to disallow new devices",
+                "de": "* Unterstützung für NodeJS 10 hinzugefügt\n* Option hinzugefügt, um neue Geräte zu ignorieren"
             },
             "0.5.5": {
                 "en": "Bugfixes",
