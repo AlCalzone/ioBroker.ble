@@ -160,7 +160,15 @@ class Global {
             if (ioPack.instanceObjects == null || ioPack.instanceObjects.length === 0)
                 return;
             // wait for all instance objects to be created
-            const setObjects = ioPack.instanceObjects.map(obj => Global._adapter.$setObjectNotExists(obj._id, obj));
+            const setObjects = ioPack.instanceObjects.map((obj) => __awaiter(this, void 0, void 0, function* () {
+                const original = yield Global._adapter.$getObject(obj._id);
+                if (original == undefined) {
+                    yield Global._adapter.$setObject(obj._id, obj);
+                    if (obj.common.def != undefined) {
+                        yield Global._adapter.$setState(obj._id, obj.common.def);
+                    }
+                }
+            }));
             yield Promise.all(setObjects);
         });
     }

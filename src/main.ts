@@ -132,12 +132,15 @@ let adapter: ExtendedAdapter = utils.adapter({
 
 	// is called if a subscribed state changes
 	stateChange: (id, state) => {
-		if (/options\.allowNewDevices$/.test(id)) {
-			allowNewDevices = state ? !!state.val : false;
-			// Whenever allowNewDevices is set to true,
-			// forget all devices we previously ignored
-			if (allowNewDevices) ignoredNewDeviceIDs.clear();
-			return;
+		if (/options\.allowNewDevices$/.test(id) && state != undefined && !state.ack) {
+			if (typeof state.val === "boolean") {
+				allowNewDevices = state.val;
+				// ACK the state change
+				_.adapter.setState(id, state.val, true);
+				// Whenever allowNewDevices is set to true,
+				// forget all devices we previously ignored
+				if (allowNewDevices) ignoredNewDeviceIDs.clear();
+			}
 		}
 		// apply additional subscriptions we've defined
 		applyCustomStateSubscriptions(id, state);
