@@ -73,7 +73,7 @@ let adapter = utils.adapter({
         adapter.subscribeObjects("*");
         // load noble driver with the correct device selected
         process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
-        noble = require("noble");
+        noble = require("@abandonware/noble");
         // prepare scanning for beacons
         noble.on("stateChange", (state) => {
             switch (state) {
