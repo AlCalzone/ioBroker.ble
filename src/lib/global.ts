@@ -255,15 +255,7 @@ export class Global {
 
 		// wait for all instance objects to be created
 		const setObjects = ioPack.instanceObjects.map(
-			async (obj: ioBroker.Object) => {
-				const original = await Global._adapter.$getObject(obj._id);
-				if (original == undefined) {
-					await Global._adapter.$setObject(obj._id, obj);
-					if ((obj.common as any).def != undefined) {
-						await Global._adapter.$setState(obj._id, (obj.common as any).def);
-					}
-				}
-			},
+			obj => Global._adapter.$setObjectNotExists(obj._id, obj),
 		);
 		await Promise.all(setObjects);
 	}

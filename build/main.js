@@ -42,7 +42,9 @@ let adapter = utils.adapter({
         // Workaround für fehlende InstanceObjects nach update
         yield global_1.Global.ensureInstanceObjects();
         // Prüfen, ob wir neue Geräte erfassen dürfen
-        allowNewDevices = !!(yield adapter.$getState("options.allowNewDevices")).val;
+        const allowNewDevicesState = yield adapter.$getState("options.allowNewDevices");
+        allowNewDevices = (allowNewDevicesState && allowNewDevicesState.val != undefined) ? allowNewDevicesState.val : true;
+        yield adapter.$setState("options.allowNewDevices", allowNewDevices, true);
         // Plugins laden
         global_1.Global.log(`loaded plugins: ${plugins_1.default.map(p => p.name).join(", ")}`);
         const enabledPluginNames = (adapter.config.plugins || "")

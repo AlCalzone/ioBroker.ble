@@ -46,7 +46,9 @@ let adapter: ExtendedAdapter = utils.adapter({
 		await _.ensureInstanceObjects();
 
 		// Prüfen, ob wir neue Geräte erfassen dürfen
-		allowNewDevices = !!(await adapter.$getState("options.allowNewDevices")).val;
+		const allowNewDevicesState = await adapter.$getState("options.allowNewDevices");
+		allowNewDevices = (allowNewDevicesState && allowNewDevicesState.val != undefined) ? allowNewDevicesState.val : true;
+		await adapter.$setState("options.allowNewDevices", allowNewDevices, true);
 
 		// Plugins laden
 		_.log(`loaded plugins: ${plugins.map(p => p.name).join(", ")}`);
