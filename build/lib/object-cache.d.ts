@@ -1,3 +1,4 @@
+/// <reference types="iobroker" />
 export declare class ObjectCache {
     private expiryDuration;
     /**

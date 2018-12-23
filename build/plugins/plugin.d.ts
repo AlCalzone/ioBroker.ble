@@ -1,3 +1,4 @@
+/// <reference types="iobroker" />
 /// <reference types="node" />
 export declare type DeviceObjectDefinition = Partial<Pick<ioBroker.DeviceObject, "common" | "native">>;
 export declare type ChannelObjectDefinition = Partial<Pick<ioBroker.ChannelObject, "common" | "native">> & {

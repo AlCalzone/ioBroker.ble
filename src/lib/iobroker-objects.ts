@@ -9,7 +9,7 @@ export async function extendDevice(
 ) {
 	const original = await _.objectCache.getObject(`${_.adapter.namespace}.${deviceId}`);
 	// update the object while preserving the existing properties
-	const updated: ioBroker.DeviceObject = {
+	const updated: ioBroker.SettableObject = {
 		type: "device",
 		common: Object.assign(
 			{
@@ -48,7 +48,7 @@ export async function extendChannel(
 ) {
 	const original = await _.objectCache.getObject(`${_.adapter.namespace}.${channelId}`);
 	// update the object while preserving the existing properties
-	const updated: ioBroker.ChannelObject = {
+	const updated: ioBroker.SettableObject = {
 		type: "channel",
 		common: Object.assign(
 			{
@@ -80,7 +80,7 @@ export async function extendState(
 ) {
 	const original = await _.objectCache.getObject(`${_.adapter.namespace}.${stateId}`);
 	// update the object while preserving the existing properties
-	const updated: ioBroker.StateObject = {
+	const updated: ioBroker.SettableObject = {
 		type: "state",
 		common: Object.assign(
 			object.common,

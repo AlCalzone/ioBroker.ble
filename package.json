@@ -22,6 +22,7 @@
     "url": "https://github.com/AlCalzone/ioBroker.ble"
   },
   "dependencies": {
+    "@iobroker/adapter-core": "^1.0.1",
     "alcalzone-shared": "^1.3.2",
     "noble": "^1.9.1"
   },
@@ -36,6 +37,7 @@
     "@types/sinon-chai": "^3.2.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
+    "cpx": "^1.5.0",
     "mocha": "^5.2.0",
     "node-ssh": "^5.1.1",
     "nyc": "^11.9.0",
@@ -50,7 +52,9 @@
   },
   "main": "build/main.js",
   "scripts": {
+    "clean-build-dir": "cpx build/src/**/*.* build && rimraf build/src && rimraf build/{io-,}package.json",
     "build": "tsc -p src/tsconfig.json",
+    "postbuild": "npm run clean-build-dir",
     "prebuild": "rimraf ./build",
     "watch": "tsc -p src/tsconfig.json --watch",
     "test:package": "node_modules/.bin/mocha test/testPackageFiles.js --exit",

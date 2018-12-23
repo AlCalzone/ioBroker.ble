@@ -8,12 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const utils = require("@iobroker/adapter-core");
 const child_process_1 = require("child_process");
 const custom_subscriptions_1 = require("./lib/custom-subscriptions");
 const global_1 = require("./lib/global");
 const iobroker_objects_1 = require("./lib/iobroker-objects");
 const object_cache_1 = require("./lib/object-cache");
-const utils_1 = require("./lib/utils");
 // Load all registered plugins
 const plugins_1 = require("./plugins");
 let enabledPlugins;
@@ -25,7 +25,7 @@ let rssiUpdateInterval = 0;
 // noble-Treiber-Instanz
 let noble;
 // Adapter-Objekt erstellen
-let adapter = utils_1.default.adapter({
+let adapter = utils.adapter({
     name: "ble",
     // is called when databases are connected and adapter received configuration.
     // start here!

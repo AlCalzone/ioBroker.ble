@@ -44,17 +44,17 @@ export interface ExtendedAdapter extends ioBroker.Adapter {
 	/** Get all states, channels and devices of this adapter */
 	$getAdapterObjects(): Promise<Record<string, ioBroker.Object>>;
 	/** Creates or overwrites an object in the object db */
-	$setObject(id: string, obj: ioBroker.Object, options?: any): Promise<{ id: string }>;
+	$setObject(id: string, obj: ioBroker.SettableObject, options?: any): Promise<{ id: string }>;
 	/** Creates an object in the object db if it doesn't exist yet */
-	$setObjectNotExists(id: string, obj: ioBroker.Object, options?: any): Promise<{ id: string }>;
+	$setObjectNotExists(id: string, obj: ioBroker.SettableObject, options?: any): Promise<{ id: string }>;
 	/** Extends an object in the object db */
 	$extendObject(id: string, obj: ioBroker.PartialObject, options?: any): Promise<{ id: string }>;
 	/** Reads an object (which might not belong to this adapter) from the object db */
 	$getForeignObject(id: string, options?: any): Promise<ioBroker.Object>;
 	/** Creates or overwrites an object (which might not belong to this adapter) in the object db */
-	$setForeignObject(id: string, obj: ioBroker.Object, options?: any): Promise<{ id: string }>;
+	$setForeignObject(id: string, obj: ioBroker.SettableObject, options?: any): Promise<{ id: string }>;
 	/** Creates an object (which might not belong to this adapter) in the object db if it doesn't exist yet */
-	$setForeignObjectNotExists(id: string, obj: ioBroker.Object, options?: any): Promise<{ id: string }>;
+	$setForeignObjectNotExists(id: string, obj: ioBroker.SettableObject, options?: any): Promise<{ id: string }>;
 	/** Extends an object in the object (which might not belong to this adapter) db */
 	$extendForeignObject(id: string, obj: ioBroker.PartialObject, options?: any): Promise<{ id: string }>;
 	/** Get foreign objects by pattern, by specific type and resolve their enums. */

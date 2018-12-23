@@ -1,3 +1,4 @@
+/// <reference types="iobroker" />
 export interface CustomStateSubscription {
     pattern: RegExp;
     callback: (id: string, state: ioBroker.State | null | undefined) => void;

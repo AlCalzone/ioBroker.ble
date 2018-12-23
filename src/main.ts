@@ -1,10 +1,10 @@
+import * as utils from "@iobroker/adapter-core";
 import { exec } from "child_process";
 import { EventEmitter } from "events";
 import { applyCustomObjectSubscriptions, applyCustomStateSubscriptions } from "./lib/custom-subscriptions";
 import { ExtendedAdapter, Global as _ } from "./lib/global";
 import { extendChannel, extendDevice, extendState } from "./lib/iobroker-objects";
 import { ObjectCache } from "./lib/object-cache";
-import utils from "./lib/utils";
 
 // Load all registered plugins
 import plugins from "./plugins";
