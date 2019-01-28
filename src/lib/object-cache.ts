@@ -29,7 +29,7 @@ export class ObjectCache {
 	public async getObject(id: string): Promise<ioBroker.Object | undefined> {
 		if (!this.cache.has(id)) {
 			// retrieve the original object from the DB
-			const ret = await _.adapter.$getForeignObject(id);
+			const ret = await _.adapter.getForeignObjectAsync(id);
 			// and remember it in the cache
 			if (ret != null) this.storeObject(ret);
 		}
@@ -39,7 +39,7 @@ export class ObjectCache {
 	public async objectExists(id: string): Promise<boolean> {
 		if (this.cache.has(id)) return true;
 		// Try to retrieve the original object from the DB
-		const ret = await _.adapter.$getForeignObject(id);
+		const ret = await _.adapter.getForeignObjectAsync(id);
 		return ret != undefined;
 	}
 

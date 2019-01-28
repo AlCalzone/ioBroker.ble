@@ -31,7 +31,7 @@ function extendDevice(deviceId, peripheral, object) {
             || JSON.stringify(original.common) !== JSON.stringify(updated.common)
             || JSON.stringify(original.native) !== JSON.stringify(updated.native)) {
             global_1.Global.log(`${original == null ? "creating" : "updating"} device object ${deviceId}`, "debug");
-            yield global_1.Global.adapter.$setObject(deviceId, updated);
+            yield global_1.Global.adapter.setObjectAsync(deviceId, updated);
         }
     });
 }
@@ -52,7 +52,7 @@ function extendChannel(channelId, object) {
             || JSON.stringify(original.common) !== JSON.stringify(updated.common)
             || JSON.stringify(original.native) !== JSON.stringify(updated.native)) {
             global_1.Global.log(`${original == null ? "creating" : "updating"} channel object ${channelId}`, "debug");
-            yield global_1.Global.adapter.$setObject(channelId, updated);
+            yield global_1.Global.adapter.setObjectAsync(channelId, updated);
         }
     });
 }
@@ -71,7 +71,7 @@ function extendState(stateId, object) {
             || JSON.stringify(original.common) !== JSON.stringify(updated.common)
             || JSON.stringify(original.native) !== JSON.stringify(updated.native)) {
             global_1.Global.log(`${original == null ? "creating" : "updating"} state object ${stateId}`, "debug");
-            yield global_1.Global.adapter.$setObject(stateId, updated);
+            yield global_1.Global.adapter.setObjectAsync(stateId, updated);
         }
     });
 }

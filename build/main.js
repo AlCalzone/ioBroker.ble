@@ -29,22 +29,21 @@ let rssiUpdateInterval = 0;
 // noble-Treiber-Instanz
 let noble;
 // Adapter-Objekt erstellen
-let adapter = utils.adapter({
+const adapter = utils.adapter({
     name: "ble",
     // is called when databases are connected and adapter received configuration.
     // start here!
     ready: () => __awaiter(this, void 0, void 0, function* () {
         // Adapter-Instanz global machen
-        adapter = global_1.Global.extend(adapter);
         global_1.Global.adapter = adapter;
         // Cache objects for 1 minute
         global_1.Global.objectCache = new object_cache_1.ObjectCache(60000);
         // Workaround für fehlende InstanceObjects nach update
         yield global_1.Global.ensureInstanceObjects();
         // Prüfen, ob wir neue Geräte erfassen dürfen
-        const allowNewDevicesState = yield adapter.$getState("options.allowNewDevices");
+        const allowNewDevicesState = yield adapter.getStateAsync("options.allowNewDevices");
         allowNewDevices = (allowNewDevicesState && allowNewDevicesState.val != undefined) ? allowNewDevicesState.val : true;
-        yield adapter.$setState("options.allowNewDevices", allowNewDevices, true);
+        yield adapter.setStateAsync("options.allowNewDevices", allowNewDevices, true);
         // Plugins laden
         global_1.Global.log(`loaded plugins: ${plugins_1.default.map(p => p.name).join(", ")}`);
         const enabledPluginNames = (adapter.config.plugins || "")
@@ -276,13 +275,13 @@ function onDiscover(peripheral) {
             native: {},
         });
         // update RSSI information
-        const rssiState = yield adapter.$getState(`${deviceId}.rssi`);
+        const rssiState = yield adapter.getStateAsync(`${deviceId}.rssi`);
         if (rssiState == null ||
             (rssiState.val !== peripheral.rssi && // only save changes
                 rssiState.lc + rssiUpdateInterval < Date.now()) // and dont update too frequently
         ) {
             global_1.Global.log(`updating rssi state for ${deviceId}`, "debug");
-            yield adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);
+            yield adapter.setStateAsync(`${deviceId}.rssi`, peripheral.rssi, true);
         }
         // Now update device-specific objects and states
         const context = plugin.createContext(peripheral);
@@ -307,7 +306,7 @@ function onDiscover(peripheral) {
                 const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
                 if ((yield global_1.Global.objectCache.getObject(iobStateId)) != null) {
                     global_1.Global.log(`setting state ${iobStateId}`, "debug");
-                    yield adapter.$setStateChanged(iobStateId, values[stateId], true);
+                    yield adapter.setStateChangedAsync(iobStateId, values[stateId], true);
                 }
                 else {
                     global_1.Global.log(`skipping state ${iobStateId} because the object does not exist`, "warn");

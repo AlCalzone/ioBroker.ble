@@ -2,7 +2,7 @@ import * as utils from "@iobroker/adapter-core";
 import { exec } from "child_process";
 import { EventEmitter } from "events";
 import { applyCustomObjectSubscriptions, applyCustomStateSubscriptions } from "./lib/custom-subscriptions";
-import { ExtendedAdapter, Global as _ } from "./lib/global";
+import { Global as _ } from "./lib/global";
 import { extendChannel, extendDevice, extendState } from "./lib/iobroker-objects";
 import { ObjectCache } from "./lib/object-cache";
 
@@ -28,7 +28,7 @@ let rssiUpdateInterval: number = 0;
 let noble: typeof import("noble") & EventEmitter;
 
 // Adapter-Objekt erstellen
-let adapter: ExtendedAdapter = utils.adapter({
+const adapter = utils.adapter({
 	name: "ble",
 
 	// is called when databases are connected and adapter received configuration.
@@ -36,7 +36,6 @@ let adapter: ExtendedAdapter = utils.adapter({
 	ready: async () => {
 
 		// Adapter-Instanz global machen
-		adapter = _.extend(adapter);
 		_.adapter = adapter;
 
 		// Cache objects for 1 minute
@@ -46,9 +45,9 @@ let adapter: ExtendedAdapter = utils.adapter({
 		await _.ensureInstanceObjects();
 
 		// Prüfen, ob wir neue Geräte erfassen dürfen
-		const allowNewDevicesState = await adapter.$getState("options.allowNewDevices");
+		const allowNewDevicesState = await adapter.getStateAsync("options.allowNewDevices");
 		allowNewDevices = (allowNewDevicesState && allowNewDevicesState.val != undefined) ? allowNewDevicesState.val : true;
-		await adapter.$setState("options.allowNewDevices", allowNewDevices, true);
+		await adapter.setStateAsync("options.allowNewDevices", allowNewDevices, true);
 
 		// Plugins laden
 		_.log(`loaded plugins: ${plugins.map(p => p.name).join(", ")}`);
@@ -209,7 +208,7 @@ let adapter: ExtendedAdapter = utils.adapter({
 		}
 	},
 
-}) as ExtendedAdapter;
+});
 
 // =========================
 
@@ -293,14 +292,14 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 		native: {},
 	});
 	// update RSSI information
-	const rssiState = await adapter.$getState(`${deviceId}.rssi`);
+	const rssiState = await adapter.getStateAsync(`${deviceId}.rssi`);
 	if (
 		rssiState == null ||
 		(rssiState.val !== peripheral.rssi &&			// only save changes
 			rssiState.lc + rssiUpdateInterval < Date.now())	// and dont update too frequently
 	) {
 		_.log(`updating rssi state for ${deviceId}`, "debug");
-		await adapter.$setState(`${deviceId}.rssi`, peripheral.rssi, true);
+		await adapter.setStateAsync(`${deviceId}.rssi`, peripheral.rssi, true);
 	}
 
 	// Now update device-specific objects and states
@@ -336,7 +335,7 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 			const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
 			if (await _.objectCache.getObject(iobStateId) != null) {
 				_.log(`setting state ${iobStateId}`, "debug");
-				await adapter.$setStateChanged(iobStateId, values[stateId], true);
+				await adapter.setStateChangedAsync(iobStateId, values[stateId], true);
 			} else {
 				_.log(`skipping state ${iobStateId} because the object does not exist`, "warn");
 			}

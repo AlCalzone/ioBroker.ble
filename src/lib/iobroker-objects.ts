@@ -37,7 +37,7 @@ export async function extendDevice(
 		|| JSON.stringify(original.native) !== JSON.stringify(updated.native)
 	) {
 		_.log(`${original == null ? "creating" : "updating"} device object ${deviceId}`, "debug");
-		await _.adapter.$setObject(deviceId, updated);
+		await _.adapter.setObjectAsync(deviceId, updated);
 	}
 
 }
@@ -70,7 +70,7 @@ export async function extendChannel(
 		|| JSON.stringify(original.native) !== JSON.stringify(updated.native)
 	) {
 		_.log(`${original == null ? "creating" : "updating"} channel object ${channelId}`, "debug");
-		await _.adapter.$setObject(channelId, updated);
+		await _.adapter.setObjectAsync(channelId, updated);
 	}
 }
 
@@ -99,6 +99,6 @@ export async function extendState(
 		|| JSON.stringify(original.native) !== JSON.stringify(updated.native)
 	) {
 		_.log(`${original == null ? "creating" : "updating"} state object ${stateId}`, "debug");
-		await _.adapter.$setObject(stateId, updated);
+		await _.adapter.setObjectAsync(stateId, updated);
 	}
 }

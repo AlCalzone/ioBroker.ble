@@ -31,7 +31,7 @@ class ObjectCache {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this.cache.has(id)) {
                 // retrieve the original object from the DB
-                const ret = yield global_1.Global.adapter.$getForeignObject(id);
+                const ret = yield global_1.Global.adapter.getForeignObjectAsync(id);
                 // and remember it in the cache
                 if (ret != null)
                     this.storeObject(ret);
@@ -44,7 +44,7 @@ class ObjectCache {
             if (this.cache.has(id))
                 return true;
             // Try to retrieve the original object from the DB
-            const ret = yield global_1.Global.adapter.$getForeignObject(id);
+            const ret = yield global_1.Global.adapter.getForeignObjectAsync(id);
             return ret != undefined;
         });
     }

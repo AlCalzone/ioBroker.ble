@@ -23,10 +23,11 @@
   },
   "dependencies": {
     "@abandonware/noble": "^1.9.2-1",
-    "@iobroker/adapter-core": "^1.0.1",
+    "@iobroker/adapter-core": "^1.0.3",
     "alcalzone-shared": "^1.3.2"
   },
   "devDependencies": {
+    "@iobroker/testing": "github:AlCalzone/testing",
     "@types/chai": "^4.1.2",
     "@types/chai-as-promised": "^7.1.0",
     "@types/mocha": "^5.0.0",

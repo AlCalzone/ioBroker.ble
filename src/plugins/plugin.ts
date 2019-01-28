@@ -1,6 +1,4 @@
-﻿import { ExtendedAdapter } from "../lib/global";
-
-export type DeviceObjectDefinition = Partial<Pick<ioBroker.DeviceObject, "common" | "native">>;
+﻿export type DeviceObjectDefinition = Partial<Pick<ioBroker.DeviceObject, "common" | "native">>;
 export type ChannelObjectDefinition = Partial<Pick<ioBroker.ChannelObject, "common" | "native">> & { id: string };
 export type StateObjectDefinition = Partial<Pick<ioBroker.StateObject, "common" | "native">> & { id: string };
 
