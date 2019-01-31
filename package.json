@@ -60,7 +60,7 @@
     "postbuild": "npm run clean-build-dir",
     "prebuild": "rimraf ./build",
     "watch": "tsc -p src/tsconfig.json --watch",
-    "test:offline": "node_modules/.bin/mocha test/testAdapterOffline.js",
+    "test:offline": "node_modules/.bin/mocha test/testAdapterOffline.js --exit",
     "test:package": "node_modules/.bin/mocha test/testPackageFiles.js --exit",
     "test:iobroker": "node_modules/.bin/mocha test/testAdapter.js --exit",
     "test:ts": "node_modules/.bin/mocha --opts test/mocha.typescript.opts",
