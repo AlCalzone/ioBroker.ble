@@ -22,5 +22,6 @@ test_script:
   - node --version
   - npm --version
   - npm run test:package
+  - npm run test:offline
   - npm run test:iobroker
 build: 'off'

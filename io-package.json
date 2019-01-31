@@ -85,6 +85,7 @@
             "AlCalzone <d.griesel@gmx.net>"
         ],
         "platform": "Javascript/Node.js",
+        "main": "build/main.js",
         "mode": "daemon",
         "icon": "ble.png",
         "enabled": true,
@@ -97,7 +98,8 @@
         "readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
         "loglevel": "info",
         "type": "hardware",
-        "messagebox": true
+        "messagebox": true,
+        "compact": true
     },
     "native": {
         "services": "",

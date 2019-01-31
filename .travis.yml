@@ -16,6 +16,7 @@ before_script:
   - 'npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production'
 script:
   - npm run test:package
+  - npm run test:offline
   - npm run test:iobroker
 env:
   - CXX=g++-4.8

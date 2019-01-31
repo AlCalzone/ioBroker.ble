@@ -15,6 +15,12 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "resolveJsonModule": true,
+        "plugins": [
+            {
+                "name": "@fimbul/mithotyn",
+                "displayErrorsAsWarnings": true
+            }
+        ],
     },
     "include": [
         "**/*.ts"
