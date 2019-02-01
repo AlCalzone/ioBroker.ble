@@ -40,14 +40,6 @@ function startAdapter(options?: Partial<ioBroker.AdapterOptions>) {
 		// is called when databases are connected and adapter received configuration.
 		// start here!
 		ready: async () => {
-			if (/^win/.test(platform())) {
-				if (typeof adapter.terminate === "function") {
-					adapter.terminate("This adapter does not support Windows!");
-				} else {
-					adapter.log.error("This adapter does not support Windows!");
-					process.exit(11);
-				}
-			}
 
 			// Adapter-Instanz global machen
 			_.adapter = adapter;
@@ -103,7 +95,11 @@ function startAdapter(options?: Partial<ioBroker.AdapterOptions>) {
 
 			// load noble driver with the correct device selected
 			process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
-			noble = require("@abandonware/noble");
+			try {
+				noble = require("@abandonware/noble");
+			} catch (e) {
+				terminate(e.message || e);
+			}
 
 			// prepare scanning for beacons
 			noble.on("stateChange", (state) => {
@@ -378,11 +374,26 @@ function stopScanning() {
 	isScanning = false;
 }
 
+function terminate(reason: string = "no reason given") {
+	if (adapter) {
+		if (adapter.terminate) {
+			return adapter.terminate(reason);
+		}
+		adapter.log.error(reason);
+	}
+	process.exit(11);
+}
+
 // Unbehandelte Fehler tracen
 process.on("unhandledRejection", r => {
 	adapter.log.error("unhandled promise rejection: " + r);
 });
 process.on("uncaughtException", err => {
+	// Noble on Windows seems to throw in a callback we cannot catch
+	if (/compatible USB Bluetooth/.test(err.message)) {
+		return terminate(err.message);
+	}
+
 	adapter.log.error("unhandled exception:" + err.message);
 	adapter.log.error("> stack: " + err.stack);
 	process.exit(1);

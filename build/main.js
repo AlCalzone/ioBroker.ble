@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils = require("@iobroker/adapter-core");
 const child_process_1 = require("child_process");
-const os_1 = require("os");
 const custom_subscriptions_1 = require("./lib/custom-subscriptions");
 const global_1 = require("./lib/global");
 const iobroker_objects_1 = require("./lib/iobroker-objects");
@@ -27,7 +26,8 @@ const ignoredNewDeviceIDs = new Set();
 // let knownDevices: string[] = [];
 /** How frequent the RSSI of devices should be updated */
 let rssiUpdateInterval = 0;
-// noble-Treiber-Instanz
+/** noble-Treiber-Instanz */
+// tslint:disable-next-line:whitespace
 let noble;
 // Adapter-Objekt erstellen
 let adapter;
@@ -36,15 +36,6 @@ function startAdapter(options) {
         // is called when databases are connected and adapter received configuration.
         // start here!
         ready: () => __awaiter(this, void 0, void 0, function* () {
-            if (/^win/.test(os_1.platform())) {
-                if (typeof adapter.terminate === "function") {
-                    adapter.terminate("This adapter does not support Windows!");
-                }
-                else {
-                    adapter.log.error("This adapter does not support Windows!");
-                    process.exit(11);
-                }
-            }
             // Adapter-Instanz global machen
             global_1.Global.adapter = adapter;
             // Cache objects for 1 minute
@@ -91,7 +82,12 @@ function startAdapter(options) {
             adapter.subscribeObjects("*");
             // load noble driver with the correct device selected
             process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
-            noble = require("@abandonware/noble");
+            try {
+                noble = require("@abandonware/noble");
+            }
+            catch (e) {
+                terminate(e.message || e);
+            }
             // prepare scanning for beacons
             noble.on("stateChange", (state) => {
                 switch (state) {
@@ -347,13 +343,27 @@ function stopScanning() {
     adapter.setState("info.connection", false, true);
     isScanning = false;
 }
+function terminate(reason = "no reason given") {
+    if (adapter) {
+        if (adapter.terminate) {
+            return adapter.terminate(reason);
+        }
+        adapter.log.error(reason);
+    }
+    process.exit(11);
+}
 // Unbehandelte Fehler tracen
 process.on("unhandledRejection", r => {
     adapter.log.error("unhandled promise rejection: " + r);
 });
 process.on("uncaughtException", err => {
-    adapter.log.error("unhandled exception:" + err.message);
-    adapter.log.error("> stack: " + err.stack);
+	// Noble on Windows seems to throw in a callback we cannot catch
+	if (/compatible USB Bluetooth/.test(err.message)) {
+		return terminate(err.message);
+	}
+
+    console.error("unhandled exception:" + err.message);
+    console.error("> stack: " + err.stack);
     process.exit(1);
 });
 if (module.parent) {
