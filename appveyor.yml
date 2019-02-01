@@ -15,12 +15,14 @@ install:
   - ps: npm --version
   - 'IF "%nodejs_version:~0,1%"=="8" npm install npm@3 -g'
   - npm install
-  - npm install winston@2.3.1
-  - 'npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production'
 test_script:
   - echo %cd%
   - node --version
   - npm --version
   - npm run test:package
+  - npm run test:offline
+
+  - npm install winston@2.3.1
+  - 'npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production'
   - npm run test:iobroker
 build: 'off'

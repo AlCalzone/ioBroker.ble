@@ -1,6 +1,7 @@
 import * as utils from "@iobroker/adapter-core";
 import { exec } from "child_process";
 import { EventEmitter } from "events";
+import { platform } from "os";
 import { applyCustomObjectSubscriptions, applyCustomStateSubscriptions } from "./lib/custom-subscriptions";
 import { Global as _ } from "./lib/global";
 import { extendChannel, extendDevice, extendState } from "./lib/iobroker-objects";
@@ -24,191 +25,200 @@ const ignoredNewDeviceIDs = new Set<string>();
 /** How frequent the RSSI of devices should be updated */
 let rssiUpdateInterval: number = 0;
 
-// noble-Treiber-Instanz
+/** noble-Treiber-Instanz */
+// tslint:disable-next-line:whitespace
 let noble: typeof import("noble") & EventEmitter;
 
 // Adapter-Objekt erstellen
-const adapter = utils.adapter({
-	name: "ble",
+let adapter: ioBroker.Adapter;
 
-	// is called when databases are connected and adapter received configuration.
-	// start here!
-	ready: async () => {
+function startAdapter(options?: Partial<ioBroker.AdapterOptions>) {
+	adapter = utils.adapter({
+		...options,
 
-		// Adapter-Instanz global machen
-		_.adapter = adapter;
+		name: "ble",
+		// is called when databases are connected and adapter received configuration.
+		// start here!
+		ready: async () => {
 
-		// Cache objects for 1 minute
-		_.objectCache = new ObjectCache(60000);
+			// Adapter-Instanz global machen
+			_.adapter = adapter;
 
-		// Workaround für fehlende InstanceObjects nach update
-		await _.ensureInstanceObjects();
+			// Cache objects for 1 minute
+			_.objectCache = new ObjectCache(60000);
 
-		// Prüfen, ob wir neue Geräte erfassen dürfen
-		const allowNewDevicesState = await adapter.getStateAsync("options.allowNewDevices");
-		allowNewDevices = (allowNewDevicesState && allowNewDevicesState.val != undefined) ? allowNewDevicesState.val : true;
-		await adapter.setStateAsync("options.allowNewDevices", allowNewDevices, true);
+			// Workaround für fehlende InstanceObjects nach update
+			await _.ensureInstanceObjects();
 
-		// Plugins laden
-		_.log(`loaded plugins: ${plugins.map(p => p.name).join(", ")}`);
-		const enabledPluginNames: string[] = (adapter.config.plugins as string || "")
-			.split(",")
-			.map((p: string) => p.trim().toLowerCase())
-			.concat("_default")
-			;
-		enabledPlugins = plugins.filter(p => enabledPluginNames.indexOf(p.name.toLowerCase()) > -1);
-		_.log(`enabled plugins: ${enabledPlugins.map(p => p.name).join(", ")}`);
+			// Prüfen, ob wir neue Geräte erfassen dürfen
+			const allowNewDevicesState = await adapter.getStateAsync("options.allowNewDevices");
+			allowNewDevices = (allowNewDevicesState && allowNewDevicesState.val != undefined) ? allowNewDevicesState.val : true;
+			await adapter.setStateAsync("options.allowNewDevices", allowNewDevices, true);
 
-		// Bring the monitored service names into the correct form
-		if (adapter.config.services === "*") {
-			services = [];
-			_.log(`monitoring all services`);
-		} else {
-			services =
-				(adapter.config.services as string).split(",")	// get manually defined services
-					.concat(...enabledPlugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
-					.reduce((acc, s) => acc.concat(s), [] as string[])		// flatten the arrays
-					.map(s => fixServiceName(s))				// cleanup the names
-					.filter(s => s != null && s !== "")
-					.reduce((acc: any[], s) => {				// filter out duplicates
-						if (acc.indexOf(s) === -1) acc.push(s);
-						return acc;
-					}, [])
+			// Plugins laden
+			_.log(`loaded plugins: ${plugins.map(p => p.name).join(", ")}`);
+			const enabledPluginNames: string[] = (adapter.config.plugins as string || "")
+				.split(",")
+				.map((p: string) => p.trim().toLowerCase())
+				.concat("_default")
 				;
-			_.log(`monitored services: ${services.join(", ")}`);
-		}
+			enabledPlugins = plugins.filter(p => enabledPluginNames.indexOf(p.name.toLowerCase()) > -1);
+			_.log(`enabled plugins: ${enabledPlugins.map(p => p.name).join(", ")}`);
 
-		// Limit RSSI updates
-		if (adapter.config.rssiThrottle != null) {
-			rssiUpdateInterval = Math.max(0, Math.min(10000, adapter.config.rssiThrottle));
-		}
-
-		// monitor our own states and objects
-		adapter.subscribeStates("*");
-		adapter.subscribeObjects("*");
-
-		// load noble driver with the correct device selected
-		process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
-		noble = require("@abandonware/noble");
-
-		// prepare scanning for beacons
-		noble.on("stateChange", (state) => {
-			switch (state) {
-				case "poweredOn":
-					startScanning();
-					break;
-				case "poweredOff":
-					stopScanning();
-					break;
+			// Bring the monitored service names into the correct form
+			if (adapter.config.services === "*") {
+				services = [];
+				_.log(`monitoring all services`);
+			} else {
+				services =
+					(adapter.config.services as string).split(",")	// get manually defined services
+						.concat(...enabledPlugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
+						.reduce((acc, s) => acc.concat(s), [] as string[])		// flatten the arrays
+						.map(s => fixServiceName(s))				// cleanup the names
+						.filter(s => s != null && s !== "")
+						.reduce((acc: any[], s) => {				// filter out duplicates
+							if (acc.indexOf(s) === -1) acc.push(s);
+							return acc;
+						}, [])
+					;
+				_.log(`monitored services: ${services.join(", ")}`);
 			}
-			adapter.setState("info.driverState", state, true);
-		});
-		if (noble.state === "poweredOn") startScanning();
-		adapter.setState("info.driverState", noble.state, true);
-	},
 
-	// is called when adapter shuts down - callback has to be called under any circumstances!
-	unload: (callback) => {
-		try {
-			stopScanning();
-			noble.removeAllListeners("stateChange");
-			callback();
-		} catch (e) {
-			callback();
-		}
-	},
-
-	// is called if a subscribed object changes
-	objectChange: (id, obj) => {
-		if (!!obj) {
-			// it has just been changed, so update the cached object
-			_.objectCache.updateObject(obj);
-		} else {
-			// it has been deleted, so delete it from the cache
-			_.objectCache.invalidateObject(id);
-		}
-		// apply additional subscriptions we've defined
-		applyCustomObjectSubscriptions(id, obj);
-	},
-
-	// is called if a subscribed state changes
-	stateChange: (id, state) => {
-		if (/options\.allowNewDevices$/.test(id) && state != undefined && !state.ack) {
-			if (typeof state.val === "boolean") {
-				allowNewDevices = state.val;
-				// ACK the state change
-				_.adapter.setState(id, state.val, true);
-				// Whenever allowNewDevices is set to true,
-				// forget all devices we previously ignored
-				if (allowNewDevices) ignoredNewDeviceIDs.clear();
+			// Limit RSSI updates
+			if (adapter.config.rssiThrottle != null) {
+				rssiUpdateInterval = Math.max(0, Math.min(10000, adapter.config.rssiThrottle));
 			}
-		}
-		// apply additional subscriptions we've defined
-		applyCustomStateSubscriptions(id, state);
-	},
 
-	message: async (obj) => {
-		// responds to the adapter that sent the original message
-		function respond(response) {
-			if (obj.callback) adapter.sendTo(obj.from, obj.command, response, obj.callback);
-		}
-		// some predefined responses so we only have to define them once
-		const predefinedResponses = {
-			ACK: { error: null },
-			OK: { error: null, result: "ok" },
-			ERROR_UNKNOWN_COMMAND: { error: "Unknown command!" },
-			MISSING_PARAMETER: (paramName) => {
-				return { error: 'missing parameter "' + paramName + '"!' };
-			},
-			COMMAND_RUNNING: { error: "command running" },
-		};
-		// make required parameters easier
-		function requireParams(params) {
-			if (!(params && params.length)) return true;
-			for (const param of params) {
-				if (!(obj.message && obj.message.hasOwnProperty(param))) {
-					respond(predefinedResponses.MISSING_PARAMETER(param));
-					return false;
+			// monitor our own states and objects
+			adapter.subscribeStates("*");
+			adapter.subscribeObjects("*");
+
+			// load noble driver with the correct device selected
+			process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
+			try {
+				noble = require("@abandonware/noble");
+			} catch (e) {
+				terminate(e.message || e);
+			}
+
+			// prepare scanning for beacons
+			noble.on("stateChange", (state) => {
+				switch (state) {
+					case "poweredOn":
+						startScanning();
+						break;
+					case "poweredOff":
+						stopScanning();
+						break;
+				}
+				adapter.setState("info.driverState", state, true);
+			});
+			if (noble.state === "poweredOn") startScanning();
+			adapter.setState("info.driverState", noble.state, true);
+		},
+
+		// is called when adapter shuts down - callback has to be called under any circumstances!
+		unload: (callback) => {
+			try {
+				stopScanning();
+				noble.removeAllListeners("stateChange");
+				callback();
+			} catch (e) {
+				callback();
+			}
+		},
+
+		// is called if a subscribed object changes
+		objectChange: (id, obj) => {
+			if (!!obj) {
+				// it has just been changed, so update the cached object
+				_.objectCache.updateObject(obj);
+			} else {
+				// it has been deleted, so delete it from the cache
+				_.objectCache.invalidateObject(id);
+			}
+			// apply additional subscriptions we've defined
+			applyCustomObjectSubscriptions(id, obj);
+		},
+
+		// is called if a subscribed state changes
+		stateChange: (id, state) => {
+			if (/options\.allowNewDevices$/.test(id) && state != undefined && !state.ack) {
+				if (typeof state.val === "boolean") {
+					allowNewDevices = state.val;
+					// ACK the state change
+					_.adapter.setState(id, state.val, true);
+					// Whenever allowNewDevices is set to true,
+					// forget all devices we previously ignored
+					if (allowNewDevices) ignoredNewDeviceIDs.clear();
 				}
 			}
-			return true;
-		}
+			// apply additional subscriptions we've defined
+			applyCustomStateSubscriptions(id, state);
+		},
 
-		// handle the message
-		if (obj) {
-			switch (obj.command) {
-				case "getHCIPorts":
-					exec("hciconfig | grep hci", (error, stdout, stderr) => {
-						// hci1:   Type: BR/EDR  Bus: USB
-						// hci0:   Type: BR/EDR  Bus: UART
-						if (error != null) {
-							_.log(JSON.stringify(error));
-							respond({ error });
-							return;
-						}
-						// parse index and bus type
-						const ports: { index: number, bus: string }[] = [];
-						const regex = /^hci(\d+)\:.+Bus\:\s(\w+)$/gm;
-						let result: RegExpExecArray | null;
-
-						while (true) {
-							result = regex.exec(stdout);
-							if (!(result && result.length)) break;
-							const port = { index: +result[1], bus: result[2] };
-							_.log(JSON.stringify(port));
-							ports.push(port);
-						}
-						respond({ error: null, result: ports });
-					});
-					return;
-				default:
-					respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
-					return;
+		message: async (obj) => {
+			// responds to the adapter that sent the original message
+			function respond(response) {
+				if (obj.callback) adapter.sendTo(obj.from, obj.command, response, obj.callback);
 			}
-		}
-	},
+			// some predefined responses so we only have to define them once
+			const predefinedResponses = {
+				ACK: { error: null },
+				OK: { error: null, result: "ok" },
+				ERROR_UNKNOWN_COMMAND: { error: "Unknown command!" },
+				MISSING_PARAMETER: (paramName) => {
+					return { error: 'missing parameter "' + paramName + '"!' };
+				},
+				COMMAND_RUNNING: { error: "command running" },
+			};
+			// make required parameters easier
+			function requireParams(params) {
+				if (!(params && params.length)) return true;
+				for (const param of params) {
+					if (!(obj.message && obj.message.hasOwnProperty(param))) {
+						respond(predefinedResponses.MISSING_PARAMETER(param));
+						return false;
+					}
+				}
+				return true;
+			}
 
-});
+			// handle the message
+			if (obj) {
+				switch (obj.command) {
+					case "getHCIPorts":
+						exec("hciconfig | grep hci", (error, stdout, stderr) => {
+							// hci1:   Type: BR/EDR  Bus: USB
+							// hci0:   Type: BR/EDR  Bus: UART
+							if (error != null) {
+								_.log(JSON.stringify(error));
+								respond({ error });
+								return;
+							}
+							// parse index and bus type
+							const ports: { index: number, bus: string }[] = [];
+							const regex = /^hci(\d+)\:.+Bus\:\s(\w+)$/gm;
+							let result: RegExpExecArray | null;
+
+							while (true) {
+								result = regex.exec(stdout);
+								if (!(result && result.length)) break;
+								const port = { index: +result[1], bus: result[2] };
+								_.log(JSON.stringify(port));
+								ports.push(port);
+							}
+							respond({ error: null, result: ports });
+						});
+						return;
+					default:
+						respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
+						return;
+				}
+			}
+		},
+	});
+}
 
 // =========================
 
@@ -364,12 +374,35 @@ function stopScanning() {
 	isScanning = false;
 }
 
+function terminate(reason: string = "no reason given") {
+	if (adapter) {
+		if (adapter.terminate) {
+			return adapter.terminate(reason);
+		}
+		adapter.log.error(reason);
+	}
+	process.exit(11);
+}
+
 // Unbehandelte Fehler tracen
 process.on("unhandledRejection", r => {
 	adapter.log.error("unhandled promise rejection: " + r);
 });
 process.on("uncaughtException", err => {
+	// Noble on Windows seems to throw in a callback we cannot catch
+	if (/compatible USB Bluetooth/.test(err.message)) {
+		return terminate(err.message);
+	}
+
 	adapter.log.error("unhandled exception:" + err.message);
 	adapter.log.error("> stack: " + err.stack);
 	process.exit(1);
 });
+
+if (module.parent) {
+	// Export the start method in compact mode
+	module.exports = startAdapter;
+} else {
+	// Start the adapter immediately
+	startAdapter();
+}
