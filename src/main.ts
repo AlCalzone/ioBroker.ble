@@ -75,7 +75,7 @@ function startAdapter(options?: Partial<ioBroker.AdapterOptions>) {
 						.concat(...enabledPlugins.map(p => p.advertisedServices))	// concat with plugin-defined ones
 						.reduce((acc, s) => acc.concat(s), [] as string[])		// flatten the arrays
 						.map(s => fixServiceName(s))				// cleanup the names
-						.filter(s => s != null && s !== "")
+						.filter(s => s !== "")
 						.reduce((acc: any[], s) => {				// filter out duplicates
 							if (acc.indexOf(s) === -1) acc.push(s);
 							return acc;
@@ -222,7 +222,7 @@ function startAdapter(options?: Partial<ioBroker.AdapterOptions>) {
 
 // =========================
 
-function fixServiceName(name: string): string {
+function fixServiceName(name: string | null | undefined): string {
 	if (name == null) return "";
 	name = name.trim();
 	// No whitespace

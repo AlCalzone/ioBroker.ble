@@ -357,13 +357,12 @@ process.on("unhandledRejection", r => {
     adapter.log.error("unhandled promise rejection: " + r);
 });
 process.on("uncaughtException", err => {
-	// Noble on Windows seems to throw in a callback we cannot catch
-	if (/compatible USB Bluetooth/.test(err.message)) {
-		return terminate(err.message);
-	}
-
-    console.error("unhandled exception:" + err.message);
-    console.error("> stack: " + err.stack);
+    // Noble on Windows seems to throw in a callback we cannot catch
+    if (/compatible USB Bluetooth/.test(err.message)) {
+        return terminate(err.message);
+    }
+    adapter.log.error("unhandled exception:" + err.message);
+    adapter.log.error("> stack: " + err.stack);
     process.exit(1);
 });
 if (module.parent) {

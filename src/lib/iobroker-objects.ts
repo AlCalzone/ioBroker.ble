@@ -11,23 +11,19 @@ export async function extendDevice(
 	// update the object while preserving the existing properties
 	const updated: ioBroker.SettableObject = {
 		type: "device",
-		common: Object.assign(
-			{
-				name: peripheral.advertisement.localName!,
-			},
-			object.common || {},
-			(original && original.common) || {},
-		),
-		native: Object.assign(
-			{
-				id: peripheral.id,
-				address: peripheral.address,
-				addressType: peripheral.addressType,
-				connectable: peripheral.connectable,
-			},
-			object.native || {},
-			(original && original.native) || {},
-		),
+		common: {
+			name: peripheral.advertisement!.localName!,
+			...object.common,
+			...(original && original.common),
+		},
+		native: {
+			id: peripheral.id,
+			address: peripheral.address,
+			addressType: peripheral.addressType,
+			connectable: peripheral.connectable,
+			...object.native,
+			...(original && original.native),
+		},
 	};
 
 	// check if we have to update anything
@@ -50,17 +46,15 @@ export async function extendChannel(
 	// update the object while preserving the existing properties
 	const updated: ioBroker.SettableObject = {
 		type: "channel",
-		common: Object.assign(
-			{
-				name: channelId,
-			},
-			object.common || {},
-			(original && original.common) || {},
-		),
-		native: Object.assign(
-			object.native || {},
-			(original && original.native) || {},
-		),
+		common: {
+			name: channelId,
+			...object.common,
+			...(original && original.common),
+		},
+		native: {
+			...object.native,
+			...(original && original.native),
+		},
 	};
 
 	// check if we have to update anything
@@ -82,14 +76,15 @@ export async function extendState(
 	// update the object while preserving the existing properties
 	const updated: ioBroker.SettableObject = {
 		type: "state",
-		common: Object.assign(
-			object.common,
-			(original && original.common) || {},
-		),
-		native: Object.assign(
-			object.native || {},
-			(original && original.native) || {},
-		),
+		common: {
+			name: stateId,
+			...object.common,
+			...(original && original.common),
+		},
+		native: {
+			...object.native,
+			...(original && original.native),
+		},
 	};
 
 	// check if we have to update anything

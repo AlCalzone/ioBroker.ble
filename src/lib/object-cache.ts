@@ -45,8 +45,8 @@ export class ObjectCache {
 
 	private storeObject(obj: ioBroker.Object) {
 		const clone = extend({}, obj) as ioBroker.Object;
-		this.cache.set(clone._id!, clone);
-		this.rememberForExpiry(clone._id!);
+		this.cache.set(clone._id, clone);
+		this.rememberForExpiry(clone._id);
 	}
 
 	private retrieveObject(id: string): ioBroker.Object | undefined {

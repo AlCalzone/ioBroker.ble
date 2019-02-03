@@ -68,11 +68,7 @@ export class Global {
 		if (message) {
 			// Farben und Formatierungen
 			for (const [/*key*/, [regex, repl]] of entries(replacements)) {
-				if (typeof repl === "string") {
-					message = message.replace(regex, repl as string);
-				} else { // a bit verbose, but TS doesn't get the overload thingy here
-					message = message.replace(regex, repl as Replacer);
-				}
+				message = message.replace(regex, repl as any);
 			}
 		}
 
@@ -84,8 +80,8 @@ export class Global {
 	 * Kurzschreibweise für die Ermittlung eines Objekts
 	 * @param id
 	 */
-	public static async $(id: string) {
-		return await Global._adapter.getForeignObjectAsync(id);
+	public static $(id: string) {
+		return Global._adapter.getForeignObjectAsync(id);
 	}
 
 	/**

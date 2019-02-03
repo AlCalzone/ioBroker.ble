@@ -16,7 +16,7 @@ declare global {
 			/** Manufacturer specific data */
 			manufacturerData?: Buffer;
 			/** Dictionary of advertised service data */
-			serviceData: {
+			serviceData?: {
 				uuid: string,
 				data: Buffer,
 			}[];
@@ -33,7 +33,7 @@ declare global {
 			/** If the device can be connected to */
 			connectable: boolean;
 			/** Advertised data */
-			advertisement: Advertisement;
+			advertisement?: Advertisement;
 			/** Signal strength of the device */
 			rssi: number;
 			state?: "disconnected" | "connected";

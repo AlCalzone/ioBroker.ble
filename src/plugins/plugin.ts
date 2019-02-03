@@ -42,7 +42,7 @@ export interface Plugin<TContext = any> {
 }
 
 export function getServiceData(peripheral: BLE.Peripheral, uuid: string): Buffer | undefined {
-	for (const entry of peripheral.advertisement.serviceData) {
+	for (const entry of peripheral.advertisement!.serviceData!) {
 		if (entry.uuid === uuid) return entry.data;
 	}
 }

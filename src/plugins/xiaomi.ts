@@ -37,6 +37,7 @@ const plugin: Plugin<XiaomiContext> = {
 
 	advertisedServices: ["fe95"],
 	isHandling: (p) => {
+		if (!p.advertisement || !p.advertisement.serviceData) return false;
 		const mac = p.address.toLowerCase();
 		if (!Object.keys(MacPrefixes).some(key => mac.startsWith(MacPrefixes[key]))) return false;
 		return p.advertisement.serviceData.some(entry => entry.uuid === "fe95");
@@ -74,94 +75,92 @@ const plugin: Plugin<XiaomiContext> = {
 		};
 
 		const event = context.event;
-		if (event != undefined) {
-			if ("temperature" in event) {
-				stateObjects.push({
-					id: "temperature",
-					common: {
-						role: "value",
-						name: "Temperature",
-						type: "number",
-						unit: "°C",
-						read: true,
-						write: false,
-					},
-					native: undefined,
-				});
-			}
-			if ("humidity" in event) {
-				stateObjects.push({
-					id: "humidity",
-					common: {
-						role: "value",
-						name: "Relative Humidity",
-						type: "number",
-						unit: "%rF",
-						read: true,
-						write: false,
-					},
-					native: undefined,
-				});
-			}
-			if ("illuminance" in event) {
-				stateObjects.push({
-					id: "illuminance",
-					common: {
-						role: "value",
-						name: "Illuminance",
-						type: "number",
-						unit: "lux",
-						read: true,
-						write: false,
-					},
-					native: undefined,
-				});
-			}
-			if ("moisture" in event) {
-				stateObjects.push({
-					id: "moisture",
-					common: {
-						role: "value",
-						name: "Moisture",
-						desc: "Moisture of the soil",
-						type: "number",
-						unit: "%",
-						read: true,
-						write: false,
-					},
-					native: undefined,
-				});
-			}
-			if ("fertility" in event) {
-				stateObjects.push({
-					id: "fertility",
-					common: {
-						role: "value",
-						name: "Fertility",
-						desc: "Fertility of the soil",
-						type: "number",
-						unit: "µS/cm",
-						read: true,
-						write: false,
-					},
-					native: undefined,
-				});
-			}
-			if ("battery" in event) {
-				stateObjects.push({
-					id: "battery",
-					common: {
-						role: "value",
-						name: "Battery",
-						desc: "Battery status of the sensor",
-						type: "number",
-						unit: "%",
-						read: true,
-						write: false,
-					},
-					native: undefined,
-				});
-			}
+		if ("temperature" in event) {
+			stateObjects.push({
+				id: "temperature",
+				common: {
+					role: "value",
+					name: "Temperature",
+					type: "number",
+					unit: "°C",
+					read: true,
+					write: false,
+				},
+				native: undefined,
+			});
+		}
+		if ("humidity" in event) {
+			stateObjects.push({
+				id: "humidity",
+				common: {
+					role: "value",
+					name: "Relative Humidity",
+					type: "number",
+					unit: "%rF",
+					read: true,
+					write: false,
+				},
+				native: undefined,
+			});
+		}
+		if ("illuminance" in event) {
+			stateObjects.push({
+				id: "illuminance",
+				common: {
+					role: "value",
+					name: "Illuminance",
+					type: "number",
+					unit: "lux",
+					read: true,
+					write: false,
+				},
+				native: undefined,
+			});
+		}
+		if ("moisture" in event) {
+			stateObjects.push({
+				id: "moisture",
+				common: {
+					role: "value",
+					name: "Moisture",
+					desc: "Moisture of the soil",
+					type: "number",
+					unit: "%",
+					read: true,
+					write: false,
+				},
+				native: undefined,
+			});
+		}
+		if ("fertility" in event) {
+			stateObjects.push({
+				id: "fertility",
+				common: {
+					role: "value",
+					name: "Fertility",
+					desc: "Fertility of the soil",
+					type: "number",
+					unit: "µS/cm",
+					read: true,
+					write: false,
+				},
+				native: undefined,
+			});
+		}
+		if ("battery" in event) {
+			stateObjects.push({
+				id: "battery",
+				common: {
+					role: "value",
+					name: "Battery",
+					desc: "Battery status of the sensor",
+					type: "number",
+					unit: "%",
+					read: true,
+					write: false,
+				},
+				native: undefined,
+			});
 		}
 
 		return ret;

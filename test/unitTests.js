@@ -8,10 +8,12 @@ const nobleMock = {
 }
 
 // Run tests
-tests.offline.adapterStartup(path.join(__dirname, ".."), {
+tests.unit.adapterStartup(path.join(__dirname, ".."), {
 	allowedExitCodes: [11],
 	additionalMockedModules: {
 		"noble": nobleMock,
 		"@abandonware/noble": nobleMock,
 	},
 });
+
+tests.packageFiles(path.join(__dirname, ".."));
