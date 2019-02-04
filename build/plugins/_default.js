@@ -34,21 +34,23 @@ const plugin = {
             native: undefined,
         };
         const stateObjects = [];
-        for (const entry of peripheral.advertisement.serviceData) {
-            const uuid = entry.uuid;
-            const stateId = `${channelId}.${uuid}`;
-            stateObjects.push({
-                id: stateId,
-                common: {
-                    role: "value",
-                    name: "Advertised service " + uuid,
-                    desc: "",
-                    type: "mixed",
-                    read: true,
-                    write: false,
-                },
-                native: undefined,
-            });
+        if (peripheral.advertisement && peripheral.advertisement.serviceData) {
+            for (const entry of peripheral.advertisement.serviceData) {
+                const uuid = entry.uuid;
+                const stateId = `${channelId}.${uuid}`;
+                stateObjects.push({
+                    id: stateId,
+                    common: {
+                        role: "value",
+                        name: "Advertised service " + uuid,
+                        desc: "",
+                        type: "mixed",
+                        read: true,
+                        write: false,
+                    },
+                    native: undefined,
+                });
+            }
         }
         return {
             device: deviceObject,
@@ -58,12 +60,14 @@ const plugin = {
     },
     getValues: (peripheral) => {
         const ret = {};
-        for (const entry of peripheral.advertisement.serviceData) {
-            const uuid = entry.uuid;
-            const stateId = `services.${uuid}`;
-            // remember the transmitted data
-            ret[stateId] = parseData(entry.data);
-            global_1.Global.log(`_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`, "debug");
+        if (peripheral.advertisement && peripheral.advertisement.serviceData) {
+            for (const entry of peripheral.advertisement.serviceData) {
+                const uuid = entry.uuid;
+                const stateId = `services.${uuid}`;
+                // remember the transmitted data
+                ret[stateId] = parseData(entry.data);
+                global_1.Global.log(`_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`, "debug");
+            }
         }
         return ret;
     },

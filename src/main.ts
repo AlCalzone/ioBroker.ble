@@ -98,7 +98,8 @@ function startAdapter(options?: Partial<ioBroker.AdapterOptions>) {
 			try {
 				noble = require("@abandonware/noble");
 			} catch (e) {
-				terminate(e.message || e);
+				tryCatchUnsupportedHardware(e);
+				return terminate(e.message || e);
 			}
 
 			// prepare scanning for beacons
@@ -374,14 +375,23 @@ function stopScanning() {
 	isScanning = false;
 }
 
-function terminate(reason: string = "no reason given") {
+function tryCatchUnsupportedHardware(err: Error): never | void {
+	if (
+		/compatible USB Bluetooth/.test(err.message)
+		|| /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)
+	) {
+		return terminate("No compatible BLE 4.0 hardware found!");
+	}
+}
+
+function terminate(reason: string = "no reason given"): never {
 	if (adapter) {
 		if (adapter.terminate) {
 			return adapter.terminate(reason);
 		}
 		adapter.log.error(reason);
 	}
-	process.exit(11);
+	return process.exit(11) as never;
 }
 
 // Unbehandelte Fehler tracen
@@ -390,9 +400,7 @@ process.on("unhandledRejection", r => {
 });
 process.on("uncaughtException", err => {
 	// Noble on Windows seems to throw in a callback we cannot catch
-	if (/compatible USB Bluetooth/.test(err.message)) {
-		return terminate(err.message);
-	}
+	tryCatchUnsupportedHardware(err);
 
 	adapter.log.error("unhandled exception:" + err.message);
 	adapter.log.error("> stack: " + err.stack);

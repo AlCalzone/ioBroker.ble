@@ -22,7 +22,7 @@ export declare class Global {
      * Kurzschreibweise für die Ermittlung eines Objekts
      * @param id
      */
-    static $(id: string): Promise<ioBroker.Object>;
+    static $(id: string): Promise<ioBroker.StateObject | ioBroker.ChannelObject | ioBroker.DeviceObject | ioBroker.OtherObject | null | undefined>;
     /**
      * Kurzschreibweise für die Ermittlung mehrerer Objekte
      * @param id

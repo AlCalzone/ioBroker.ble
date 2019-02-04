@@ -19,9 +19,7 @@ test_script:
   - echo %cd%
   - node --version
   - npm --version
-  - npm run unittests
-
-  - npm install winston@2.3.1
-  - 'npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production'
-  - npm run test:iobroker
+  # - npm install winston@2.3.1
+  - npm run test:unit
+  - npm run test:integration
 build: 'off'

@@ -16,15 +16,8 @@ function extendDevice(deviceId, peripheral, object) {
         // update the object while preserving the existing properties
         const updated = {
             type: "device",
-            common: Object.assign({
-                name: peripheral.advertisement.localName,
-            }, object.common || {}, (original && original.common) || {}),
-            native: Object.assign({
-                id: peripheral.id,
-                address: peripheral.address,
-                addressType: peripheral.addressType,
-                connectable: peripheral.connectable,
-            }, object.native || {}, (original && original.native) || {}),
+            common: Object.assign({ name: peripheral.advertisement.localName }, object.common, (original && original.common)),
+            native: Object.assign({ id: peripheral.id, address: peripheral.address, addressType: peripheral.addressType, connectable: peripheral.connectable }, object.native, (original && original.native)),
         };
         // check if we have to update anything
         if (original == null
@@ -42,10 +35,8 @@ function extendChannel(channelId, object) {
         // update the object while preserving the existing properties
         const updated = {
             type: "channel",
-            common: Object.assign({
-                name: channelId,
-            }, object.common || {}, (original && original.common) || {}),
-            native: Object.assign(object.native || {}, (original && original.native) || {}),
+            common: Object.assign({ name: channelId }, object.common, (original && original.common)),
+            native: Object.assign({}, object.native, (original && original.native)),
         };
         // check if we have to update anything
         if (original == null
@@ -63,8 +54,8 @@ function extendState(stateId, object) {
         // update the object while preserving the existing properties
         const updated = {
             type: "state",
-            common: Object.assign(object.common, (original && original.common) || {}),
-            native: Object.assign(object.native || {}, (original && original.native) || {}),
+            common: Object.assign({ name: stateId }, object.common, (original && original.common)),
+            native: Object.assign({}, object.native, (original && original.native)),
         };
         // check if we have to update anything
         if (original == null

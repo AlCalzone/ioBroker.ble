@@ -41,22 +41,24 @@ const plugin: Plugin = {
 		};
 
 		const stateObjects: StateObjectDefinition[] = [];
-		for (const entry of peripheral.advertisement.serviceData) {
-			const uuid = entry.uuid;
-			const stateId = `${channelId}.${uuid}`;
+		if (peripheral.advertisement && peripheral.advertisement.serviceData) {
+			for (const entry of peripheral.advertisement.serviceData) {
+				const uuid = entry.uuid;
+				const stateId = `${channelId}.${uuid}`;
 
-			stateObjects.push({
-				id: stateId,
-				common: {
-					role: "value",
-					name: "Advertised service " + uuid, // TODO: create readable names
-					desc: "",
-					type: "mixed",
-					read: true,
-					write: false,
-				},
-				native: undefined,
-			});
+				stateObjects.push({
+					id: stateId,
+					common: {
+						role: "value",
+						name: "Advertised service " + uuid, // TODO: create readable names
+						desc: "",
+						type: "mixed",
+						read: true,
+						write: false,
+					},
+					native: undefined,
+				});
+			}
 		}
 
 		return {
@@ -69,14 +71,15 @@ const plugin: Plugin = {
 
 	getValues: (peripheral: BLE.Peripheral) => {
 		const ret = {};
-		for (const entry of peripheral.advertisement.serviceData) {
-			const uuid = entry.uuid;
-			const stateId = `services.${uuid}`;
-			// remember the transmitted data
-			ret[stateId] = parseData(entry.data);
-			_.log(`_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`, "debug");
+		if (peripheral.advertisement && peripheral.advertisement.serviceData) {
+			for (const entry of peripheral.advertisement.serviceData) {
+				const uuid = entry.uuid;
+				const stateId = `services.${uuid}`;
+				// remember the transmitted data
+				ret[stateId] = parseData(entry.data);
+				_.log(`_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`, "debug");
+			}
 		}
-
 		return ret;
 	},
 };

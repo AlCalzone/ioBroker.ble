@@ -1,5 +1,6 @@
 const path = require("path");
 const { tests } = require("@iobroker/testing");
+const adapterDir = path.join(__dirname, "../..");
 
 // Mock noble package
 const nobleMock = {
@@ -8,12 +9,10 @@ const nobleMock = {
 }
 
 // Run tests
-tests.unit.adapterStartup(path.join(__dirname, ".."), {
+tests.unit.adapterStartup(adapterDir, {
 	allowedExitCodes: [11],
 	additionalMockedModules: {
 		"noble": nobleMock,
 		"@abandonware/noble": nobleMock,
 	},
 });
-
-tests.packageFiles(path.join(__dirname, ".."));

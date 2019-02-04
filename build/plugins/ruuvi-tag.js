@@ -45,6 +45,8 @@ const plugin = {
         return ret;
     },
     createContext: (peripheral) => {
+        if (!peripheral.advertisement)
+            return;
         let data = plugin_1.getServiceData(peripheral, serviceUUID);
         if (data != undefined) {
             const url = data.toString("utf8");
@@ -88,137 +90,135 @@ const plugin = {
             channels: undefined,
             states: stateObjects,
         };
-        if (context != null) {
-            if ("temperature" in context) {
+        if ("temperature" in context) {
+            stateObjects.push({
+                id: "temperature",
+                common: {
+                    role: "value",
+                    name: "Temperature",
+                    type: "number",
+                    unit: "°C",
+                    read: true,
+                    write: false,
+                },
+                native: undefined,
+            });
+        }
+        if ("humidity" in context) {
+            stateObjects.push({
+                id: "humidity",
+                common: {
+                    role: "value",
+                    name: "Relative Humidity",
+                    type: "number",
+                    unit: "%rF",
+                    read: true,
+                    write: false,
+                },
+                native: undefined,
+            });
+        }
+        if ("pressure" in context) {
+            stateObjects.push({
+                id: "pressure",
+                common: {
+                    role: "value",
+                    name: "Air pressure",
+                    type: "number",
+                    unit: "hPa",
+                    read: true,
+                    write: false,
+                },
+                native: undefined,
+            });
+        }
+        if (context.acceleration != undefined) {
+            if (context.acceleration.x != null) {
                 stateObjects.push({
-                    id: "temperature",
+                    id: "accelerationX",
                     common: {
                         role: "value",
-                        name: "Temperature",
+                        name: "Acceleration (X)",
                         type: "number",
-                        unit: "°C",
+                        unit: "G",
                         read: true,
                         write: false,
                     },
                     native: undefined,
                 });
             }
-            if ("humidity" in context) {
+            if (context.acceleration.y != null) {
                 stateObjects.push({
-                    id: "humidity",
+                    id: "accelerationY",
                     common: {
                         role: "value",
-                        name: "Relative Humidity",
+                        name: "Acceleration (Y)",
                         type: "number",
-                        unit: "%rF",
+                        unit: "G",
                         read: true,
                         write: false,
                     },
                     native: undefined,
                 });
             }
-            if ("pressure" in context) {
+            if (context.acceleration.z != null) {
                 stateObjects.push({
-                    id: "pressure",
+                    id: "accelerationZ",
                     common: {
                         role: "value",
-                        name: "Air pressure",
+                        name: "Acceleration (Z)",
                         type: "number",
-                        unit: "hPa",
+                        unit: "G",
                         read: true,
                         write: false,
                     },
                     native: undefined,
                 });
             }
-            if (context.acceleration != undefined) {
-                if (context.acceleration.x != null) {
-                    stateObjects.push({
-                        id: "accelerationX",
-                        common: {
-                            role: "value",
-                            name: "Acceleration (X)",
-                            type: "number",
-                            unit: "G",
-                            read: true,
-                            write: false,
-                        },
-                        native: undefined,
-                    });
-                }
-                if (context.acceleration.y != null) {
-                    stateObjects.push({
-                        id: "accelerationY",
-                        common: {
-                            role: "value",
-                            name: "Acceleration (Y)",
-                            type: "number",
-                            unit: "G",
-                            read: true,
-                            write: false,
-                        },
-                        native: undefined,
-                    });
-                }
-                if (context.acceleration.z != null) {
-                    stateObjects.push({
-                        id: "accelerationZ",
-                        common: {
-                            role: "value",
-                            name: "Acceleration (Z)",
-                            type: "number",
-                            unit: "G",
-                            read: true,
-                            write: false,
-                        },
-                        native: undefined,
-                    });
-                }
-            }
-            if ("battery" in context) {
-                stateObjects.push({
-                    id: "battery",
-                    common: {
-                        role: "value",
-                        name: "Battery",
-                        desc: "Battery voltage",
-                        type: "number",
-                        unit: "mV",
-                        read: true,
-                        write: false,
-                    },
-                    native: undefined,
-                });
-            }
-            if ("txPower" in context) {
-                stateObjects.push({
-                    id: "txPower",
-                    common: {
-                        role: "value",
-                        name: "TX Power",
-                        desc: "Transmit power",
-                        type: "number",
-                        unit: "dBm",
-                        read: true,
-                        write: false,
-                    },
-                    native: undefined,
-                });
-            }
-            if ("motionCounter" in context) {
-                stateObjects.push({
-                    id: "motionCounter",
-                    common: {
-                        role: "value",
-                        name: "Motion counter",
-                        desc: "Incremented through motion detection interrupts",
-                        type: "number",
-                        read: true,
-                        write: false,
-                    },
-                    native: undefined,
-                });
-            }
+        }
+        if ("battery" in context) {
+            stateObjects.push({
+                id: "battery",
+                common: {
+                    role: "value",
+                    name: "Battery",
+                    desc: "Battery voltage",
+                    type: "number",
+                    unit: "mV",
+                    read: true,
+                    write: false,
+                },
+                native: undefined,
+            });
+        }
+        if ("txPower" in context) {
+            stateObjects.push({
+                id: "txPower",
+                common: {
+                    role: "value",
+                    name: "TX Power",
+                    desc: "Transmit power",
+                    type: "number",
+                    unit: "dBm",
+                    read: true,
+                    write: false,
+                },
+                native: undefined,
+            });
+        }
+        if ("motionCounter" in context) {
+            stateObjects.push({
+                id: "motionCounter",
+                common: {
+                    role: "value",
+                    name: "Motion counter",
+                    desc: "Incremented through motion detection interrupts",
+                    type: "number",
+                    read: true,
+                    write: false,
+                },
+                native: undefined,
+            });
         }
         return ret;
     },

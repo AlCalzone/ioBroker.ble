@@ -65,7 +65,7 @@ function startAdapter(options) {
                         .concat(...enabledPlugins.map(p => p.advertisedServices)) // concat with plugin-defined ones
                         .reduce((acc, s) => acc.concat(s), []) // flatten the arrays
                         .map(s => fixServiceName(s)) // cleanup the names
-                        .filter(s => s != null && s !== "")
+                        .filter(s => s !== "")
                         .reduce((acc, s) => {
                         if (acc.indexOf(s) === -1)
                             acc.push(s);
@@ -86,7 +86,8 @@ function startAdapter(options) {
                 noble = require("@abandonware/noble");
             }
             catch (e) {
-                terminate(e.message || e);
+                tryCatchUnsupportedHardware(e);
+                return terminate(e.message || e);
             }
             // prepare scanning for beacons
             noble.on("stateChange", (state) => {
@@ -343,6 +344,12 @@ function stopScanning() {
     adapter.setState("info.connection", false, true);
     isScanning = false;
 }
+function tryCatchUnsupportedHardware(err) {
+    if (/compatible USB Bluetooth/.test(err.message)
+        || /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)) {
+        return terminate("No compatible BLE 4.0 hardware found!");
+    }
+}
 function terminate(reason = "no reason given") {
     if (adapter) {
         if (adapter.terminate) {
@@ -350,7 +357,7 @@ function terminate(reason = "no reason given") {
         }
         adapter.log.error(reason);
     }
-    process.exit(11);
+    return process.exit(11);
 }
 // Unbehandelte Fehler tracen
 process.on("unhandledRejection", r => {
@@ -358,9 +365,7 @@ process.on("unhandledRejection", r => {
 });
 process.on("uncaughtException", err => {
     // Noble on Windows seems to throw in a callback we cannot catch
-    if (/compatible USB Bluetooth/.test(err.message)) {
-        return terminate(err.message);
-    }
+    tryCatchUnsupportedHardware(err);
     adapter.log.error("unhandled exception:" + err.message);
     adapter.log.error("> stack: " + err.stack);
     process.exit(1);

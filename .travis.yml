@@ -13,11 +13,10 @@ before_script:
   - 'if [[ $NPMVERSION == 5 ]]; then npm install -g npm@5; fi'
   - npm -v
 script:
-  - npm run unittests
-
-  - npm install winston@2.3.1
-  - 'npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production'
-  - npm run test:iobroker
+  # - npm install winston@2.3.1
+  - npm run test:unit
+  - export DEBUG=testing:*
+  - npm run test:integration
 env:
   - CXX=g++-4.8
 addons:

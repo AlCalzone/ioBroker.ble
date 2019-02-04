@@ -58,12 +58,7 @@ class Global {
         if (message) {
             // Farben und Formatierungen
             for (const [/*key*/ , [regex, repl]] of objects_1.entries(replacements)) {
-                if (typeof repl === "string") {
-                    message = message.replace(regex, repl);
-                }
-                else { // a bit verbose, but TS doesn't get the overload thingy here
-                    message = message.replace(regex, repl);
-                }
+                message = message.replace(regex, repl);
             }
         }
         if (level === "silly" && !(level in Global._adapter.log))
@@ -75,9 +70,7 @@ class Global {
      * @param id
      */
     static $(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield Global._adapter.getForeignObjectAsync(id);
-        });
+        return Global._adapter.getForeignObjectAsync(id);
     }
     /**
      * Kurzschreibweise für die Ermittlung mehrerer Objekte
