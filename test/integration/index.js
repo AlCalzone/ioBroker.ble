@@ -18,13 +18,13 @@ tests.integration(adapterDir, {
 const additionalTests = (getHarness) => {
 	describe("Test sendTo", () => {
 		it("Should work", () => {
-			return new Promise(async (resolve) => {
+			return new Promise((resolve) => {
 				const harness = getHarness();
-				await harness.startAdapterAndWait();
-
-				harness.sendTo("ble.0", "test", "message", (resp) => {
-					console.dir(resp);
-					resolve();
+				harness.startAdapterAndWait().then(() => {
+					harness.sendTo("ble.0", "test", "message", (resp) => {
+						console.dir(resp);
+						resolve();
+					});
 				});
 			});
 		});
