@@ -91,7 +91,7 @@
     "lint:wotan": "wotan",
     "lint": "npm run lint:ts && npm run lint:wotan",
     "deploy_local": "node build/deploy_local.js",
-    "prepublishOnly": "npm run test:ts && npm run test:package"
+    "prepublishOnly": "npm run test:package"
   },
   "bugs": {
     "url": "https://github.com/AlCalzone/ioBroker.ble/issues"

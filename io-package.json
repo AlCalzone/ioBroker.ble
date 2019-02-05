@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.6.0",
+        "version": "0.7.0",
         "news": {
+            "0.7.0": {
+                "en": "* Support MaterializeCSS (Admin v3)\n* Support compact mode\n* Use @iobroker/testing for tests",
+                "de": "* Support MaterialiseCSS (Admin v3)\n* Kompaktmodus unterstützen\n* Verwenden Sie @iobroker/testing für Tests",
+                "ru": "* Поддержка MaterializeCSS (Admin v3)\n* Поддержка компактного режима\n* Использование @iobroker/testing для тестов",
+                "pt": "* Suporte MaterializeCSS (Admin v3)\n* Suporte ao modo compacto\n* Use @iobroker/testing para testes",
+                "nl": "* Ondersteuning MaterializeCSS (Admin v3)\n* Ondersteuning voor compacte modus\n* Gebruik @ iobroker / testen voor tests",
+                "fr": "* Support MaterialiseCSS (Admin v3)\n* Support du mode compact\n* Utilisez @iobroker/testing pour les tests",
+                "it": "* Supporto MaterialiseCSS (Admin v3)\n* Supporto modalità compatta\n* Utilizzare @iobroker/testing per i test",
+                "es": "* Soporte MaterialiseCSS (Admin v3)\n* Soporte modo compacto\n* Use @iobroker/testing para pruebas",
+                "pl": "* Wsparcie MaterialiseCSS (Admin v3)\n* Obsługa trybu kompaktowego\n* Używanie @iobroker/testing do testów",
+                "zh-cn": "*支持MaterialiseCSS（Admin v3）\n*支持紧凑模式\n*使用@iobroker/testing进行测试"
+            },
             "0.6.0": {
                 "en": "* Added NodeJS 10 support\n* Added an option to disallow new devices",
                 "de": "* Unterstützung für NodeJS 10 hinzugefügt\n* Option hinzugefügt, um neue Geräte zu ignorieren"
