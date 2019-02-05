@@ -80,30 +80,33 @@ function startAdapter(options) {
             // monitor our own states and objects
             adapter.subscribeStates("*");
             adapter.subscribeObjects("*");
-            // load noble driver with the correct device selected
-            process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
-            try {
-                noble = require("@abandonware/noble");
-            }
-            catch (e) {
-                tryCatchUnsupportedHardware(e);
-                return terminate(e.message || e);
-            }
-            // prepare scanning for beacons
-            noble.on("stateChange", (state) => {
-                switch (state) {
-                    case "poweredOn":
-                        startScanning();
-                        break;
-                    case "poweredOff":
-                        stopScanning();
-                        break;
+            if (!process.env.TESTING) {
+                // load noble driver with the correct device selected
+                // but only if this is not a testing environment
+                process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
+                try {
+                    noble = require("@abandonware/noble");
                 }
-                adapter.setState("info.driverState", state, true);
-            });
-            if (noble.state === "poweredOn")
-                startScanning();
-            adapter.setState("info.driverState", noble.state, true);
+                catch (e) {
+                    tryCatchUnsupportedHardware(e);
+                    return terminate(e.message || e);
+                }
+                // prepare scanning for beacons
+                noble.on("stateChange", (state) => {
+                    switch (state) {
+                        case "poweredOn":
+                            startScanning();
+                            break;
+                        case "poweredOff":
+                            stopScanning();
+                            break;
+                    }
+                    adapter.setState("info.driverState", state, true);
+                });
+                if (noble.state === "poweredOn")
+                    startScanning();
+                adapter.setState("info.driverState", noble.state, true);
+            }
         }), 
         // is called when adapter shuts down - callback has to be called under any circumstances!
         unload: (callback) => {
