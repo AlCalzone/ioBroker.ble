@@ -1,0 +1,34 @@
+* {
+	box-sizing: border-box
+}
+.m {
+	/* Don't cut off dropdowns! */
+	overflow: initial;
+}
+
+div.loading:first-child {
+	margin-top: 2em;
+}
+div.loading {
+	text-align: center;
+}
+
+.tabs-header {
+	margin-bottom: 0.5rem;
+	margin-top: 0.5rem;
+}
+
+/* #virtual-groups .delete-group {
+	margin-top: -0.25em;
+	margin-bottom: -0.25em;
+	width: 24px;
+	height: 20px;
+} */
+
+.admin-tooltip-icon {
+	margin-left: 0.25em;
+}
+.active > .admin-tooltip-icon {
+	/* Offset the downscaling in active labels */
+	transform: scale(1.25);
+}

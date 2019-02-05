@@ -297,3 +297,5 @@ Thumbs.db
 
 # Local debugging password
 *_password.json
+
+.cache

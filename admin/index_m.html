@@ -1,0 +1,43 @@
+<html>
+
+<head>
+
+	<link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+	<link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+	<link rel="stylesheet" type="text/css" href="style.css" />
+
+	<script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+	<script type="text/javascript" src="../../js/translate.js"></script>
+	<script type="text/javascript" src="../../lib/js/materialize.js"></script>
+	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+	<script type="text/javascript" src="words.js"></script>
+
+	<style>
+		/* Avoid double-triggering the dropdown options */
+		li[id^="select-options"] > * {
+			pointer-events: none;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<!-- you have to put your config page in a div with id adapter-container -->
+	<div class="m adapter-container">
+
+		<div class="loading">
+			<img src="ble.png" />
+		</div>
+		<div class="translate loading">loading...</div>
+
+	</div>
+
+	<!-- load parcel sources //-->
+	<script type="text/javascript" src="build/index.js"></script>
+
+</body>
+
+</html>

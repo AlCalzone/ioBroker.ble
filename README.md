@@ -32,6 +32,11 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+### 0.7.0 (2019-02-05)
+* (AlCalzone) Support MaterializeCSS (Admin v3)
+* (AlCalzone) Support compact mode
+* (AlCalzone) Use @iobroker/testing for tests
+
 ### 0.6.0 (2018-12-23)
 * (AlCalzone) Add NodeJS 10 support
 * (AlCalzone) Add an option to disallow new devices

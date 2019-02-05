@@ -11,7 +11,7 @@
         "removeComments": false,
         "stripInternal": true,
         "target": "es6",
-        "lib": [ "es6" ],
+        "jsx": "react",
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "resolveJsonModule": true,

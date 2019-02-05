@@ -100,7 +100,8 @@
         "loglevel": "info",
         "type": "hardware",
         "messagebox": true,
-        "compact": true
+        "compact": true,
+        "materialize": true
     },
     "native": {
         "services": "",
