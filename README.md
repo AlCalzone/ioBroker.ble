@@ -12,7 +12,13 @@ Connecting and reading/writing service chararcteristics will be supported in a f
 
 ## Installation
 This adapter needs additional libraries to compile. See https://github.com/sandeepmistry/noble#prerequisites for detailed instructions.
-On Raspberry Pi and similar, this should do it: `sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev`
+On Raspberry Pi and similar, this should do it: `sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev libcap2-bin`
+
+If the adapter starts but won't connect to your bluetooth hardware, please check the `info.driverState` state in ioBroker. If it is `unauthorized`, you need to give `node` additional permissions. For Linux, this is as simple as
+```bash
+sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+```
+which requires `libcap2-bin` to be installed.
 
 ## Configuration
 If you have multiple bluetooth devices on your system, select the one to use from the dropdown.
