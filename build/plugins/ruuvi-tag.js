@@ -26,7 +26,7 @@ const plugin = {
     advertisedServices: [serviceUUID],
     isHandling: (peripheral) => {
         const cached = testedPeripherals.get(peripheral.id);
-        if (cached && cached.timestamp >= Date.now()) {
+        if (cached && cached.timestamp >= Date.now() - testValidity) {
             // we have a recent test result, return it
             return cached.result;
         }
@@ -53,7 +53,7 @@ const plugin = {
             global_1.Global.log(`ruuvi-tag >> got url: ${data.toString("utf8")}`, "debug");
             // data format 2 or 4 - extract from URL hash
             const parsedUrl = nodeUrl.parse(url);
-            if (!(parsedUrl && parsedUrl.hash))
+            if (!parsedUrl.hash)
                 return;
             data = Buffer.from(parsedUrl.hash, "base64");
             return ruuvi_tag_protocol_1.parseDataFormat2or4(data);

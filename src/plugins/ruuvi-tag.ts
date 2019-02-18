@@ -22,7 +22,7 @@ const plugin: Plugin<RuuviContext> = {
 
 	isHandling: (peripheral: BLE.Peripheral) => {
 		const cached = testedPeripherals.get(peripheral.id);
-		if (cached && cached.timestamp >= Date.now()) {
+		if (cached && cached.timestamp >= Date.now() - testValidity) {
 			// we have a recent test result, return it
 			return cached.result;
 		}
@@ -48,7 +48,7 @@ const plugin: Plugin<RuuviContext> = {
 			_.log(`ruuvi-tag >> got url: ${data.toString("utf8")}`, "debug");
 			// data format 2 or 4 - extract from URL hash
 			const parsedUrl = nodeUrl.parse(url);
-			if (!(parsedUrl && parsedUrl.hash)) return;
+			if (!parsedUrl.hash) return;
 			data = Buffer.from(parsedUrl.hash, "base64");
 			return parseDataFormat2or4(data);
 		} else if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0) {

@@ -1,5 +1,4 @@
-﻿import { promisify, promisifyNoError } from "alcalzone-shared/async";
-import { entries, filter as objFilter } from "alcalzone-shared/objects";
+﻿import { entries, filter as objFilter } from "alcalzone-shared/objects";
 import * as fs from "fs";
 import * as path from "path";
 import { ObjectCache } from "./object-cache";

@@ -49,7 +49,7 @@ export function getServiceData(peripheral: BLE.Peripheral, uuid: string): Buffer
 
 /** Aliases an existing plugin with a new name */
 export function alias(newName: string, oldPlugin: Plugin): Plugin {
-	const {name, ...plugin} = oldPlugin;
+	const { name, ...plugin } = oldPlugin;
 	return {
 		name: newName,
 		...plugin,

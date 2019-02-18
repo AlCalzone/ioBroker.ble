@@ -5,7 +5,7 @@ import { Tabs } from "iobroker-react-components";
 
 import { OnSettingsChangedCallback, Settings } from "./pages/settings";
 
-const namespace = `ble.${instance}`;
+// const namespace = `ble.${instance}`;
 
 // layout components
 interface RootProps {
