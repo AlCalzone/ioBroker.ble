@@ -2,8 +2,8 @@
 export function str2regex(pattern: string) {
 	return new RegExp(
 		pattern
-			.replace(".", "\.") // Punkte als solche matchen
-			.replace("*", ".*") // Wildcard in Regex umsetzen
-			.replace("!", "?!") // negative lookahead
+			.replace(/\./g, "\\.") // Punkte als solche matchen
+			.replace(/\*/g, ".*") // Wildcard in Regex umsetzen
+			.replace(/\!/g, "?!") // negative lookahead
 	);
 }

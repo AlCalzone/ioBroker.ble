@@ -1,7 +1,6 @@
 import * as utils from "@iobroker/adapter-core";
 import { exec } from "child_process";
 import { EventEmitter } from "events";
-import { platform } from "os";
 import { applyCustomObjectSubscriptions, applyCustomStateSubscriptions } from "./lib/custom-subscriptions";
 import { Global as _ } from "./lib/global";
 import { extendChannel, extendDevice, extendState } from "./lib/iobroker-objects";
