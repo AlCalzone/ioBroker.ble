@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.7.0",
+        "version": "0.7.1",
         "news": {
             "0.7.0": {
                 "en": "* Support MaterializeCSS (Admin v3)\n* Support compact mode\n* Use @iobroker/testing for tests",
@@ -113,7 +113,11 @@
         "type": "hardware",
         "messagebox": true,
         "compact": true,
-        "materialize": true
+        "materialize": true,
+        "dependencies": [
+            { "admin": ">=3.0.0" },
+            { "js-controller": ">=1.4.2" }
+        ]
     },
     "native": {
         "services": "",
