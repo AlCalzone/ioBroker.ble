@@ -355,10 +355,10 @@ function tryCatchUnsupportedHardware(err) {
 }
 function terminate(reason = "no reason given") {
     if (adapter) {
+        adapter.log.error(`Terminating because ${reason}`);
         if (adapter.terminate) {
             return adapter.terminate(reason);
         }
-        adapter.log.error(reason);
     }
     return process.exit(11);
 }

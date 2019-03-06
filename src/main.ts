@@ -388,10 +388,10 @@ function tryCatchUnsupportedHardware(err: Error): never | void {
 
 function terminate(reason: string = "no reason given"): never {
 	if (adapter) {
+		adapter.log.error(`Terminating because ${reason}`);
 		if (adapter.terminate) {
 			return adapter.terminate(reason);
 		}
-		adapter.log.error(reason);
 	}
 	return process.exit(11) as never;
 }
