@@ -56,7 +56,7 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "cpx": "^1.5.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.2",
     "node-ssh": "^5.1.1",
     "nyc": "^11.9.0",
     "parcel-bundler": "^1.11.0",
