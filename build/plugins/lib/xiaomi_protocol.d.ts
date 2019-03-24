@@ -8,7 +8,7 @@ export declare enum CapabilityFlags {
 export declare enum ProductIDs {
     MiFlora = 152
 }
-export declare const MacPrefixes: Record<keyof typeof ProductIDs, string>;
+export declare const MacPrefixes: Record<string, string[]>;
 export declare class XiaomiAdvertisement {
     constructor(data: Buffer);
     private _productID;

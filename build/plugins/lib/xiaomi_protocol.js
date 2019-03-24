@@ -15,8 +15,8 @@ var ProductIDs;
 })(ProductIDs = exports.ProductIDs || (exports.ProductIDs = {}));
 // tslint:disable-next-line:variable-name
 exports.MacPrefixes = Object.freeze({
-    MiFlora: "c4:7c:8d",
-    MiTemperature: "4c:65:a8",
+    MiFlora: ["c4:7c:8d"],
+    MiTemperature: ["4c:65:a8", "58:2d:34"],
 });
 class XiaomiAdvertisement {
     constructor(data) {

@@ -39,7 +39,7 @@ const plugin: Plugin<XiaomiContext> = {
 	isHandling: (p) => {
 		if (!p.advertisement || !p.advertisement.serviceData) return false;
 		const mac = p.address.toLowerCase();
-		if (!Object.keys(MacPrefixes).some(key => mac.startsWith(MacPrefixes[key]))) return false;
+		if (!Object.keys(MacPrefixes).some(key => MacPrefixes[key].some(pfx => mac.startsWith(pfx)))) return false;
 		return p.advertisement.serviceData.some(entry => entry.uuid === "fe95");
 	},
 

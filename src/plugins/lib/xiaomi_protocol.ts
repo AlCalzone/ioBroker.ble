@@ -25,9 +25,9 @@ export enum ProductIDs {
 	// the rest is unknown
 }
 // tslint:disable-next-line:variable-name
-export const MacPrefixes: Record<keyof typeof ProductIDs, string> = Object.freeze({
-	MiFlora: "c4:7c:8d",
-	MiTemperature: "4c:65:a8",
+export const MacPrefixes: Record<string, string[]> = Object.freeze({
+	MiFlora: ["c4:7c:8d"],
+	MiTemperature: ["4c:65:a8", "58:2d:34"],
 });
 
 export class XiaomiAdvertisement {

@@ -32,7 +32,7 @@ const plugin = {
         if (!p.advertisement || !p.advertisement.serviceData)
             return false;
         const mac = p.address.toLowerCase();
-        if (!Object.keys(xiaomi_protocol_1.MacPrefixes).some(key => mac.startsWith(xiaomi_protocol_1.MacPrefixes[key])))
+        if (!Object.keys(xiaomi_protocol_1.MacPrefixes).some(key => xiaomi_protocol_1.MacPrefixes[key].some(pfx => mac.startsWith(pfx))))
             return false;
         return p.advertisement.serviceData.some(entry => entry.uuid === "fe95");
     },
