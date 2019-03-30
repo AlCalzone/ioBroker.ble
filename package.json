@@ -49,7 +49,7 @@
     "@types/materialize-css": "^1.0.6",
     "@types/mocha": "^5.0.0",
     "@types/noble": "0.0.37",
-    "@types/node": "^6.0.88",
+    "@types/node": "^11.12.1",
     "@types/proxyquire": "^1.3.28",
     "@types/sinon": "^5.0.1",
     "@types/sinon-chai": "^3.2.0",
