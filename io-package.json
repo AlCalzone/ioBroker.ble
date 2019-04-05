@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.7.1",
+        "version": "0.7.2",
         "news": {
+            "0.7.2": {
+                "en": "Add `58:2d:34` as an alternative mac prefix for MiTemperature",
+                "de": "Mac-Präfix `58:2d:34` als Alternative für MiTemperature hinzugefügt",
+                "ru": "Добавить `58:2Д:34` в качестве альтернативы префикса Mac для MiTemperature",
+                "pt": "Adicionar `58:2d:34` como uma alternativa mac prefixo para MiTemperature",
+                "nl": "Voeg `58:2d:34` als alternatief mac voorvoegsel voor MiTemperature",
+                "fr": "Ajouter `58:2d:34 \" comme une alternative mac préfixe pour MiTemperature",
+                "it": "Aggiungere `58:2d:34` come un'alternativa mac prefisso per MiTemperature",
+                "es": "Agregar `58:2d:34` como una alternativa mac prefijo para MiTemperature",
+                "pl": "Dodaj `58:2D:34`, jako alternatywy przedrostek Mac dla MiTemperature",
+                "zh-cn": "添加`58：2d:34`作为一种替代mac前缀为MiTemperature"
+            },
             "0.7.0": {
                 "en": "* Support MaterializeCSS (Admin v3)\n* Support compact mode\n* Use @iobroker/testing for tests",
                 "de": "* Support MaterialiseCSS (Admin v3)\n* Kompaktmodus unterstützen\n* Verwenden Sie @iobroker/testing für Tests",
@@ -17,81 +29,113 @@
             },
             "0.6.0": {
                 "en": "* Added NodeJS 10 support\n* Added an option to disallow new devices",
-                "de": "* Unterstützung für NodeJS 10 hinzugefügt\n* Option hinzugefügt, um neue Geräte zu ignorieren"
+                "de": "* Unterstützung für NodeJS 10 hinzugefügt\n* Option hinzugefügt, um neue Geräte zu ignorieren",
+                "ru": "* Добавлена поддержка NodeJS 10\n* Добавлена опция для запрета новых устройств",
+                "pt": "* Adicionado NodeJS 10 de suporte\n* Adicionado uma opção para não permitir novos dispositivos",
+                "nl": "* Toegevoegd NodeJS 10 ondersteuning\n* Er is een mogelijkheid toegevoegd om het verbieden van nieuwe apparaten",
+                "fr": "* Ajout de NodeJS support 10\n* Ajout d'une option pour interdire les nouveaux dispositifs",
+                "it": "* Aggiunto NodeJS 10 supporto\n* Ha aggiunto un'opzione per bloccare i nuovi dispositivi",
+                "es": "* Añadido NodeJS 10 apoyo\n* Añadida una opción para no permitir nuevos dispositivos",
+                "pl": "* Dodano wsparcie dla NodeJS 10\n* Dodano opcję, aby uniemożliwić nowych urządzeń",
+                "zh-cn": "*增加node.js10支持\n*增加一个选项，以禁止的新设备"
             },
             "0.5.5": {
                 "en": "Bugfixes",
-                "de": "Bugfixes"
+                "de": "Bugfixes",
+                "ru": "Багфиксы",
+                "pt": "Correções de bugs",
+                "nl": "Bugfixes",
+                "fr": "Corrections de bugs",
+                "it": "Correzioni di bug",
+                "es": "Correcciones de errores",
+                "pl": "Багфиксы",
+                "zh-cn": "错误修正"
             },
             "0.5.3": {
                 "en": "Added support negative temperatures in the Xiaomi protocol",
-                "de": "Unterstützung für negative Temperaturen im Xiaomi-Protokoll hinzugefügt"
+                "de": "Unterstützung für negative Temperaturen im Xiaomi-Protokoll hinzugefügt",
+                "ru": "Добавлена поддержка отрицательных температурах в Xiaomi протокола",
+                "pt": "Adicionado suporte a temperaturas negativas no Xiaomi protocolo",
+                "nl": "Ondersteuning toegevoegd negatieve temperaturen in de Xiaomi protocol",
+                "fr": "Ajout du support des températures négatives dans le Xiaomi protocole",
+                "it": "Aggiunto il supporto temperature negative nel Xiaomi protocollo",
+                "es": "Añadido soporte temperaturas negativas en el protocolo de Xiaomi",
+                "pl": "Dodano wsparcie dla ujemnych temperaturach w Xiaomi protokołu",
+                "zh-cn": "加入支持消极的温度小蜜协议"
             },
             "0.5.2": {
                 "en": "Bugfixes",
-                "de": "Bugfixes"
+                "de": "Bugfixes",
+                "ru": "Багфиксы",
+                "pt": "Correções de bugs",
+                "nl": "Bugfixes",
+                "fr": "Corrections de bugs",
+                "it": "Correzioni di bug",
+                "es": "Correcciones de errores",
+                "pl": "Багфиксы",
+                "zh-cn": "错误修正"
             },
             "0.5.0": {
                 "en": "Added support for the Ruuvi Tag with the `ruuvi-tag` plugin",
-                "de": "Unterstützung für das Ruuvi-Tag durch das `ruuvi-tag`-Plugin"
+                "de": "Unterstützung für das Ruuvi-Tag durch das `ruuvi-tag`-Plugin",
+                "ru": "Плагин добавлена поддержка тега Ruuvi с ruuvi-тега ",
+                "pt": "Adicionado suporte para o Ruuvi Tag com o `ruuvi-tag` plugin",
+                "nl": "Ondersteuning toegevoegd voor de Ruuvi Tag met de `ruuvi-tag` - plugin",
+                "fr": "Ajout du support pour le Ruuvi Étiquette avec le \" ruuvi-tag` plugin",
+                "it": "Aggiunto il supporto per il Ruuvi Tag con il `ruuvi tag \" plugin",
+                "es": "Añadido soporte para la Ruuvi Etiqueta con el `ruuvi-etiqueta de` plugin",
+                "pl": "Plugin dodano wsparcie dla tagu Ruuvi z ruuvi tagu ",
+                "zh-cn": "加入支持Ruuvi标与`ruuvi标签`插件"
             },
             "0.4.2": {
                 "en": "Fixed the parsing of temperature+humidity packets from the Xiaomi temperature sensor",
-                "de": "Parsen von Temperatur+Feuchtigkeits-Paketen des Xiaomi Temperatursensors gefixt"
+                "de": "Parsen von Temperatur+Feuchtigkeits-Paketen des Xiaomi Temperatursensors gefixt",
+                "ru": "Исправлен парсинг температуры+влажность пакетов от компании Xiaomi датчик температуры ",
+                "pt": "Fixo a análise de temperatura de+umidade pacotes da Xiaomi sensor de temperatura",
+                "nl": "Vaste parseren van temperatuur+vochtigheid pakketten van de Xiaomi temperatuur sensor",
+                "fr": "Correction de l'analyse de la température+humidité des paquets à partir du Xiaomi capteur de température",
+                "it": "Fissa l'analisi di temperatura+umidità pacchetti da Xiaomi sensore di temperatura",
+                "es": "Fija el análisis de la temperatura+humedad paquetes desde el Xiaomi sensor de temperatura",
+                "pl": "Naprawiono analizowania temperatura+wilgotność pakietów od firmy Xiaomi czujnik temperatury ",
+                "zh-cn": "固定分析的温度+湿度的数据包的小蜜温度传感器"
             },
             "0.4.1": {
                 "en": "Bugfixes",
-                "de": "Bugfixes"
+                "de": "Bugfixes",
+                "ru": "Багфиксы",
+                "pt": "Correções de bugs",
+                "nl": "Bugfixes",
+                "fr": "Corrections de bugs",
+                "it": "Correzioni di bug",
+                "es": "Correcciones de errores",
+                "pl": "Багфиксы",
+                "zh-cn": "错误修正"
             },
             "0.4.0": {
                 "en": "Support for Mi Temperature sensor using the `mi-temperature` plugin",
-                "de": "Unterstützung für den Mi Temperatur-Sensor durch das `mi-temperature`-Plugin"
-            },
-            "0.3.5": {
-                "en": "Bugfixes",
-                "de": "Bugfixes"
-            },
-            "0.3.3": {
-                "en": "Fix logging of RSSI",
-                "de": "Logging von RSSI gefixt"
-            },
-            "0.3.2": {
-                "en": "Add * wildcard for \"all services\"",
-                "de": "Platzhalter * für \"alle Dienste\" hinzugefügt"
-            },
-            "0.3.1": {
-                "en": "Support throttling of RSSI updates",
-                "de": "Frequenz von RSSI-Aktualisierungen kann begrenzt werden"
-            },
-            "0.2.2": {
-                "en": "Bugfixes",
-                "de": "Bugfixes"
-            },
-            "0.2.0": {
-                "en": "Modularized the adapter code into a plugin system",
-                "de": "Adapter-Code in ein Pluginsystem modularisiert"
-            },
-            "0.1.0": {
-                "en": "Support Bluetooth device selection",
-                "de": "Auswahl von Bluetooth-Geräten unterstützt"
-            },
-            "0.0.2": {
-                "en": "Store more information, improved object structure.",
-                "de": "Mehr Informationen speichern, bessere Objektstruktur."
-            },
-            "0.0.1": {
-                "en": "initial adapter",
-                "de": "Initiale Version",
-                "ru": "Первоначальный адаптер",
-                "pt": "Versão inicial",
-                "fr": "Version initiale",
-                "nl": "Eerste release"
+                "de": "Unterstützung für den Mi Temperatur-Sensor durch das `mi-temperature`-Plugin",
+                "ru": "Поддержка плагинов для датчика Ми температуры с помощью Ми-температуры ` ",
+                "pt": "Suporte para Mi sensor de Temperatura utilizando o `mi-temperatura do` plugin",
+                "nl": "Ondersteuning voor Mi Temperatuur sensor met behulp van de `mi-temperatuur` plugin",
+                "fr": "Soutien pour Mi capteur de Température à l'aide de la \"mi-température\" plugin",
+                "it": "Supporto per Mi sensore di Temperatura con `mi-temperatura \" plugin",
+                "es": "Apoyo para Mi sensor de Temperatura utilizando el \" mi-temperatura de plugin",
+                "pl": "Wsparcie dla wtyczki do czujnika Mi temperatury za pomocą E-temperatury ` ",
+                "zh-cn": "支持Mi温度传感器的使用mi-温度`插件"
             }
         },
         "title": "Bluetooth Low Energy",
         "desc": {
             "en": "Monitor Bluetooth Low Energy (BLE) beacons",
-            "de": "Überwacht Bluetooth Low Energy (BLE) beacons"
+            "de": "Überwacht Bluetooth Low Energy (BLE) beacons",
+            "ru": "Монитор Bluetooth низкой энергии (BLE) маяки",
+            "pt": "Monitor de Bluetooth Low Energy (BLE) beacons",
+            "nl": "Monitor Bluetooth Low Energy (BLE) beacons",
+            "fr": "Moniteur Bluetooth Low Energy (BLE) balises",
+            "it": "Monitor Bluetooth Low Energy (BLE) beacon",
+            "es": "Monitor de Bluetooth de Baja Energía (BLE) las balizas",
+            "pl": "Monitor Bluetooth low energy (BLE) latarnie",
+            "zh-cn": "监测蓝牙低能源(BLE)信标"
         },
         "authors": [
             "AlCalzone <d.griesel@gmx.net>"
@@ -115,8 +159,12 @@
         "compact": true,
         "materialize": true,
         "dependencies": [
-            { "admin": ">=3.0.0" },
-            { "js-controller": ">=1.4.2" }
+            {
+                "admin": ">=3.0.0"
+            },
+            {
+                "js-controller": ">=1.4.2"
+            }
         ]
     },
     "native": {

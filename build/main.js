@@ -83,7 +83,7 @@ function startAdapter(options) {
             if (!process.env.TESTING) {
                 // load noble driver with the correct device selected
                 // but only if this is not a testing environment
-                process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
+                process.env.NOBLE_HCI_DEVICE_ID = (adapter.config.hciDevice || 0).toString();
                 try {
                     noble = require("@abandonware/noble");
                 }
@@ -371,7 +371,7 @@ process.on("uncaughtException", err => {
     tryCatchUnsupportedHardware(err);
     adapter.log.error("unhandled exception:" + err.message);
     adapter.log.error("> stack: " + err.stack);
-    process.exit(1);
+    return process.exit(1);
 });
 if (module.parent) {
     // Export the start method in compact mode

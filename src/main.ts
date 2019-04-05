@@ -95,7 +95,7 @@ function startAdapter(options?: Partial<ioBroker.AdapterOptions>) {
 			if (!process.env.TESTING) {
 				// load noble driver with the correct device selected
 				// but only if this is not a testing environment
-				process.env.NOBLE_HCI_DEVICE_ID = adapter.config.hciDevice || 0;
+				process.env.NOBLE_HCI_DEVICE_ID = (adapter.config.hciDevice || 0).toString();
 				try {
 					noble = require("@abandonware/noble");
 				} catch (e) {
@@ -393,7 +393,7 @@ function terminate(reason: string = "no reason given"): never {
 			return adapter.terminate(reason);
 		}
 	}
-	return process.exit(11) as never;
+	return process.exit(11);
 }
 
 // Unbehandelte Fehler tracen
@@ -406,7 +406,7 @@ process.on("uncaughtException", err => {
 
 	adapter.log.error("unhandled exception:" + err.message);
 	adapter.log.error("> stack: " + err.stack);
-	process.exit(1);
+	return process.exit(1);
 });
 
 if (module.parent) {

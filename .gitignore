@@ -299,3 +299,5 @@ Thumbs.db
 *_password.json
 
 .cache
+
+admin/i18n
