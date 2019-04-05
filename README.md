@@ -37,6 +37,7 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+### 0.7.2 (2019-04-05)
 * (AlCalzone) Add `58:2d:34` as an alternative mac prefix for MiTemperature
 
 ### 0.7.0 (2019-02-05)
