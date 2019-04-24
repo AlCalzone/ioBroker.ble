@@ -41,7 +41,7 @@ matrix:
     - <<: *linux
       node_js: 10
     - <<: *linux
-      node_js: 12
+      node_js: node
 
     - <<: *osx
       node_js: 6
@@ -50,14 +50,14 @@ matrix:
     - <<: *osx
       node_js: 10
     - <<: *osx
-      node_js: 12
+      node_js: node
 
     - <<: *windows
       node_js: 8
     - <<: *windows
       node_js: 10
     - <<: *windows
-      node_js: 12
+      node_js: node
 
 before_install:
   - eval "${MATRIX_EVAL}"
