@@ -77,7 +77,7 @@ export class ObjectCache {
 		this.expireTimer = undefined;
 		if (this.expireTimestamps.length === 0) return;
 
-		const nextTimestamp = this.expireTimestamps.peekStart();
+		const nextTimestamp = this.expireTimestamps.peekStart()!;
 		const timeDelta = nextTimestamp.timestamp - Date.now();
 		if (timeDelta <= 0) {
 			// it has expired
@@ -90,7 +90,7 @@ export class ObjectCache {
 	private setTimerForNextExpiry() {
 		if (this.expireTimestamps.length === 0) return;
 
-		const nextTimestamp = this.expireTimestamps.peekStart();
+		const nextTimestamp = this.expireTimestamps.peekStart()!;
 		const timeDelta = nextTimestamp.timestamp - Date.now();
 		this.expireTimer = setTimeout(
 			() => this.expire(),
