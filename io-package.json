@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.7.2",
+        "version": "0.7.3",
         "news": {
+            "0.7.3": {
+                "en": "Added MiTemperature watch with E-Ink display",
+                "de": "MiTemperature-Uhr mit E-Ink-Anzeige hinzugefügt",
+                "ru": "Добавлены часы MiTempera с дисплеем E-Ink",
+                "pt": "Relógio MiTemperature adicionado com display E-Ink",
+                "nl": "Toegevoegd MiTemperatuur horloge met E-Ink display",
+                "fr": "Ajout de la surveillance MiTemperature avec affichage E-Ink",
+                "it": "Aggiunto orologio MiTemperature con display E-Ink",
+                "es": "Se agregó el reloj MiTemperature con pantalla E-Ink",
+                "pl": "Dodano zegarek MiTemperature z wyświetlaczem E-Ink",
+                "zh-cn": "添加了带有E-Ink显示屏的MiTemperature手表"
+            },
             "0.7.2": {
                 "en": "Add `58:2d:34` as an alternative mac prefix for MiTemperature",
                 "de": "Mac-Präfix `58:2d:34` als Alternative für MiTemperature hinzugefügt",
