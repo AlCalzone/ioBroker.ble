@@ -37,6 +37,10 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+### 0.7.4 (2019-07-03)
+* (AlCalzone) Removed dependency to admin instance on slaves
+* (AlCalzone) Several dependency updates
+
 ### 0.7.3 (2019-04-05)
 * (AlCalzone) Add MiTemperature watch with E-Ink display
 

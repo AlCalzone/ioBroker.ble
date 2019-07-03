@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.7.3",
+        "version": "0.7.4",
         "news": {
+            "0.7.4": {
+                "en": "* Removed dependency to admin instance on slaves\n* Several dependency updates",
+                "de": "* Abhängigkeit von Admin-Instanzen auf Slaves entfernt\n*Einige Updates von Abhängigkeiten"
+            },
             "0.7.3": {
                 "en": "Added MiTemperature watch with E-Ink display",
                 "de": "MiTemperature-Uhr mit E-Ink-Anzeige hinzugefügt",
