@@ -10,7 +10,9 @@ Currently, only recording *advertised* service data is supported. You can monito
 Connecting and reading/writing service chararcteristics will be supported in a future version.
 
 ## Installation
-![Number of Installations](http://iobroker.live/badges/ble-installed.svg) ![Number of Installations](http://iobroker.live/badges/ble-stable.svg) This adapter needs additional libraries to compile. See https://github.com/sandeepmistry/noble#prerequisites for detailed instructions.
+![Number of Installations](http://iobroker.live/badges/ble-installed.svg) ![Number of Installations](http://iobroker.live/badges/ble-stable.svg)
+
+This adapter needs additional libraries to compile. See https://github.com/sandeepmistry/noble#prerequisites for detailed instructions.
 On Raspberry Pi and similar, this should do it: `sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev libcap2-bin`
 
 If the adapter starts but won't connect to your bluetooth hardware, please check the `info.driverState` state in ioBroker. If it is `unauthorized`, you need to give `node` additional permissions. For Linux, this is as simple as
