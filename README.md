@@ -10,7 +10,7 @@ Currently, only recording *advertised* service data is supported. You can monito
 Connecting and reading/writing service chararcteristics will be supported in a future version.
 
 ## Installation
-![Number of Installations](http://iobroker.live/badges/ble-installed.svg) ![Number of Installations](http://iobroker.live/badges/ble-stable.svg)
+![Number of Installations](http://iobroker.live/badges/ble-installed.svg?break_cache=1) ![Number of Installations](http://iobroker.live/badges/ble-stable.svg?break_cache=1)
 
 This adapter needs additional libraries to compile. See https://github.com/sandeepmistry/noble#prerequisites for detailed instructions.
 On Raspberry Pi and similar, this should do it: `sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev libcap2-bin`
