@@ -66,6 +66,8 @@ before_script:
   - 'if [[ $NPMVERSION == 5 ]]; then npm install -g npm@5; fi'
   - npm -v
 script:
+  # This test determines if noble can be loaded
+  - node test/noble.js
   - 'npm run test:unit'
   - 'export DEBUG=testing:*'
   - 'npm run test:integration'
