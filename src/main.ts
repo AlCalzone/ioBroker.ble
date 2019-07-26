@@ -343,7 +343,9 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	// Now fill the states with values
 	if (values != null) {
 		_.log(`${deviceId} > got values: ${JSON.stringify(values)}`, "debug");
-		for (const stateId of Object.keys(values)) {
+		for (let stateId of Object.keys(values)) {
+			// Fix special chars
+			stateId = stateId.replace(/[\(\)]+/g, "").replace(" ", "_");
 			// set the value if there's an object for the state
 			const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
 			if (await _.objectCache.getObject(iobStateId) != null) {

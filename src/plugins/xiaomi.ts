@@ -4,8 +4,19 @@
 
 import { entries } from "alcalzone-shared/objects";
 import { Global as _ } from "../lib/global";
-import { MacPrefixes, XiaomiAdvertisement, XiaomiEvent } from "./lib/xiaomi_protocol";
-import { ChannelObjectDefinition, DeviceObjectDefinition, getServiceData, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "./plugin";
+import {
+	MacPrefixes,
+	XiaomiAdvertisement,
+	XiaomiEvent
+} from "./lib/xiaomi_protocol";
+import {
+	ChannelObjectDefinition,
+	DeviceObjectDefinition,
+	getServiceData,
+	PeripheralObjectStructure,
+	Plugin,
+	StateObjectDefinition
+} from "./plugin";
 
 interface XiaomiContext {
 	event?: XiaomiEvent;
@@ -36,10 +47,15 @@ const plugin: Plugin<XiaomiContext> = {
 	description: "Xiaomi devices",
 
 	advertisedServices: ["fe95"],
-	isHandling: (p) => {
+	isHandling: p => {
 		if (!p.advertisement || !p.advertisement.serviceData) return false;
 		const mac = p.address.toLowerCase();
-		if (!Object.keys(MacPrefixes).some(key => MacPrefixes[key].some(pfx => mac.startsWith(pfx)))) return false;
+		if (
+			!Object.keys(MacPrefixes).some(key =>
+				MacPrefixes[key].some(pfx => mac.startsWith(pfx))
+			)
+		)
+			return false;
 		return p.advertisement.serviceData.some(entry => entry.uuid === "fe95");
 	},
 
@@ -56,12 +72,12 @@ const plugin: Plugin<XiaomiContext> = {
 	},
 
 	defineObjects: (context: XiaomiContext) => {
-
 		if (context == undefined || context.event == undefined) return;
 
-		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
+		const deviceObject: DeviceObjectDefinition = {
+			// no special definitions neccessary
 			common: undefined,
-			native: undefined,
+			native: undefined
 		};
 
 		// no channels
@@ -71,7 +87,7 @@ const plugin: Plugin<XiaomiContext> = {
 		const ret = {
 			device: deviceObject,
 			channels: undefined,
-			states: stateObjects,
+			states: stateObjects
 		};
 
 		const event = context.event;
@@ -84,9 +100,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "°C",
 					read: true,
-					write: false,
+					write: false
 				},
-				native: undefined,
+				native: undefined
 			});
 		}
 		if ("humidity" in event) {
@@ -98,9 +114,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "%rF",
 					read: true,
-					write: false,
+					write: false
 				},
-				native: undefined,
+				native: undefined
 			});
 		}
 		if ("illuminance" in event) {
@@ -112,9 +128,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "lux",
 					read: true,
-					write: false,
+					write: false
 				},
-				native: undefined,
+				native: undefined
 			});
 		}
 		if ("moisture" in event) {
@@ -127,9 +143,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "%",
 					read: true,
-					write: false,
+					write: false
 				},
-				native: undefined,
+				native: undefined
 			});
 		}
 		if ("fertility" in event) {
@@ -142,9 +158,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "µS/cm",
 					read: true,
-					write: false,
+					write: false
 				},
-				native: undefined,
+				native: undefined
 			});
 		}
 		if ("battery" in event) {
@@ -157,24 +173,42 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "%",
 					read: true,
-					write: false,
+					write: false
 				},
-				native: undefined,
+				native: undefined
 			});
+		}
+		// Create objects for unknown events
+		for (const key of Object.keys(event)) {
+			if (key.startsWith("unknown ")) {
+				stateObjects.push({
+					id: key.replace(/[\(\)]+/g, "").replace(" ", "_"),
+					common: {
+						role: "value",
+						name: key,
+						type: "number",
+						read: true,
+						write: false
+					},
+					native: undefined
+				});
+			}
 		}
 
 		return ret;
-
 	},
 	getValues: (context: XiaomiContext) => {
 		if (context == null || context.event == null) return;
 
 		for (const [prop, value] of entries(context.event)) {
-			_.log(`xiaomi >> {{green|got ${prop} update => ${value}}}`, "debug");
+			_.log(
+				`xiaomi >> {{green|got ${prop} update => ${value}}}`,
+				"debug"
+			);
 		}
 		// The event is simply the value dictionary itself
 		return context.event;
-	},
+	}
 };
 
 export = plugin as Plugin;

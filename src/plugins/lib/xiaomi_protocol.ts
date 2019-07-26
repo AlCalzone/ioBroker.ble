@@ -201,7 +201,13 @@ const valueTransforms: Partial<
 	>
 > & { "default": ValueTransform } = {
 	// by default just pass the value through
-	default: (val, eventID) => ({ [XiaomiEventIDs_Internal[eventID!].toLowerCase()]: val }),
+	default: (val, eventID) => {
+		if (eventID! in XiaomiEventIDs_Internal) {
+			return { [XiaomiEventIDs_Internal[eventID!].toLowerCase()]: val };
+		} else {
+			return { [`unknown (0x${eventID!.toString(16)})`]: val };
+		}
+	},
 	// TODO: find a nicer way to specify the bit size of temperature - this information exists in the packet!
 	Temperature: (val) => ({ temperature: toSigned(val, 16) / 10 }),
 	Humidity: (val) => ({ humidity: val / 10 }),
