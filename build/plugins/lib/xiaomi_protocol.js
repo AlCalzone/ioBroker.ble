@@ -18,6 +18,7 @@ exports.MacPrefixes = Object.freeze({
     MiFlora: ["c4:7c:8d"],
     MiTemperature: ["4c:65:a8", "58:2d:34"],
     MiTemperature_EInk: ["3f:59:c8"],
+    MosquitoRepellent: ["74:a3:4a"]
 });
 class XiaomiAdvertisement {
     constructor(data) {

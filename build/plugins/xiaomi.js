@@ -28,7 +28,7 @@ const plugin = {
     name: "Xiaomi",
     description: "Xiaomi devices",
     advertisedServices: ["fe95"],
-    isHandling: (p) => {
+    isHandling: p => {
         if (!p.advertisement || !p.advertisement.serviceData)
             return false;
         const mac = p.address.toLowerCase();
@@ -50,15 +50,16 @@ const plugin = {
         if (context == undefined || context.event == undefined)
             return;
         const deviceObject = {
+            // no special definitions neccessary
             common: undefined,
-            native: undefined,
+            native: undefined
         };
         // no channels
         const stateObjects = [];
         const ret = {
             device: deviceObject,
             channels: undefined,
-            states: stateObjects,
+            states: stateObjects
         };
         const event = context.event;
         if ("temperature" in event) {
@@ -70,9 +71,9 @@ const plugin = {
                     type: "number",
                     unit: "°C",
                     read: true,
-                    write: false,
+                    write: false
                 },
-                native: undefined,
+                native: undefined
             });
         }
         if ("humidity" in event) {
@@ -84,9 +85,9 @@ const plugin = {
                     type: "number",
                     unit: "%rF",
                     read: true,
-                    write: false,
+                    write: false
                 },
-                native: undefined,
+                native: undefined
             });
         }
         if ("illuminance" in event) {
@@ -98,9 +99,9 @@ const plugin = {
                     type: "number",
                     unit: "lux",
                     read: true,
-                    write: false,
+                    write: false
                 },
-                native: undefined,
+                native: undefined
             });
         }
         if ("moisture" in event) {
@@ -113,9 +114,9 @@ const plugin = {
                     type: "number",
                     unit: "%",
                     read: true,
-                    write: false,
+                    write: false
                 },
-                native: undefined,
+                native: undefined
             });
         }
         if ("fertility" in event) {
@@ -128,9 +129,9 @@ const plugin = {
                     type: "number",
                     unit: "µS/cm",
                     read: true,
-                    write: false,
+                    write: false
                 },
-                native: undefined,
+                native: undefined
             });
         }
         if ("battery" in event) {
@@ -143,10 +144,26 @@ const plugin = {
                     type: "number",
                     unit: "%",
                     read: true,
-                    write: false,
+                    write: false
                 },
-                native: undefined,
+                native: undefined
             });
+        }
+        // Create objects for unknown events
+        for (const key of Object.keys(event)) {
+            if (key.startsWith("unknown ")) {
+                stateObjects.push({
+                    id: key.replace(/[\(\)]+/g, "").replace(" ", "_"),
+                    common: {
+                        role: "value",
+                        name: key,
+                        type: "number",
+                        read: true,
+                        write: false
+                    },
+                    native: undefined
+                });
+            }
         }
         return ret;
     },
@@ -158,6 +175,6 @@ const plugin = {
         }
         // The event is simply the value dictionary itself
         return context.event;
-    },
+    }
 };
 module.exports = plugin;
