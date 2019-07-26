@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.7.4",
+        "version": "0.8.0",
         "news": {
+            "0.8.0": {
+                "en": "Added support for the Xiaomi Mosquito Repellent (read-only!)",
+                "de": "Unterstützung für den Xiaomi Mückenschutz hinzugefügt (nur lesend!)"
+            },
             "0.7.4": {
                 "en": "* Removed dependency to admin instance on slaves\n* Several dependency updates",
                 "de": "* Abhängigkeit von Admin-Instanzen auf Slaves entfernt\n*Einige Updates von Abhängigkeiten"
