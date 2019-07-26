@@ -17,7 +17,7 @@ var ProductIDs;
 exports.MacPrefixes = Object.freeze({
     MiFlora: ["c4:7c:8d"],
     MiTemperature: ["4c:65:a8", "58:2d:34"],
-    MiTemperature_EInk: ["3f:59:c8"]
+    MiTemperature_EInk: ["3f:59:c8"],
 });
 class XiaomiAdvertisement {
     constructor(data) {
@@ -132,7 +132,14 @@ var XiaomiEventIDs_Internal;
 // in most cases this is a 1:1 match
 const valueTransforms = {
     // by default just pass the value through
-    default: (val, eventID) => ({ [XiaomiEventIDs_Internal[eventID].toLowerCase()]: val }),
+    default: (val, eventID) => {
+        if (eventID in XiaomiEventIDs_Internal) {
+            return { [XiaomiEventIDs_Internal[eventID].toLowerCase()]: val };
+        }
+        else {
+            return { [`unknown (0x${eventID.toString(16)})`]: val };
+        }
+    },
     // TODO: find a nicer way to specify the bit size of temperature - this information exists in the packet!
     Temperature: (val) => ({ temperature: toSigned(val, 16) / 10 }),
     Humidity: (val) => ({ humidity: val / 10 }),

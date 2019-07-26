@@ -64,6 +64,6 @@ const remoteRoot = `/opt/iobroker/node_modules/iobroker.${ADAPTER_NAME}`;
         console.log(execResult.stdout);
         console.log(execResult.stderr);
         console.log("done");
-        process.exit(0);
+        return process.exit(0);
     });
 })();
