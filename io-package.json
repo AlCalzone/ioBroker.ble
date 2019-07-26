@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.8.0",
+        "version": "0.8.1",
         "news": {
-            "0.8.0": {
+            "0.8.1": {
                 "en": "Added support for the Xiaomi Mosquito Repellent (read-only!)",
                 "de": "Unterstützung für den Xiaomi Mückenschutz hinzugefügt (nur lesend!)"
             },

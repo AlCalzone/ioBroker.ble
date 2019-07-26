@@ -40,7 +40,7 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
-### 0.8.0 (2019-07-26)
+### 0.8.1 (2019-07-26)
 * (AlCalzone) Added support for the Xiaomi Mosquito Repellent (read-only!)
 
 ### 0.7.4 (2019-07-03)
