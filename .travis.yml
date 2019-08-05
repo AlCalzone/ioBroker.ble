@@ -58,6 +58,8 @@ matrix:
       node_js: 10
     - <<: *windows
       node_js: node
+  allow_failures:
+    - node_js: node
 
 before_install:
   - eval "${MATRIX_EVAL}"
