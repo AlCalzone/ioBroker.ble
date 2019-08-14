@@ -28,7 +28,7 @@ export enum ProductIDs {
 export const MacPrefixes: Record<string, string[]> = Object.freeze({
 	MiFlora: ["c4:7c:8d"],
 	MiTemperature: ["4c:65:a8", "58:2d:34"],
-	MiTemperature_EInk: ["3f:59:c8"],
+	MiWatch: ["3f:59:c8", "3f:5b:7d"],
 	MosquitoRepellent: ["74:a3:4a"]
 });
 
