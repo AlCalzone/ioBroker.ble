@@ -40,6 +40,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+### 0.8.3 (2019-08-26)
+* (AlCalzone) Add `80:ea:ca` as an alternative mac prefix for FlowerCare
+
 ### 0.8.2 (2019-08-14)
 * (AlCalzone) Add `3f:5b:7d` as an alternative mac prefix for the Xiaomi watch
 
