@@ -2,11 +2,11 @@
 
 import { stub } from "sinon";
 
-import { createMocks } from "@iobroker/testing";
+import { utils } from "@iobroker/testing";
 import { filter as objFilter } from "alcalzone-shared/objects";
 
 export function createGlobalMock() {
-	const {adapter, database: db} = createMocks();
+	const { adapter, database: db } = utils.unit.createMocks({});
 
 	const ret = {
 		Global: {
