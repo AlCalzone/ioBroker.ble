@@ -13,7 +13,7 @@ import { parseDataFormat2or4 } from "./ruuvi-tag_protocol";
 // tslint:disable-next-line:no-var-requires
 const plugin: Plugin = require("../ruuvi-tag");
 
-describe("ruuvi-tag protocol => ", () => {
+describe("ruuvi-tag protocol (service data) => ", () => {
 	// a real packet:
 	const peripheral: BLE.Peripheral = {
 		id: "c0cd266001a0",
@@ -38,7 +38,27 @@ describe("ruuvi-tag protocol => ", () => {
 		// also for repeated tests
 		plugin.isHandling(peripheral).should.be.true;
 	});
-	// describe("packets should be parsed correctly => ", () => {
+});
 
-	// });
+describe("ruuvi-tag protocol (manufacturer data) => ", () => {
+	// a real packet:
+	const peripheral: BLE.Peripheral = {
+		id: "c0cd266001a0",
+		address: "c0:cd:26:60:01:a0",
+		addressType: "random",
+		connectable: false,
+		advertisement: {
+			manufacturerData: Buffer.from("990403581b08baa8ffc3004303f90bb3", "hex"),
+			serviceData: [],
+			serviceUuids: [],
+			serviceSolicitationUuids: [],
+		},
+		rssi: -91,
+		state: "disconnected",
+	};
+	it("should be handling the packet", () => {
+		plugin.isHandling(peripheral).should.be.true;
+		// also for repeated tests
+		plugin.isHandling(peripheral).should.be.true;
+	});
 });
