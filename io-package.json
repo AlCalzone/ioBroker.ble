@@ -1,18 +1,30 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.8.3",
+        "version": "0.8.4",
         "news": {
+            "0.8.4": {
+                "en": "ruuvi-tag: Fix parsing of data format 3 and 5",
+                "de": "ruuvi-tag: Parsen der Datenformate 3 und 5 korrigiert",
+                "ru": "ruuvi-tag: исправление разбора данных формата 3 и 5",
+                "pt": "ruuvi-tag: corrige a análise do formato de dados 3 e 5",
+                "nl": "ruuvi-tag: parsering van gegevensformaat 3 en 5 repareren",
+                "fr": "ruuvi-tag: Correction de l'analyse des formats de données 3 et 5",
+                "it": "ruuvi-tag: correzione dell'analisi dei formati di dati 3 e 5",
+                "es": "ruuvi-tag: corrige el análisis de los formatos de datos 3 y 5",
+                "pl": "ruuvi-tag: Naprawiono parsowanie formatu danych 3 i 5",
+                "zh-cn": "ruuvi-tag：修复数据格式3和5的解析"
+            },
             "0.8.3": {
                 "en": "Added `80:ea:ca` as an alternative mac prefix for FlowerCare",
-                "de": "`80: ea: ca` als alternatives Mac-Präfix für FlowerCare hinzugefügt",
-                "ru": "Добавлен `80: ea: ca` в качестве альтернативного префикса mac для FlowerCare",
-                "pt": "Adicionado `80: ea: ca` como um prefixo mac alternativo para FlowerCare",
-                "nl": "`80: ea: ca` toegevoegd als alternatief mac-voorvoegsel voor FlowerCare",
-                "fr": "Ajout de `80: ea: ca` comme préfixe mac alternatif pour FlowerCare",
-                "it": "Aggiunto `80: ea: ca` come prefisso mac alternativo per FlowerCare",
-                "es": "Se agregó `80: ea: ca` como prefijo mac alternativo para FlowerCare",
-                "pl": "Dodano `80: ea: ca` jako alternatywny prefiks mac dla FlowerCare",
+                "de": "`80:ea:ca` als alternatives Mac-Präfix für FlowerCare hinzugefügt",
+                "ru": "Добавлен `80:ea:ca` в качестве альтернативного префикса mac для FlowerCare",
+                "pt": "Adicionado `80:ea:ca` como um prefixo mac alternativo para FlowerCare",
+                "nl": "`80:ea:ca` toegevoegd als alternatief mac-voorvoegsel voor FlowerCare",
+                "fr": "Ajout de `80:ea:ca` comme préfixe mac alternatif pour FlowerCare",
+                "it": "Aggiunto `80:ea:ca` come prefisso mac alternativo per FlowerCare",
+                "es": "Se agregó `80:ea:ca` como prefijo mac alternativo para FlowerCare",
+                "pl": "Dodano `80:ea:ca` jako alternatywny prefiks mac dla FlowerCare",
                 "zh-cn": "添加了'80：ea：ca`作为FlowerCare的替代mac前缀"
             },
             "0.8.2": {

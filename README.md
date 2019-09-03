@@ -40,6 +40,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+### 0.8.4 (2019-09-03)
+* (AlCalzone) `ruuvi-tag`: Fix parsing of data format 3 and 5
+
 ### 0.8.3 (2019-08-26)
 * (AlCalzone) Add `80:ea:ca` as an alternative mac prefix for FlowerCare
 
