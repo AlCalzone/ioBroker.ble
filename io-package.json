@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.8.4",
+        "version": "0.9.0",
         "news": {
+            "0.9.0": {
+                "en": "* Devices without service data but with manufacturer data are no longer treated as empty\n* `_default` plugin: Create states for manufacturer data\n* `ruuvi-tag` plugin: Set \"Ruuvi Tag\" as the default name for the device object",
+                "de": "* Geräte ohne Servicedaten aber mit Herstellerdaten werden nicht mehr als leer behandelt\n* `_default` plugin: Erzeugt Zustände für Herstellerdaten\n* `ruuvi-tag` plugin: Nutzt \"Ruuvi Tag\" als Standardnamen für das Geräteobjekt",
+                "ru": "* Устройства без сервисных данных, но с данными производителя больше не считаются пустыми\n* `_default` плагин: создание состояний для данных производителя\n* `ruuvi-tag` плагин: установите \"Ruuvi Tag\" в качестве имени по умолчанию для объекта устройства",
+                "pt": "* Os dispositivos sem dados de serviço, mas com dados do fabricante, não são mais tratados como vazios\n* plugin _default`: crie estados para dados do fabricante\n* plugin ruuvi-tag`: Defina `\" Ruuvi Tag \"` como o nome padrão para o objeto do dispositivo",
+                "nl": "* Apparaten zonder servicegegevens maar met fabrikantgegevens worden niet langer als leeg behandeld\n* `_default` plug-in: Creëer statussen voor fabrikantgegevens\n* `ruuvi-tag`-plug-in: stel` `Ruuvi Tag '' in als de standaardnaam voor het apparaatobject",
+                "fr": "* Les appareils sans données de service mais avec les données du fabricant ne sont plus traités comme vides\n* `_default` plugin: Crée des états pour les données du fabricant\n* `ruuvi-tag` plugin: Définit \"Ruuvi Tag\" comme nom par défaut pour l'objet périphérique",
+                "it": "* I dispositivi senza dati di servizio ma con i dati del produttore non vengono più considerati vuoti\n* Plugin `_default`: Crea stati per i dati del produttore\n* plugin `ruuvi-tag`: imposta \"Ruuvi Tag\" come nome predefinito per l'oggetto dispositivo",
+                "es": "* Los dispositivos sin datos de servicio pero con datos del fabricante ya no se consideran vacíos\n* Complemento `_default`: crea estados para los datos del fabricante\n* Complemento `ruuvi-tag`: establezca \"Ruuvi Tag\" como el nombre predeterminado para el objeto del dispositivo",
+                "pl": "* Urządzenia bez danych serwisowych, ale z danymi producenta nie są już traktowane jako puste\n* Wtyczka `_default`: Twórz stany dla danych producenta\n* Wtyczka `ruuvi-tag`: Ustaw` `Ruuvi Tag '' jako domyślną nazwę obiektu urządzenia",
+                "zh-cn": "*没有服务数据但具有制造商数据的设备不再被视为空\n*`_default`插件：为制造商数据创建状态\n*`ruuvi-tag`插件：设置`“Ruuvi Tag”`作为设备对象的默认名称"
+            },
             "0.8.4": {
                 "en": "ruuvi-tag: Fix parsing of data format 3 and 5",
                 "de": "ruuvi-tag: Parsen der Datenformate 3 und 5 korrigiert",

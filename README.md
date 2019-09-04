@@ -40,8 +40,13 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+### 0.9.0 (2019-09-04)
+* (AlCalzone) Devices without service data but with manufacturer data are no longer treated as empty
+* (AlCalzone) `_default` plugin: Create states for manufacturer data
+* (AlCalzone) `ruuvi-tag` plugin: Set `"Ruuvi Tag"` as the default name for the device object
+
 ### 0.8.4 (2019-09-03)
-* (AlCalzone) `ruuvi-tag`: Fix parsing of data format 3 and 5
+* (AlCalzone) `ruuvi-tag` plugin: Fix parsing of data format 3 and 5
 
 ### 0.8.3 (2019-08-26)
 * (AlCalzone) Add `80:ea:ca` as an alternative mac prefix for FlowerCare
