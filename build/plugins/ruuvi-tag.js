@@ -87,7 +87,9 @@ const plugin = {
         if (context == undefined)
             return;
         const deviceObject = {
-            common: undefined,
+            common: {
+                name: "Ruuvi Tag"
+            },
             native: undefined,
         };
         if ("beaconID" in context) {

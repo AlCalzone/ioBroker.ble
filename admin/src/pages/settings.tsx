@@ -141,7 +141,7 @@ export class Settings extends React.Component<SettingsProps, ioBroker.AdapterCon
 							<input type="checkbox" className="value" id="allowEmptyDevices" defaultChecked={this.getSetting("allowEmptyDevices")}
 								ref={me => this.chkAllowEmptyDevices = me}
 							/>
-							<CheckboxLabel text="Allow creation of devices without service data" />
+							<CheckboxLabel text="Allow creation of devices without advertised data" />
 						</label>
 					</div>
 				</div>

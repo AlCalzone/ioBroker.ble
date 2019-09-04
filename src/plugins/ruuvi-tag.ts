@@ -78,7 +78,9 @@ const plugin: Plugin<RuuviContext> = {
 		if (context == undefined) return;
 
 		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
-			common: undefined,
+			common: {
+				name: "Ruuvi Tag"
+			},
 			native: undefined,
 		};
 		if ("beaconID" in context) {
