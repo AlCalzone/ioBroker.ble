@@ -221,6 +221,7 @@ function startAdapter(options?: Partial<ioBroker.AdapterOptions>) {
 			}
 		},
 	});
+	return adapter;
 }
 
 // =========================

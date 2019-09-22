@@ -208,6 +208,7 @@ function startAdapter(options) {
                 }
             }
         }) }));
+    return adapter;
 }
 // =========================
 function fixServiceName(name) {
