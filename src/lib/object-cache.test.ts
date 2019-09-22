@@ -15,7 +15,7 @@ import { createCustomSubscriptionsMock } from "../../test/mocks/custom-subscript
 import { createGlobalMock } from "../../test/mocks/global";
 
 namespace mocks {
-	export const global = createGlobalMock();
+	export const global = createGlobalMock({});
 	export const adapter = global.Global.adapter;
 	export const database = global.Global.database;
 	export const customSubscriptions = createCustomSubscriptionsMock();

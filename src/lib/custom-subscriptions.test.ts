@@ -7,7 +7,7 @@ import { spy, stub } from "sinon";
 
 // import mocks
 import { createGlobalMock } from "../../test/mocks/global";
-const globalMock = createGlobalMock();
+const globalMock = createGlobalMock({});
 
 const {
 	subscribeStates, subscribeObjects,
