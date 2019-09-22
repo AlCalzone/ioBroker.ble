@@ -19,6 +19,7 @@ const global_1 = require("../lib/global");
 const ruuvi_tag_protocol_1 = require("./lib/ruuvi-tag_protocol");
 const plugin_1 = require("./plugin");
 const serviceUUID = "feaa";
+const manufacturerId = Buffer.from([0x99, 0x04]);
 // remember tested peripherals by their ID for 1h
 const testValidity = 1000 * 3600;
 const testedPeripherals = new Map();
@@ -61,7 +62,14 @@ const plugin = {
             return ruuvi_tag_protocol_1.parseDataFormat2or4(data);
         }
         else if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0) {
+            // When the data is decoded from manufacturerData, the first two bytes should be 0x9904
             data = peripheral.advertisement.manufacturerData;
+            if (data.length <= 2 || !data.slice(0, 2).equals(manufacturerId)) {
+                global_1.Global.log(`ruuvi-tag >> got unsupported data: ${data.toString("hex")}`, "debug");
+                return;
+            }
+            // Cut off the manufuacturer ID
+            data = data.slice(2);
             // data format 3 or 5 - extract from manufacturerData buffer
             global_1.Global.log(`ruuvi-tag >> got data: ${data.toString("hex")}`, "debug");
             if (data[0] === 3) {
@@ -79,7 +87,9 @@ const plugin = {
         if (context == undefined)
             return;
         const deviceObject = {
-            common: undefined,
+            common: {
+                name: "Ruuvi Tag"
+            },
             native: undefined,
         };
         if ("beaconID" in context) {

@@ -242,23 +242,29 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 
 	if (peripheral == null) return;
 
+	let serviceDataIsNotEmpty = false;
+	let manufacturerDataIsNotEmpty = false;
+
 	_.log(`discovered peripheral ${peripheral.address}`, "debug");
 	_.log(`  has advertisement: ${peripheral.advertisement != null}`, "debug");
 	if (peripheral.advertisement != null) {
 		_.log(`  has serviceData: ${peripheral.advertisement.serviceData != null}`, "debug");
 		if (peripheral.advertisement.serviceData != null) {
 			_.log(`  serviceData = ${JSON.stringify(peripheral.advertisement.serviceData)}`, "debug");
+			serviceDataIsNotEmpty = peripheral.advertisement.serviceData.length > 0;
 		}
+		_.log(`  has manufacturerData: ${peripheral.advertisement.manufacturerData != null}`, "debug");
+		if (peripheral.advertisement.manufacturerData != null) {
+			_.log(`  manufacturerData = ${peripheral.advertisement.manufacturerData.toString("hex")}`, "debug");
+			manufacturerDataIsNotEmpty = peripheral.advertisement.manufacturerData.length > 0;
+		}
+	} else {
+		// don't create devices for peripherals without advertised data
+		return;
 	}
-
-	// don't create devices for peripherals without advertised data
-	if (peripheral.advertisement == null) return;
 	// create devices if we selected to allow empty devices
-	// or the peripheral transmits serviceData
-	if (!(
-		adapter.config.allowEmptyDevices ||
-		(peripheral.advertisement.serviceData != null && peripheral.advertisement.serviceData.length > 0)
-	)) {
+	// or the peripheral transmits serviceData or manufacturerData
+	if (!adapter.config.allowEmptyDevices && !serviceDataIsNotEmpty && !manufacturerDataIsNotEmpty) {
 		return;
 	}
 

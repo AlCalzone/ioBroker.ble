@@ -9,6 +9,7 @@ import { parseDataFormat2or4, parseDataFormat3, parseDataFormat5, RuuviContext }
 import { ChannelObjectDefinition, DeviceObjectDefinition, getServiceData, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "./plugin";
 
 const serviceUUID = "feaa";
+const manufacturerId = Buffer.from([0x99, 0x04]);
 
 // remember tested peripherals by their ID for 1h
 const testValidity = 1000 * 3600;
@@ -52,7 +53,14 @@ const plugin: Plugin<RuuviContext> = {
 			data = Buffer.from(parsedUrl.hash, "base64");
 			return parseDataFormat2or4(data);
 		} else if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0) {
+			// When the data is decoded from manufacturerData, the first two bytes should be 0x9904
 			data = peripheral.advertisement.manufacturerData;
+			if (data.length <= 2 || !data.slice(0, 2).equals(manufacturerId)) {
+				_.log(`ruuvi-tag >> got unsupported data: ${data.toString("hex")}`, "debug");
+				return;
+			}
+			// Cut off the manufuacturer ID
+			data = data.slice(2);
 			// data format 3 or 5 - extract from manufacturerData buffer
 			_.log(`ruuvi-tag >> got data: ${data.toString("hex")}`, "debug");
 			if (data[0] === 3) {
@@ -70,7 +78,9 @@ const plugin: Plugin<RuuviContext> = {
 		if (context == undefined) return;
 
 		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
-			common: undefined,
+			common: {
+				name: "Ruuvi Tag"
+			},
 			native: undefined,
 		};
 		if ("beaconID" in context) {

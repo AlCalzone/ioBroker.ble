@@ -52,6 +52,20 @@ const plugin = {
                 });
             }
         }
+        if (peripheral.advertisement && peripheral.advertisement.manufacturerData && peripheral.advertisement.manufacturerData.length > 0) {
+            stateObjects.push({
+                id: `${channelId}.manufacturerData`,
+                common: {
+                    role: "value",
+                    name: "Manufacturer Data",
+                    desc: "",
+                    type: "mixed",
+                    read: true,
+                    write: false,
+                },
+                native: undefined,
+            });
+        }
         return {
             device: deviceObject,
             channels: [channelObject],
@@ -68,6 +82,12 @@ const plugin = {
                 ret[stateId] = parseData(entry.data);
                 global_1.Global.log(`_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`, "debug");
             }
+        }
+        if (peripheral.advertisement && peripheral.advertisement.manufacturerData && peripheral.advertisement.manufacturerData.length > 0) {
+            const stateId = `services.manufacturerData`;
+            // remember the transmitted data
+            ret[stateId] = parseData(peripheral.advertisement.manufacturerData);
+            global_1.Global.log(`_default: ${peripheral.address} > got manufacturer data ${ret[stateId]}`, "debug");
         }
         return ret;
     },
