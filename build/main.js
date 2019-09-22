@@ -373,17 +373,6 @@ function terminate(reason = "no reason given") {
     }
     return process.exit(11);
 }
-// Unbehandelte Fehler tracen
-process.on("unhandledRejection", r => {
-    adapter.log.error("unhandled promise rejection: " + r);
-});
-process.on("uncaughtException", err => {
-    // Noble on Windows seems to throw in a callback we cannot catch
-    tryCatchUnsupportedHardware(err);
-    adapter.log.error("unhandled exception:" + err.message);
-    adapter.log.error("> stack: " + err.stack);
-    return process.exit(1);
-});
 if (module.parent) {
     // Export the start method in compact mode
     module.exports = startAdapter;
@@ -391,4 +380,15 @@ if (module.parent) {
 else {
     // Start the adapter immediately
     startAdapter();
+    // Trace unhandled errors when NOT running in compact mode
+    process.on("unhandledRejection", r => {
+        adapter.log.error("unhandled promise rejection: " + r);
+    });
+    process.on("uncaughtException", err => {
+        // Noble on Windows seems to throw in a callback we cannot catch
+        tryCatchUnsupportedHardware(err);
+        adapter.log.error("unhandled exception:" + err.message);
+        adapter.log.error("> stack: " + err.stack);
+        return process.exit(1);
+    });
 }
