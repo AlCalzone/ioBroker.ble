@@ -80,19 +80,25 @@ function startAdapter(options) {
             // monitor our own states and objects
             adapter.subscribeStates("*");
             adapter.subscribeObjects("*");
+            console.log(`process.env.TESTING = ${process.env.TESTING}`);
             if (!process.env.TESTING) {
                 // load noble driver with the correct device selected
                 // but only if this is not a testing environment
                 process.env.NOBLE_HCI_DEVICE_ID = (adapter.config.hciDevice || 0).toString();
+                console.log(`process.env.NOBLE_HCI_DEVICE_ID = ${process.env.NOBLE_HCI_DEVICE_ID}`);
                 try {
                     noble = require("@abandonware/noble");
+                    console.log("after require");
                 }
                 catch (e) {
+                    console.log("catch: " + e);
                     tryCatchUnsupportedHardware(e);
                     return terminate(e.message || e);
                 }
                 // prepare scanning for beacons
+                console.log("before state change");
                 noble.on("stateChange", (state) => {
+                    console.log("state change: " + state);
                     switch (state) {
                         case "poweredOn":
                             startScanning();
@@ -103,8 +109,13 @@ function startAdapter(options) {
                     }
                     adapter.setState("info.driverState", state, true);
                 });
-                if (noble.state === "poweredOn")
+                console.log("before state check");
+                if (noble.state === "poweredOn") {
+                    console.log("state1 = " + noble.state);
                     startScanning();
+                    console.log("after start scanning");
+                }
+                console.log("state2 = " + noble.state);
                 adapter.setState("info.driverState", noble.state, true);
             }
         }), 
