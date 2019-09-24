@@ -72,4 +72,5 @@ script:
   - node test/noble.js
   - 'npm run test:unit'
   - 'export DEBUG=testing:*'
+  - 'export TESTING=true' # so the adapter does not attempt to load noble and crashes
   - 'npm run test:integration'
