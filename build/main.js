@@ -121,9 +121,12 @@ function startAdapter(options) {
         }), 
         // is called when adapter shuts down - callback has to be called under any circumstances!
         unload: (callback) => {
+            console.log("inside unload");
             try {
                 stopScanning();
+                console.log("after stopScanning");
                 noble.removeAllListeners("stateChange");
+                console.log("after removeAllListeners");
                 callback();
             }
             catch (e) {
