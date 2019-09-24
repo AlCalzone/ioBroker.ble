@@ -69,7 +69,7 @@ before_script:
   - npm -v
 script:
   # This test determines if noble can be loaded
-  - node test/noble.js
+  - if [ "$TRAVIS_OS_NAME" != "linux" ]; then node test/noble.js; fi
   - 'npm run test:unit'
   - 'export DEBUG=testing:*'
   - 'npm run test:integration'
