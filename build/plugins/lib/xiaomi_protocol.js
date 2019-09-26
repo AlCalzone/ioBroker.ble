@@ -8,18 +8,6 @@ var CapabilityFlags;
     CapabilityFlags[CapabilityFlags["Encrypt"] = 4] = "Encrypt";
     CapabilityFlags[CapabilityFlags["IO"] = 24] = "IO";
 })(CapabilityFlags = exports.CapabilityFlags || (exports.CapabilityFlags = {}));
-var ProductIDs;
-(function (ProductIDs) {
-    ProductIDs[ProductIDs["MiFlora"] = 152] = "MiFlora";
-    // the rest is unknown
-})(ProductIDs = exports.ProductIDs || (exports.ProductIDs = {}));
-// tslint:disable-next-line:variable-name
-exports.MacPrefixes = Object.freeze({
-    FlowerCare: ["c4:7c:8d", "80:ea:ca"],
-    MiTemperature: ["4c:65:a8", "58:2d:34", "e7:2e:00"],
-    MiWatch: ["3f:59:c8", "3f:5b:7d"],
-    MosquitoRepellent: ["74:a3:4a"]
-});
 class XiaomiAdvertisement {
     constructor(data) {
         if (!data || data.length < 5) {

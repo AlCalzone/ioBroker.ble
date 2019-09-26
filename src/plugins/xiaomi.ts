@@ -5,7 +5,6 @@
 import { entries } from "alcalzone-shared/objects";
 import { Global as _ } from "../lib/global";
 import {
-	MacPrefixes,
 	XiaomiAdvertisement,
 	XiaomiEvent
 } from "./lib/xiaomi_protocol";
@@ -42,21 +41,44 @@ function parseAdvertisementEvent(data: Buffer): XiaomiEvent | undefined {
 	return advertisement.event;
 }
 
+// remember tested peripherals by their MAC address for 1h
+const testValidity = 1000 * 3600;
+const testedPeripherals = new Map<string, { timestamp: number, result: boolean }>();
+
 const plugin: Plugin<XiaomiContext> = {
 	name: "Xiaomi",
 	description: "Xiaomi devices",
 
 	advertisedServices: ["fe95"],
 	isHandling: p => {
-		if (!p.advertisement || !p.advertisement.serviceData) return false;
-		const mac = p.address.toLowerCase();
+		// If the peripheral has no serviceData with UUID fe95, this is not for us
 		if (
-			!Object.keys(MacPrefixes).some(key =>
-				MacPrefixes[key].some(pfx => mac.startsWith(pfx))
-			)
-		)
-			return false;
-		return p.advertisement.serviceData.some(entry => entry.uuid === "fe95");
+			!p.advertisement
+			|| !p.advertisement.serviceData
+			|| !p.advertisement.serviceData.some(entry => entry.uuid === "fe95")
+		) return false;
+
+		const mac = p.address.toLowerCase();
+		const cached = testedPeripherals.get(mac);
+		if (cached && cached.timestamp >= Date.now() - testValidity) {
+			// we have a recent test result, return it
+			return cached.result;
+		}
+
+		// Try to parse advertisement data as a XiaomiEvent to see if this
+		// is for us
+		let ret: boolean = false;
+		const data = getServiceData(p, "fe95");
+		if (data != undefined) {
+			const event = parseAdvertisementEvent(data);
+			ret = event != undefined;
+		}
+		// store the test result
+		testedPeripherals.set(mac, {
+			timestamp: Date.now(),
+			result: ret,
+		});
+		return ret;
 	},
 
 	createContext: (peripheral: BLE.Peripheral) => {
