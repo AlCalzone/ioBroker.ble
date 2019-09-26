@@ -40,6 +40,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+### 0.10.0 (2019-09-26)
+* (AlCalzone) `xiaomi` plugin: test the received data instead of relying on MAC prefixes
+
 ### 0.9.2 (2019-09-26)
 * (AlCalzone) Add `e7:2e:00` as an alternative mac prefix for MiTemperature
 
