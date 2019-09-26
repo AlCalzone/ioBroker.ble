@@ -24,17 +24,39 @@ function parseAdvertisementEvent(data) {
     // succesful - return it
     return advertisement.event;
 }
+// remember tested peripherals by their MAC address for 1h
+const testValidity = 1000 * 3600;
+const testedPeripherals = new Map();
 const plugin = {
     name: "Xiaomi",
     description: "Xiaomi devices",
     advertisedServices: ["fe95"],
     isHandling: p => {
-        if (!p.advertisement || !p.advertisement.serviceData)
+        // If the peripheral has no serviceData with UUID fe95, this is not for us
+        if (!p.advertisement
+            || !p.advertisement.serviceData
+            || !p.advertisement.serviceData.some(entry => entry.uuid === "fe95"))
             return false;
         const mac = p.address.toLowerCase();
-        if (!Object.keys(xiaomi_protocol_1.MacPrefixes).some(key => xiaomi_protocol_1.MacPrefixes[key].some(pfx => mac.startsWith(pfx))))
-            return false;
-        return p.advertisement.serviceData.some(entry => entry.uuid === "fe95");
+        const cached = testedPeripherals.get(mac);
+        if (cached && cached.timestamp >= Date.now() - testValidity) {
+            // we have a recent test result, return it
+            return cached.result;
+        }
+        // Try to parse advertisement data as a XiaomiEvent to see if this
+        // is for us
+        let ret = false;
+        const data = plugin_1.getServiceData(p, "fe95");
+        if (data != undefined) {
+            const event = parseAdvertisementEvent(data);
+            ret = event != undefined;
+        }
+        // store the test result
+        testedPeripherals.set(mac, {
+            timestamp: Date.now(),
+            result: ret,
+        });
+        return ret;
     },
     createContext: (peripheral) => {
         const data = plugin_1.getServiceData(peripheral, "fe95");

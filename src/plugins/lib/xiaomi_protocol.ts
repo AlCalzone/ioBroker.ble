@@ -20,18 +20,6 @@ export enum CapabilityFlags {
 	IO = 1 << 3 | 1 << 4,
 }
 
-export enum ProductIDs {
-	MiFlora = 0x0098,
-	// the rest is unknown
-}
-// tslint:disable-next-line:variable-name
-export const MacPrefixes: Record<string, string[]> = Object.freeze({
-	FlowerCare: ["c4:7c:8d", "80:ea:ca"],
-	MiTemperature: ["4c:65:a8", "58:2d:34", "e7:2e:00"],
-	MiWatch: ["3f:59:c8", "3f:5b:7d"],
-	MosquitoRepellent: ["74:a3:4a"]
-});
-
 export class XiaomiAdvertisement {
 
 	public constructor(data: Buffer) {

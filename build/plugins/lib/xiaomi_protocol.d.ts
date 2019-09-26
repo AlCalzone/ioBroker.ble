@@ -5,10 +5,6 @@ export declare enum CapabilityFlags {
     Encrypt = 4,
     IO = 24
 }
-export declare enum ProductIDs {
-    MiFlora = 152
-}
-export declare const MacPrefixes: Record<string, string[]>;
 export declare class XiaomiAdvertisement {
     constructor(data: Buffer);
     private _productID;
