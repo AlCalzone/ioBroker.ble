@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -16,8 +17,8 @@ function extendDevice(deviceId, peripheral, object) {
         // update the object while preserving the existing properties
         const updated = {
             type: "device",
-            common: Object.assign({ name: peripheral.advertisement.localName }, object.common, (original && original.common)),
-            native: Object.assign({ id: peripheral.id, address: peripheral.address, addressType: peripheral.addressType, connectable: peripheral.connectable }, object.native, (original && original.native)),
+            common: Object.assign(Object.assign({ name: peripheral.advertisement.localName }, object.common), (original && original.common)),
+            native: Object.assign(Object.assign({ id: peripheral.id, address: peripheral.address, addressType: peripheral.addressType, connectable: peripheral.connectable }, object.native), (original && original.native)),
         };
         // check if we have to update anything
         if (original == null
@@ -35,8 +36,8 @@ function extendChannel(channelId, object) {
         // update the object while preserving the existing properties
         const updated = {
             type: "channel",
-            common: Object.assign({ name: channelId }, object.common, (original && original.common)),
-            native: Object.assign({}, object.native, (original && original.native)),
+            common: Object.assign(Object.assign({ name: channelId }, object.common), (original && original.common)),
+            native: Object.assign(Object.assign({}, object.native), (original && original.native)),
         };
         // check if we have to update anything
         if (original == null
@@ -54,8 +55,8 @@ function extendState(stateId, object) {
         // update the object while preserving the existing properties
         const updated = {
             type: "state",
-            common: Object.assign({ name: stateId }, object.common, (original && original.common)),
-            native: Object.assign({}, object.native, (original && original.native)),
+            common: Object.assign(Object.assign({ name: stateId }, object.common), (original && original.common)),
+            native: Object.assign(Object.assign({}, object.native), (original && original.native)),
         };
         // check if we have to update anything
         if (original == null
