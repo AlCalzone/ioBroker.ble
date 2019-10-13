@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.10.0",
+        "version": "0.10.1",
         "news": {
+            "0.10.1": {
+                "en": "Fixed crash in JS-Controller 2.0",
+                "de": "Absturz in JS-Controller 2.0 behoben",
+                "ru": "Исправлено падение в JS-Controller 2.0",
+                "pt": "Corrigida falha no JS-Controller 2.0",
+                "nl": "Crash opgelost in JS-Controller 2.0",
+                "fr": "Correction d'un crash dans JS-Controller 2.0",
+                "it": "Risolto crash in JS-Controller 2.0",
+                "es": "Se corrigió el bloqueo en JS-Controller 2.0",
+                "pl": "Naprawiono awarię w JS-Controller 2.0",
+                "zh-cn": "修复了JS-Controller 2.0中的崩溃"
+            },
             "0.10.0": {
                 "en": "Xiaomi plugin: test the received data instead of relying on MAC prefixes",
                 "de": "Xiaomi-Plugin: Testen Sie die empfangenen Daten, anstatt sich auf MAC-Präfixe zu verlassen",
