@@ -381,15 +381,16 @@ if (module.parent) {
 else {
     // Start the adapter immediately
     startAdapter();
+    // wotan-disable no-useless-predicate
     // Trace unhandled errors when NOT running in compact mode
     process.on("unhandledRejection", r => {
-        adapter.log.error("unhandled promise rejection: " + r);
+        (adapter && adapter.log || console).error("unhandled promise rejection: " + r);
     });
     process.on("uncaughtException", err => {
         // Noble on Windows seems to throw in a callback we cannot catch
         tryCatchUnsupportedHardware(err);
-        adapter.log.error("unhandled exception:" + err.message);
-        adapter.log.error("> stack: " + err.stack);
+        (adapter && adapter.log || console).error("unhandled exception:" + err.message);
+        (adapter && adapter.log || console).error("> stack: " + err.stack);
         return process.exit(1);
     });
 }
