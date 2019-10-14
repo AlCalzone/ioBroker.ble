@@ -35,16 +35,12 @@ include: &windows
 matrix:
   include:
     - <<: *linux
-      node_js: 6
-    - <<: *linux
       node_js: 8
     - <<: *linux
       node_js: 10
     - <<: *linux
       node_js: node
 
-    - <<: *osx
-      node_js: 6
     - <<: *osx
       node_js: 8
     - <<: *osx
