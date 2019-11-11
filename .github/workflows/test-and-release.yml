@@ -35,8 +35,8 @@ jobs:
               run: npm run check:ts
               env:
                   CI: true
-            - name: Lint TypeScript code
-              run: npm run lint
+            # - name: Lint TypeScript code
+            #   run: npm run lint
             - name: Test package files
               run: npm run test:package
 
