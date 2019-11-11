@@ -76,6 +76,7 @@
   "scripts": {
     "clean-build-dir": "cpx build/src/**/*.* build && rimraf build/src && rimraf build/{io-,}package.json",
     "build:ts": "tsc -p src/tsconfig.json",
+    "check:ts": "tsc -p src/tsconfig.json --noEmit",
     "postbuild:ts": "npm run clean-build-dir",
     "prebuild:ts": "rimraf ./build",
     "build:parcel": "parcel build admin/src/index.tsx -d admin/build",
