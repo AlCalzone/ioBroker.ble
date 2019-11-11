@@ -79,7 +79,9 @@ jobs:
               run: DEBUG=testing:* npm run test:integration
             - name: Run integration tests (windows only)
               if: runner.OS == 'Windows'
-              run: set DEBUG=testing:* & npm run test:integration
+              run: |
+                set DEBUG=testing:*
+                npm run test:integration
 
     # Deploys the final package to NPM
     deploy:
