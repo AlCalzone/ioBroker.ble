@@ -71,7 +71,7 @@ jobs:
               run: npm ci
 
             - name: Run local tests
-              run: npm test
+              run: npm run test:ts
             - name: Run unit tests
               run: npm run test:unit
             - name: Run integration tests (unix only)
