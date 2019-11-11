@@ -1,9 +1,7 @@
 <img src="admin/ble.png" height="48" /> ioBroker.ble
 =================
 
-**Tests:** [![Build Status](https://travis-ci.org/AlCalzone/ioBroker.ble.svg?branch=master)](https://travis-ci.org/AlCalzone/ioBroker.ble) 
-
-================
+![Build Status](https://action-badges.now.sh/AlCalzone/ioBroker.tradfri)
 
 Monitor Bluetooth Low Energy (BLE) beacons and record their information. 
 Currently, only recording *advertised* service data is supported. You can monitor which services are advertised by using the nRF Connect app (service data UUIDs).
