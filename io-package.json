@@ -182,7 +182,7 @@
         "loglevel": "info",
         "type": "hardware",
         "messagebox": true,
-        "compact": true,
+        "compact": false,
         "materialize": true,
         "dependencies": [
             {

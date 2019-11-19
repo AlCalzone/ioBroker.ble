@@ -12,11 +12,14 @@ export declare class Global {
         error: number;
     }>;
     private static _adapter;
-    static adapter: ioBroker.Adapter;
+    static get adapter(): ioBroker.Adapter;
+    static set adapter(adapter: ioBroker.Adapter);
     private static _objectCache;
-    static objectCache: ObjectCache;
+    static get objectCache(): ObjectCache;
+    static set objectCache(cache: ObjectCache);
     private static _loglevel;
-    static loglevel: number;
+    static get loglevel(): number;
+    static set loglevel(value: number);
     static log(message: string, level?: ioBroker.LogLevel): void;
     /**
      * Kurzschreibweise für die Ermittlung eines Objekts
