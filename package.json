@@ -1,6 +1,6 @@
 {
   "name": "iobroker.ble",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "ioBroker adapter to monitor Bluetooth Low Energy (BLE) beacons",
   "author": {
     "name": "AlCalzone",
@@ -71,7 +71,7 @@
     "source-map-support": "^0.5.4",
     "ts-node": "^8.0.3",
     "tslint": "^6.0.0",
-    "typescript": "^3.3.3"
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "clean-build-dir": "cpx build/src/**/*.* build && rimraf build/src && rimraf build/{io-,}package.json",
