@@ -39,6 +39,8 @@ matrix:
     - <<: *linux
       node_js: 10
     - <<: *linux
+      node_js: 12
+    - <<: *linux
       node_js: node
 
     - <<: *osx
@@ -46,12 +48,16 @@ matrix:
     - <<: *osx
       node_js: 10
     - <<: *osx
+      node_js: 12
+    - <<: *osx
       node_js: node
 
     - <<: *windows
       node_js: 8
     - <<: *windows
       node_js: 10
+    - <<: *windows
+      node_js: 12
     - <<: *windows
       node_js: node
   allow_failures:
