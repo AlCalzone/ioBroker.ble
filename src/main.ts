@@ -82,7 +82,6 @@ const adapter = utils.adapter({
 		if (adapter.config.rssiThrottle != null) {
 			rssiUpdateInterval = Math.max(0, Math.min(10000, adapter.config.rssiThrottle));
 		}
-
 		// monitor our own states and objects
 		adapter.subscribeStates("*");
 		adapter.subscribeObjects("*");
@@ -94,9 +93,11 @@ const adapter = utils.adapter({
 			try {
 				noble = require("@abandonware/noble");
 			} catch (e) {
-				tryCatchUnsupportedHardware(e);
-				return terminate(e.message || e);
+				tryCatchUnsupportedHardware(e, () => {
+					terminate(e.message || e);
+				});
 			}
+
 
 			// prepare scanning for beacons
 			noble.on("stateChange", (state) => {
@@ -379,12 +380,15 @@ function stopScanning() {
 	isScanning = false;
 }
 
-function tryCatchUnsupportedHardware(err: Error): never | void {
+function tryCatchUnsupportedHardware(err: Error, otherwise: () => never): never {
 	if (
 		/compatible USB Bluetooth/.test(err.message)
 		|| /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)
 	) {
-		return terminate("No compatible BLE 4.0 hardware found!");
+		terminate("No compatible BLE 4.0 hardware found!");
+	} else {
+		// ioBroker gives the process time to exit, so we need to call the alternative conditionally
+		otherwise();
 	}
 }
 
@@ -400,13 +404,13 @@ function terminate(reason: string = "no reason given"): never {
 
 // wotan-disable no-useless-predicate
 process.on("unhandledRejection", r => {
-	(adapter && adapter.log || console).error("unhandled promise rejection: " + r);
+	(adapter?.log ?? console).error("unhandled promise rejection: " + r);
 });
 process.on("uncaughtException", err => {
 	// Noble on Windows seems to throw in a callback we cannot catch
-	tryCatchUnsupportedHardware(err);
-
-	(adapter && adapter.log || console).error("unhandled exception:" + err.message);
-	(adapter && adapter.log || console).error("> stack: " + err.stack);
-	return process.exit(1);
+	tryCatchUnsupportedHardware(err, () => {
+		(adapter?.log ?? console).error("unhandled exception:" + err.message);
+		(adapter?.log ?? console).error("> stack: " + err.stack);
+		return process.exit(1);
+	});
 });
