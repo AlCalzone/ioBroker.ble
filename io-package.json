@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.10.1",
+        "version": "0.11.0",
         "news": {
+            "0.11.0": {
+                "en": "Removed compact support. `noble` sometimes throws errors in callbacks that cannot be handled and would bring the whole compact group down.",
+                "de": "Kompakte Unterstützung entfernt. `noble` schmeißt manchmal Fehler in Rückrufen, die nicht verarbeitet werden können und die gesamte Kompakt-Gruppe abstürzen lassen.",
+                "ru": "Убрана компактная подставка. noble иногда выдает ошибки в обратных вызовах, которые не могут быть обработаны, и может привести к сбою всей компактной группы.",
+                "pt": "Suporte compacto removido. Às vezes, o `noble 'gera erros nos retornos de chamada que não podem ser manipulados e derrubariam todo o grupo compacto.",
+                "nl": "Compacte ondersteuning verwijderd. 'nobel' gooit soms fouten in callbacks die niet kunnen worden afgehandeld en die de hele compacte groep naar beneden halen.",
+                "fr": "Suppression du support compact. `noble` jette parfois des erreurs dans les rappels qui ne peuvent pas être gérés et réduirait le groupe entier.",
+                "it": "Supporto compatto rimosso. \"nobile\" talvolta genera errori nei callback che non possono essere gestiti e porterebbe giù l'intero gruppo compatto.",
+                "es": "Soporte compacto eliminado. `noble` a veces arroja errores en devoluciones de llamada que no se pueden manejar y derribaría a todo el grupo compacto.",
+                "pl": "Usunięto kompaktowe wsparcie. „szlachetny” czasami generuje błędy w wywołaniach zwrotnych, których nie można obsłużyć i sprowadziłoby całą kompaktową grupę w dół.",
+                "zh-cn": "删除紧凑的支持。有时，“ noble”会在无法处理的回调中引发错误，并使整个紧凑型组崩溃。"
+            },
             "0.10.1": {
                 "en": "Fixed crash in JS-Controller 2.0",
                 "de": "Absturz in JS-Controller 2.0 behoben",
@@ -182,7 +194,7 @@
         "loglevel": "info",
         "type": "hardware",
         "messagebox": true,
-        "compact": true,
+        "compact": false,
         "materialize": true,
         "dependencies": [
             {

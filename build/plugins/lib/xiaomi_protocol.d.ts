@@ -8,39 +8,39 @@ export declare enum CapabilityFlags {
 export declare class XiaomiAdvertisement {
     constructor(data: Buffer);
     private _productID;
-    readonly productID: number;
+    get productID(): number;
     private _version;
-    readonly version: number;
+    get version(): number;
     private _frameCounter;
-    readonly frameCounter: number;
+    get frameCounter(): number;
     private _isNewFactory;
-    readonly isNewFactory: boolean;
+    get isNewFactory(): boolean;
     private _isConnected;
-    readonly isConnected: boolean;
+    get isConnected(): boolean;
     private _isCentral;
-    readonly isCentral: boolean;
+    get isCentral(): boolean;
     private _isEncrypted;
-    readonly isEncrypted: boolean;
+    get isEncrypted(): boolean;
     private _hasMacAddress;
-    readonly hasMacAddress: boolean;
+    get hasMacAddress(): boolean;
     private _macAddress;
-    readonly macAddress: string | undefined;
+    get macAddress(): string | undefined;
     private _hasCapabilities;
-    readonly hasCapabilities: boolean;
+    get hasCapabilities(): boolean;
     private _capabilities;
-    readonly capabilities: number | undefined;
+    get capabilities(): number | undefined;
     private _hasEvent;
-    readonly hasEvent: boolean;
+    get hasEvent(): boolean;
     private _event;
-    readonly event: XiaomiEvent | undefined;
+    get event(): XiaomiEvent | undefined;
     private _hasCustomData;
-    readonly hasCustomData: boolean;
+    get hasCustomData(): boolean;
     private _customData;
-    readonly customData: Buffer | undefined;
+    get customData(): Buffer | undefined;
     private _hasSubtitle;
-    readonly hasSubtitle: boolean;
+    get hasSubtitle(): boolean;
     private _isBindingFrame;
-    readonly isBindingFrame: boolean;
+    get isBindingFrame(): boolean;
 }
 export declare enum XiaomiEventIDs_Internal {
     Temperature = 4100,

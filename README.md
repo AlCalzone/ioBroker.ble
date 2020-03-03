@@ -40,6 +40,9 @@ If you have any device transmitting specially encoded information via advertisem
 
 ## Changelog
 
+### 0.11.0 (2019-11-19)
+* (AlCalzone) Removed compact support. `noble` sometimes throws errors in callbacks that cannot be handled and would bring the whole compact group down.
+
 ### 0.10.1 (2019-10-13)
 * (AlCalzone) Fixed crash in JS-Controller 2.0
 
