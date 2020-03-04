@@ -88,8 +88,9 @@ const adapter = utils.adapter({
                 noble = require("@abandonware/noble");
             }
             catch (e) {
-                tryCatchUnsupportedHardware(e);
-                return terminate(e.message || e);
+                tryCatchUnsupportedHardware(e, () => {
+                    terminate(e.message || e);
+                });
             }
             // prepare scanning for beacons
             noble.on("stateChange", (state) => {
@@ -358,10 +359,14 @@ function stopScanning() {
     adapter.setState("info.connection", false, true);
     isScanning = false;
 }
-function tryCatchUnsupportedHardware(err) {
+function tryCatchUnsupportedHardware(err, otherwise) {
     if (/compatible USB Bluetooth/.test(err.message)
         || /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)) {
-        return terminate("No compatible BLE 4.0 hardware found!");
+        terminate("No compatible BLE 4.0 hardware found!");
+    }
+    else {
+        // ioBroker gives the process time to exit, so we need to call the alternative conditionally
+        otherwise();
     }
 }
 function terminate(reason = "no reason given") {
@@ -375,12 +380,15 @@ function terminate(reason = "no reason given") {
 }
 // wotan-disable no-useless-predicate
 process.on("unhandledRejection", r => {
-    (adapter && adapter.log || console).error("unhandled promise rejection: " + r);
+    var _a;
+    ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _a !== void 0 ? _a : console).error("unhandled promise rejection: " + r);
 });
 process.on("uncaughtException", err => {
     // Noble on Windows seems to throw in a callback we cannot catch
-    tryCatchUnsupportedHardware(err);
-    (adapter && adapter.log || console).error("unhandled exception:" + err.message);
-    (adapter && adapter.log || console).error("> stack: " + err.stack);
-    return process.exit(1);
+    tryCatchUnsupportedHardware(err, () => {
+        var _a, _b;
+        ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _a !== void 0 ? _a : console).error("unhandled exception:" + err.message);
+        ((_b = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _b !== void 0 ? _b : console).error("> stack: " + err.stack);
+        return process.exit(1);
+    });
 });
