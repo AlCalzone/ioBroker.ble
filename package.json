@@ -59,7 +59,7 @@
     "cpx": "^1.5.0",
     "gulp": "^4.0.0",
     "mocha": "^7.0.0",
-    "node-ssh": "^7.0.0",
+    "node-ssh": "^8.0.0",
     "nyc": "^15.0.0",
     "parcel-bundler": "^1.12.3",
     "proxyquire": "^2.0.1",
