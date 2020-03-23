@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.11.0",
+        "version": "0.11.0-beta.0",
         "news": {
             "0.11.0": {
                 "en": "Removed compact support. `noble` sometimes throws errors in callbacks that cannot be handled and would bring the whole compact group down.",
@@ -187,7 +187,7 @@
         "main": "build/main.js",
         "mode": "daemon",
         "icon": "ble.png",
-        "enabled": true,
+        "enabled": false,
         "extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
         "keywords": ["bluetooth", "BLE", "beacon"],
         "readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
