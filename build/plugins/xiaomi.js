@@ -171,6 +171,26 @@ const plugin = {
                 native: undefined
             });
         }
+        if ("kettleStatus" in event) {
+            stateObjects.push({
+                id: "kettleStatus",
+                common: {
+                    role: "value",
+                    name: "Kettle status",
+                    desc: "What the kettle is currently doing",
+                    type: "number",
+                    read: true,
+                    write: false,
+                    states: {
+                        "0": "Idle",
+                        "1": "Heating",
+                        "2": "Cooling",
+                        "3": "Keeping warm",
+                    }
+                },
+                native: undefined
+            });
+        }
         // Create objects for unknown events
         for (const key of Object.keys(event)) {
             if (key.startsWith("unknown ")) {

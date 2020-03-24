@@ -163,11 +163,6 @@ export class XiaomiAdvertisement {
 export enum XiaomiEventIDs_Internal {
 	Temperature = 0x1004, // temp = value / 10
 	KettleStatusAndTemperature = 0x1005, // 1 byte status, 1 byte temperature
-	// Status:
-	// 0 - Idle
-	// 1 - Heating
-	// 2 - Cooling
-	// 3 - Keeping warm
 	Humidity = 0x1006,    // humidity = value / 10
 	Illuminance = 0x1007,
 	Moisture = 0x1008,
