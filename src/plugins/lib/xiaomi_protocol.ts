@@ -162,6 +162,12 @@ export class XiaomiAdvertisement {
 
 export enum XiaomiEventIDs_Internal {
 	Temperature = 0x1004, // temp = value / 10
+	KettleStatusAndTemperature = 0x1005, // 1 byte status, 1 byte temperature
+	// Status:
+	// 0 - Idle
+	// 1 - Heating
+	// 2 - Cooling
+	// 3 - Keeping warm
 	Humidity = 0x1006,    // humidity = value / 10
 	Illuminance = 0x1007,
 	Moisture = 0x1008,
@@ -170,6 +176,7 @@ export enum XiaomiEventIDs_Internal {
 	TemperatureAndHumidity = 0x100D, // 2 byte temperature / 10, 2 byte humidity / 10
 }
 
+
 export type XiaomiEventIDs =
 	"temperature"
 	| "humidity"
@@ -177,6 +184,7 @@ export type XiaomiEventIDs =
 	| "moisture"
 	| "fertility"
 	| "battery"
+	| "kettleStatus"
 	;
 
 export type XiaomiEvent = Partial<Record<XiaomiEventIDs, number>>;
@@ -206,6 +214,11 @@ const valueTransforms: Partial<
 		humidity: (val >>> 16) / 10,
 		temperature: toSigned((val & 0xffff), 16) / 10,
 	}),
+	KettleStatusAndTemperature: val =>({
+		// the data is read in little-endian (reverse) order, so val = 0xTTSS
+		kettleStatus: val & 0xff,
+		temperature: val >>> 8,
+	})
 };
 
 function reverseBuffer(buf: Buffer): Buffer {

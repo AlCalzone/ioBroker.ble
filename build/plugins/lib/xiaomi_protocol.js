@@ -110,6 +110,7 @@ exports.XiaomiAdvertisement = XiaomiAdvertisement;
 var XiaomiEventIDs_Internal;
 (function (XiaomiEventIDs_Internal) {
     XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Temperature"] = 4100] = "Temperature";
+    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["KettleStatusAndTemperature"] = 4101] = "KettleStatusAndTemperature";
     XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Humidity"] = 4102] = "Humidity";
     XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Illuminance"] = 4103] = "Illuminance";
     XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Moisture"] = 4104] = "Moisture";
@@ -138,6 +139,11 @@ const valueTransforms = {
         humidity: (val >>> 16) / 10,
         temperature: toSigned((val & 0xffff), 16) / 10,
     }),
+    KettleStatusAndTemperature: val => ({
+        // the data is read in little-endian (reverse) order, so val = 0xTTSS
+        kettleStatus: val & 0xff,
+        temperature: val >>> 8,
+    })
 };
 function reverseBuffer(buf) {
     const ret = Buffer.allocUnsafe(buf.length);

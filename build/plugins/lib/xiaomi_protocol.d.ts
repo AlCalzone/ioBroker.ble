@@ -44,6 +44,7 @@ export declare class XiaomiAdvertisement {
 }
 export declare enum XiaomiEventIDs_Internal {
     Temperature = 4100,
+    KettleStatusAndTemperature = 4101,
     Humidity = 4102,
     Illuminance = 4103,
     Moisture = 4104,
@@ -51,5 +52,5 @@ export declare enum XiaomiEventIDs_Internal {
     Battery = 4106,
     TemperatureAndHumidity = 4109
 }
-export declare type XiaomiEventIDs = "temperature" | "humidity" | "illuminance" | "moisture" | "fertility" | "battery";
+export declare type XiaomiEventIDs = "temperature" | "humidity" | "illuminance" | "moisture" | "fertility" | "battery" | "kettleStatus";
 export declare type XiaomiEvent = Partial<Record<XiaomiEventIDs, number>>;
