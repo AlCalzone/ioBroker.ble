@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.11.0-beta.1",
+        "version": "0.11.0",
         "news": {
+            "0.11.0": {
+                "en": "* (AlCalzone) Removed compact support. `noble` sometimes throws errors in callbacks that cannot be handled and would bring the whole compact group down.\n* (AlCalzone) Added support for the Xiaomi Kettle\n* (AlCalzone) Encrypted packets are no longer decoded (for now) to avoid creating thousands of `unknown (0xabcd)` states",
+                "de": "* (AlCalzone) Kompakte Unterstützung entfernt. `noble` wirft manchmal Fehler in Rückrufen auf, die nicht behandelt werden können und die gesamte kompakte Gruppe zum Erliegen bringen.\n* (AlCalzone) Unterstützung für den Xiaomi-Wasserkocher hinzugefügt\n* (AlCalzone) Verschlüsselte Pakete werden (vorerst) nicht mehr dekodiert, um zu vermeiden, dass Tausende von \"unbekannten (0xabcd)\" Zuständen erstellt werden",
+                "ru": "* (AlCalzone) Удалена компактная поддержка. noble иногда выдает ошибки в обратных вызовах, которые не могут быть обработаны, и может привести к сбою всей компактной группы.\n* (AlCalzone) Добавлена поддержка чайника Xiaomi\n* (AlCalzone) Зашифрованные пакеты больше не декодируются (пока), чтобы избежать создания тысяч «неизвестных (0xabcd)» состояний",
+                "pt": "* (AlCalzone) Removido o suporte compacto. Às vezes, o `noble 'gera erros nos retornos de chamada que não podem ser manipulados e derrubariam todo o grupo compacto.\n* (AlCalzone) Adicionado suporte para a Xiaomi Kettle\n* (AlCalzone) Pacotes criptografados não são mais decodificados (por enquanto) para evitar a criação de milhares de estados `unknown (0xabcd)`",
+                "nl": "* (AlCalzone) Compacte ondersteuning verwijderd. `nobel` veroorzaakt soms fouten in terugbelverzoeken die niet kunnen worden afgehandeld en zou de hele compacte groep ten val brengen.\n* (AlCalzone) Ondersteuning toegevoegd voor de Xiaomi-waterkoker\n* (AlCalzone) Versleutelde pakketten worden niet meer gedecodeerd (voorlopig) om te voorkomen dat duizenden `onbekende (0xabcd)` staten ontstaan",
+                "fr": "* (AlCalzone) Suppression du support compact. `noble` lance parfois des erreurs dans les rappels qui ne peuvent pas être gérées et ferait tomber l'ensemble du groupe compact.\n* (AlCalzone) Ajout de la prise en charge de la bouilloire Xiaomi\n* (AlCalzone) Les paquets chiffrés ne sont plus décodés (pour l'instant) pour éviter de créer des milliers d'états `inconnus (0xabcd)`",
+                "it": "* (AlCalzone) Supporto compatto rimosso. \"nobile\" a volte genera errori nei callback che non possono essere gestiti e porterebbe giù l'intero gruppo compatto.\n* (AlCalzone) Aggiunto supporto per Xiaomi Kettle\n* (AlCalzone) I pacchetti crittografati non vengono più decodificati (per ora) per evitare la creazione di migliaia di stati `sconosciuti (0xabcd)`",
+                "es": "* (AlCalzone) Se eliminó el soporte compacto. `noble` a veces arroja errores en devoluciones de llamada que no se pueden manejar y derribaría a todo el grupo compacto.\n* (AlCalzone) Se agregó soporte para el hervidor de agua Xiaomi\n* (AlCalzone) Los paquetes cifrados ya no se decodifican (por ahora) para evitar crear miles de estados `desconocidos (0xabcd)`",
+                "pl": "* (AlCalzone) Usunięto kompaktowe wsparcie. „szlachetny” czasami generuje błędy w wywołaniach zwrotnych, których nie można obsłużyć i sprowadziłoby całą kompaktową grupę w dół.\n* (AlCalzone) Dodano obsługę czajnika Xiaomi\n* (AlCalzone) Zaszyfrowane pakiety nie są już dekodowane (na razie), aby uniknąć tworzenia tysięcy stanów `nieznanych (0xabcd)`",
+                "zh-cn": "*（AlCalzone）删除了紧凑型支架。有时，“ noble”会在无法处理的回调中引发错误，并使整个紧凑型组崩溃。\n*（AlCalzone）添加了对小米水壶的支持\n*（AlCalzone）不再对加密数据包进行解码（暂时），以避免创建数千个“未知（0xabcd）”状态"
+            },
             "0.10.1": {
                 "en": "Fixed crash in JS-Controller 2.0",
                 "de": "Absturz in JS-Controller 2.0 behoben",
@@ -169,7 +181,9 @@
             "pl": "Monitor Bluetooth low energy (BLE) latarnie",
             "zh-cn": "监测蓝牙低能源(BLE)信标"
         },
-        "authors": ["AlCalzone <d.griesel@gmx.net>"],
+        "authors": [
+            "AlCalzone <d.griesel@gmx.net>"
+        ],
         "platform": "Javascript/Node.js",
         "license": "MIT",
         "main": "build/main.js",
@@ -177,7 +191,11 @@
         "icon": "ble.png",
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
-        "keywords": ["bluetooth", "BLE", "beacon"],
+        "keywords": [
+            "bluetooth",
+            "BLE",
+            "beacon"
+        ],
         "readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
         "loglevel": "info",
         "type": "hardware",
