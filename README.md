@@ -45,6 +45,7 @@ If you have any device transmitting specially encoded information via advertisem
 ### __WORK IN PROGRESS__
 * (AlCalzone) Removed compact support. `noble` sometimes throws errors in callbacks that cannot be handled and would bring the whole compact group down.
 * (AlCalzone) Added support for the Xiaomi Kettle
+* (AlCalzone) Encrypted packets are no longer decoded (for now) to avoid creating thousands of `unknown (0xabcd)` states
 
 ### 0.10.1 (2019-10-13)
 * (AlCalzone) Fixed crash in JS-Controller 2.0
