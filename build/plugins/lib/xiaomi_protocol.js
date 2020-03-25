@@ -29,6 +29,10 @@ class XiaomiAdvertisement {
         this._isBindingFrame = (flags & 512 /* Binding */) !== 0;
         this._productID = data.readUInt16LE(2);
         this._frameCounter = data[4];
+        // Avoid creating thousands of unknown(0xabcd) states
+        if (this._isEncrypted) {
+            throw new Error("Encrypted advertisements are not supported");
+        }
         // The actual packet content begins at offset 5
         let offset = 5;
         if (this._hasMacAddress) {
