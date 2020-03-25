@@ -38,6 +38,7 @@
     "iobroker-react-components": "^1.0.0"
   },
   "devDependencies": {
+    "@alcalzone/release-script": "^1.1.1",
     "@babel/core": "^7.2.2",
     "@fimbul/mithotyn": "^0.21.0",
     "@fimbul/wotan": "^0.21.0",
@@ -94,7 +95,8 @@
     "lint:wotan": "wotan",
     "lint": "npm run lint:ts && npm run lint:wotan",
     "deploy_local": "node build/deploy_local.js",
-    "prepublishOnly": "npm run test:package"
+    "prepublishOnly": "npm run test:package",
+    "release": "release-script"
   },
   "bugs": {
     "url": "https://github.com/AlCalzone/ioBroker.ble/issues"
