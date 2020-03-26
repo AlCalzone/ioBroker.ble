@@ -75,7 +75,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "clean-build-dir": "cpx build/src/**/*.* build && rimraf build/src && rimraf build/{io-,}package.json",
+    "clean-build-dir": "cpx \"build/src/**/*.*\" build && rimraf build/src && rimraf build/{io-,}package.json",
     "build:ts": "tsc -p src/tsconfig.json",
     "check:ts": "tsc -p src/tsconfig.json --noEmit",
     "postbuild:ts": "npm run clean-build-dir",
