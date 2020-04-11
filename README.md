@@ -42,7 +42,7 @@ If you have any device transmitting specially encoded information via advertisem
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.11.1 (2020-04-11)
 * (AlCalzone) Fixed typo in Ruuvi Tag plugin: `motionCounter` -> `movementCounter`
 
 ### 0.11.0 (2020-03-25)

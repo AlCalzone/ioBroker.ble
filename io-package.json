@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.11.0",
+        "version": "0.11.1",
         "news": {
+            "0.11.1": {
+                "en": "* (AlCalzone) Fixed typo in Ruuvi Tag plugin: `motionCounter` -> `movementCounter`",
+                "de": "* (AlCalzone) Tippfehler im Ruuvi Tag Plugin behoben: `motionCounter` ->` motionCounter`",
+                "ru": "* (AlCalzone) Исправлена опечатка в плагине Ruuvi Tag: `motionCounter` ->` motionCounter`",
+                "pt": "* (AlCalzone) Corrigido erro de digitação no plugin Ruuvi Tag: `motionCounter` ->` motionCounter`",
+                "nl": "* (AlCalzone) Vaste typefout in Ruuvi Tag-plug-in: `motionCounter` ->` movementCounter`",
+                "fr": "* (AlCalzone) Correction d'une faute de frappe dans le plugin Ruuvi Tag: `motionCounter` ->` motionCounter`",
+                "it": "* (AlCalzone) Corretto errore di battitura nel plug-in Ruuvi Tag: `motionCounter` ->` movementCounter`",
+                "es": "* (AlCalzone) Se corrigió el error tipográfico en el plugin Ruuvi Tag: `motionCounter` ->` movementCounter`",
+                "pl": "* (AlCalzone) Naprawiono literówkę we wtyczce Ruuvi Tag: `motionCounter` ->` movementCounter`",
+                "zh-cn": "*（AlCalzone）修正了Ruuvi标签插件中的错别字：`motionCounter`->`movementCounter`"
+            },
             "0.11.0": {
                 "en": "* (AlCalzone) Removed compact support. `noble` sometimes throws errors in callbacks that cannot be handled and would bring the whole compact group down.\n* (AlCalzone) Added support for the Xiaomi Kettle\n* (AlCalzone) Encrypted packets are no longer decoded (for now) to avoid creating thousands of `unknown (0xabcd)` states",
                 "de": "* (AlCalzone) Kompakte Unterstützung entfernt. `noble` wirft manchmal Fehler in Rückrufen auf, die nicht behandelt werden können und die gesamte kompakte Gruppe zum Erliegen bringen.\n* (AlCalzone) Unterstützung für den Xiaomi-Wasserkocher hinzugefügt\n* (AlCalzone) Verschlüsselte Pakete werden (vorerst) nicht mehr dekodiert, um zu vermeiden, dass Tausende von \"unbekannten (0xabcd)\" Zuständen erstellt werden",
