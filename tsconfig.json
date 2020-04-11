@@ -12,6 +12,7 @@
         "stripInternal": true,
         "target": "es6",
         "jsx": "react",
+        "skipLibCheck": true,
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "resolveJsonModule": true,

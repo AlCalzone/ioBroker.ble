@@ -213,12 +213,12 @@ const plugin: Plugin<RuuviContext> = {
 				native: undefined,
 			});
 		}
-		if ("motionCounter" in context) {
+		if ("movementCounter" in context) {
 			stateObjects.push({
-				id: "motionCounter",
+				id: "movementCounter",
 				common: {
 					role: "value",
-					name: "Motion counter",
+					name: "Movement counter",
 					desc: "Incremented through motion detection interrupts",
 					type: "number",
 					read: true,

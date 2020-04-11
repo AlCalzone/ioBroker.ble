@@ -11,7 +11,7 @@ export interface RuuviContext {
     };
     battery?: number;
     txPower?: number;
-    motionCounter?: number;
+    movementCounter?: number;
     sequenceNumber?: number;
     macAddress?: string;
     beaconID?: number;
