@@ -42,6 +42,9 @@ If you have any device transmitting specially encoded information via advertisem
 	### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+* (AlCalzone) Avoid setting `undefined` as a state value to be compatible with JS-Controller 3.0
+
 ### 0.11.1 (2020-04-11)
 * (AlCalzone) Fixed typo in Ruuvi Tag plugin: `motionCounter` -> `movementCounter`
 
