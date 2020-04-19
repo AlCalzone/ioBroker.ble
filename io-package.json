@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.11.1",
+        "version": "0.11.2",
         "news": {
+            "0.11.2": {
+                "en": "* (AlCalzone) Avoid setting `undefined` as a state value to be compatible with JS-Controller 3.0",
+                "de": "* (AlCalzone) Vermeiden Sie es, \"undefined\" als Statuswert festzulegen, um mit JS-Controller 3.0 kompatibel zu sein",
+                "ru": "* (AlCalzone) Избегайте установки значения undefined в качестве значения состояния для совместимости с JS-Controller 3.0",
+                "pt": "* (AlCalzone) Evite definir `undefined` como um valor de estado para ser compatível com o JS-Controller 3.0",
+                "nl": "* (AlCalzone) Vermijd het instellen van `undefined` als een statuswaarde om compatibel te zijn met JS-Controller 3.0",
+                "fr": "* (AlCalzone) Évitez de définir `undefined` comme valeur d'état pour être compatible avec JS-Controller 3.0",
+                "it": "* (AlCalzone) Evita di impostare `undefined` come valore di stato per essere compatibile con JS-Controller 3.0",
+                "es": "* (AlCalzone) Evite establecer 'undefined` como un valor de estado para ser compatible con JS-Controller 3.0",
+                "pl": "* (AlCalzone) Unikaj ustawiania `undefined` jako wartości stanu, aby być kompatybilnym z JS-Controller 3.0",
+                "zh-cn": "*（AlCalzone）避免将undefined设置为与JS-Controller 3.0兼容的状态值"
+            },
             "0.11.1": {
                 "en": "* (AlCalzone) Fixed typo in Ruuvi Tag plugin: `motionCounter` -> `movementCounter`",
                 "de": "* (AlCalzone) Tippfehler im Ruuvi Tag Plugin behoben: `motionCounter` ->` motionCounter`",

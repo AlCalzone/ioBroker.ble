@@ -42,7 +42,7 @@ If you have any device transmitting specially encoded information via advertisem
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.11.2 (2020-04-19)
 * (AlCalzone) Avoid setting `undefined` as a state value to be compatible with JS-Controller 3.0
 
 ### 0.11.1 (2020-04-11)
