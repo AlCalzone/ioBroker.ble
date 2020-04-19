@@ -9,6 +9,7 @@ import { ObjectCache } from "./lib/object-cache";
 // Load all registered plugins
 import plugins from "./plugins";
 import { Plugin } from "./plugins/plugin";
+import { entries } from "alcalzone-shared/objects";
 
 let enabledPlugins: Plugin[];
 let services: string[] = [];
@@ -344,14 +345,14 @@ async function onDiscover(peripheral: BLE.Peripheral) {
 	// Now fill the states with values
 	if (values != null) {
 		_.log(`${deviceId} > got values: ${JSON.stringify(values)}`, "debug");
-		for (let stateId of Object.keys(values)) {
+		for (let [stateId, value] of entries(values)) {
 			// Fix special chars
 			stateId = stateId.replace(/[\(\)]+/g, "").replace(" ", "_");
 			// set the value if there's an object for the state
 			const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
 			if (await _.objectCache.getObject(iobStateId) != null) {
 				_.log(`setting state ${iobStateId}`, "debug");
-				await adapter.setStateChangedAsync(iobStateId, values[stateId], true);
+				await adapter.setStateChangedAsync(iobStateId, value ?? null, true);
 			} else {
 				_.log(`skipping state ${iobStateId} because the object does not exist`, "warn");
 			}

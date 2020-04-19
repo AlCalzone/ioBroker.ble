@@ -17,6 +17,7 @@ const iobroker_objects_1 = require("./lib/iobroker-objects");
 const object_cache_1 = require("./lib/object-cache");
 // Load all registered plugins
 const plugins_1 = require("./plugins");
+const objects_1 = require("alcalzone-shared/objects");
 let enabledPlugins;
 let services = [];
 /** Whether new devices may be recorded */
@@ -321,14 +322,14 @@ function onDiscover(peripheral) {
         // Now fill the states with values
         if (values != null) {
             global_1.Global.log(`${deviceId} > got values: ${JSON.stringify(values)}`, "debug");
-            for (let stateId of Object.keys(values)) {
+            for (let [stateId, value] of objects_1.entries(values)) {
                 // Fix special chars
                 stateId = stateId.replace(/[\(\)]+/g, "").replace(" ", "_");
                 // set the value if there's an object for the state
                 const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
                 if ((yield global_1.Global.objectCache.getObject(iobStateId)) != null) {
                     global_1.Global.log(`setting state ${iobStateId}`, "debug");
-                    yield adapter.setStateChangedAsync(iobStateId, values[stateId], true);
+                    yield adapter.setStateChangedAsync(iobStateId, value !== null && value !== void 0 ? value : null, true);
                 }
                 else {
                     global_1.Global.log(`skipping state ${iobStateId} because the object does not exist`, "warn");
