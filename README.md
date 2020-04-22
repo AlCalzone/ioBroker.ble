@@ -42,6 +42,9 @@ If you have any device transmitting specially encoded information via advertisem
 	### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+* (AlCalzone) Fixed a crash that happens when `noble` can not be loaded.
+
 ### 0.11.2 (2020-04-19)
 * (AlCalzone) Avoid setting `undefined` as a state value to be compatible with JS-Controller 3.0
 
