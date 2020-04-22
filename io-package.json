@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.11.2",
+        "version": "0.11.3",
         "news": {
+            "0.11.3": {
+                "en": "* (AlCalzone) Fixed a crash that happens when `noble` can not be loaded.",
+                "de": "* (AlCalzone) Es wurde ein Absturz behoben, der auftrat, wenn \"noble\" nicht geladen werden konnte.",
+                "ru": "* (AlCalzone) Исправлен сбой, который происходит, когда `noble` не может быть загружен.",
+                "pt": "* (AlCalzone) Corrigida uma falha que acontece quando o `noble` não pode ser carregado.",
+                "nl": "* (AlCalzone) Een crash gerepareerd die optreedt wanneer `noble` niet kan worden geladen.",
+                "fr": "* (AlCalzone) Correction d'un plantage qui se produit lorsque `noble` ne peut pas être chargé.",
+                "it": "* (AlCalzone) Risolto un crash che si verificava quando \"nobile\" non può essere caricato.",
+                "es": "* (AlCalzone) Se corrigió un bloqueo que ocurre cuando no se puede cargar `noble`.",
+                "pl": "* (AlCalzone) Naprawiono awarię występującą, gdy nie można załadować „szlachetnego”.",
+                "zh-cn": "*（AlCalzone）修复了无法加载`noble`时发生的崩溃。"
+            },
             "0.11.2": {
                 "en": "* (AlCalzone) Avoid setting `undefined` as a state value to be compatible with JS-Controller 3.0",
                 "de": "* (AlCalzone) Vermeiden Sie es, \"undefined\" als Statuswert festzulegen, um mit JS-Controller 3.0 kompatibel zu sein",
