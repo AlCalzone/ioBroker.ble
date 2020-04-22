@@ -89,7 +89,7 @@ const adapter = utils.adapter({
                 noble = require("@abandonware/noble");
             }
             catch (e) {
-                tryCatchUnsupportedHardware(e, () => {
+                return tryCatchUnsupportedHardware(e, () => {
                     terminate(e.message || e);
                 });
             }
