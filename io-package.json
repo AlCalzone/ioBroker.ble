@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.11.3",
+        "version": "0.11.4",
         "news": {
+            "0.11.4": {
+                "en": "* (AlCalzone) Utilize JS-Controller's auto module rebuild if possible",
+                "de": "* (AlCalzone) Verwenden Sie nach Möglichkeit die automatische Modulwiederherstellung von JS-Controller",
+                "ru": "* (AlCalzone) Используйте автоматическую перестройку JS-контроллера, если это возможно",
+                "pt": "* (AlCalzone) Utilize a reconstrução automática do módulo do controlador JS, se possível",
+                "nl": "* (AlCalzone) Gebruik indien mogelijk de automatische herbouw van de JS-Controller",
+                "fr": "* (AlCalzone) Utilisez la reconstruction automatique du module JS-Controller si possible",
+                "it": "* (AlCalzone) Utilizzare la ricostruzione automatica del modulo di JS-Controller, se possibile",
+                "es": "* (AlCalzone) Utilice la reconstrucción automática del módulo JS-Controller si es posible",
+                "pl": "* (AlCalzone) Wykorzystaj automatyczną przebudowę modułu JS-Controller, jeśli to możliwe",
+                "zh-cn": "*（AlCalzone）尽可能利用JS-Controller的自动模块重建"
+            },
             "0.11.3": {
                 "en": "* (AlCalzone) Fixed a crash that happens when `noble` can not be loaded.",
                 "de": "* (AlCalzone) Es wurde ein Absturz behoben, der auftrat, wenn \"noble\" nicht geladen werden konnte.",
