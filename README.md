@@ -42,6 +42,9 @@ If you have any device transmitting specially encoded information via advertisem
 	### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+* (AlCalzone) Utilize JS-Controller's auto module rebuild if possible
+
 ### 0.11.3 (2020-04-22)
 * (AlCalzone) Fixed a crash that happens when `noble` can not be loaded.
 
