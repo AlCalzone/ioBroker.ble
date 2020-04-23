@@ -37,6 +37,7 @@ const adapter = utils.adapter({
     // is called when databases are connected and adapter received configuration.
     // start here!
     ready: () => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
         // Adapter-Instanz global machen
         global_1.Global.adapter = adapter;
         // Cache objects for 1 minute
@@ -89,6 +90,10 @@ const adapter = utils.adapter({
                 noble = require("@abandonware/noble");
             }
             catch (e) {
+                if (/NODE_MODULE_VERSION/.test(e.message) && ((_a = adapter.supportsFeature) === null || _a === void 0 ? void 0 : _a.call(adapter, "CONTROLLER_NPM_AUTO_REBUILD"))) {
+                    // Let JS-Controller take care of rebuilding the module
+                    throw e;
+                }
                 return tryCatchUnsupportedHardware(e, () => {
                     terminate(e.message || e);
                 });

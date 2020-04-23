@@ -25,7 +25,22 @@ export declare class Global {
      * Kurzschreibweise für die Ermittlung eines Objekts
      * @param id
      */
-    static $(id: string): Promise<ioBroker.StateObject | ioBroker.ChannelObject | ioBroker.DeviceObject | ioBroker.OtherObject | null | undefined>;
+    static $(id: string): Promise<(ioBroker.StateObject & {
+        common: Record<string, any>;
+        native: Record<string, any>;
+    }) | (ioBroker.ChannelObject & {
+        common: Record<string, any>;
+        native: Record<string, any>;
+    }) | (ioBroker.DeviceObject & {
+        common: Record<string, any>;
+        native: Record<string, any>;
+    }) | (ioBroker.FolderObject & {
+        common: Record<string, any>;
+        native: Record<string, any>;
+    }) | (ioBroker.OtherObject & {
+        common: Record<string, any>;
+        native: Record<string, any>;
+    }) | null | undefined>;
     /**
      * Kurzschreibweise für die Ermittlung mehrerer Objekte
      * @param id

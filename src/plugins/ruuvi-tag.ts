@@ -84,7 +84,7 @@ const plugin: Plugin<RuuviContext> = {
 			native: undefined,
 		};
 		if ("beaconID" in context) {
-			deviceObject.native = { beaconID: context.beaconID };
+			deviceObject.native = { beaconID: context.beaconID } as any;
 		}
 
 		// no channels

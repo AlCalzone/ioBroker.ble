@@ -47,7 +47,7 @@ const adapter = utils.adapter({
 
 		// Prüfen, ob wir neue Geräte erfassen dürfen
 		const allowNewDevicesState = await adapter.getStateAsync("options.allowNewDevices");
-		allowNewDevices = (allowNewDevicesState && allowNewDevicesState.val != undefined) ? allowNewDevicesState.val : true;
+		allowNewDevices = (allowNewDevicesState && allowNewDevicesState.val != undefined) ? (allowNewDevicesState.val as unknown as boolean) : true;
 		await adapter.setStateAsync("options.allowNewDevices", allowNewDevices, true);
 
 		// Plugins laden
@@ -94,6 +94,10 @@ const adapter = utils.adapter({
 			try {
 				noble = require("@abandonware/noble");
 			} catch (e) {
+				if (/NODE_MODULE_VERSION/.test(e.message) && adapter.supportsFeature?.("CONTROLLER_NPM_AUTO_REBUILD")) {
+					// Let JS-Controller take care of rebuilding the module
+					throw e;
+				}
 				return tryCatchUnsupportedHardware(e, () => {
 					terminate(e.message || e);
 				});

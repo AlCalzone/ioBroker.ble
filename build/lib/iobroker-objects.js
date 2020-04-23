@@ -53,6 +53,7 @@ function extendState(stateId, object) {
     return __awaiter(this, void 0, void 0, function* () {
         const original = yield global_1.Global.objectCache.getObject(`${global_1.Global.adapter.namespace}.${stateId}`);
         // update the object while preserving the existing properties
+        // @ts-ignore
         const updated = {
             type: "state",
             common: Object.assign(Object.assign({ name: stateId }, object.common), (original && original.common)),
