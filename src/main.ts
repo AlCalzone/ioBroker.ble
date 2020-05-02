@@ -94,11 +94,7 @@ const adapter = utils.adapter({
 			try {
 				noble = require("@abandonware/noble");
 			} catch (e) {
-				if (/NODE_MODULE_VERSION/.test(e.message) && adapter.supportsFeature?.("CONTROLLER_NPM_AUTO_REBUILD")) {
-					// Let JS-Controller take care of rebuilding the module
-					throw e;
-				}
-				return tryCatchUnsupportedHardware(e, () => {
+				return tryCatchKnownErrors(e, () => {
 					terminate(e.message || e);
 				});
 			}
@@ -385,37 +381,40 @@ function stopScanning() {
 	isScanning = false;
 }
 
-function tryCatchUnsupportedHardware(err: Error, otherwise: () => never): never {
+function tryCatchKnownErrors(err: Error, otherwise: () => never): never {
 	if (
 		/compatible USB Bluetooth/.test(err.message)
 		|| /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)
 	) {
 		terminate("No compatible BLE 4.0 hardware found!");
+	} else if (/NODE_MODULE_VERSION/.test(err.message) && adapter.supportsFeature?.("CONTROLLER_NPM_AUTO_REBUILD")) {
+		terminate("A dependency requires a rebuild.", 13);
 	} else {
 		// ioBroker gives the process time to exit, so we need to call the alternative conditionally
 		otherwise();
 	}
 }
 
-function terminate(reason: string = "no reason given"): never {
+function terminate(reason: string = "no reason given", exitCode: number = 11): never {
 	if (adapter) {
 		adapter.log.error(`Terminating because ${reason}`);
 		if (adapter.terminate) {
-			return adapter.terminate(reason);
+			return adapter.terminate(reason, exitCode);
 		}
 	}
-	return process.exit(11);
+	return process.exit(exitCode);
 }
 
 // wotan-disable no-useless-predicate
 process.on("unhandledRejection", r => {
 	(adapter?.log ?? console).error("unhandled promise rejection: " + r);
+	throw r;
 });
 process.on("uncaughtException", err => {
 	// Noble on Windows seems to throw in a callback we cannot catch
-	tryCatchUnsupportedHardware(err, () => {
+	tryCatchKnownErrors(err, () => {
 		(adapter?.log ?? console).error("unhandled exception:" + err.message);
 		(adapter?.log ?? console).error("> stack: " + err.stack);
-		return process.exit(1);
+		return process.exit(6);
 	});
 });

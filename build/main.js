@@ -37,7 +37,6 @@ const adapter = utils.adapter({
     // is called when databases are connected and adapter received configuration.
     // start here!
     ready: () => __awaiter(void 0, void 0, void 0, function* () {
-        var _a;
         // Adapter-Instanz global machen
         global_1.Global.adapter = adapter;
         // Cache objects for 1 minute
@@ -90,11 +89,7 @@ const adapter = utils.adapter({
                 noble = require("@abandonware/noble");
             }
             catch (e) {
-                if (/NODE_MODULE_VERSION/.test(e.message) && ((_a = adapter.supportsFeature) === null || _a === void 0 ? void 0 : _a.call(adapter, "CONTROLLER_NPM_AUTO_REBUILD"))) {
-                    // Let JS-Controller take care of rebuilding the module
-                    throw e;
-                }
-                return tryCatchUnsupportedHardware(e, () => {
+                return tryCatchKnownErrors(e, () => {
                     terminate(e.message || e);
                 });
             }
@@ -365,36 +360,41 @@ function stopScanning() {
     adapter.setState("info.connection", false, true);
     isScanning = false;
 }
-function tryCatchUnsupportedHardware(err, otherwise) {
+function tryCatchKnownErrors(err, otherwise) {
+    var _a;
     if (/compatible USB Bluetooth/.test(err.message)
         || /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)) {
         terminate("No compatible BLE 4.0 hardware found!");
+    }
+    else if (/NODE_MODULE_VERSION/.test(err.message) && ((_a = adapter.supportsFeature) === null || _a === void 0 ? void 0 : _a.call(adapter, "CONTROLLER_NPM_AUTO_REBUILD"))) {
+        terminate("A dependency requires a rebuild.", 13);
     }
     else {
         // ioBroker gives the process time to exit, so we need to call the alternative conditionally
         otherwise();
     }
 }
-function terminate(reason = "no reason given") {
+function terminate(reason = "no reason given", exitCode = 11) {
     if (adapter) {
         adapter.log.error(`Terminating because ${reason}`);
         if (adapter.terminate) {
-            return adapter.terminate(reason);
+            return adapter.terminate(reason, exitCode);
         }
     }
-    return process.exit(11);
+    return process.exit(exitCode);
 }
 // wotan-disable no-useless-predicate
 process.on("unhandledRejection", r => {
     var _a;
     ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _a !== void 0 ? _a : console).error("unhandled promise rejection: " + r);
+    throw r;
 });
 process.on("uncaughtException", err => {
     // Noble on Windows seems to throw in a callback we cannot catch
-    tryCatchUnsupportedHardware(err, () => {
+    tryCatchKnownErrors(err, () => {
         var _a, _b;
         ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _a !== void 0 ? _a : console).error("unhandled exception:" + err.message);
         ((_b = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _b !== void 0 ? _b : console).error("> stack: " + err.stack);
-        return process.exit(1);
+        return process.exit(6);
     });
 });
