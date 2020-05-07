@@ -42,6 +42,9 @@ If you have any device transmitting specially encoded information via advertisem
 	### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+* (AlCalzone) Ignore unhandled out of range error somewhere in `noble`
+
 ### 0.11.4 (2020-04-23)
 * (AlCalzone) Utilize JS-Controller's auto module rebuild if possible
 

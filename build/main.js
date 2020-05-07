@@ -361,13 +361,17 @@ function stopScanning() {
     isScanning = false;
 }
 function tryCatchKnownErrors(err, otherwise) {
-    var _a;
+    var _a, _b;
     if (/compatible USB Bluetooth/.test(err.message)
         || /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)) {
         terminate("No compatible BLE 4.0 hardware found!");
     }
     else if (/NODE_MODULE_VERSION/.test(err.message) && ((_a = adapter.supportsFeature) === null || _a === void 0 ? void 0 : _a.call(adapter, "CONTROLLER_NPM_AUTO_REBUILD"))) {
         terminate("A dependency requires a rebuild.", 13);
+    }
+    else if (err.message.includes(`The value of "offset" is out of range`)) {
+        // ignore, this happens in noble sometimes
+        ((_b = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _b !== void 0 ? _b : console).error(err.message);
     }
     else {
         // ioBroker gives the process time to exit, so we need to call the alternative conditionally
