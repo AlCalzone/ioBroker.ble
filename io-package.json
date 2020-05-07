@@ -3,18 +3,6 @@
         "name": "ble",
         "version": "0.11.5",
         "news": {
-            "0.11.5": {
-                "en": "* (AlCalzone) Ignore unhandled out of range error somewhere in `noble`",
-                "de": "* (AlCalzone) Ignorieren Sie nicht behandelte Fehler außerhalb des Bereichs irgendwo in `noble`",
-                "ru": "* (AlCalzone) Игнорировать необработанную ошибку вне диапазона где-то в `noble`",
-                "pt": "* (AlCalzone) Ignore o erro não tratado fora do intervalo em algum lugar nobre",
-                "nl": "* (AlCalzone) Negeer onverwerkte fout buiten bereik ergens in `noble`",
-                "fr": "* (AlCalzone) Ignorer l'erreur hors de portée non gérée quelque part dans `noble`",
-                "it": "* (AlCalzone) Ignora l'errore non gestito fuori portata da qualche parte in \"nobile\"",
-                "es": "* (AlCalzone) Ignora el error fuera de rango no manejado en algún lugar de `noble`",
-                "pl": "* (AlCalzone) Zignoruj nieobsługiwany błąd przekroczenia zakresu gdzieś w `noble`",
-                "zh-cn": "*（AlCalzone）忽略`noble`中某处未处理的超出范围的错误"
-            },
             "0.11.4": {
                 "en": "* (AlCalzone) Utilize JS-Controller's auto module rebuild if possible",
                 "de": "* (AlCalzone) Verwenden Sie nach Möglichkeit die automatische Modulwiederherstellung von JS-Controller",

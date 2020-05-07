@@ -217,6 +217,11 @@ const adapter = utils.adapter({
 			}
 		}
 	},
+
+	// @ts-ignore
+	error: (err) => {
+		return tryCatchKnownErrorsSync(err);
+	}
 });
 
 // =========================
@@ -381,43 +386,42 @@ function stopScanning() {
 	isScanning = false;
 }
 
-function tryCatchKnownErrors(err: Error, otherwise: () => never): void {
+function tryCatchKnownErrors(err: Error, notHandled: () => never): void {
+	if (!tryCatchKnownErrorsSync(err)) {
+		// ioBroker gives the process time to exit, so we need to call the callback
+		// if we did not shut down the adapter or handled the error
+		notHandled();
+	}
+}
+
+/**
+ * @returns true if the error was handled
+ */
+function tryCatchKnownErrorsSync(err: Error): boolean {
 	if (
 		/compatible USB Bluetooth/.test(err.message)
 		|| /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)
 	) {
 		terminate("No compatible BLE 4.0 hardware found!");
+		return true;
 	} else if (/NODE_MODULE_VERSION/.test(err.message) && adapter.supportsFeature?.("CONTROLLER_NPM_AUTO_REBUILD")) {
 		terminate("A dependency requires a rebuild.", 13);
+		return true;
 	} else if (err.message.includes(`The value of "offset" is out of range`)) {
 		// ignore, this happens in noble sometimes
 		(adapter?.log ?? console).error(err.message);
-	} else {
-		// ioBroker gives the process time to exit, so we need to call the alternative conditionally
-		otherwise();
+		return true;
 	}
+	return false;
 }
 
 function terminate(reason: string = "no reason given", exitCode: number = 11): never {
 	if (adapter) {
 		adapter.log.error(`Terminating because ${reason}`);
 		if (adapter.terminate) {
+			// @ts-ignore
 			return adapter.terminate(reason, exitCode);
 		}
 	}
 	return process.exit(exitCode);
 }
-
-// wotan-disable no-useless-predicate
-process.on("unhandledRejection", r => {
-	(adapter?.log ?? console).error("unhandled promise rejection: " + r);
-	throw r;
-});
-process.on("uncaughtException", err => {
-	// Noble on Windows seems to throw in a callback we cannot catch
-	tryCatchKnownErrors(err, () => {
-		(adapter?.log ?? console).error("unhandled exception:" + err.message);
-		(adapter?.log ?? console).error("> stack: " + err.stack);
-		return process.exit(6);
-	});
-});

@@ -211,6 +211,10 @@ const adapter = utils.adapter({
             }
         }
     }),
+    // @ts-ignore
+    error: (err) => {
+        return tryCatchKnownErrorsSync(err);
+    }
 });
 // =========================
 function fixServiceName(name) {
@@ -360,45 +364,41 @@ function stopScanning() {
     adapter.setState("info.connection", false, true);
     isScanning = false;
 }
-function tryCatchKnownErrors(err, otherwise) {
+function tryCatchKnownErrors(err, notHandled) {
+    if (!tryCatchKnownErrorsSync(err)) {
+        // ioBroker gives the process time to exit, so we need to call the callback
+        // if we did not shut down the adapter or handled the error
+        notHandled();
+    }
+}
+/**
+ * @returns true if the error was handled
+ */
+function tryCatchKnownErrorsSync(err) {
     var _a, _b;
     if (/compatible USB Bluetooth/.test(err.message)
         || /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)) {
         terminate("No compatible BLE 4.0 hardware found!");
+        return true;
     }
     else if (/NODE_MODULE_VERSION/.test(err.message) && ((_a = adapter.supportsFeature) === null || _a === void 0 ? void 0 : _a.call(adapter, "CONTROLLER_NPM_AUTO_REBUILD"))) {
         terminate("A dependency requires a rebuild.", 13);
+        return true;
     }
     else if (err.message.includes(`The value of "offset" is out of range`)) {
         // ignore, this happens in noble sometimes
         ((_b = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _b !== void 0 ? _b : console).error(err.message);
+        return true;
     }
-    else {
-        // ioBroker gives the process time to exit, so we need to call the alternative conditionally
-        otherwise();
-    }
+    return false;
 }
 function terminate(reason = "no reason given", exitCode = 11) {
     if (adapter) {
         adapter.log.error(`Terminating because ${reason}`);
         if (adapter.terminate) {
+            // @ts-ignore
             return adapter.terminate(reason, exitCode);
         }
     }
     return process.exit(exitCode);
 }
-// wotan-disable no-useless-predicate
-process.on("unhandledRejection", r => {
-    var _a;
-    ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _a !== void 0 ? _a : console).error("unhandled promise rejection: " + r);
-    throw r;
-});
-process.on("uncaughtException", err => {
-    // Noble on Windows seems to throw in a callback we cannot catch
-    tryCatchKnownErrors(err, () => {
-        var _a, _b;
-        ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _a !== void 0 ? _a : console).error("unhandled exception:" + err.message);
-        ((_b = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _b !== void 0 ? _b : console).error("> stack: " + err.stack);
-        return process.exit(6);
-    });
-});
