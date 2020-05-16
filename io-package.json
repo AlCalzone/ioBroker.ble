@@ -122,110 +122,6 @@
                 "es": "Repara bloqueos en modo compacto",
                 "pl": "Napraw awarie trybu kompaktowego",
                 "zh-cn": "修复压缩模式崩溃"
-            },
-            "0.9.0": {
-                "en": "* Devices without service data but with manufacturer data are no longer treated as empty\n* `_default` plugin: Create states for manufacturer data\n* `ruuvi-tag` plugin: Set \"Ruuvi Tag\" as the default name for the device object",
-                "de": "* Geräte ohne Servicedaten aber mit Herstellerdaten werden nicht mehr als leer behandelt\n* `_default` plugin: Erzeugt Zustände für Herstellerdaten\n* `ruuvi-tag` plugin: Nutzt \"Ruuvi Tag\" als Standardnamen für das Geräteobjekt",
-                "ru": "* Устройства без сервисных данных, но с данными производителя больше не считаются пустыми\n* `_default` плагин: создание состояний для данных производителя\n* `ruuvi-tag` плагин: установите \"Ruuvi Tag\" в качестве имени по умолчанию для объекта устройства",
-                "pt": "* Os dispositivos sem dados de serviço, mas com dados do fabricante, não são mais tratados como vazios\n* plugin _default`: crie estados para dados do fabricante\n* plugin ruuvi-tag`: Defina `\" Ruuvi Tag \"` como o nome padrão para o objeto do dispositivo",
-                "nl": "* Apparaten zonder servicegegevens maar met fabrikantgegevens worden niet langer als leeg behandeld\n* `_default` plug-in: Creëer statussen voor fabrikantgegevens\n* `ruuvi-tag`-plug-in: stel` `Ruuvi Tag '' in als de standaardnaam voor het apparaatobject",
-                "fr": "* Les appareils sans données de service mais avec les données du fabricant ne sont plus traités comme vides\n* `_default` plugin: Crée des états pour les données du fabricant\n* `ruuvi-tag` plugin: Définit \"Ruuvi Tag\" comme nom par défaut pour l'objet périphérique",
-                "it": "* I dispositivi senza dati di servizio ma con i dati del produttore non vengono più considerati vuoti\n* Plugin `_default`: Crea stati per i dati del produttore\n* plugin `ruuvi-tag`: imposta \"Ruuvi Tag\" come nome predefinito per l'oggetto dispositivo",
-                "es": "* Los dispositivos sin datos de servicio pero con datos del fabricante ya no se consideran vacíos\n* Complemento `_default`: crea estados para los datos del fabricante\n* Complemento `ruuvi-tag`: establezca \"Ruuvi Tag\" como el nombre predeterminado para el objeto del dispositivo",
-                "pl": "* Urządzenia bez danych serwisowych, ale z danymi producenta nie są już traktowane jako puste\n* Wtyczka `_default`: Twórz stany dla danych producenta\n* Wtyczka `ruuvi-tag`: Ustaw` `Ruuvi Tag '' jako domyślną nazwę obiektu urządzenia",
-                "zh-cn": "*没有服务数据但具有制造商数据的设备不再被视为空\n*`_default`插件：为制造商数据创建状态\n*`ruuvi-tag`插件：设置`“Ruuvi Tag”`作为设备对象的默认名称"
-            },
-            "0.8.4": {
-                "en": "ruuvi-tag: Fix parsing of data format 3 and 5",
-                "de": "ruuvi-tag: Parsen der Datenformate 3 und 5 korrigiert",
-                "ru": "ruuvi-tag: исправление разбора данных формата 3 и 5",
-                "pt": "ruuvi-tag: corrige a análise do formato de dados 3 e 5",
-                "nl": "ruuvi-tag: parsering van gegevensformaat 3 en 5 repareren",
-                "fr": "ruuvi-tag: Correction de l'analyse des formats de données 3 et 5",
-                "it": "ruuvi-tag: correzione dell'analisi dei formati di dati 3 e 5",
-                "es": "ruuvi-tag: corrige el análisis de los formatos de datos 3 y 5",
-                "pl": "ruuvi-tag: Naprawiono parsowanie formatu danych 3 i 5",
-                "zh-cn": "ruuvi-tag：修复数据格式3和5的解析"
-            },
-            "0.8.3": {
-                "en": "Added `80:ea:ca` as an alternative mac prefix for FlowerCare",
-                "de": "`80:ea:ca` als alternatives Mac-Präfix für FlowerCare hinzugefügt",
-                "ru": "Добавлен `80:ea:ca` в качестве альтернативного префикса mac для FlowerCare",
-                "pt": "Adicionado `80:ea:ca` como um prefixo mac alternativo para FlowerCare",
-                "nl": "`80:ea:ca` toegevoegd als alternatief mac-voorvoegsel voor FlowerCare",
-                "fr": "Ajout de `80:ea:ca` comme préfixe mac alternatif pour FlowerCare",
-                "it": "Aggiunto `80:ea:ca` come prefisso mac alternativo per FlowerCare",
-                "es": "Se agregó `80:ea:ca` como prefijo mac alternativo para FlowerCare",
-                "pl": "Dodano `80:ea:ca` jako alternatywny prefiks mac dla FlowerCare",
-                "zh-cn": "添加了'80：ea：ca`作为FlowerCare的替代mac前缀"
-            },
-            "0.8.2": {
-                "en": "Added `3f:5b:7d` as an alternative mac prefix for the Xiaomi watch",
-                "de": "`3f:5b:7d` als alternatives Mac-Präfix für die Xiaomi-Uhr hinzugefügt",
-                "ru": "Добавлен `3f:5b:7d` в качестве альтернативного префикса mac для часов Xiaomi",
-                "pt": "Adicionado `3f:5b:7d` como um prefixo mac alternativo para o relógio Xiaomi",
-                "nl": "`3f:5b:7d` toegevoegd als alternatief mac-voorvoegsel voor het Xiaomi-horloge",
-                "fr": "Ajout de `3f:5b:7d` comme préfixe mac alternatif pour la montre Xiaomi",
-                "it": "Aggiunto `3f:5b:7d` come prefisso mac alternativo per l'orologio Xiaomi",
-                "es": "Se agregó `3f:5b:7d` como un prefijo mac alternativo para el reloj Xiaomi",
-                "pl": "Dodano `3f:5b:7d` jako alternatywny przedrostek mac dla zegarka Xiaomi",
-                "zh-cn": "添加了“3f：5b：7d”作为小米手表的替代mac前缀"
-            },
-            "0.8.1": {
-                "en": "Added support for the Xiaomi Mosquito Repellent (read-only!)",
-                "de": "Unterstützung für den Xiaomi Mückenschutz hinzugefügt (nur lesend!)"
-            },
-            "0.7.4": {
-                "en": "* Removed dependency to admin instance on slaves\n* Several dependency updates",
-                "de": "* Abhängigkeit von Admin-Instanzen auf Slaves entfernt\n*Einige Updates von Abhängigkeiten"
-            },
-            "0.7.3": {
-                "en": "Added MiTemperature watch with E-Ink display",
-                "de": "MiTemperature-Uhr mit E-Ink-Anzeige hinzugefügt",
-                "ru": "Добавлены часы MiTempera с дисплеем E-Ink",
-                "pt": "Relógio MiTemperature adicionado com display E-Ink",
-                "nl": "Toegevoegd MiTemperatuur horloge met E-Ink display",
-                "fr": "Ajout de la surveillance MiTemperature avec affichage E-Ink",
-                "it": "Aggiunto orologio MiTemperature con display E-Ink",
-                "es": "Se agregó el reloj MiTemperature con pantalla E-Ink",
-                "pl": "Dodano zegarek MiTemperature z wyświetlaczem E-Ink",
-                "zh-cn": "添加了带有E-Ink显示屏的MiTemperature手表"
-            },
-            "0.7.2": {
-                "en": "Add `58:2d:34` as an alternative mac prefix for MiTemperature",
-                "de": "Mac-Präfix `58:2d:34` als Alternative für MiTemperature hinzugefügt",
-                "ru": "Добавить `58:2Д:34` в качестве альтернативы префикса Mac для MiTemperature",
-                "pt": "Adicionar `58:2d:34` como uma alternativa mac prefixo para MiTemperature",
-                "nl": "Voeg `58:2d:34` als alternatief mac voorvoegsel voor MiTemperature",
-                "fr": "Ajouter `58:2d:34 \" comme une alternative mac préfixe pour MiTemperature",
-                "it": "Aggiungere `58:2d:34` come un'alternativa mac prefisso per MiTemperature",
-                "es": "Agregar `58:2d:34` como una alternativa mac prefijo para MiTemperature",
-                "pl": "Dodaj `58:2D:34`, jako alternatywy przedrostek Mac dla MiTemperature",
-                "zh-cn": "添加`58：2d:34`作为一种替代mac前缀为MiTemperature"
-            },
-            "0.7.0": {
-                "en": "* Support MaterializeCSS (Admin v3)\n* Support compact mode\n* Use @iobroker/testing for tests",
-                "de": "* Support MaterialiseCSS (Admin v3)\n* Kompaktmodus unterstützen\n* Verwenden Sie @iobroker/testing für Tests",
-                "ru": "* Поддержка MaterializeCSS (Admin v3)\n* Поддержка компактного режима\n* Использование @iobroker/testing для тестов",
-                "pt": "* Suporte MaterializeCSS (Admin v3)\n* Suporte ao modo compacto\n* Use @iobroker/testing para testes",
-                "nl": "* Ondersteuning MaterializeCSS (Admin v3)\n* Ondersteuning voor compacte modus\n* Gebruik @ iobroker / testen voor tests",
-                "fr": "* Support MaterialiseCSS (Admin v3)\n* Support du mode compact\n* Utilisez @iobroker/testing pour les tests",
-                "it": "* Supporto MaterialiseCSS (Admin v3)\n* Supporto modalità compatta\n* Utilizzare @iobroker/testing per i test",
-                "es": "* Soporte MaterialiseCSS (Admin v3)\n* Soporte modo compacto\n* Use @iobroker/testing para pruebas",
-                "pl": "* Wsparcie MaterialiseCSS (Admin v3)\n* Obsługa trybu kompaktowego\n* Używanie @iobroker/testing do testów",
-                "zh-cn": "*支持MaterialiseCSS（Admin v3）\n*支持紧凑模式\n*使用@iobroker/testing进行测试"
-            },
-            "0.6.0": {
-                "en": "* Added NodeJS 10 support\n* Added an option to disallow new devices",
-                "de": "* Unterstützung für NodeJS 10 hinzugefügt\n* Option hinzugefügt, um neue Geräte zu ignorieren",
-                "ru": "* Добавлена поддержка NodeJS 10\n* Добавлена опция для запрета новых устройств",
-                "pt": "* Adicionado NodeJS 10 de suporte\n* Adicionado uma opção para não permitir novos dispositivos",
-                "nl": "* Toegevoegd NodeJS 10 ondersteuning\n* Er is een mogelijkheid toegevoegd om het verbieden van nieuwe apparaten",
-                "fr": "* Ajout de NodeJS support 10\n* Ajout d'une option pour interdire les nouveaux dispositifs",
-                "it": "* Aggiunto NodeJS 10 supporto\n* Ha aggiunto un'opzione per bloccare i nuovi dispositivi",
-                "es": "* Añadido NodeJS 10 apoyo\n* Añadida una opción para no permitir nuevos dispositivos",
-                "pl": "* Dodano wsparcie dla NodeJS 10\n* Dodano opcję, aby uniemożliwić nowych urządzeń",
-                "zh-cn": "*增加node.js10支持\n*增加一个选项，以禁止的新设备"
             }
         },
         "title": "Bluetooth Low Energy",
@@ -266,7 +162,10 @@
             {
                 "js-controller": ">=1.4.2"
             }
-        ]
+        ],
+        "osDependencies": {
+            "linux": ["libcap2-bin"]
+        }
     },
     "native": {
         "services": "",
