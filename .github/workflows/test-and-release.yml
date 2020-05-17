@@ -59,10 +59,6 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
 
-            - name: Install linux dependencies
-              if: runner.OS == 'Linux'
-              run: sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev
-
             - name: Install npm dependencies
               run: npm ci
 
