@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.11.6",
+        "version": "0.11.7",
         "news": {
+            "0.11.7": {
+                "en": "Added a more helpful error message if the adapter terminates with error `EAFNOSUPPORT`",
+                "de": "Eine hilfreichere Fehlermeldung wurde hinzugefügt, wenn der Adapter mit dem Fehler \"EAFNOSUPPORT\" beendet wird",
+                "ru": "Добавлено более полезное сообщение об ошибке, если адаптер завершает работу с ошибкой `EAFNOSUPPORT`",
+                "pt": "Adicionada uma mensagem de erro mais útil se o adaptador terminar com o erro `EAFNOSUPPORT`",
+                "nl": "Een nuttiger foutbericht toegevoegd als de adapter eindigt met de fout 'EAFNOSUPPORT'",
+                "fr": "Ajout d'un message d'erreur plus utile si l'adaptateur se termine par l'erreur `EAFNOSUPPORT`",
+                "it": "Aggiunto un messaggio di errore più utile se l'adattatore termina con l'errore \"EAFNOSUPPORT\"",
+                "es": "Se agregó un mensaje de error más útil si el adaptador termina con el error `EAFNOSUPPORT`",
+                "pl": "Dodano bardziej pomocny komunikat o błędzie, jeśli adapter kończy pracę z błędem `EAFNOSUPPORT`",
+                "zh-cn": "如果适配器以错误“ EAFNOSUPPORT”终止，则添加了更有用的错误消息"
+            },
             "0.11.6": {
                 "en": "* (AlCalzone) Ignore unhandled out of range error somewhere in `noble`",
                 "de": "* (AlCalzone) Ignorieren Sie nicht behandelte Fehler außerhalb des Bereichs irgendwo in `noble`",
