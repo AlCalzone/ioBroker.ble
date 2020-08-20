@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ObjectCache = void 0;
 const objects_1 = require("alcalzone-shared/objects");
 const sorted_list_1 = require("alcalzone-shared/sorted-list");
 const global_1 = require("./global");

@@ -390,6 +390,10 @@ function tryCatchKnownErrorsSync(err) {
         ((_b = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _b !== void 0 ? _b : console).error(err.message);
         return true;
     }
+    else if (err.message.includes("EAFNOSUPPORT")) {
+        terminate("Unsupported Address Family (EAFNOSUPPORT). If ioBroker is running in a Docker container, make sure that the container uses host mode networking.");
+        return true;
+    }
     return false;
 }
 function terminate(reason = "no reason given", exitCode = 11) {

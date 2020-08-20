@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.extendState = exports.extendChannel = exports.extendDevice = void 0;
 const global_1 = require("./global");
 /** Extends a device object in the ioBroker objects DB */
 function extendDevice(deviceId, peripheral, object) {

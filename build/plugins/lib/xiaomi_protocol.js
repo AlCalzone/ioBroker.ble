@@ -1,6 +1,7 @@
 "use strict";
 // tslint:disable:max-classes-per-file
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.XiaomiEventIDs_Internal = exports.XiaomiAdvertisement = exports.CapabilityFlags = void 0;
 var CapabilityFlags;
 (function (CapabilityFlags) {
     CapabilityFlags[CapabilityFlags["Connectable"] = 1] = "Connectable";

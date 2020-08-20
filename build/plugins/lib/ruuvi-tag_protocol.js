@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.parseDataFormat5 = exports.parseDataFormat3 = exports.parseDataFormat2or4 = void 0;
 const object_polyfill_1 = require("../../lib/object-polyfill");
 function parseDataFormat2or4(data) {
     const dataFormat = data[0];

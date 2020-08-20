@@ -11,6 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.alias = exports.getServiceData = void 0;
 function getServiceData(peripheral, uuid) {
     for (const entry of peripheral.advertisement.serviceData) {
         if (entry.uuid === uuid)

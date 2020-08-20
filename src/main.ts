@@ -411,6 +411,9 @@ function tryCatchKnownErrorsSync(err: Error): boolean {
 		// ignore, this happens in noble sometimes
 		(adapter?.log ?? console).error(err.message);
 		return true;
+	} else if (err.message.includes("EAFNOSUPPORT")) {
+		terminate("Unsupported Address Family (EAFNOSUPPORT). If ioBroker is running in a Docker container, make sure that the container uses host mode networking.");
+		return true;
 	}
 	return false;
 }
