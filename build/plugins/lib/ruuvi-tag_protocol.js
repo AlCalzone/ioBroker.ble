@@ -6,7 +6,7 @@ function parseDataFormat2or4(data) {
     const dataFormat = data[0];
     const humidity = data.readUInt8(1) * 0.5;
     const temperature = data.readInt8(2);
-    const pressure = Math.round((data.readUInt16BE(4) + 50000) / 100); // hPa
+    const pressure = (data.readUInt16BE(4) + 50000) / 100; // hPa
     const ret = {
         dataFormat,
         humidity,
@@ -23,7 +23,7 @@ function parseDataFormat3(data) {
     const dataFormat = data[0];
     const humidity = data.readUInt8(1) * 0.5;
     const temperature = data.readInt8(2) + data[3] / 100;
-    const pressure = Math.round((data.readUInt16BE(4) + 50000) / 100); // hPa
+    const pressure = (data.readUInt16BE(4) + 50000) / 100; // hPa
     const acceleration = {
         x: data.readInt16BE(6),
         y: data.readInt16BE(8),
@@ -47,7 +47,7 @@ function parseDataFormat5(data) {
     let humidity = data.readUInt16BE(3);
     humidity = humidity !== 0xffff ? humidity * 0.0025 : undefined;
     let pressure = data.readUInt16BE(5);
-    pressure = pressure !== 0xffff ? Math.round((pressure + 50000) / 100) : undefined; // hPa
+    pressure = pressure !== 0xffff ? ((pressure + 50000) / 100) : undefined; // hPa
     let acceleration = {
         x: data.readInt16BE(7),
         y: data.readInt16BE(9),

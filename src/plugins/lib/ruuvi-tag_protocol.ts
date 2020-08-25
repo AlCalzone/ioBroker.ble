@@ -25,7 +25,7 @@ export function parseDataFormat2or4(data: Buffer): RuuviContext {
 
 	const temperature = data.readInt8(2);
 
-	const pressure = Math.round((data.readUInt16BE(4) + 50000) / 100); // hPa
+	const pressure = (data.readUInt16BE(4) + 50000) / 100; // hPa
 
 	const ret: RuuviContext = {
 		dataFormat,
@@ -46,7 +46,7 @@ export function parseDataFormat3(data: Buffer): RuuviContext {
 
 	const temperature = data.readInt8(2) + data[3] / 100;
 
-	const pressure = Math.round((data.readUInt16BE(4) + 50000) / 100); // hPa
+	const pressure = (data.readUInt16BE(4) + 50000) / 100; // hPa
 
 	const acceleration = {
 		x: data.readInt16BE(6),
@@ -76,7 +76,7 @@ export function parseDataFormat5(data: Buffer): RuuviContext {
 	humidity = humidity !== 0xffff ? humidity * 0.0025 : undefined;
 
 	let pressure: number | undefined = data.readUInt16BE(5);
-	pressure = pressure !== 0xffff ? Math.round((pressure + 50000) / 100) : undefined; // hPa
+	pressure = pressure !== 0xffff ? ((pressure + 50000) / 100) : undefined; // hPa
 
 	let acceleration: {[key in "x" | "y" | "z"]: number | undefined} | undefined = {
 		x: data.readInt16BE(7),
