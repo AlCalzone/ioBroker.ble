@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.11.7",
+        "version": "0.11.8",
         "news": {
+            "0.11.8": {
+                "en": "The pressure value reported by Ruuvi Tags is now parsed with two decimal places",
+                "de": "Der von Ruuvi Tags gemeldete Druckwert wird jetzt mit zwei Dezimalstellen analysiert",
+                "ru": "Значение давления, сообщаемое тегами Ruuvi, теперь анализируется с двумя десятичными знаками.",
+                "pt": "O valor de pressão relatado por Ruuvi Tags agora é analisado com duas casas decimais",
+                "nl": "De drukwaarde die door Ruuvi Tags wordt gerapporteerd, wordt nu geparseerd met twee decimalen",
+                "fr": "La valeur de pression rapportée par Ruuvi Tags est maintenant analysée avec deux décimales",
+                "it": "Il valore di pressione riportato da Ruuvi Tags viene ora analizzato con due cifre decimali",
+                "es": "El valor de presión informado por Ruuvi Tags ahora se analiza con dos lugares decimales",
+                "pl": "Wartość ciśnienia zgłaszana przez Ruuvi Tags jest teraz analizowana z dwoma miejscami po przecinku",
+                "zh-cn": "Ruuvi标签报告的压力值现在解析为两个小数位"
+            },
             "0.11.7": {
                 "en": "Added a more helpful error message if the adapter terminates with error `EAFNOSUPPORT`",
                 "de": "Eine hilfreichere Fehlermeldung wurde hinzugefügt, wenn der Adapter mit dem Fehler \"EAFNOSUPPORT\" beendet wird",
