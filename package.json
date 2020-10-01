@@ -60,7 +60,6 @@
     "cpx": "^1.5.0",
     "gulp": "^4.0.2",
     "mocha": "^8.1.3",
-    "node-ssh": "^8.0.0",
     "nyc": "^15.1.0",
     "parcel-bundler": "^1.12.4",
     "proxyquire": "^2.1.3",
@@ -94,7 +93,6 @@
     "lint:ts": "tslint \"src/**/*.ts\"",
     "lint:wotan": "wotan",
     "lint": "npm run lint:ts && npm run lint:wotan",
-    "deploy_local": "node build/deploy_local.js",
     "prepublishOnly": "npm run test:package",
     "release": "release-script"
   },
