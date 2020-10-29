@@ -462,8 +462,8 @@ function handleScanProcessError(err: Error) {
 			"Unsupported Address Family (EAFNOSUPPORT). If ioBroker is running in a Docker container, make sure that the container uses host mode networking.",
 		);
 	} else {
-		// This is something unexpected, better throw it so we can fix it
-		throw err;
+		// This is something unexpected. We don't want to bring down the main process, so just log it
+		(adapter?.log ?? console).error(err.message);
 	}
 }
 

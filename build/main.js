@@ -350,7 +350,7 @@ async function onDiscover(peripheral) {
     }
 }
 function handleScanProcessError(err) {
-    var _a, _b;
+    var _a, _b, _c;
     if (/compatible USB Bluetooth/.test(err.message) ||
         /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)) {
         terminate("No compatible BLE 4.0 hardware found!");
@@ -366,8 +366,8 @@ function handleScanProcessError(err) {
         terminate("Unsupported Address Family (EAFNOSUPPORT). If ioBroker is running in a Docker container, make sure that the container uses host mode networking.");
     }
     else {
-        // This is something unexpected, better throw it so we can fix it
-        throw err;
+        // This is something unexpected. We don't want to bring down the main process, so just log it
+        ((_c = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _c !== void 0 ? _c : console).error(err.message);
     }
 }
 function terminate(reason = "no reason given", exitCode = 11) {
