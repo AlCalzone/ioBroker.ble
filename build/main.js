@@ -179,19 +179,21 @@ function startScanProcess() {
     if (adapter.config.hciDevice) {
         args.push("-d", adapter.config.hciDevice.toString());
     }
+    adapter.log.info("starting scanner process...");
     scanProcess = child_process_1.fork(path.join(__dirname, "scanProcess"), args, {
         stdio: ["pipe", "pipe", "pipe", "ipc"],
     }).on("exit", (code, signal) => {
         if (!signal &&
             code !== 0 &&
             code !== scanProcessInterface_1.ScanExitCodes.RequireNobleFailed) {
+            adapter.log.warn("scanner process crashed, restarting...");
             setImmediate(startScanProcess);
         }
         else {
             scanProcess = undefined;
         }
     });
-    scanProcess.on("message", (message, handle) => {
+    scanProcess.on("message", scanProcessInterface_1.getMessageReviver((message) => {
         var _a;
         switch (message.type) {
             case "connected":
@@ -201,7 +203,7 @@ function startScanProcess() {
                 adapter.setState("info.connection", false, true);
                 break;
             case "discover":
-                onDiscover(handle);
+                onDiscover(message.peripheral);
                 break;
             case "driverState":
                 adapter.setState("info.driverState", message.driverState, true);
@@ -214,7 +216,7 @@ function startScanProcess() {
                 adapter.log[(_a = message.level) !== null && _a !== void 0 ? _a : "info"](message.message);
                 break;
         }
-    });
+    }));
 }
 function fixServiceName(name) {
     if (name == null)
@@ -362,6 +364,10 @@ function handleScanProcessError(err) {
     }
     else if (err.message.includes("EAFNOSUPPORT")) {
         terminate("Unsupported Address Family (EAFNOSUPPORT). If ioBroker is running in a Docker container, make sure that the container uses host mode networking.");
+    }
+    else {
+        // This is something unexpected, better throw it so we can fix it
+        throw err;
     }
 }
 function terminate(reason = "no reason given", exitCode = 11) {

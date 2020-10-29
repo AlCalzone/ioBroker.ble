@@ -2,9 +2,9 @@
  * Plugin for Xiaomi devices using the fe95 characteristic
  */
 
-import type { Peripheral } from "@abandonware/noble";
 import { entries } from "alcalzone-shared/objects";
 import { Global as _ } from "../lib/global";
+import type { PeripheralInfo } from "../lib/scanProcessInterface";
 import { XiaomiAdvertisement, XiaomiEvent } from "./lib/xiaomi_protocol";
 import {
 	DeviceObjectDefinition,
@@ -83,7 +83,7 @@ const plugin: Plugin<XiaomiContext> = {
 		return ret;
 	},
 
-	createContext: (peripheral: Peripheral) => {
+	createContext: (peripheral: PeripheralInfo) => {
 		const data = getServiceData(peripheral, "fe95");
 		if (data == undefined) return;
 

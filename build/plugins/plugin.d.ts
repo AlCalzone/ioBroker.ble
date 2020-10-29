@@ -1,6 +1,6 @@
 /// <reference types="iobroker" />
 /// <reference types="node" />
-import type { Peripheral } from "@abandonware/noble";
+import type { PeripheralInfo } from "../lib/scanProcessInterface";
 export declare type DeviceObjectDefinition = Partial<Pick<ioBroker.DeviceObject, "common" | "native">>;
 export declare type ChannelObjectDefinition = Partial<Pick<ioBroker.ChannelObject, "common" | "native">> & {
     id: string;
@@ -36,14 +36,14 @@ export interface Plugin<TContext = any> {
     /** A list of services to include in the scan */
     advertisedServices: string[];
     /** Determines whether this plugin is handling a peripheral or not */
-    isHandling: (peripheral: Peripheral) => boolean;
+    isHandling: (peripheral: PeripheralInfo) => boolean;
     /** Creates an object used by @see{defineObjects} and @see{getValues} to create their return values */
-    createContext: (peripheral: Peripheral) => TContext | undefined;
+    createContext: (peripheral: PeripheralInfo) => TContext | undefined;
     /** Defines the object structure for a handled peripheral. */
     defineObjects: (context: TContext) => PeripheralObjectStructure | undefined;
     /** Returns the values extracted from the peripheral */
     getValues: (context: TContext) => Record<string, any> | undefined;
 }
-export declare function getServiceData(peripheral: Peripheral, uuid: string): Buffer | undefined;
+export declare function getServiceData(peripheral: PeripheralInfo, uuid: string): Buffer | undefined;
 /** Aliases an existing plugin with a new name */
 export declare function alias(newName: string, oldPlugin: Plugin): Plugin;

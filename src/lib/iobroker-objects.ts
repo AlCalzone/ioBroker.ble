@@ -1,15 +1,15 @@
-import type { Peripheral } from "@abandonware/noble";
 import type {
 	ChannelObjectDefinition,
 	DeviceObjectDefinition,
 	StateObjectDefinition,
 } from "../plugins/plugin";
 import { Global as _ } from "./global";
+import type { PeripheralInfo } from "./scanProcessInterface";
 
 /** Extends a device object in the ioBroker objects DB */
 export async function extendDevice(
 	deviceId: string,
-	peripheral: Peripheral,
+	peripheral: PeripheralInfo,
 	object: DeviceObjectDefinition,
 ): Promise<void> {
 	const original = (await _.objectCache.getObject(

@@ -1,4 +1,3 @@
-import type { Peripheral } from "@abandonware/noble";
 import * as utils from "@iobroker/adapter-core";
 import { entries } from "alcalzone-shared/objects";
 import { ChildProcess, exec, fork } from "child_process";
@@ -10,7 +9,12 @@ import {
 	extendState,
 } from "./lib/iobroker-objects";
 import { ObjectCache } from "./lib/object-cache";
-import { ScanExitCodes, ScanMessage } from "./lib/scanProcessInterface";
+import {
+	getMessageReviver,
+	PeripheralInfo,
+	ScanExitCodes,
+	ScanMessage,
+} from "./lib/scanProcessInterface";
 // Load all registered plugins
 import plugins from "./plugins";
 import type { Plugin } from "./plugins/plugin";
@@ -215,6 +219,7 @@ function startScanProcess() {
 	if (adapter.config.hciDevice) {
 		args.push("-d", adapter.config.hciDevice.toString());
 	}
+	adapter.log.info("starting scanner process...");
 	scanProcess = fork(path.join(__dirname, "scanProcess"), args, {
 		stdio: ["pipe", "pipe", "pipe", "ipc"],
 	}).on("exit", (code, signal) => {
@@ -223,34 +228,42 @@ function startScanProcess() {
 			code !== 0 &&
 			code !== ScanExitCodes.RequireNobleFailed
 		) {
+			adapter.log.warn("scanner process crashed, restarting...");
 			setImmediate(startScanProcess);
 		} else {
 			scanProcess = undefined;
 		}
 	});
-	scanProcess.on("message", (message: ScanMessage, handle: any) => {
-		switch (message.type) {
-			case "connected":
-				adapter.setState("info.connection", true, true);
-				break;
-			case "disconnected":
-				adapter.setState("info.connection", false, true);
-				break;
-			case "discover":
-				onDiscover(handle);
-				break;
-			case "driverState":
-				adapter.setState("info.driverState", message.driverState, true);
-				break;
-			case "error": // fall through
-			case "fatal":
-				handleScanProcessError(message.error);
-				break;
-			case "log":
-				adapter.log[message.level ?? "info"](message.message);
-				break;
-		}
-	});
+	scanProcess.on(
+		"message",
+		getMessageReviver((message: ScanMessage) => {
+			switch (message.type) {
+				case "connected":
+					adapter.setState("info.connection", true, true);
+					break;
+				case "disconnected":
+					adapter.setState("info.connection", false, true);
+					break;
+				case "discover":
+					onDiscover(message.peripheral);
+					break;
+				case "driverState":
+					adapter.setState(
+						"info.driverState",
+						message.driverState,
+						true,
+					);
+					break;
+				case "error": // fall through
+				case "fatal":
+					handleScanProcessError(message.error);
+					break;
+				case "log":
+					adapter.log[message.level ?? "info"](message.message);
+					break;
+			}
+		}),
+	);
 }
 
 function fixServiceName(name: string | null | undefined): string {
@@ -266,7 +279,7 @@ function fixServiceName(name: string | null | undefined): string {
 	return name.toLowerCase();
 }
 
-async function onDiscover(peripheral: Peripheral) {
+async function onDiscover(peripheral: PeripheralInfo) {
 	if (peripheral == null) return;
 
 	let serviceDataIsNotEmpty = false;
@@ -448,6 +461,9 @@ function handleScanProcessError(err: Error) {
 		terminate(
 			"Unsupported Address Family (EAFNOSUPPORT). If ioBroker is running in a Docker container, make sure that the container uses host mode networking.",
 		);
+	} else {
+		// This is something unexpected, better throw it so we can fix it
+		throw err;
 	}
 }
 

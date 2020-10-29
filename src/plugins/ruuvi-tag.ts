@@ -3,9 +3,9 @@
  * See https://github.com/ruuvi/ruuvi-sensor-protocols for details
  */
 
-import type { Peripheral } from "@abandonware/noble";
 import * as nodeUrl from "url";
 import { Global as _ } from "../lib/global";
+import type { PeripheralInfo } from "../lib/scanProcessInterface";
 import {
 	parseDataFormat2or4,
 	parseDataFormat3,
@@ -35,7 +35,7 @@ const plugin: Plugin<RuuviContext> = {
 
 	advertisedServices: [serviceUUID],
 
-	isHandling: (peripheral: Peripheral) => {
+	isHandling: (peripheral: PeripheralInfo) => {
 		const cached = testedPeripherals.get(peripheral.id);
 		if (cached && cached.timestamp >= Date.now() - testValidity) {
 			// we have a recent test result, return it
@@ -57,7 +57,7 @@ const plugin: Plugin<RuuviContext> = {
 		return ret;
 	},
 
-	createContext: (peripheral: Peripheral) => {
+	createContext: (peripheral: PeripheralInfo) => {
 		if (!peripheral.advertisement) return;
 		let data = getServiceData(peripheral, serviceUUID);
 		if (data != undefined) {

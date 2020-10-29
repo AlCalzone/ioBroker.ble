@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const yargs = require("yargs");
+const misc_1 = require("./lib/misc");
 const scanProcessInterface_1 = require("./lib/scanProcessInterface");
 /** Define command line arguments */
 const argv = yargs
@@ -32,6 +33,22 @@ function sendAsync(message, sendHandle, swallowErrors = true) {
         });
     });
 }
+// @ts-expect-error We need this to serialize and deserialize Error objects
+Error.prototype.toJSON = function () {
+    const ret = {
+        type: "Error",
+        name: this.name,
+        message: this.message,
+        stack: this.stack,
+    };
+    // Add any custom properties such as .code in file-system errors
+    for (const key of Object.keys(this)) {
+        if (!ret[key]) {
+            ret[key] = this[key];
+        }
+    }
+    return ret;
+};
 process.on("uncaughtException", (error) => {
     // Delegate the error to the parent process and let it decide whether to shut down the scanning process
     sendAsync({ type: "error", error });
@@ -40,14 +57,31 @@ process.on("unhandledRejection", (error) => {
     // Delegate the error to the parent process and let it decide whether to shut down the scanning process
     sendAsync({
         type: "error",
+        error: 
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        error: error instanceof Error ? error : new Error(`${error}`),
+        error instanceof Error ? error : new Error(`${error}`),
     });
 });
+function serializePeripheral(peripheral) {
+    return misc_1.pick(peripheral, [
+        "id",
+        "uuid",
+        "address",
+        "addressType",
+        "connectable",
+        "advertisement",
+        "rssi",
+        "services",
+        "state",
+    ]);
+}
 function onDiscover(peripheral) {
     if (peripheral == undefined)
         return;
-    sendAsync({ type: "discover" }, peripheral);
+    sendAsync({
+        type: "discover",
+        peripheral: serializePeripheral(peripheral),
+    });
 }
 let isScanning = false;
 async function startScanning() {

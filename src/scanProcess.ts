@@ -1,7 +1,12 @@
 /** noble-Treiber-Instanz */
 import type { Peripheral } from "@abandonware/noble";
 import * as yargs from "yargs";
-import { ScanExitCodes, ScanMessage } from "./lib/scanProcessInterface";
+import { pick } from "./lib/misc";
+import {
+	PeripheralInfo,
+	ScanExitCodes,
+	ScanMessage,
+} from "./lib/scanProcessInterface";
 
 /** Define command line arguments */
 const argv = yargs
@@ -38,6 +43,23 @@ function sendAsync(
 	});
 }
 
+// @ts-expect-error We need this to serialize and deserialize Error objects
+Error.prototype.toJSON = function (this: Error) {
+	const ret: Record<string, any> = {
+		type: "Error",
+		name: this.name,
+		message: this.message,
+		stack: this.stack,
+	};
+	// Add any custom properties such as .code in file-system errors
+	for (const key of Object.keys(this) as (keyof Error)[]) {
+		if (!ret[key]) {
+			ret[key] = this[key];
+		}
+	}
+	return ret;
+};
+
 process.on("uncaughtException", (error) => {
 	// Delegate the error to the parent process and let it decide whether to shut down the scanning process
 	sendAsync({ type: "error", error });
@@ -46,14 +68,32 @@ process.on("unhandledRejection", (error) => {
 	// Delegate the error to the parent process and let it decide whether to shut down the scanning process
 	sendAsync({
 		type: "error",
-		// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-		error: error instanceof Error ? error : new Error(`${error}`),
+		error:
+			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+			error instanceof Error ? error : new Error(`${error}`),
 	});
 });
 
+function serializePeripheral(peripheral: Peripheral): PeripheralInfo {
+	return pick(peripheral, [
+		"id",
+		"uuid",
+		"address",
+		"addressType",
+		"connectable",
+		"advertisement",
+		"rssi",
+		"services",
+		"state",
+	]);
+}
+
 function onDiscover(peripheral?: Peripheral) {
 	if (peripheral == undefined) return;
-	sendAsync({ type: "discover" }, peripheral);
+	sendAsync({
+		type: "discover",
+		peripheral: serializePeripheral(peripheral),
+	});
 }
 
 let isScanning = false;

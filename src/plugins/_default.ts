@@ -1,5 +1,5 @@
-﻿import type { Peripheral } from "@abandonware/noble";
-import { Global as _ } from "../lib/global";
+﻿import { Global as _ } from "../lib/global";
+import type { PeripheralInfo } from "../lib/scanProcessInterface";
 import type {
 	ChannelObjectDefinition,
 	DeviceObjectDefinition,
@@ -28,9 +28,9 @@ const plugin: Plugin = {
 	isHandling: (_p) => true,
 
 	// No special context necessary. Return the peripheral, so it gets passed to the other methods.
-	createContext: (peripheral: Peripheral) => peripheral,
+	createContext: (peripheral: PeripheralInfo) => peripheral,
 
-	defineObjects: (peripheral: Peripheral): PeripheralObjectStructure => {
+	defineObjects: (peripheral: PeripheralInfo): PeripheralObjectStructure => {
 		const deviceObject: DeviceObjectDefinition = {
 			// no special definitions neccessary
 			common: undefined,
@@ -94,7 +94,7 @@ const plugin: Plugin = {
 		};
 	},
 
-	getValues: (peripheral: Peripheral) => {
+	getValues: (peripheral: PeripheralInfo) => {
 		const ret: Record<string, any> = {};
 		if (peripheral.advertisement && peripheral.advertisement.serviceData) {
 			for (const entry of peripheral.advertisement.serviceData) {

@@ -1,4 +1,4 @@
-﻿import type { Peripheral } from "@abandonware/noble";
+﻿import type { PeripheralInfo } from "../lib/scanProcessInterface";
 
 export type DeviceObjectDefinition = Partial<
 	Pick<ioBroker.DeviceObject, "common" | "native">
@@ -40,9 +40,9 @@ export interface Plugin<TContext = any> {
 	advertisedServices: string[];
 
 	/** Determines whether this plugin is handling a peripheral or not */
-	isHandling: (peripheral: Peripheral) => boolean;
+	isHandling: (peripheral: PeripheralInfo) => boolean;
 	/** Creates an object used by @see{defineObjects} and @see{getValues} to create their return values */
-	createContext: (peripheral: Peripheral) => TContext | undefined;
+	createContext: (peripheral: PeripheralInfo) => TContext | undefined;
 	/** Defines the object structure for a handled peripheral. */
 	defineObjects: (context: TContext) => PeripheralObjectStructure | undefined;
 	/** Returns the values extracted from the peripheral */
@@ -50,7 +50,7 @@ export interface Plugin<TContext = any> {
 }
 
 export function getServiceData(
-	peripheral: Peripheral,
+	peripheral: PeripheralInfo,
 	uuid: string,
 ): Buffer | undefined {
 	for (const entry of peripheral.advertisement!.serviceData!) {
