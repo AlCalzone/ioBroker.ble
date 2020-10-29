@@ -42,7 +42,7 @@ If you have any device transmitting specially encoded information via advertisem
 	### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.12.0 (2020-10-29)
 * Scanning is now done in a separate process, so uncatchable errors in `noble` no longer bring down the main process
 
 ### 0.11.8 (2020-08-25)
