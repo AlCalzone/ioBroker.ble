@@ -1,5 +1,12 @@
 ﻿import { Global as _ } from "../lib/global";
-import { ChannelObjectDefinition, DeviceObjectDefinition, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "./plugin";
+import type { PeripheralInfo } from "../lib/scanProcessInterface";
+import type {
+	ChannelObjectDefinition,
+	DeviceObjectDefinition,
+	PeripheralObjectStructure,
+	Plugin,
+	StateObjectDefinition,
+} from "./plugin";
 
 function parseData(raw: Buffer): string | number {
 	if (raw.length === 1) {
@@ -13,18 +20,19 @@ function parseData(raw: Buffer): string | number {
 
 const plugin: Plugin = {
 	name: "_default",
-	description: "Handles all peripherals that are not handled by other plugins",
+	description:
+		"Handles all peripherals that are not handled by other plugins",
 
 	// Just handle all services we receive already
 	advertisedServices: [],
-	isHandling: (p) => true,
+	isHandling: (_p) => true,
 
 	// No special context necessary. Return the peripheral, so it gets passed to the other methods.
-	createContext: (peripheral: BLE.Peripheral) => peripheral,
+	createContext: (peripheral: PeripheralInfo) => peripheral,
 
-	defineObjects: (peripheral: BLE.Peripheral): PeripheralObjectStructure => {
-
-		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
+	defineObjects: (peripheral: PeripheralInfo): PeripheralObjectStructure => {
+		const deviceObject: DeviceObjectDefinition = {
+			// no special definitions neccessary
 			common: undefined,
 			native: undefined,
 		};
@@ -60,7 +68,11 @@ const plugin: Plugin = {
 				});
 			}
 		}
-		if (peripheral.advertisement && peripheral.advertisement.manufacturerData && peripheral.advertisement.manufacturerData.length > 0) {
+		if (
+			peripheral.advertisement &&
+			peripheral.advertisement.manufacturerData &&
+			peripheral.advertisement.manufacturerData.length > 0
+		) {
 			stateObjects.push({
 				id: `${channelId}.manufacturerData`,
 				common: {
@@ -80,25 +92,32 @@ const plugin: Plugin = {
 			channels: [channelObject],
 			states: stateObjects,
 		};
-
 	},
 
-	getValues: (peripheral: BLE.Peripheral) => {
-		const ret = {};
+	getValues: (peripheral: PeripheralInfo) => {
+		const ret: Record<string, any> = {};
 		if (peripheral.advertisement && peripheral.advertisement.serviceData) {
 			for (const entry of peripheral.advertisement.serviceData) {
 				const uuid = entry.uuid;
 				const stateId = `services.${uuid}`;
 				// remember the transmitted data
 				ret[stateId] = parseData(entry.data);
-				_.log(`_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`, "debug");
+				_.adapter.log.debug(
+					`_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`,
+				);
 			}
 		}
-		if (peripheral.advertisement && peripheral.advertisement.manufacturerData && peripheral.advertisement.manufacturerData.length > 0) {
+		if (
+			peripheral.advertisement &&
+			peripheral.advertisement.manufacturerData &&
+			peripheral.advertisement.manufacturerData.length > 0
+		) {
 			const stateId = `services.manufacturerData`;
 			// remember the transmitted data
 			ret[stateId] = parseData(peripheral.advertisement.manufacturerData);
-			_.log(`_default: ${peripheral.address} > got manufacturer data ${ret[stateId]}`, "debug");
+			_.adapter.log.debug(
+				`_default: ${peripheral.address} > got manufacturer data ${ret[stateId]}`,
+			);
 		}
 		return ret;
 	},

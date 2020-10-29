@@ -13,12 +13,12 @@ function parseAdvertisementEvent(data) {
         advertisement = new xiaomi_protocol_1.XiaomiAdvertisement(data);
     }
     catch (e) {
-        global_1.Global.log(`xiaomi >> failed to parse data`, "debug");
+        global_1.Global.adapter.log.debug(`xiaomi >> failed to parse data`);
         return;
     }
     if (!advertisement.hasEvent || advertisement.isBindingFrame) {
-        global_1.Global.log(`xiaomi >> The device is not fully initialized.`, "debug");
-        global_1.Global.log(`xiaomi >> Use its app to complete the initialization.`, "debug");
+        global_1.Global.adapter.log.debug(`xiaomi >> The device is not fully initialized.`);
+        global_1.Global.adapter.log.debug(`xiaomi >> Use its app to complete the initialization.`);
         return;
     }
     // succesful - return it
@@ -31,11 +31,11 @@ const plugin = {
     name: "Xiaomi",
     description: "Xiaomi devices",
     advertisedServices: ["fe95"],
-    isHandling: p => {
+    isHandling: (p) => {
         // If the peripheral has no serviceData with UUID fe95, this is not for us
-        if (!p.advertisement
-            || !p.advertisement.serviceData
-            || !p.advertisement.serviceData.some(entry => entry.uuid === "fe95"))
+        if (!p.advertisement ||
+            !p.advertisement.serviceData ||
+            !p.advertisement.serviceData.some((entry) => entry.uuid === "fe95"))
             return false;
         const mac = p.address.toLowerCase();
         const cached = testedPeripherals.get(mac);
@@ -62,7 +62,7 @@ const plugin = {
         const data = plugin_1.getServiceData(peripheral, "fe95");
         if (data == undefined)
             return;
-        global_1.Global.log(`xiaomi >> got data: ${data.toString("hex")}`, "debug");
+        global_1.Global.adapter.log.debug(`xiaomi >> got data: ${data.toString("hex")}`);
         const event = parseAdvertisementEvent(data);
         if (event == undefined)
             return;
@@ -74,14 +74,14 @@ const plugin = {
         const deviceObject = {
             // no special definitions neccessary
             common: undefined,
-            native: undefined
+            native: undefined,
         };
         // no channels
         const stateObjects = [];
         const ret = {
             device: deviceObject,
             channels: undefined,
-            states: stateObjects
+            states: stateObjects,
         };
         const event = context.event;
         if ("temperature" in event) {
@@ -93,9 +93,9 @@ const plugin = {
                     type: "number",
                     unit: "°C",
                     read: true,
-                    write: false
+                    write: false,
                 },
-                native: undefined
+                native: undefined,
             });
         }
         if ("humidity" in event) {
@@ -107,9 +107,9 @@ const plugin = {
                     type: "number",
                     unit: "%rF",
                     read: true,
-                    write: false
+                    write: false,
                 },
-                native: undefined
+                native: undefined,
             });
         }
         if ("illuminance" in event) {
@@ -121,9 +121,9 @@ const plugin = {
                     type: "number",
                     unit: "lux",
                     read: true,
-                    write: false
+                    write: false,
                 },
-                native: undefined
+                native: undefined,
             });
         }
         if ("moisture" in event) {
@@ -136,9 +136,9 @@ const plugin = {
                     type: "number",
                     unit: "%",
                     read: true,
-                    write: false
+                    write: false,
                 },
-                native: undefined
+                native: undefined,
             });
         }
         if ("fertility" in event) {
@@ -151,9 +151,9 @@ const plugin = {
                     type: "number",
                     unit: "µS/cm",
                     read: true,
-                    write: false
+                    write: false,
                 },
-                native: undefined
+                native: undefined,
             });
         }
         if ("battery" in event) {
@@ -166,9 +166,9 @@ const plugin = {
                     type: "number",
                     unit: "%",
                     read: true,
-                    write: false
+                    write: false,
                 },
-                native: undefined
+                native: undefined,
             });
         }
         if ("kettleStatus" in event) {
@@ -186,9 +186,9 @@ const plugin = {
                         "1": "Heating",
                         "2": "Cooling",
                         "3": "Keeping warm",
-                    }
+                    },
                 },
-                native: undefined
+                native: undefined,
             });
         }
         // Create objects for unknown events
@@ -201,9 +201,9 @@ const plugin = {
                         name: key,
                         type: "number",
                         read: true,
-                        write: false
+                        write: false,
                     },
-                    native: undefined
+                    native: undefined,
                 });
             }
         }
@@ -213,10 +213,11 @@ const plugin = {
         if (context == null || context.event == null)
             return;
         for (const [prop, value] of objects_1.entries(context.event)) {
-            global_1.Global.log(`xiaomi >> {{green|got ${prop} update => ${value}}}`, "debug");
+            global_1.Global.adapter.log.debug(`xiaomi >> got ${prop} update => ${value}`);
         }
         // The event is simply the value dictionary itself
         return context.event;
-    }
+    },
 };
 module.exports = plugin;
+//# sourceMappingURL=xiaomi.js.map

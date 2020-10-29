@@ -1,13 +1,15 @@
-import { native } from "../../io-package.json";
-
-type _AdapterConfig = Partial<typeof native>;
-
+// This file extends the AdapterConfig type from "@types/iobroker"
 // Augment the globally declared type ioBroker.AdapterConfig
 declare global {
 	namespace ioBroker {
-		// tslint:disable-next-line:no-empty-interface
-		interface AdapterConfig extends _AdapterConfig {
-
+		interface AdapterConfig {
+			services: string;
+			hciDevice: number;
+			plugins: string;
+			allowEmptyDevices: boolean;
+			rssiThrottle: number;
 		}
 	}
 }
+// this is required so the above AdapterConfig is found by TypeScript / type checking
+export {};

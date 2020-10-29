@@ -5,15 +5,29 @@
 
 import * as nodeUrl from "url";
 import { Global as _ } from "../lib/global";
-import { parseDataFormat2or4, parseDataFormat3, parseDataFormat5, RuuviContext } from "./lib/ruuvi-tag_protocol";
-import { ChannelObjectDefinition, DeviceObjectDefinition, getServiceData, PeripheralObjectStructure, Plugin, StateObjectDefinition } from "./plugin";
+import type { PeripheralInfo } from "../lib/scanProcessInterface";
+import {
+	parseDataFormat2or4,
+	parseDataFormat3,
+	parseDataFormat5,
+	RuuviContext,
+} from "./lib/ruuvi-tag_protocol";
+import {
+	DeviceObjectDefinition,
+	getServiceData,
+	Plugin,
+	StateObjectDefinition,
+} from "./plugin";
 
 const serviceUUID = "feaa";
 const manufacturerId = Buffer.from([0x99, 0x04]);
 
 // remember tested peripherals by their ID for 1h
 const testValidity = 1000 * 3600;
-const testedPeripherals = new Map<string, { timestamp: number, result: boolean }>();
+const testedPeripherals = new Map<
+	string,
+	{ timestamp: number; result: boolean }
+>();
 
 const plugin: Plugin<RuuviContext> = {
 	name: "ruuvi-tag",
@@ -21,18 +35,20 @@ const plugin: Plugin<RuuviContext> = {
 
 	advertisedServices: [serviceUUID],
 
-	isHandling: (peripheral: BLE.Peripheral) => {
+	isHandling: (peripheral: PeripheralInfo) => {
 		const cached = testedPeripherals.get(peripheral.id);
 		if (cached && cached.timestamp >= Date.now() - testValidity) {
 			// we have a recent test result, return it
 			return cached.result;
 		}
 		// we have no quick check, so try to create a context
-		let ret: boolean = false;
+		let ret = false;
 		try {
 			const ctx = plugin.createContext(peripheral);
 			ret = ctx != null;
-		} catch (e) { /* all good */ }
+		} catch (e) {
+			/* all good */
+		}
 		// store the test result
 		testedPeripherals.set(peripheral.id, {
 			timestamp: Date.now(),
@@ -41,45 +57,58 @@ const plugin: Plugin<RuuviContext> = {
 		return ret;
 	},
 
-	createContext: (peripheral: BLE.Peripheral) => {
+	createContext: (peripheral: PeripheralInfo) => {
 		if (!peripheral.advertisement) return;
 		let data = getServiceData(peripheral, serviceUUID);
 		if (data != undefined) {
 			const url = data.toString("utf8");
-			_.log(`ruuvi-tag >> got url: ${data.toString("utf8")}`, "debug");
+			_.adapter.log.debug(
+				`ruuvi-tag >> got url: ${data.toString("utf8")}`,
+			);
 			// data format 2 or 4 - extract from URL hash
 			const parsedUrl = nodeUrl.parse(url);
 			if (!parsedUrl.hash) return;
 			data = Buffer.from(parsedUrl.hash, "base64");
 			return parseDataFormat2or4(data);
-		} else if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0) {
+		} else if (
+			peripheral.advertisement.manufacturerData != null &&
+			peripheral.advertisement.manufacturerData.length > 0
+		) {
 			// When the data is decoded from manufacturerData, the first two bytes should be 0x9904
 			data = peripheral.advertisement.manufacturerData;
 			if (data.length <= 2 || !data.slice(0, 2).equals(manufacturerId)) {
-				_.log(`ruuvi-tag >> got unsupported data: ${data.toString("hex")}`, "debug");
+				_.adapter.log.debug(
+					`ruuvi-tag >> got unsupported data: ${data.toString(
+						"hex",
+					)}`,
+				);
 				return;
 			}
 			// Cut off the manufuacturer ID
 			data = data.slice(2);
 			// data format 3 or 5 - extract from manufacturerData buffer
-			_.log(`ruuvi-tag >> got data: ${data.toString("hex")}`, "debug");
+			_.adapter.log.debug(
+				`ruuvi-tag >> got data: ${data.toString("hex")}`,
+			);
 			if (data[0] === 3) {
 				return parseDataFormat3(data);
 			} else if (data[0] === 5) {
 				return parseDataFormat5(data);
 			} else {
-				_.log(`ruuvi-tag >> {{red|unsupported data format ${data[0]}}}`, "debug");
+				_.adapter.log.debug(
+					`ruuvi-tag >> unsupported data format ${data[0]}`,
+				);
 			}
 		}
 	},
 
 	defineObjects: (context) => {
-
 		if (context == undefined) return;
 
-		const deviceObject: DeviceObjectDefinition = { // no special definitions neccessary
+		const deviceObject: DeviceObjectDefinition = {
+			// no special definitions neccessary
 			common: {
-				name: "Ruuvi Tag"
+				name: "Ruuvi Tag",
 			},
 			native: undefined,
 		};
@@ -229,13 +258,18 @@ const plugin: Plugin<RuuviContext> = {
 		}
 
 		return ret;
-
 	},
 	getValues: (context) => {
 		if (context == null) return;
 
 		// strip out unnecessary properties
-		const { dataFormat, beaconID, macAddress, sequenceNumber, ...remainder } = context;
+		const {
+			dataFormat,
+			beaconID,
+			macAddress,
+			sequenceNumber,
+			...remainder
+		} = context;
 		// if acceleration exists, we need to rename the acceleration components
 		const { acceleration, ...ret } = remainder;
 		if (acceleration != null) {

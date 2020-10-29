@@ -1,124 +1,127 @@
 {
-  "name": "iobroker.ble",
-  "version": "0.11.8",
-  "description": "ioBroker adapter to monitor Bluetooth Low Energy (BLE) beacons",
-  "author": {
-    "name": "AlCalzone",
-    "email": "d.griesel@gmx.net"
-  },
-  "main": "build/main.js",
-  "files": [
-    "admin/*.html",
-    "admin/build",
-    "admin/*.css",
-    "admin/*.png",
-    "admin/*.js",
-    "build/",
-    "io-package.json"
-  ],
-  "contributors": [
-    "zuvielx9 (https://github.com/zuvielx9)"
-  ],
-  "homepage": "https://github.com/AlCalzone/ioBroker.ble",
-  "license": "MIT",
-  "keywords": [
-    "ioBroker",
-    "bluetooth",
-    "BLE",
-    "beacon"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/AlCalzone/ioBroker.ble"
-  },
-  "dependencies": {
-    "@abandonware/noble": "^1.9.2-10",
-    "@iobroker/adapter-core": "^2.4.0",
-    "alcalzone-shared": "^2.2.0",
-    "iobroker-react-components": "^1.0.0"
-  },
-  "devDependencies": {
-    "@alcalzone/release-script": "^1.8.1",
-    "@babel/core": "^7.11.6",
-    "@fimbul/mithotyn": "^0.21.0",
-    "@fimbul/wotan": "^0.21.1",
-    "@iobroker/testing": "^2.3.0",
-    "@material-ui/core": "^4.11.0",
-    "@types/chai": "^4.2.12",
-    "@types/chai-as-promised": "^7.1.3",
-    "@types/jquery": "^3.5.1",
-    "@types/materialize-css": "^1.0.8",
-    "@types/mocha": "^8.0.3",
-    "@types/noble": "0.0.40",
-    "@types/node": "^14.11.2",
-    "@types/proxyquire": "^1.3.28",
-    "@types/sinon": "^9.0.7",
-    "@types/sinon-chai": "^3.2.5",
-    "axios": "^0.20.0",
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
-    "cpx": "^1.5.0",
-    "gulp": "^4.0.2",
-    "mocha": "^8.1.3",
-    "nyc": "^15.1.0",
-    "parcel-bundler": "^1.12.4",
-    "proxyquire": "^2.1.3",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "rimraf": "^3.0.2",
-    "sinon": "^9.1.0",
-    "sinon-chai": "^3.5.0",
-    "source-map-support": "^0.5.19",
-    "ts-node": "^9.0.0",
-    "tslint": "^6.1.3",
-    "typescript": "^4.0.3"
-  },
-  "scripts": {
-    "clean-build-dir": "cpx \"build/src/**/*.*\" build && rimraf build/src && rimraf build/{io-,}package.json",
-    "build:ts": "tsc -p src/tsconfig.json",
-    "check:ts": "tsc -p src/tsconfig.json --noEmit",
-    "postbuild:ts": "npm run clean-build-dir",
-    "prebuild:ts": "rimraf ./build",
-    "build:parcel": "parcel build admin/src/index.tsx -d admin/build",
-    "build": "npm run build:ts && npm run build:parcel",
-    "watch:parcel": "parcel admin/src/index.tsx -d admin/build",
-    "watch": "tsc -p src/tsconfig.json --watch",
-    "test:unit": "node_modules/.bin/mocha test/unit --exit",
-    "test:package": "node_modules/.bin/mocha test/package --exit",
-    "test:integration": "node_modules/.bin/mocha test/integration --exit",
-    "test:ts": "node_modules/.bin/mocha --opts test/mocha.typescript.opts",
-    "test": "node_modules/.bin/mocha --opts test/mocha.typescript.opts --watch",
-    "coverage": "node_modules/.bin/nyc mocha --opts test/mocha.typescript.opts",
-    "show-coverage": "npm run coverage & start ./coverage/index.html",
-    "lint:ts": "tslint \"src/**/*.ts\"",
-    "lint:wotan": "wotan",
-    "lint": "npm run lint:ts && npm run lint:wotan",
-    "prepublishOnly": "npm run test:package",
-    "release": "release-script"
-  },
-  "bugs": {
-    "url": "https://github.com/AlCalzone/ioBroker.ble/issues"
-  },
-  "nyc": {
-    "all": true,
-    "include": [
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "build/**",
-      "src/**/*.test.ts",
-      "**/*.d.ts"
-    ],
-    "extension": [
-      ".ts"
-    ],
-    "reporter": [
-      "text-summary",
-      "html",
-      "lcov"
-    ],
-    "sourceMap": true,
-    "instrument": true
-  },
-  "readmeFilename": "README.md"
+	"name": "iobroker.ble",
+	"version": "0.11.8",
+	"description": "ioBroker adapter to monitor Bluetooth Low Energy (BLE) beacons",
+	"author": {
+		"name": "AlCalzone",
+		"email": "d.griesel@gmx.net"
+	},
+	"main": "build/main.js",
+	"files": [
+		"admin/*.html",
+		"admin/build",
+		"admin/*.css",
+		"admin/*.png",
+		"admin/*.js",
+		"build/",
+		"io-package.json"
+	],
+	"contributors": [
+		"zuvielx9 (https://github.com/zuvielx9)"
+	],
+	"homepage": "https://github.com/AlCalzone/ioBroker.ble",
+	"license": "MIT",
+	"keywords": [
+		"ioBroker",
+		"bluetooth",
+		"BLE",
+		"beacon"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/AlCalzone/ioBroker.ble"
+	},
+	"dependencies": {
+		"@abandonware/noble": "^1.9.2-10",
+		"@iobroker/adapter-core": "^2.4.0",
+		"alcalzone-shared": "^2.2.0",
+		"iobroker-react-components": "^1.0.0",
+		"yargs": "^16.1.0"
+	},
+	"devDependencies": {
+		"@alcalzone/release-script": "^1.8.1",
+		"@babel/core": "^7.11.6",
+		"@babel/preset-env": "^7.11.5",
+		"@babel/preset-typescript": "^7.10.4",
+		"@iobroker/testing": "^2.3.0",
+		"@material-ui/core": "^4.11.0",
+		"@types/chai": "^4.2.12",
+		"@types/chai-as-promised": "^7.1.3",
+		"@types/jquery": "^3.5.1",
+		"@types/materialize-css": "^1.0.8",
+		"@types/mocha": "^8.0.3",
+		"@types/node": "^14.11.2",
+		"@types/proxyquire": "^1.3.28",
+		"@types/sinon": "^9.0.7",
+		"@types/sinon-chai": "^3.2.5",
+		"@types/yargs": "^15.0.9",
+		"@typescript-eslint/eslint-plugin": "^4.6.0",
+		"@typescript-eslint/parser": "^4.6.0",
+		"axios": "^0.20.0",
+		"chai": "^4.2.0",
+		"chai-as-promised": "^7.1.1",
+		"eslint": "^7.11.0",
+		"eslint-config-prettier": "^6.12.0",
+		"eslint-plugin-prettier": "^3.1.4",
+		"gulp": "^4.0.2",
+		"mocha": "^8.1.3",
+		"nyc": "^15.1.0",
+		"parcel-bundler": "^1.12.4",
+		"prettier": "^2.1.2",
+		"prettier-plugin-organize-imports": "^1.1.1",
+		"proxyquire": "^2.1.3",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"rimraf": "^3.0.2",
+		"sinon": "^9.1.0",
+		"sinon-chai": "^3.5.0",
+		"source-map-support": "^0.5.19",
+		"ts-node": "^9.0.0",
+		"typescript": "^4.0.5"
+	},
+	"scripts": {
+		"build:ts": "tsc -p src/tsconfig.json",
+		"check:ts": "tsc -p src/tsconfig.json --noEmit",
+		"prebuild:ts": "rimraf ./build",
+		"build:parcel": "parcel build admin/src/index.tsx -d admin/build",
+		"build": "npm run build:ts && npm run build:parcel",
+		"watch:parcel": "parcel admin/src/index.tsx -d admin/build",
+		"watch": "tsc -p src/tsconfig.json --watch",
+		"test:unit": "node_modules/.bin/mocha test/unit --exit",
+		"test:package": "node_modules/.bin/mocha test/package --exit",
+		"test:integration": "node_modules/.bin/mocha test/integration --exit",
+		"test:ts": "node_modules/.bin/mocha --opts test/mocha.typescript.opts",
+		"test": "node_modules/.bin/mocha --opts test/mocha.typescript.opts --watch",
+		"coverage": "node_modules/.bin/nyc mocha --opts test/mocha.typescript.opts",
+		"show-coverage": "npm run coverage & start ./coverage/index.html",
+		"lint:ts": "eslint --ext .ts src",
+		"lint": "npm run lint:ts",
+		"prepublishOnly": "npm run test:package",
+		"release": "release-script"
+	},
+	"bugs": {
+		"url": "https://github.com/AlCalzone/ioBroker.ble/issues"
+	},
+	"nyc": {
+		"all": true,
+		"include": [
+			"src/**/*.ts"
+		],
+		"exclude": [
+			"build/**",
+			"src/**/*.test.ts",
+			"**/*.d.ts"
+		],
+		"extension": [
+			".ts"
+		],
+		"reporter": [
+			"text-summary",
+			"html",
+			"lcov"
+		],
+		"sourceMap": true,
+		"instrument": true
+	},
+	"readmeFilename": "README.md"
 }

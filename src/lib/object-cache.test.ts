@@ -1,19 +1,14 @@
-// tslint:disable:no-console
-// tslint:disable:no-unused-expression
-// tslint:disable:no-namespace
-// tslint:disable:variable-name
-
-import { wait } from "alcalzone-shared/async";
 import { extend } from "alcalzone-shared/objects";
-import { assert, expect } from "chai";
+import { expect } from "chai";
 import * as proxyquireModule from "proxyquire";
-import { SinonFakeTimers, spy, stub, useFakeTimers } from "sinon";
-
-// import mocks
-const proxyquire = proxyquireModule.noPreserveCache();
+import { SinonFakeTimers, useFakeTimers } from "sinon";
 import { createCustomSubscriptionsMock } from "../../test/mocks/custom-subscriptions";
 import { createGlobalMock } from "../../test/mocks/global";
 
+// import mocks
+const proxyquire = proxyquireModule.noPreserveCache();
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
 namespace mocks {
 	export const global = createGlobalMock({});
 	export const adapter = global.Global.adapter;
@@ -21,14 +16,15 @@ namespace mocks {
 	export const customSubscriptions = createCustomSubscriptionsMock();
 }
 
-// tslint:disable-next-line:whitespace
-const { ObjectCache } = proxyquire<typeof import("./object-cache")>("./object-cache", {
-	"./custom-subscriptions": mocks.customSubscriptions,
-	"../lib/global": mocks.global,
-});
+const { ObjectCache } = proxyquire<typeof import("./object-cache")>(
+	"./object-cache",
+	{
+		"./custom-subscriptions": mocks.customSubscriptions,
+		"../lib/global": mocks.global,
+	},
+);
 
 describe("lib/object-cache", () => {
-
 	afterEach(() => {
 		mocks.global.resetMockHistory();
 		mocks.customSubscriptions.resetMock();
@@ -49,7 +45,9 @@ describe("lib/object-cache", () => {
 			mocks.database.publishObject(theObject);
 
 			const retrievedObject = await cache.getObject("whatever");
-			expect(retrievedObject!.common.role).to.equal(theObject.common!.role);
+			expect(retrievedObject!.common.role).to.equal(
+				theObject.common!.role,
+			);
 		});
 
 		it("should return the cached object even if the database changed", async () => {
@@ -135,7 +133,9 @@ describe("lib/object-cache", () => {
 			const original = await cache.getObject("whatever");
 
 			// cache an updated copy
-			const obj2 = extend({}, original!, { common: { role: "updated" } }) as ioBroker.Object;
+			const obj2 = extend({}, original!, {
+				common: { role: "updated" },
+			}) as ioBroker.Object;
 			cache.updateObject(obj2);
 
 			const retrievedObject = await cache.getObject("whatever");
@@ -157,7 +157,9 @@ describe("lib/object-cache", () => {
 			const original = await cache.getObject("whatever");
 
 			// cache an updated copy
-			const obj2 = extend({}, original!, { common: { role: "cached" } }) as ioBroker.Object;
+			const obj2 = extend({}, original!, {
+				common: { role: "cached" },
+			}) as ioBroker.Object;
 			cache.updateObject(obj2);
 
 			// publish an updated copy
@@ -173,7 +175,9 @@ describe("lib/object-cache", () => {
 	describe("objectExists() => ", () => {
 		it("should return false for non-existent objects", async () => {
 			const cache = new ObjectCache();
-			await cache.objectExists("does.not.exist").should.eventually.become(false);
+			await cache
+				.objectExists("does.not.exist")
+				.should.eventually.become(false);
 		});
 
 		it("should return true if the object is in the database", async () => {
@@ -207,7 +211,6 @@ describe("lib/object-cache", () => {
 	});
 
 	describe("automatic expiration =>", () => {
-
 		let clock: SinonFakeTimers;
 		const DURATION = 1000;
 
@@ -248,7 +251,6 @@ describe("lib/object-cache", () => {
 			// now it has, expect the updated object
 			const expired = await cache.getObject("whatever");
 			expired!.should.not.deep.equal(original);
-
 		});
 
 		it.skip("test multiple expirations in sequence", () => {

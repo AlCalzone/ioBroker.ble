@@ -5,6 +5,18 @@ export declare enum CapabilityFlags {
     Encrypt = 4,
     IO = 24
 }
+export declare enum XiaomiEventIDs_Internal {
+    Temperature = 4100,
+    KettleStatusAndTemperature = 4101,
+    Humidity = 4102,
+    Illuminance = 4103,
+    Moisture = 4104,
+    Fertility = 4105,
+    Battery = 4106,
+    TemperatureAndHumidity = 4109
+}
+export declare type XiaomiEventIDs = "temperature" | "humidity" | "illuminance" | "moisture" | "fertility" | "battery" | "kettleStatus";
+export declare type XiaomiEvent = Partial<Record<XiaomiEventIDs, number>>;
 export declare class XiaomiAdvertisement {
     constructor(data: Buffer);
     private _productID;
@@ -42,15 +54,3 @@ export declare class XiaomiAdvertisement {
     private _isBindingFrame;
     get isBindingFrame(): boolean;
 }
-export declare enum XiaomiEventIDs_Internal {
-    Temperature = 4100,
-    KettleStatusAndTemperature = 4101,
-    Humidity = 4102,
-    Illuminance = 4103,
-    Moisture = 4104,
-    Fertility = 4105,
-    Battery = 4106,
-    TemperatureAndHumidity = 4109
-}
-export declare type XiaomiEventIDs = "temperature" | "humidity" | "illuminance" | "moisture" | "fertility" | "battery" | "kettleStatus";
-export declare type XiaomiEvent = Partial<Record<XiaomiEventIDs, number>>;

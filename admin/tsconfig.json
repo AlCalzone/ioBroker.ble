@@ -1,11 +1,15 @@
 {
 	"extends": "../tsconfig.json",
-	"compileOnSave": true,
 	"compilerOptions": {
 		"noEmit": false,
-		"outDir": "./build/",
+		"outDir": "./build",
 		"sourceMap": true,
-		"sourceRoot": "./src/",
+		"sourceRoot": "./src",
+		"noImplicitAny": false,
+		"lib": [
+			"es2018",
+			"DOM"
+		]
 	},
 	"include": [
 		"./**/*.ts*",
@@ -13,6 +17,6 @@
 		"./src/lib/admin.d.ts"
 	],
 	"exclude": [
-		"./**/*.test.ts*",
+		"./**/*.test.ts*"
 	]
 }

@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ObjectCache = void 0;
 const objects_1 = require("alcalzone-shared/objects");
@@ -29,26 +20,22 @@ class ObjectCache {
      * Retrieves an object from the cache or queries the database if it is not cached yet
      * @param id The id of the object to retrieve
      */
-    getObject(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.cache.has(id)) {
-                // retrieve the original object from the DB
-                const ret = yield global_1.Global.adapter.getForeignObjectAsync(id);
-                // and remember it in the cache
-                if (ret != null)
-                    this.storeObject(ret);
-            }
-            return this.retrieveObject(id);
-        });
+    async getObject(id) {
+        if (!this.cache.has(id)) {
+            // retrieve the original object from the DB
+            const ret = await global_1.Global.adapter.getForeignObjectAsync(id);
+            // and remember it in the cache
+            if (ret != null)
+                this.storeObject(ret);
+        }
+        return this.retrieveObject(id);
     }
-    objectExists(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.cache.has(id))
-                return true;
-            // Try to retrieve the original object from the DB
-            const ret = yield global_1.Global.adapter.getForeignObjectAsync(id);
-            return ret != undefined;
-        });
+    async objectExists(id) {
+        if (this.cache.has(id))
+            return true;
+        // Try to retrieve the original object from the DB
+        const ret = await global_1.Global.adapter.getForeignObjectAsync(id);
+        return ret != undefined;
     }
     storeObject(obj) {
         const clone = objects_1.extend({}, obj);
@@ -63,7 +50,7 @@ class ObjectCache {
     rememberForExpiry(id) {
         if (typeof this.expiryDuration !== "number")
             return;
-        const existingTimestamp = [...this.expireTimestamps].find(ets => ets.id === id);
+        const existingTimestamp = [...this.expireTimestamps].find((ets) => ets.id === id);
         if (existingTimestamp != null) {
             this.expireTimestamps.remove(existingTimestamp);
         }
@@ -121,3 +108,4 @@ class ObjectCache {
     }
 }
 exports.ObjectCache = ObjectCache;
+//# sourceMappingURL=object-cache.js.map
