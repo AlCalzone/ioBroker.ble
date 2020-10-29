@@ -1,4 +1,4 @@
-import { CompareResult } from "alcalzone-shared/comparable";
+import type { CompareResult } from "alcalzone-shared/comparable";
 import { extend } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { Global as _ } from "./global";
@@ -7,19 +7,24 @@ interface ExpireTimestamp {
 	timestamp: number;
 	id: string;
 }
-function compareExpireTimestamp(a: ExpireTimestamp, b: ExpireTimestamp): CompareResult {
+function compareExpireTimestamp(
+	a: ExpireTimestamp,
+	b: ExpireTimestamp,
+): CompareResult {
 	return Math.sign(b.timestamp - a.timestamp) as CompareResult;
 }
 
 export class ObjectCache {
-
 	/**
 	 * @param expiryDuration The timespan after which cached objects are expired automatically
 	 */
-	constructor(private expiryDuration: number | false = false) { }
+	constructor(private expiryDuration: number | false = false) {}
 
 	private cache = new Map<string, ioBroker.Object>();
-	private expireTimestamps = new SortedList<ExpireTimestamp>(undefined, compareExpireTimestamp);
+	private expireTimestamps = new SortedList<ExpireTimestamp>(
+		undefined,
+		compareExpireTimestamp,
+	);
 	private expireTimer: NodeJS.Timer | undefined;
 
 	/**
@@ -58,7 +63,9 @@ export class ObjectCache {
 	private rememberForExpiry(id: string) {
 		if (typeof this.expiryDuration !== "number") return;
 
-		const existingTimestamp = [...this.expireTimestamps].find(ets => ets.id === id);
+		const existingTimestamp = [...this.expireTimestamps].find(
+			(ets) => ets.id === id,
+		);
 		if (existingTimestamp != null) {
 			this.expireTimestamps.remove(existingTimestamp);
 		}
@@ -69,7 +76,10 @@ export class ObjectCache {
 		this.expireTimestamps.add(newTimestamp);
 		// if no expiry timer is running, start one
 		if (this.expireTimer == null) {
-			this.expireTimer = setTimeout(() => this.expire(), this.expiryDuration);
+			this.expireTimer = setTimeout(
+				() => this.expire(),
+				this.expiryDuration,
+			);
 		}
 	}
 
@@ -96,13 +106,13 @@ export class ObjectCache {
 			() => this.expire(),
 			Math.max(timeDelta, 100),
 		);
-}
+	}
 
 	/**
 	 * Causes the cache for an object to be invalidated
 	 * @param id The id of the object to invalidate
 	 */
-	public invalidateObject(id: string) {
+	public invalidateObject(id: string): void {
 		this.cache.delete(id);
 	}
 
@@ -111,11 +121,11 @@ export class ObjectCache {
 	 * @param id The id of the object to update
 	 * @param obj The updated object
 	 */
-	public updateObject(obj: ioBroker.Object) {
+	public updateObject(obj: ioBroker.Object): void {
 		this.storeObject(obj);
 	}
 
-	public dispose() {
+	public dispose(): void {
 		if (this.expireTimer != undefined) {
 			clearTimeout(this.expireTimer);
 			this.expireTimer = undefined;

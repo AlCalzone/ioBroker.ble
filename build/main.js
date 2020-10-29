@@ -1,23 +1,15 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils = require("@iobroker/adapter-core");
+const objects_1 = require("alcalzone-shared/objects");
 const child_process_1 = require("child_process");
-const custom_subscriptions_1 = require("./lib/custom-subscriptions");
+const path = require("path");
 const global_1 = require("./lib/global");
 const iobroker_objects_1 = require("./lib/iobroker-objects");
 const object_cache_1 = require("./lib/object-cache");
+const scanProcessInterface_1 = require("./lib/scanProcessInterface");
 // Load all registered plugins
 const plugins_1 = require("./plugins");
-const objects_1 = require("alcalzone-shared/objects");
 let enabledPlugins;
 let services = [];
 /** Whether new devices may be recorded */
@@ -28,51 +20,54 @@ const ignoredNewDeviceIDs = new Set();
 // let knownDevices: string[] = [];
 /** How frequent the RSSI of devices should be updated */
 let rssiUpdateInterval = 0;
-/** noble-Treiber-Instanz */
-// tslint:disable-next-line:whitespace
-let noble;
+/** A reference to the scanning process */
+let scanProcess;
 // Adapter-Objekt erstellen
 const adapter = utils.adapter({
     name: "ble",
     // is called when databases are connected and adapter received configuration.
     // start here!
-    ready: () => __awaiter(void 0, void 0, void 0, function* () {
+    ready: async () => {
         // Adapter-Instanz global machen
         global_1.Global.adapter = adapter;
         // Cache objects for 1 minute
         global_1.Global.objectCache = new object_cache_1.ObjectCache(60000);
         // Workaround für fehlende InstanceObjects nach update
-        yield global_1.Global.ensureInstanceObjects();
+        await global_1.Global.ensureInstanceObjects();
         // Prüfen, ob wir neue Geräte erfassen dürfen
-        const allowNewDevicesState = yield adapter.getStateAsync("options.allowNewDevices");
-        allowNewDevices = (allowNewDevicesState && allowNewDevicesState.val != undefined) ? allowNewDevicesState.val : true;
-        yield adapter.setStateAsync("options.allowNewDevices", allowNewDevices, true);
+        const allowNewDevicesState = await adapter.getStateAsync("options.allowNewDevices");
+        allowNewDevices =
+            allowNewDevicesState && allowNewDevicesState.val != undefined
+                ? allowNewDevicesState.val
+                : true;
+        await adapter.setStateAsync("options.allowNewDevices", allowNewDevices, true);
         // Plugins laden
-        global_1.Global.log(`loaded plugins: ${plugins_1.default.map(p => p.name).join(", ")}`);
+        global_1.Global.adapter.log.info(`loaded plugins: ${plugins_1.default.map((p) => p.name).join(", ")}`);
         const enabledPluginNames = (adapter.config.plugins || "")
             .split(",")
             .map((p) => p.trim().toLowerCase())
             .concat("_default");
-        enabledPlugins = plugins_1.default.filter(p => enabledPluginNames.indexOf(p.name.toLowerCase()) > -1);
-        global_1.Global.log(`enabled plugins: ${enabledPlugins.map(p => p.name).join(", ")}`);
+        enabledPlugins = plugins_1.default.filter((p) => enabledPluginNames.indexOf(p.name.toLowerCase()) > -1);
+        global_1.Global.adapter.log.info(`enabled plugins: ${enabledPlugins.map((p) => p.name).join(", ")}`);
         // Bring the monitored service names into the correct form
         if (adapter.config.services === "*") {
             services = [];
-            global_1.Global.log(`monitoring all services`);
+            global_1.Global.adapter.log.info(`monitoring all services`);
         }
         else {
-            services =
-                adapter.config.services.split(",") // get manually defined services
-                    .concat(...enabledPlugins.map(p => p.advertisedServices)) // concat with plugin-defined ones
-                    .reduce((acc, s) => acc.concat(s), []) // flatten the arrays
-                    .map(s => fixServiceName(s)) // cleanup the names
-                    .filter(s => s !== "")
-                    .reduce((acc, s) => {
-                    if (acc.indexOf(s) === -1)
-                        acc.push(s);
-                    return acc;
-                }, []);
-            global_1.Global.log(`monitored services: ${services.join(", ")}`);
+            services = adapter.config.services
+                .split(",") // get manually defined services
+                .concat(...enabledPlugins.map((p) => p.advertisedServices)) // concat with plugin-defined ones
+                .reduce((acc, s) => acc.concat(s), []) // flatten the arrays
+                .map((s) => fixServiceName(s)) // cleanup the names
+                .filter((s) => s !== "")
+                .reduce((acc, s) => {
+                // filter out duplicates
+                if (acc.indexOf(s) === -1)
+                    acc.push(s);
+                return acc;
+            }, []);
+            global_1.Global.adapter.log.info(`monitored services: ${services.join(", ")}`);
         }
         // Limit RSSI updates
         if (adapter.config.rssiThrottle != null) {
@@ -81,45 +76,17 @@ const adapter = utils.adapter({
         // monitor our own states and objects
         adapter.subscribeStates("*");
         adapter.subscribeObjects("*");
-        if (!process.env.TESTING) {
-            // load noble driver with the correct device selected
-            // but only if this is not a testing environment
-            process.env.NOBLE_HCI_DEVICE_ID = (adapter.config.hciDevice || 0).toString();
-            try {
-                noble = require("@abandonware/noble");
-            }
-            catch (e) {
-                return tryCatchKnownErrors(e, () => {
-                    terminate(e.message || e);
-                });
-            }
-            // prepare scanning for beacons
-            noble.on("stateChange", (state) => {
-                switch (state) {
-                    case "poweredOn":
-                        startScanning();
-                        break;
-                    case "poweredOff":
-                        stopScanning();
-                        break;
-                }
-                adapter.setState("info.driverState", state, true);
-            });
-            if (noble.state === "poweredOn")
-                startScanning();
-            adapter.setState("info.driverState", noble.state, true);
-        }
-    }),
+        // And start scanning
+        if (!process.env.TESTING)
+            startScanProcess();
+    },
     // is called when adapter shuts down - callback has to be called under any circumstances!
     unload: (callback) => {
         try {
-            stopScanning();
-            noble.removeAllListeners("stateChange");
-            callback();
+            scanProcess === null || scanProcess === void 0 ? void 0 : scanProcess.kill();
         }
-        catch (e) {
-            callback();
-        }
+        catch (_a) { }
+        callback();
     },
     // is called if a subscribed object changes
     objectChange: (id, obj) => {
@@ -131,12 +98,12 @@ const adapter = utils.adapter({
             // it has been deleted, so delete it from the cache
             global_1.Global.objectCache.invalidateObject(id);
         }
-        // apply additional subscriptions we've defined
-        custom_subscriptions_1.applyCustomObjectSubscriptions(id, obj);
     },
     // is called if a subscribed state changes
     stateChange: (id, state) => {
-        if (/options\.allowNewDevices$/.test(id) && state != undefined && !state.ack) {
+        if (/options\.allowNewDevices$/.test(id) &&
+            state != undefined &&
+            !state.ack) {
             if (typeof state.val === "boolean") {
                 allowNewDevices = state.val;
                 // ACK the state change
@@ -147,10 +114,8 @@ const adapter = utils.adapter({
                     ignoredNewDeviceIDs.clear();
             }
         }
-        // apply additional subscriptions we've defined
-        custom_subscriptions_1.applyCustomStateSubscriptions(id, state);
     },
-    message: (obj) => __awaiter(void 0, void 0, void 0, function* () {
+    message: async (obj) => {
         // responds to the adapter that sent the original message
         function respond(response) {
             if (obj.callback)
@@ -167,26 +132,24 @@ const adapter = utils.adapter({
             COMMAND_RUNNING: { error: "command running" },
         };
         // make required parameters easier
-        function requireParams(params) {
-            if (!(params && params.length))
-                return true;
-            for (const param of params) {
-                if (!(obj.message && obj.message.hasOwnProperty(param))) {
-                    respond(predefinedResponses.MISSING_PARAMETER(param));
-                    return false;
-                }
-            }
-            return true;
-        }
+        // function requireParams(params: string[]) {
+        // 	if (!(params && params.length)) return true;
+        // 	for (const param of params) {
+        // 		if (!(obj.message && obj.message.hasOwnProperty(param))) {
+        // 			respond(predefinedResponses.MISSING_PARAMETER(param));
+        // 			return false;
+        // 		}
+        // 	}
+        // 	return true;
+        // }
         // handle the message
         if (obj) {
             switch (obj.command) {
                 case "getHCIPorts":
-                    child_process_1.exec("hciconfig | grep hci", (error, stdout, stderr) => {
+                    child_process_1.exec("hciconfig | grep hci", (error, stdout, _stderr) => {
                         // hci1:   Type: BR/EDR  Bus: USB
                         // hci0:   Type: BR/EDR  Bus: UART
                         if (error != null) {
-                            global_1.Global.log(JSON.stringify(error));
                             respond({ error });
                             return;
                         }
@@ -199,7 +162,6 @@ const adapter = utils.adapter({
                             if (!(result && result.length))
                                 break;
                             const port = { index: +result[1], bus: result[2] };
-                            global_1.Global.log(JSON.stringify(port));
                             ports.push(port);
                         }
                         respond({ error: null, result: ports });
@@ -210,13 +172,50 @@ const adapter = utils.adapter({
                     return;
             }
         }
-    }),
-    // @ts-ignore
-    error: (err) => {
-        return tryCatchKnownErrorsSync(err);
-    }
+    },
 });
-// =========================
+function startScanProcess() {
+    const args = ["-s", ...services];
+    if (adapter.config.hciDevice) {
+        args.push("-d", adapter.config.hciDevice.toString());
+    }
+    scanProcess = child_process_1.fork(path.join(__dirname, "scanProcess"), args, {
+        stdio: ["pipe", "pipe", "pipe", "ipc"],
+    }).on("exit", (code, signal) => {
+        if (!signal &&
+            code !== 0 &&
+            code !== scanProcessInterface_1.ScanExitCodes.RequireNobleFailed) {
+            setImmediate(startScanProcess);
+        }
+        else {
+            scanProcess = undefined;
+        }
+    });
+    scanProcess.on("message", (message, handle) => {
+        var _a;
+        switch (message.type) {
+            case "connected":
+                adapter.setState("info.connection", true, true);
+                break;
+            case "disconnected":
+                adapter.setState("info.connection", false, true);
+                break;
+            case "discover":
+                onDiscover(handle);
+                break;
+            case "driverState":
+                adapter.setState("info.driverState", message.driverState, true);
+                break;
+            case "error": // fall through
+            case "fatal":
+                handleScanProcessError(message.error);
+                break;
+            case "log":
+                adapter.log[(_a = message.level) !== null && _a !== void 0 ? _a : "info"](message.message);
+                break;
+        }
+    });
+}
 function fixServiceName(name) {
     if (name == null)
         return "";
@@ -230,179 +229,147 @@ function fixServiceName(name) {
     // lowerCase
     return name.toLowerCase();
 }
-function onDiscover(peripheral) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (peripheral == null)
+async function onDiscover(peripheral) {
+    if (peripheral == null)
+        return;
+    let serviceDataIsNotEmpty = false;
+    let manufacturerDataIsNotEmpty = false;
+    global_1.Global.adapter.log.debug(`discovered peripheral ${peripheral.address}`);
+    global_1.Global.adapter.log.debug(`  has advertisement: ${peripheral.advertisement != null}`);
+    if (peripheral.advertisement != null) {
+        global_1.Global.adapter.log.debug(`  has serviceData: ${peripheral.advertisement.serviceData != null}`);
+        if (peripheral.advertisement.serviceData != null) {
+            global_1.Global.adapter.log.debug(`  serviceData = ${JSON.stringify(peripheral.advertisement.serviceData)}`);
+            serviceDataIsNotEmpty =
+                peripheral.advertisement.serviceData.length > 0;
+        }
+        global_1.Global.adapter.log.debug(`  has manufacturerData: ${peripheral.advertisement.manufacturerData != null}`);
+        if (peripheral.advertisement.manufacturerData != null) {
+            global_1.Global.adapter.log.debug(`  manufacturerData = ${peripheral.advertisement.manufacturerData.toString("hex")}`);
+            manufacturerDataIsNotEmpty =
+                peripheral.advertisement.manufacturerData.length > 0;
+        }
+    }
+    else {
+        // don't create devices for peripherals without advertised data
+        return;
+    }
+    // create devices if we selected to allow empty devices
+    // or the peripheral transmits serviceData or manufacturerData
+    if (!adapter.config.allowEmptyDevices &&
+        !serviceDataIsNotEmpty &&
+        !manufacturerDataIsNotEmpty) {
+        return;
+    }
+    const deviceId = peripheral.address;
+    // find out which plugin is handling this
+    let plugin;
+    for (const p of enabledPlugins) {
+        if (p.isHandling(peripheral)) {
+            global_1.Global.adapter.log.debug(`plugin ${p.name} is handling ${deviceId}`);
+            plugin = p;
+            break;
+        }
+    }
+    if (!plugin) {
+        global_1.Global.adapter.log.warn(`no handling plugin found for peripheral ${peripheral.id}`);
+        return;
+    }
+    // Test if we may record this device
+    if (!allowNewDevices) {
+        // We may not. First test if we already ignored this device
+        if (ignoredNewDeviceIDs.has(deviceId))
             return;
-        let serviceDataIsNotEmpty = false;
-        let manufacturerDataIsNotEmpty = false;
-        global_1.Global.log(`discovered peripheral ${peripheral.address}`, "debug");
-        global_1.Global.log(`  has advertisement: ${peripheral.advertisement != null}`, "debug");
-        if (peripheral.advertisement != null) {
-            global_1.Global.log(`  has serviceData: ${peripheral.advertisement.serviceData != null}`, "debug");
-            if (peripheral.advertisement.serviceData != null) {
-                global_1.Global.log(`  serviceData = ${JSON.stringify(peripheral.advertisement.serviceData)}`, "debug");
-                serviceDataIsNotEmpty = peripheral.advertisement.serviceData.length > 0;
-            }
-            global_1.Global.log(`  has manufacturerData: ${peripheral.advertisement.manufacturerData != null}`, "debug");
-            if (peripheral.advertisement.manufacturerData != null) {
-                global_1.Global.log(`  manufacturerData = ${peripheral.advertisement.manufacturerData.toString("hex")}`, "debug");
-                manufacturerDataIsNotEmpty = peripheral.advertisement.manufacturerData.length > 0;
-            }
-        }
-        else {
-            // don't create devices for peripherals without advertised data
+        // If not, check if the RSSI object exists, as that exists for every one
+        if (!(await global_1.Global.objectCache.objectExists(`${global_1.Global.adapter.namespace}.${deviceId}.rssi`))) {
+            // This is a new device. Remember that we need to ignore it
+            ignoredNewDeviceIDs.add(deviceId);
             return;
         }
-        // create devices if we selected to allow empty devices
-        // or the peripheral transmits serviceData or manufacturerData
-        if (!adapter.config.allowEmptyDevices && !serviceDataIsNotEmpty && !manufacturerDataIsNotEmpty) {
-            return;
-        }
-        const deviceId = peripheral.address;
-        // find out which plugin is handling this
-        let plugin;
-        for (const p of enabledPlugins) {
-            if (p.isHandling(peripheral)) {
-                global_1.Global.log(`plugin ${p.name} is handling ${deviceId}`, "debug");
-                plugin = p;
-                break;
-            }
-        }
-        if (!plugin) {
-            global_1.Global.log(`no handling plugin found for peripheral ${peripheral.id}`, "warn");
-            return;
-        }
-        // Test if we may record this device
-        if (!allowNewDevices) {
-            // We may not. First test if we already ignored this device
-            if (ignoredNewDeviceIDs.has(deviceId))
-                return;
-            // If not, check if the RSSI object exists, as that exists for every one
-            if (!(yield global_1.Global.objectCache.objectExists(`${global_1.Global.adapter.namespace}.${deviceId}.rssi`))) {
-                // This is a new device. Remember that we need to ignore it
-                ignoredNewDeviceIDs.add(deviceId);
-                return;
-            }
-            // This is a known device
-        }
-        // Always ensure the rssi state exists and gets a value
-        yield iobroker_objects_1.extendState(`${deviceId}.rssi`, {
-            id: "rssi",
-            common: {
-                role: "value.rssi",
-                name: "signal strength (RSSI)",
-                desc: "Signal strength of the device",
-                type: "number",
-                read: true,
-                write: false,
-            },
-            native: {},
-        });
-        // update RSSI information
-        const rssiState = yield adapter.getStateAsync(`${deviceId}.rssi`);
-        if (rssiState == null ||
-            (rssiState.val !== peripheral.rssi && // only save changes
-                rssiState.lc + rssiUpdateInterval < Date.now()) // and dont update too frequently
-        ) {
-            global_1.Global.log(`updating rssi state for ${deviceId}`, "debug");
-            yield adapter.setStateAsync(`${deviceId}.rssi`, peripheral.rssi, true);
-        }
-        // Now update device-specific objects and states
-        const context = plugin.createContext(peripheral);
-        const objects = plugin.defineObjects(context);
-        const values = plugin.getValues(context);
-        // We can't do anything without objects
-        if (objects == null)
-            return;
-        // Ensure the device object exists
-        yield iobroker_objects_1.extendDevice(deviceId, peripheral, objects.device);
-        // Ensure the channel objects exist (optional)
-        if (objects.channels != null && objects.channels.length > 0) {
-            yield Promise.all(objects.channels.map(c => iobroker_objects_1.extendChannel(deviceId + "." + c.id, c)));
-        }
-        // Ensure the state objects exist. These might change in every advertisement frame
-        yield Promise.all(objects.states.map(s => iobroker_objects_1.extendState(deviceId + "." + s.id, s)));
-        // Now fill the states with values
-        if (values != null) {
-            global_1.Global.log(`${deviceId} > got values: ${JSON.stringify(values)}`, "debug");
-            for (let [stateId, value] of objects_1.entries(values)) {
-                // Fix special chars
-                stateId = stateId.replace(/[\(\)]+/g, "").replace(" ", "_");
-                // set the value if there's an object for the state
-                const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
-                if ((yield global_1.Global.objectCache.getObject(iobStateId)) != null) {
-                    global_1.Global.log(`setting state ${iobStateId}`, "debug");
-                    yield adapter.setStateChangedAsync(iobStateId, value !== null && value !== void 0 ? value : null, true);
-                }
-                else {
-                    global_1.Global.log(`skipping state ${iobStateId} because the object does not exist`, "warn");
-                }
-            }
-        }
-        else {
-            global_1.Global.log(`${deviceId} > got no values`, "debug");
-        }
+        // This is a known device
+    }
+    // Always ensure the rssi state exists and gets a value
+    await iobroker_objects_1.extendState(`${deviceId}.rssi`, {
+        id: "rssi",
+        common: {
+            role: "value.rssi",
+            name: "signal strength (RSSI)",
+            desc: "Signal strength of the device",
+            type: "number",
+            read: true,
+            write: false,
+        },
+        native: {},
     });
-}
-let isScanning = false;
-function startScanning() {
-    if (isScanning)
+    // update RSSI information
+    const rssiState = await adapter.getStateAsync(`${deviceId}.rssi`);
+    if (rssiState == null ||
+        (rssiState.val !== peripheral.rssi && // only save changes
+            rssiState.lc + rssiUpdateInterval < Date.now()) // and dont update too frequently
+    ) {
+        global_1.Global.adapter.log.debug(`updating rssi state for ${deviceId}`);
+        await adapter.setStateAsync(`${deviceId}.rssi`, peripheral.rssi, true);
+    }
+    // Now update device-specific objects and states
+    const context = plugin.createContext(peripheral);
+    const objects = plugin.defineObjects(context);
+    const values = plugin.getValues(context);
+    // We can't do anything without objects
+    if (objects == null)
         return;
-    adapter.setState("info.connection", true, true);
-    noble.on("discover", onDiscover);
-    global_1.Global.log(`starting scan for services ${JSON.stringify(services)}`);
-    noble.startScanning(services, true);
-    isScanning = true;
-}
-function stopScanning() {
-    if (!isScanning)
-        return;
-    noble.removeAllListeners("discover");
-    global_1.Global.log(`stopping scan`);
-    noble.stopScanning();
-    adapter.setState("info.connection", false, true);
-    isScanning = false;
-}
-function tryCatchKnownErrors(err, notHandled) {
-    if (!tryCatchKnownErrorsSync(err)) {
-        // ioBroker gives the process time to exit, so we need to call the callback
-        // if we did not shut down the adapter or handled the error
-        notHandled();
+    // Ensure the device object exists
+    await iobroker_objects_1.extendDevice(deviceId, peripheral, objects.device);
+    // Ensure the channel objects exist (optional)
+    if (objects.channels != null && objects.channels.length > 0) {
+        await Promise.all(objects.channels.map((c) => iobroker_objects_1.extendChannel(deviceId + "." + c.id, c)));
+    }
+    // Ensure the state objects exist. These might change in every advertisement frame
+    await Promise.all(objects.states.map((s) => iobroker_objects_1.extendState(deviceId + "." + s.id, s)));
+    // Now fill the states with values
+    if (values != null) {
+        global_1.Global.adapter.log.debug(`${deviceId} > got values: ${JSON.stringify(values)}`);
+        // eslint-disable-next-line prefer-const
+        for (let [stateId, value] of objects_1.entries(values)) {
+            // Fix special chars
+            stateId = stateId.replace(/[\(\)]+/g, "").replace(" ", "_");
+            // set the value if there's an object for the state
+            const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
+            if ((await global_1.Global.objectCache.getObject(iobStateId)) != null) {
+                global_1.Global.adapter.log.debug(`setting state ${iobStateId}`);
+                await adapter.setStateChangedAsync(iobStateId, value !== null && value !== void 0 ? value : null, true);
+            }
+            else {
+                global_1.Global.adapter.log.warn(`skipping state ${iobStateId} because the object does not exist`);
+            }
+        }
+    }
+    else {
+        global_1.Global.adapter.log.debug(`${deviceId} > got no values`);
     }
 }
-/**
- * @returns true if the error was handled
- */
-function tryCatchKnownErrorsSync(err) {
+function handleScanProcessError(err) {
     var _a, _b;
-    if (/compatible USB Bluetooth/.test(err.message)
-        || /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)) {
+    if (/compatible USB Bluetooth/.test(err.message) ||
+        /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)) {
         terminate("No compatible BLE 4.0 hardware found!");
-        return true;
     }
     else if (/NODE_MODULE_VERSION/.test(err.message) && ((_a = adapter.supportsFeature) === null || _a === void 0 ? void 0 : _a.call(adapter, "CONTROLLER_NPM_AUTO_REBUILD"))) {
         terminate("A dependency requires a rebuild.", 13);
-        return true;
     }
     else if (err.message.includes(`The value of "offset" is out of range`)) {
         // ignore, this happens in noble sometimes
         ((_b = adapter === null || adapter === void 0 ? void 0 : adapter.log) !== null && _b !== void 0 ? _b : console).error(err.message);
-        return true;
     }
     else if (err.message.includes("EAFNOSUPPORT")) {
         terminate("Unsupported Address Family (EAFNOSUPPORT). If ioBroker is running in a Docker container, make sure that the container uses host mode networking.");
-        return true;
     }
-    return false;
 }
 function terminate(reason = "no reason given", exitCode = 11) {
+    var _a;
     if (adapter) {
         adapter.log.error(`Terminating because ${reason}`);
-        if (adapter.terminate) {
-            // @ts-ignore
-            return adapter.terminate(reason, exitCode);
-        }
+        (_a = adapter.terminate) === null || _a === void 0 ? void 0 : _a.call(adapter, reason, exitCode);
     }
     return process.exit(exitCode);
 }
+//# sourceMappingURL=main.js.map

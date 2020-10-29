@@ -2,19 +2,15 @@
  * Plugin for Xiaomi devices using the fe95 characteristic
  */
 
+import type { Peripheral } from "@abandonware/noble";
 import { entries } from "alcalzone-shared/objects";
 import { Global as _ } from "../lib/global";
+import { XiaomiAdvertisement, XiaomiEvent } from "./lib/xiaomi_protocol";
 import {
-	XiaomiAdvertisement,
-	XiaomiEvent
-} from "./lib/xiaomi_protocol";
-import {
-	ChannelObjectDefinition,
 	DeviceObjectDefinition,
 	getServiceData,
-	PeripheralObjectStructure,
 	Plugin,
-	StateObjectDefinition
+	StateObjectDefinition,
 } from "./plugin";
 
 interface XiaomiContext {
@@ -27,13 +23,15 @@ function parseAdvertisementEvent(data: Buffer): XiaomiEvent | undefined {
 	try {
 		advertisement = new XiaomiAdvertisement(data);
 	} catch (e) {
-		_.log(`xiaomi >> failed to parse data`, "debug");
+		_.adapter.log.debug(`xiaomi >> failed to parse data`);
 		return;
 	}
 
 	if (!advertisement.hasEvent || advertisement.isBindingFrame) {
-		_.log(`xiaomi >> The device is not fully initialized.`, "debug");
-		_.log(`xiaomi >> Use its app to complete the initialization.`, "debug");
+		_.adapter.log.debug(`xiaomi >> The device is not fully initialized.`);
+		_.adapter.log.debug(
+			`xiaomi >> Use its app to complete the initialization.`,
+		);
 		return;
 	}
 
@@ -43,20 +41,24 @@ function parseAdvertisementEvent(data: Buffer): XiaomiEvent | undefined {
 
 // remember tested peripherals by their MAC address for 1h
 const testValidity = 1000 * 3600;
-const testedPeripherals = new Map<string, { timestamp: number, result: boolean }>();
+const testedPeripherals = new Map<
+	string,
+	{ timestamp: number; result: boolean }
+>();
 
 const plugin: Plugin<XiaomiContext> = {
 	name: "Xiaomi",
 	description: "Xiaomi devices",
 
 	advertisedServices: ["fe95"],
-	isHandling: p => {
+	isHandling: (p) => {
 		// If the peripheral has no serviceData with UUID fe95, this is not for us
 		if (
-			!p.advertisement
-			|| !p.advertisement.serviceData
-			|| !p.advertisement.serviceData.some(entry => entry.uuid === "fe95")
-		) return false;
+			!p.advertisement ||
+			!p.advertisement.serviceData ||
+			!p.advertisement.serviceData.some((entry) => entry.uuid === "fe95")
+		)
+			return false;
 
 		const mac = p.address.toLowerCase();
 		const cached = testedPeripherals.get(mac);
@@ -67,7 +69,7 @@ const plugin: Plugin<XiaomiContext> = {
 
 		// Try to parse advertisement data as a XiaomiEvent to see if this
 		// is for us
-		let ret: boolean = false;
+		let ret = false;
 		const data = getServiceData(p, "fe95");
 		if (data != undefined) {
 			const event = parseAdvertisementEvent(data);
@@ -81,11 +83,11 @@ const plugin: Plugin<XiaomiContext> = {
 		return ret;
 	},
 
-	createContext: (peripheral: BLE.Peripheral) => {
+	createContext: (peripheral: Peripheral) => {
 		const data = getServiceData(peripheral, "fe95");
 		if (data == undefined) return;
 
-		_.log(`xiaomi >> got data: ${data.toString("hex")}`, "debug");
+		_.adapter.log.debug(`xiaomi >> got data: ${data.toString("hex")}`);
 
 		const event = parseAdvertisementEvent(data);
 		if (event == undefined) return;
@@ -99,7 +101,7 @@ const plugin: Plugin<XiaomiContext> = {
 		const deviceObject: DeviceObjectDefinition = {
 			// no special definitions neccessary
 			common: undefined,
-			native: undefined
+			native: undefined,
 		};
 
 		// no channels
@@ -109,7 +111,7 @@ const plugin: Plugin<XiaomiContext> = {
 		const ret = {
 			device: deviceObject,
 			channels: undefined,
-			states: stateObjects
+			states: stateObjects,
 		};
 
 		const event = context.event;
@@ -122,9 +124,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "°C",
 					read: true,
-					write: false
+					write: false,
 				},
-				native: undefined
+				native: undefined,
 			});
 		}
 		if ("humidity" in event) {
@@ -136,9 +138,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "%rF",
 					read: true,
-					write: false
+					write: false,
 				},
-				native: undefined
+				native: undefined,
 			});
 		}
 		if ("illuminance" in event) {
@@ -150,9 +152,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "lux",
 					read: true,
-					write: false
+					write: false,
 				},
-				native: undefined
+				native: undefined,
 			});
 		}
 		if ("moisture" in event) {
@@ -165,9 +167,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "%",
 					read: true,
-					write: false
+					write: false,
 				},
-				native: undefined
+				native: undefined,
 			});
 		}
 		if ("fertility" in event) {
@@ -180,9 +182,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "µS/cm",
 					read: true,
-					write: false
+					write: false,
 				},
-				native: undefined
+				native: undefined,
 			});
 		}
 		if ("battery" in event) {
@@ -195,9 +197,9 @@ const plugin: Plugin<XiaomiContext> = {
 					type: "number",
 					unit: "%",
 					read: true,
-					write: false
+					write: false,
 				},
-				native: undefined
+				native: undefined,
 			});
 		}
 		if ("kettleStatus" in event) {
@@ -215,9 +217,9 @@ const plugin: Plugin<XiaomiContext> = {
 						"1": "Heating",
 						"2": "Cooling",
 						"3": "Keeping warm",
-					}
+					},
 				},
-				native: undefined
+				native: undefined,
 			});
 		}
 		// Create objects for unknown events
@@ -230,9 +232,9 @@ const plugin: Plugin<XiaomiContext> = {
 						name: key,
 						type: "number",
 						read: true,
-						write: false
+						write: false,
 					},
-					native: undefined
+					native: undefined,
 				});
 			}
 		}
@@ -243,14 +245,11 @@ const plugin: Plugin<XiaomiContext> = {
 		if (context == null || context.event == null) return;
 
 		for (const [prop, value] of entries(context.event)) {
-			_.log(
-				`xiaomi >> {{green|got ${prop} update => ${value}}}`,
-				"debug"
-			);
+			_.adapter.log.debug(`xiaomi >> got ${prop} update => ${value}`);
 		}
 		// The event is simply the value dictionary itself
 		return context.event;
-	}
+	},
 };
 
 export = plugin as Plugin;

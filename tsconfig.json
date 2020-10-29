@@ -1,34 +1,36 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
-        "noEmit": true,
-        "downlevelIteration": true,
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "noEmitOnError": true,
-        "noImplicitAny": false,
-        "outDir": "build/",
-        "removeComments": false,
-        "stripInternal": true,
-        "target": "es6",
-        "jsx": "react",
-        "skipLibCheck": true,
-        "strictNullChecks": true,
-        "strictPropertyInitialization": true,
-        "resolveJsonModule": true,
-        "plugins": [
-            {
-                "name": "@fimbul/mithotyn",
-                "displayErrorsAsWarnings": true
-            }
-        ],
-    },
-    "include": [
-        "**/*.ts"
-    ],
-    "exclude": [
-        "src/**/*.d.ts",
-        "build/**",
-        "node_modules/**"
-    ]
+	"compileOnSave": true,
+	"compilerOptions": {
+		// do not compile anything, this file is just to configure type checking
+		// the compilation is configured in tsconfig.build.json
+		"noEmit": true,
+		// check JS files, but do not compile them => tsconfig.build.json
+		"allowJs": true,
+		"checkJs": true,
+		"skipLibCheck": true,
+		"noEmitOnError": true,
+		"outDir": "./build/",
+		"removeComments": false,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		// this is necessary for the automatic typing of the adapter config
+		"resolveJsonModule": true,
+		"jsx": "react",
+		// Set this to false if you want to disable the very strict rules (not recommended)
+		"strict": true,
+		"importsNotUsedAsValues": "error",
+		"target": "es2018",
+		"sourceMap": true,
+		"inlineSourceMap": false,
+		"watch": false
+	},
+	"include": [
+		"**/*.ts",
+		"**/*.d.ts"
+	],
+	"exclude": [
+		"build/**",
+		"node_modules/**",
+		"admin/**"
+	]
 }

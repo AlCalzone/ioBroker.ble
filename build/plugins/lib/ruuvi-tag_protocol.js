@@ -47,21 +47,26 @@ function parseDataFormat5(data) {
     let humidity = data.readUInt16BE(3);
     humidity = humidity !== 0xffff ? humidity * 0.0025 : undefined;
     let pressure = data.readUInt16BE(5);
-    pressure = pressure !== 0xffff ? ((pressure + 50000) / 100) : undefined; // hPa
+    pressure = pressure !== 0xffff ? (pressure + 50000) / 100 : undefined; // hPa
     let acceleration = {
         x: data.readInt16BE(7),
         y: data.readInt16BE(9),
         z: data.readInt16BE(11),
     };
-    acceleration.x = acceleration.x !== 0x8000 ? acceleration.x * 0.001 : undefined;
-    acceleration.y = acceleration.y !== 0x8000 ? acceleration.y * 0.001 : undefined;
-    acceleration.z = acceleration.z !== 0x8000 ? acceleration.z * 0.001 : undefined;
-    if (acceleration.x == undefined && acceleration.y == undefined && acceleration.z == undefined)
+    acceleration.x =
+        acceleration.x !== 0x8000 ? acceleration.x * 0.001 : undefined;
+    acceleration.y =
+        acceleration.y !== 0x8000 ? acceleration.y * 0.001 : undefined;
+    acceleration.z =
+        acceleration.z !== 0x8000 ? acceleration.z * 0.001 : undefined;
+    if (acceleration.x == undefined &&
+        acceleration.y == undefined &&
+        acceleration.z == undefined)
         acceleration = undefined;
     const power = data.readUInt16BE(13);
     let battery;
     let txPower;
-    if ((power >>> 5) !== 2047)
+    if (power >>> 5 !== 2047)
         battery = (power >>> 5) * 0.001 + 1.6;
     if ((power & 0b11111) !== 0b11111)
         txPower = (power & 0b11111) * 2 - 40;
@@ -88,3 +93,4 @@ function parseDataFormat5(data) {
     });
 }
 exports.parseDataFormat5 = parseDataFormat5;
+//# sourceMappingURL=ruuvi-tag_protocol.js.map

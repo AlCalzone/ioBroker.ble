@@ -1,6 +1,4 @@
-// tslint:disable-next-line:no-reference
-
-import { spy, stub } from "sinon";
+import { stub } from "sinon";
 
 export function createCustomSubscriptionsMock() {
 	return {

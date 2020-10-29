@@ -6,9 +6,9 @@ export interface RuuviContext {
 	humidity?: number;
 	pressure?: number;
 	acceleration?: {
-		x: number,
-		y: number,
-		z: number,
+		x: number;
+		y: number;
+		z: number;
 	};
 	battery?: number;
 	txPower?: number;
@@ -76,22 +76,32 @@ export function parseDataFormat5(data: Buffer): RuuviContext {
 	humidity = humidity !== 0xffff ? humidity * 0.0025 : undefined;
 
 	let pressure: number | undefined = data.readUInt16BE(5);
-	pressure = pressure !== 0xffff ? ((pressure + 50000) / 100) : undefined; // hPa
+	pressure = pressure !== 0xffff ? (pressure + 50000) / 100 : undefined; // hPa
 
-	let acceleration: {[key in "x" | "y" | "z"]: number | undefined} | undefined = {
+	let acceleration:
+		| { [key in "x" | "y" | "z"]: number | undefined }
+		| undefined = {
 		x: data.readInt16BE(7),
 		y: data.readInt16BE(9),
 		z: data.readInt16BE(11),
 	};
-	acceleration.x = acceleration.x !== 0x8000 ? acceleration.x! * 0.001 : undefined;
-	acceleration.y = acceleration.y !== 0x8000 ? acceleration.y! * 0.001 : undefined;
-	acceleration.z = acceleration.z !== 0x8000 ? acceleration.z! * 0.001 : undefined;
-	if (acceleration.x == undefined && acceleration.y == undefined && acceleration.z == undefined) acceleration = undefined;
+	acceleration.x =
+		acceleration.x !== 0x8000 ? acceleration.x! * 0.001 : undefined;
+	acceleration.y =
+		acceleration.y !== 0x8000 ? acceleration.y! * 0.001 : undefined;
+	acceleration.z =
+		acceleration.z !== 0x8000 ? acceleration.z! * 0.001 : undefined;
+	if (
+		acceleration.x == undefined &&
+		acceleration.y == undefined &&
+		acceleration.z == undefined
+	)
+		acceleration = undefined;
 
 	const power = data.readUInt16BE(13);
 	let battery: number | undefined;
 	let txPower: number | undefined;
-	if ((power >>> 5) !== 0b111_1111_1111) battery = (power >>> 5) * 0.001 + 1.6;
+	if (power >>> 5 !== 0b111_1111_1111) battery = (power >>> 5) * 0.001 + 1.6;
 	if ((power & 0b11111) !== 0b11111) txPower = (power & 0b11111) * 2 - 40;
 
 	let movementCounter: number | undefined = data[15];
@@ -103,7 +113,7 @@ export function parseDataFormat5(data: Buffer): RuuviContext {
 	let macAddress: string | undefined = data.slice(18, 24).toString("hex");
 	if (macAddress === "ffffffffffff") macAddress = undefined;
 
-	return stripUndefinedProperties({
+	return (stripUndefinedProperties({
 		dataFormat,
 		temperature,
 		humidity,
@@ -114,5 +124,5 @@ export function parseDataFormat5(data: Buffer): RuuviContext {
 		movementCounter,
 		sequenceNumber,
 		macAddress,
-	}) as any as RuuviContext;
+	}) as any) as RuuviContext;
 }

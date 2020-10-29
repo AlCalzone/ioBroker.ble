@@ -3,17 +3,6 @@
  * Plugin for ruuvi tags with support for the protocol versions 2-5.
  * See https://github.com/ruuvi/ruuvi-sensor-protocols for details
  */
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 const nodeUrl = require("url");
 const global_1 = require("../lib/global");
 const ruuvi_tag_protocol_1 = require("./lib/ruuvi-tag_protocol");
@@ -39,7 +28,9 @@ const plugin = {
             const ctx = plugin.createContext(peripheral);
             ret = ctx != null;
         }
-        catch (e) { /* all good */ }
+        catch (e) {
+            /* all good */
+        }
         // store the test result
         testedPeripherals.set(peripheral.id, {
             timestamp: Date.now(),
@@ -53,7 +44,7 @@ const plugin = {
         let data = plugin_1.getServiceData(peripheral, serviceUUID);
         if (data != undefined) {
             const url = data.toString("utf8");
-            global_1.Global.log(`ruuvi-tag >> got url: ${data.toString("utf8")}`, "debug");
+            global_1.Global.adapter.log.debug(`ruuvi-tag >> got url: ${data.toString("utf8")}`);
             // data format 2 or 4 - extract from URL hash
             const parsedUrl = nodeUrl.parse(url);
             if (!parsedUrl.hash)
@@ -61,17 +52,18 @@ const plugin = {
             data = Buffer.from(parsedUrl.hash, "base64");
             return ruuvi_tag_protocol_1.parseDataFormat2or4(data);
         }
-        else if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0) {
+        else if (peripheral.advertisement.manufacturerData != null &&
+            peripheral.advertisement.manufacturerData.length > 0) {
             // When the data is decoded from manufacturerData, the first two bytes should be 0x9904
             data = peripheral.advertisement.manufacturerData;
             if (data.length <= 2 || !data.slice(0, 2).equals(manufacturerId)) {
-                global_1.Global.log(`ruuvi-tag >> got unsupported data: ${data.toString("hex")}`, "debug");
+                global_1.Global.adapter.log.debug(`ruuvi-tag >> got unsupported data: ${data.toString("hex")}`);
                 return;
             }
             // Cut off the manufuacturer ID
             data = data.slice(2);
             // data format 3 or 5 - extract from manufacturerData buffer
-            global_1.Global.log(`ruuvi-tag >> got data: ${data.toString("hex")}`, "debug");
+            global_1.Global.adapter.log.debug(`ruuvi-tag >> got data: ${data.toString("hex")}`);
             if (data[0] === 3) {
                 return ruuvi_tag_protocol_1.parseDataFormat3(data);
             }
@@ -79,7 +71,7 @@ const plugin = {
                 return ruuvi_tag_protocol_1.parseDataFormat5(data);
             }
             else {
-                global_1.Global.log(`ruuvi-tag >> {{red|unsupported data format ${data[0]}}}`, "debug");
+                global_1.Global.adapter.log.debug(`ruuvi-tag >> unsupported data format ${data[0]}`);
             }
         }
     },
@@ -87,8 +79,9 @@ const plugin = {
         if (context == undefined)
             return;
         const deviceObject = {
+            // no special definitions neccessary
             common: {
-                name: "Ruuvi Tag"
+                name: "Ruuvi Tag",
             },
             native: undefined,
         };
@@ -238,9 +231,9 @@ const plugin = {
         if (context == null)
             return;
         // strip out unnecessary properties
-        const { dataFormat, beaconID, macAddress, sequenceNumber } = context, remainder = __rest(context, ["dataFormat", "beaconID", "macAddress", "sequenceNumber"]);
+        const { dataFormat, beaconID, macAddress, sequenceNumber, ...remainder } = context;
         // if acceleration exists, we need to rename the acceleration components
-        const { acceleration } = remainder, ret = __rest(remainder, ["acceleration"]);
+        const { acceleration, ...ret } = remainder;
         if (acceleration != null) {
             const { x, y, z } = acceleration;
             if (x != null)
@@ -254,3 +247,4 @@ const plugin = {
     },
 };
 module.exports = plugin;
+//# sourceMappingURL=ruuvi-tag.js.map

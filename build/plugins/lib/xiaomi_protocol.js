@@ -1,7 +1,6 @@
 "use strict";
-// tslint:disable:max-classes-per-file
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.XiaomiEventIDs_Internal = exports.XiaomiAdvertisement = exports.CapabilityFlags = void 0;
+exports.XiaomiAdvertisement = exports.XiaomiEventIDs_Internal = exports.CapabilityFlags = void 0;
 var CapabilityFlags;
 (function (CapabilityFlags) {
     CapabilityFlags[CapabilityFlags["Connectable"] = 1] = "Connectable";
@@ -9,6 +8,44 @@ var CapabilityFlags;
     CapabilityFlags[CapabilityFlags["Encrypt"] = 4] = "Encrypt";
     CapabilityFlags[CapabilityFlags["IO"] = 24] = "IO";
 })(CapabilityFlags = exports.CapabilityFlags || (exports.CapabilityFlags = {}));
+var XiaomiEventIDs_Internal;
+(function (XiaomiEventIDs_Internal) {
+    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Temperature"] = 4100] = "Temperature";
+    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["KettleStatusAndTemperature"] = 4101] = "KettleStatusAndTemperature";
+    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Humidity"] = 4102] = "Humidity";
+    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Illuminance"] = 4103] = "Illuminance";
+    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Moisture"] = 4104] = "Moisture";
+    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Fertility"] = 4105] = "Fertility";
+    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Battery"] = 4106] = "Battery";
+    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["TemperatureAndHumidity"] = 4109] = "TemperatureAndHumidity";
+})(XiaomiEventIDs_Internal = exports.XiaomiEventIDs_Internal || (exports.XiaomiEventIDs_Internal = {}));
+// value transforms translate the internal data structure to the external one
+// in most cases this is a 1:1 match
+const valueTransforms = {
+    // by default just pass the value through
+    default: (val, eventID) => {
+        if (eventID in XiaomiEventIDs_Internal) {
+            return { [XiaomiEventIDs_Internal[eventID].toLowerCase()]: val };
+        }
+        else {
+            return { [`unknown (0x${eventID.toString(16)})`]: val };
+        }
+    },
+    // TODO: find a nicer way to specify the bit size of temperature - this information exists in the packet!
+    Temperature: (val) => ({ temperature: toSigned(val, 16) / 10 }),
+    Humidity: (val) => ({ humidity: val / 10 }),
+    TemperatureAndHumidity: (val) => ({
+        // the data is read in little-endian (reverse) order,
+        // so val = 0xHHHHTTTT
+        humidity: (val >>> 16) / 10,
+        temperature: toSigned(val & 0xffff, 16) / 10,
+    }),
+    KettleStatusAndTemperature: (val) => ({
+        // the data is read in little-endian (reverse) order, so val = 0xTTSS
+        kettleStatus: val & 0xff,
+        temperature: val >>> 8,
+    }),
+};
 class XiaomiAdvertisement {
     constructor(data) {
         if (!data || data.length < 5) {
@@ -46,7 +83,9 @@ class XiaomiAdvertisement {
         }
         if (this._hasEvent) {
             const eventID = data.readUInt16LE(offset);
-            const eventName = XiaomiEventIDs_Internal[eventID];
+            // const eventName = XiaomiEventIDs_Internal[
+            // 	eventID
+            // ] as keyof typeof XiaomiEventIDs_Internal;
             const dataLength = data[offset + 2];
             const eventData = data.slice(offset + 3, offset + 3 + dataLength);
             const numericData = parseNumberLE(eventData);
@@ -112,44 +151,6 @@ class XiaomiAdvertisement {
     }
 }
 exports.XiaomiAdvertisement = XiaomiAdvertisement;
-var XiaomiEventIDs_Internal;
-(function (XiaomiEventIDs_Internal) {
-    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Temperature"] = 4100] = "Temperature";
-    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["KettleStatusAndTemperature"] = 4101] = "KettleStatusAndTemperature";
-    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Humidity"] = 4102] = "Humidity";
-    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Illuminance"] = 4103] = "Illuminance";
-    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Moisture"] = 4104] = "Moisture";
-    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Fertility"] = 4105] = "Fertility";
-    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["Battery"] = 4106] = "Battery";
-    XiaomiEventIDs_Internal[XiaomiEventIDs_Internal["TemperatureAndHumidity"] = 4109] = "TemperatureAndHumidity";
-})(XiaomiEventIDs_Internal = exports.XiaomiEventIDs_Internal || (exports.XiaomiEventIDs_Internal = {}));
-// value transforms translate the internal data structure to the external one
-// in most cases this is a 1:1 match
-const valueTransforms = {
-    // by default just pass the value through
-    default: (val, eventID) => {
-        if (eventID in XiaomiEventIDs_Internal) {
-            return { [XiaomiEventIDs_Internal[eventID].toLowerCase()]: val };
-        }
-        else {
-            return { [`unknown (0x${eventID.toString(16)})`]: val };
-        }
-    },
-    // TODO: find a nicer way to specify the bit size of temperature - this information exists in the packet!
-    Temperature: (val) => ({ temperature: toSigned(val, 16) / 10 }),
-    Humidity: (val) => ({ humidity: val / 10 }),
-    TemperatureAndHumidity: (val) => ({
-        // the data is read in little-endian (reverse) order,
-        // so val = 0xHHHHTTTT
-        humidity: (val >>> 16) / 10,
-        temperature: toSigned((val & 0xffff), 16) / 10,
-    }),
-    KettleStatusAndTemperature: val => ({
-        // the data is read in little-endian (reverse) order, so val = 0xTTSS
-        kettleStatus: val & 0xff,
-        temperature: val >>> 8,
-    })
-};
 function reverseBuffer(buf) {
     const ret = Buffer.allocUnsafe(buf.length);
     for (let i = 0; i < buf.length; i++) {
@@ -175,3 +176,4 @@ function toSigned(unsigned, size) {
         return unsigned;
     }
 }
+//# sourceMappingURL=xiaomi_protocol.js.map
