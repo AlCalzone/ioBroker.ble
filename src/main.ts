@@ -384,8 +384,8 @@ async function onDiscover(peripheral: PeripheralInfo) {
 	const rssiState = await adapter.getStateAsync(`${deviceId}.rssi`);
 	if (
 		rssiState == null ||
-		(rssiState.val !== peripheral.rssi && // only save changes
-			rssiState.lc + rssiUpdateInterval < Date.now()) // and dont update too frequently
+		//(rssiState.val !== peripheral.rssi && // only save changes
+		(	rssiState.ts + rssiUpdateInterval < Date.now()) // and dont update too frequently
 	) {
 		_.adapter.log.debug(`updating rssi state for ${deviceId}`);
 		await adapter.setStateAsync(`${deviceId}.rssi`, peripheral.rssi, true);
