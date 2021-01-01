@@ -52,7 +52,7 @@ export function getMessageReviver<T extends Record<string, any>>(
 ): (input: Record<string, any>) => void {
 	const reviveValue = (value: any): any => {
 		if (isArray(value)) {
-			return value.map((v) => reviveValue(v));
+			return value.map((v: any) => reviveValue(v));
 		} else if (isObject(value)) {
 			const v = value as any;
 			if (v.type === "Buffer" && isArray(v.data)) {
