@@ -41,7 +41,7 @@
   "devDependencies": {
     "@alcalzone/release-script": "^1.8.1",
     "@babel/core": "^7.12.9",
-    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
     "@iobroker/testing": "^2.3.0",
     "@material-ui/core": "^4.11.1",
