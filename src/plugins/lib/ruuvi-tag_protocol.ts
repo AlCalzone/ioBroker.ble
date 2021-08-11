@@ -113,7 +113,7 @@ export function parseDataFormat5(data: Buffer): RuuviContext {
 	let macAddress: string | undefined = data.slice(18, 24).toString("hex");
 	if (macAddress === "ffffffffffff") macAddress = undefined;
 
-	return (stripUndefinedProperties({
+	return stripUndefinedProperties({
 		dataFormat,
 		temperature,
 		humidity,
@@ -124,5 +124,5 @@ export function parseDataFormat5(data: Buffer): RuuviContext {
 		movementCounter,
 		sequenceNumber,
 		macAddress,
-	}) as any) as RuuviContext;
+	}) as any as RuuviContext;
 }

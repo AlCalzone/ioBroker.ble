@@ -57,7 +57,7 @@ const adapter = utils.adapter({
 		);
 		allowNewDevices =
 			allowNewDevicesState && allowNewDevicesState.val != undefined
-				? ((allowNewDevicesState.val as unknown) as boolean)
+				? (allowNewDevicesState.val as unknown as boolean)
 				: true;
 		await adapter.setStateAsync(
 			"options.allowNewDevices",
