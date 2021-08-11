@@ -355,7 +355,8 @@ function handleScanProcessError(err) {
         /LIBUSB_ERROR_NOT_SUPPORTED/.test(err.message)) {
         terminate("No compatible BLE 4.0 hardware found!");
     }
-    else if (/NODE_MODULE_VERSION/.test(err.message) && ((_a = adapter.supportsFeature) === null || _a === void 0 ? void 0 : _a.call(adapter, "CONTROLLER_NPM_AUTO_REBUILD"))) {
+    else if (/NODE_MODULE_VERSION/.test(err.message) &&
+        ((_a = adapter.supportsFeature) === null || _a === void 0 ? void 0 : _a.call(adapter, "CONTROLLER_NPM_AUTO_REBUILD"))) {
         terminate("A dependency requires a rebuild.", 13);
     }
     else if (err.message.includes(`The value of "offset" is out of range`)) {

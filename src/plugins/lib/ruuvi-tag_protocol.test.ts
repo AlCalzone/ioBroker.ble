@@ -13,26 +13,8 @@ describe("ruuvi-tag protocol (service data) => ", () => {
 				{
 					uuid: "feaa",
 					data: Buffer.from([
-						16,
-						249,
-						3,
-						114,
-						117,
-						117,
-						46,
-						118,
-						105,
-						47,
-						35,
-						66,
-						76,
-						103,
-						67,
-						65,
-						77,
-						73,
-						107,
-						70,
+						16, 249, 3, 114, 117, 117, 46, 118, 105, 47, 35, 66, 76,
+						103, 67, 65, 77, 73, 107, 70,
 					]),
 				},
 			],
@@ -50,7 +32,7 @@ describe("ruuvi-tag protocol (service data) => ", () => {
 
 describe("ruuvi-tag protocol (manufacturer data) => ", () => {
 	// a real packet:
-	const peripheral = ({
+	const peripheral = {
 		id: "c0cd266001a0",
 		address: "c0:cd:26:60:01:a0",
 		addressType: "random",
@@ -65,7 +47,7 @@ describe("ruuvi-tag protocol (manufacturer data) => ", () => {
 		},
 		rssi: -91,
 		state: "disconnected",
-	} as any) as Peripheral;
+	} as any as Peripheral;
 	it("should be handling the packet", () => {
 		plugin.isHandling(peripheral).should.be.true;
 		// also for repeated tests
