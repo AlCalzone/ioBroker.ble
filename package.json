@@ -60,7 +60,7 @@
     "axios": "^0.21.1",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^7.25.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.4.0",
     "gulp": "^4.0.2",
