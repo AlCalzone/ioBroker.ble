@@ -26,7 +26,8 @@ const argv = yargs
 			desc: "Which BLE services to scan for",
 			default: [],
 		},
-	}).argv;
+	})
+	.parseSync();
 
 let noble: typeof import("@abandonware/noble");
 
