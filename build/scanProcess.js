@@ -21,7 +21,8 @@ const argv = yargs
         desc: "Which BLE services to scan for",
         default: [],
     },
-}).argv;
+})
+    .parseSync();
 let noble;
 function sendAsync(message, sendHandle, swallowErrors = true) {
     return new Promise((resolve, reject) => {
