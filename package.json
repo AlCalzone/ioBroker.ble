@@ -42,7 +42,7 @@
     "@alcalzone/release-script": "^1.10.0",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.14.1",
-    "@babel/preset-typescript": "^7.13.0",
+    "@babel/preset-typescript": "^7.15.0",
     "@iobroker/testing": "^2.4.4",
     "@material-ui/core": "^4.11.4",
     "@types/chai": "^4.2.18",
