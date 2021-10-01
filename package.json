@@ -55,7 +55,7 @@
     "@types/sinon": "^10.0.2",
     "@types/sinon-chai": "^3.2.5",
     "@types/yargs": "^17.0.2",
-    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.30.0",
     "axios": "^0.21.2",
     "chai": "^4.3.4",
