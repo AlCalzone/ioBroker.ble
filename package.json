@@ -48,7 +48,7 @@
     "@babel/preset-typescript": "^7.16.0",
     "@iobroker/testing": "^2.5.2",
     "@material-ui/core": "^4.12.3",
-    "@types/chai": "^4.2.22",
+    "@types/chai": "^4.3.0",
     "@types/chai-as-promised": "^7.1.4",
     "@types/jquery": "^3.5.11",
     "@types/materialize-css": "^1.0.11",
