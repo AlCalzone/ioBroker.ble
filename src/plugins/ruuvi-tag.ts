@@ -47,6 +47,7 @@ const plugin: Plugin<RuuviContext> = {
 			const ctx = plugin.createContext(peripheral);
 			ret = ctx != null;
 		} catch (e) {
+			debugger;
 			/* all good */
 		}
 		// store the test result

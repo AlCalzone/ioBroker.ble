@@ -1,5 +1,21 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import type { Peripheral } from "@abandonware/noble";
-import plugin = require("../ruuvi-tag");
+import * as proxyquireModule from "proxyquire";
+import { createGlobalMock } from "../../../test/mocks/global";
+
+// import mocks
+const proxyquire = proxyquireModule.noPreserveCache();
+
+namespace mocks {
+	export const global = createGlobalMock({});
+	// export const adapter = global.Global.adapter;
+	// export const database = global.Global.database;
+	// export const customSubscriptions = createCustomSubscriptionsMock();
+}
+
+const plugin = proxyquire<typeof import("../ruuvi-tag")>("../ruuvi-tag", {
+	"../lib/global": mocks.global,
+});
 
 describe("ruuvi-tag protocol (service data) => ", () => {
 	// a real packet:
