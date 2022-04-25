@@ -1,9 +1,7 @@
-"use strict";
+var import_plugin = require("./plugin");
 /*!
  * Alias for Xiaomi plugin
  */
-/* eslint-disable @typescript-eslint/no-var-requires */
-const plugin_1 = require("./plugin");
-const plugin = plugin_1.alias("mi-flora", require("./xiaomi"));
+const plugin = (0, import_plugin.alias)("mi-flora", require("./xiaomi"));
 module.exports = plugin;
 //# sourceMappingURL=mi-flora.js.map
