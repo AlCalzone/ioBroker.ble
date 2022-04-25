@@ -92,7 +92,6 @@
     "watch:react": "npm run build:react -- --watch",
     "watch:ts": "npm run build:ts -- --watch",
     "watch": "build-adapter all --watch",
-    "test:unit": "mocha test/unit --exit",
     "test:package": "mocha test/package --exit",
     "test:integration": "mocha test/integration --exit",
     "test:ts": "mocha src/**/*.test.ts",
