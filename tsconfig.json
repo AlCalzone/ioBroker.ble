@@ -1,28 +1,24 @@
 {
-	"compileOnSave": true,
+	// To update the compilation target, install a different version of @tsconfig/node... and reference it here
+	// https://github.com/tsconfig/bases#node-12-tsconfigjson
+	"extends": "@tsconfig/node12/tsconfig.json",
 	"compilerOptions": {
 		// do not compile anything, this file is just to configure type checking
 		// the compilation is configured in tsconfig.build.json
 		"noEmit": true,
+		// Never emit faulty JS
+		"noEmitOnError": true,
 		// check JS files, but do not compile them => tsconfig.build.json
 		"allowJs": true,
 		"checkJs": true,
-		"skipLibCheck": true,
-		"noEmitOnError": true,
 		"outDir": "./build/",
 		"removeComments": false,
-		"module": "commonjs",
-		"moduleResolution": "node",
-		// this is necessary for the automatic typing of the adapter config
-		"resolveJsonModule": true,
 		"jsx": "react",
-		// Set this to false if you want to disable the very strict rules (not recommended)
-		"strict": true,
+		// Avoid runtime imports that are unnecessary
 		"importsNotUsedAsValues": "error",
-		"target": "es2018",
+		// Required for TS debugging
 		"sourceMap": true,
-		"inlineSourceMap": false,
-		"watch": false
+		"inlineSourceMap": false
 	},
 	"include": [
 		"**/*.ts",
