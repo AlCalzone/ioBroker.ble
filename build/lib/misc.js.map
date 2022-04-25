@@ -1,1 +1,7 @@
-{"version":3,"file":"misc.js","sourceRoot":"","sources":["../../src/lib/misc.ts"],"names":[],"mappings":";;;AAAA,kEAAkE;AAClE,SAAgB,IAAI,CACnB,GAAM,EACN,IAAS;IAET,MAAM,GAAG,GAAG,EAAgB,CAAC;IAC7B,KAAK,MAAM,GAAG,IAAI,IAAI,EAAE;QACvB,IAAI,GAAG,IAAI,GAAG;YAAE,GAAG,CAAC,GAAG,CAAC,GAAG,GAAG,CAAC,GAAG,CAAC,CAAC;KACpC;IACD,OAAO,GAAG,CAAC;AACZ,CAAC;AATD,oBASC"}
+{
+  "version": 3,
+  "sources": ["../../src/lib/misc.ts"],
+  "sourcesContent": ["/** Returns a subset of `obj` that contains only the given keys */\nexport function pick<T extends Record<any, any>, K extends keyof T>(\n\tobj: T,\n\tkeys: K[],\n): Pick<T, K> {\n\tconst ret = {} as Pick<T, K>;\n\tfor (const key of keys) {\n\t\tif (key in obj) ret[key] = obj[key];\n\t}\n\treturn ret;\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AACO,cACN,KACA,MACa;AACb,QAAM,MAAM,CAAC;AACb,aAAW,OAAO,MAAM;AACvB,QAAI,OAAO;AAAK,UAAI,OAAO,IAAI;AAAA,EAChC;AACA,SAAO;AACR;",
+  "names": []
+}
