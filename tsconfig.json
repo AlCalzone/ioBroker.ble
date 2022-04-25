@@ -9,7 +9,7 @@
 		// Never emit faulty JS
 		"noEmitOnError": true,
 		// check JS files, but do not compile them => tsconfig.build.json
-		"allowJs": true,
+		"allowJs": false,
 		"checkJs": true,
 		"outDir": "./build/",
 		"removeComments": false,
