@@ -277,7 +277,7 @@
 				"type": "boolean",
 				"read": true,
 				"write": true,
-				"def": true
+				"def": false
 			},
 			"native": {}
 		}

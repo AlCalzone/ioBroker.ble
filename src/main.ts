@@ -23,7 +23,24 @@ let enabledPlugins: Plugin[];
 let services: string[] = [];
 
 /** Whether new devices may be recorded */
-let allowNewDevices = true;
+let allowNewDevices = false;
+let resetAllowNewDevicesTimeout: NodeJS.Timeout | undefined;
+
+function autoResetAllowNewDevices() {
+	if (resetAllowNewDevicesTimeout) clearTimeout(resetAllowNewDevicesTimeout);
+
+	// After 5 minutes, reset it to false
+	resetAllowNewDevicesTimeout = setTimeout(() => {
+		allowNewDevices = false;
+		_.adapter.setState("options.allowNewDevices", false, true);
+		resetAllowNewDevicesTimeout = undefined;
+
+		_.adapter.log.info(
+			"No longer accepting new devices (automatic timeout)",
+		);
+	}, 5000 * 60);
+}
+
 /** Cache of new devices we already ignored */
 const ignoredNewDeviceIDs = new Set<string>();
 
@@ -50,20 +67,6 @@ const adapter = utils.adapter({
 
 		// Workaround für fehlende InstanceObjects nach update
 		await _.ensureInstanceObjects();
-
-		// Prüfen, ob wir neue Geräte erfassen dürfen
-		const allowNewDevicesState = await adapter.getStateAsync(
-			"options.allowNewDevices",
-		);
-		allowNewDevices =
-			allowNewDevicesState && allowNewDevicesState.val != undefined
-				? (allowNewDevicesState.val as unknown as boolean)
-				: true;
-		await adapter.setStateAsync(
-			"options.allowNewDevices",
-			allowNewDevices,
-			true,
-		);
 
 		// Plugins laden
 		_.adapter.log.info(
@@ -112,6 +115,10 @@ const adapter = utils.adapter({
 		adapter.subscribeStates("*");
 		adapter.subscribeObjects("*");
 
+		// Beim Start des Adapters sicher stellen, dass keine neuen Geräte erfasst werden,
+		// bis der User es explizit erlaubt.
+		await adapter.setStateAsync("options.allowNewDevices", false, true);
+
 		// And start scanning
 		if (!process.env.TESTING) startScanProcess();
 	},
@@ -142,13 +149,26 @@ const adapter = utils.adapter({
 			state != undefined &&
 			!state.ack
 		) {
-			if (typeof state.val === "boolean") {
+			if (
+				typeof state.val === "boolean" &&
+				state.val !== allowNewDevices
+			) {
 				allowNewDevices = state.val;
 				// ACK the state change
 				_.adapter.setState(id, state.val, true);
-				// Whenever allowNewDevices is set to true,
-				// forget all devices we previously ignored
-				if (allowNewDevices) ignoredNewDeviceIDs.clear();
+				_.adapter.log.info(
+					allowNewDevices
+						? "Now accepting new devices"
+						: "No longer accepting new devices",
+				);
+
+				if (allowNewDevices) {
+					// Whenever allowNewDevices is set to true,
+					// forget all devices we previously ignored
+					ignoredNewDeviceIDs.clear();
+					// Clear or restart the auto-reset timer
+					autoResetAllowNewDevices();
+				}
 			}
 		}
 	},

@@ -24,7 +24,18 @@ var import_scanProcessInterface = require("./lib/scanProcessInterface");
 var import_plugins = __toESM(require("./plugins"));
 let enabledPlugins;
 let services = [];
-let allowNewDevices = true;
+let allowNewDevices = false;
+let resetAllowNewDevicesTimeout;
+function autoResetAllowNewDevices() {
+  if (resetAllowNewDevicesTimeout)
+    clearTimeout(resetAllowNewDevicesTimeout);
+  resetAllowNewDevicesTimeout = setTimeout(() => {
+    allowNewDevices = false;
+    import_global.Global.adapter.setState("options.allowNewDevices", false, true);
+    resetAllowNewDevicesTimeout = void 0;
+    import_global.Global.adapter.log.info("No longer accepting new devices (automatic timeout)");
+  }, 5e3 * 60);
+}
 const ignoredNewDeviceIDs = /* @__PURE__ */ new Set();
 let rssiUpdateInterval = 0;
 let scanProcess;
@@ -34,9 +45,6 @@ const adapter = utils.adapter({
     import_global.Global.adapter = adapter;
     import_global.Global.objectCache = new import_object_cache.ObjectCache(6e4);
     await import_global.Global.ensureInstanceObjects();
-    const allowNewDevicesState = await adapter.getStateAsync("options.allowNewDevices");
-    allowNewDevices = allowNewDevicesState && allowNewDevicesState.val != void 0 ? allowNewDevicesState.val : true;
-    await adapter.setStateAsync("options.allowNewDevices", allowNewDevices, true);
     import_global.Global.adapter.log.info(`loaded plugins: ${import_plugins.default.map((p) => p.name).join(", ")}`);
     const enabledPluginNames = (adapter.config.plugins || "").split(",").map((p) => p.trim().toLowerCase()).concat("_default");
     enabledPlugins = import_plugins.default.filter((p) => enabledPluginNames.indexOf(p.name.toLowerCase()) > -1);
@@ -57,6 +65,7 @@ const adapter = utils.adapter({
     }
     adapter.subscribeStates("*");
     adapter.subscribeObjects("*");
+    await adapter.setStateAsync("options.allowNewDevices", false, true);
     if (!process.env.TESTING)
       startScanProcess();
   },
@@ -76,11 +85,14 @@ const adapter = utils.adapter({
   },
   stateChange: (id, state) => {
     if (/options\.allowNewDevices$/.test(id) && state != void 0 && !state.ack) {
-      if (typeof state.val === "boolean") {
+      if (typeof state.val === "boolean" && state.val !== allowNewDevices) {
         allowNewDevices = state.val;
         import_global.Global.adapter.setState(id, state.val, true);
-        if (allowNewDevices)
+        import_global.Global.adapter.log.info(allowNewDevices ? "Now accepting new devices" : "No longer accepting new devices");
+        if (allowNewDevices) {
           ignoredNewDeviceIDs.clear();
+          autoResetAllowNewDevices();
+        }
       }
     }
   },
