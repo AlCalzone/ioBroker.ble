@@ -1,285 +1,291 @@
 {
-	"common": {
-		"name": "ble",
-		"version": "0.12.0",
-		"news": {
-			"0.12.0": {
-				"en": "Scanning is now done in a separate process, so uncatchable errors in `noble` no longer bring down the main process",
-				"de": "Das Scannen erfolgt jetzt in einem separaten Prozess, sodass nicht abfangbare Fehler in \"nobel\" den Hauptprozess nicht mehr zum Erliegen bringen",
-				"ru": "Сканирование теперь выполняется в отдельном процессе, поэтому неисправимые ошибки в `noble` больше не прерывают основной процесс.",
-				"pt": "A digitalização agora é feita em um processo separado, portanto, erros não detectáveis em `noble` não desligam mais o processo principal",
-				"nl": "Het scannen gebeurt nu in een apart proces, dus niet te vinden fouten in `noble` brengen het hoofdproces niet langer naar beneden",
-				"fr": "La numérisation est maintenant effectuée dans un processus séparé, de sorte que les erreurs incontrôlables dans `noble` ne font plus tomber le processus principal",
-				"it": "La scansione ora viene eseguita in un processo separato, quindi gli errori non rilevabili in \"nobile\" non fanno più cadere il processo principale",
-				"es": "El escaneo ahora se realiza en un proceso separado, por lo que los errores irrecuperables en `noble` ya no derriban el proceso principal",
-				"pl": "Skanowanie jest teraz wykonywane w osobnym procesie, więc niemożliwe do wykrycia błędy w elemencie „noble” nie spowodują już obniżenia głównego procesu",
-				"zh-cn": "现在，扫描是在一个单独的过程中完成的，因此“ noble”中不可捕获的错误不再使主要过程中断"
-			},
-			"0.11.8": {
-				"en": "The pressure value reported by Ruuvi Tags is now parsed with two decimal places",
-				"de": "Der von Ruuvi Tags gemeldete Druckwert wird jetzt mit zwei Dezimalstellen analysiert",
-				"ru": "Значение давления, сообщаемое тегами Ruuvi, теперь анализируется с двумя десятичными знаками.",
-				"pt": "O valor de pressão relatado por Ruuvi Tags agora é analisado com duas casas decimais",
-				"nl": "De drukwaarde die door Ruuvi Tags wordt gerapporteerd, wordt nu geparseerd met twee decimalen",
-				"fr": "La valeur de pression rapportée par Ruuvi Tags est maintenant analysée avec deux décimales",
-				"it": "Il valore di pressione riportato da Ruuvi Tags viene ora analizzato con due cifre decimali",
-				"es": "El valor de presión informado por Ruuvi Tags ahora se analiza con dos lugares decimales",
-				"pl": "Wartość ciśnienia zgłaszana przez Ruuvi Tags jest teraz analizowana z dwoma miejscami po przecinku",
-				"zh-cn": "Ruuvi标签报告的压力值现在解析为两个小数位"
-			},
-			"0.11.7": {
-				"en": "Added a more helpful error message if the adapter terminates with error `EAFNOSUPPORT`",
-				"de": "Eine hilfreichere Fehlermeldung wurde hinzugefügt, wenn der Adapter mit dem Fehler \"EAFNOSUPPORT\" beendet wird",
-				"ru": "Добавлено более полезное сообщение об ошибке, если адаптер завершает работу с ошибкой `EAFNOSUPPORT`",
-				"pt": "Adicionada uma mensagem de erro mais útil se o adaptador terminar com o erro `EAFNOSUPPORT`",
-				"nl": "Een nuttiger foutbericht toegevoegd als de adapter eindigt met de fout 'EAFNOSUPPORT'",
-				"fr": "Ajout d'un message d'erreur plus utile si l'adaptateur se termine par l'erreur `EAFNOSUPPORT`",
-				"it": "Aggiunto un messaggio di errore più utile se l'adattatore termina con l'errore \"EAFNOSUPPORT\"",
-				"es": "Se agregó un mensaje de error más útil si el adaptador termina con el error `EAFNOSUPPORT`",
-				"pl": "Dodano bardziej pomocny komunikat o błędzie, jeśli adapter kończy pracę z błędem `EAFNOSUPPORT`",
-				"zh-cn": "如果适配器以错误“ EAFNOSUPPORT”终止，则添加了更有用的错误消息"
-			},
-			"0.11.6": {
-				"en": "* Ignore unhandled out of range error somewhere in `noble`",
-				"de": "* Ignorieren Sie nicht behandelte Fehler außerhalb des Bereichs irgendwo in `noble`",
-				"ru": "* Игнорировать необработанную ошибку вне диапазона где-то в `noble`",
-				"pt": "* Ignore o erro não tratado fora do intervalo em algum lugar nobre",
-				"nl": "* Negeer onverwerkte fout buiten bereik ergens in `noble`",
-				"fr": "* Ignorer l'erreur hors de portée non gérée quelque part dans `noble`",
-				"it": "* Ignora l'errore non gestito fuori portata da qualche parte in \"nobile\"",
-				"es": "* Ignora el error fuera de rango no manejado en algún lugar de `noble`",
-				"pl": "* Zignoruj nieobsługiwany błąd przekroczenia zakresu gdzieś w `noble`",
-				"zh-cn": "* 忽略`noble`中某处未处理的超出范围的错误"
-			},
-			"0.11.4": {
-				"en": "* Utilize JS-Controller's auto module rebuild if possible",
-				"de": "* Verwenden Sie nach Möglichkeit die automatische Modulwiederherstellung von JS-Controller",
-				"ru": "* Используйте автоматическую перестройку JS-контроллера, если это возможно",
-				"pt": "* Utilize a reconstrução automática do módulo do controlador JS, se possível",
-				"nl": "* Gebruik indien mogelijk de automatische herbouw van de JS-Controller",
-				"fr": "* Utilisez la reconstruction automatique du module JS-Controller si possible",
-				"it": "* Utilizzare la ricostruzione automatica del modulo di JS-Controller, se possibile",
-				"es": "* Utilice la reconstrucción automática del módulo JS-Controller si es posible",
-				"pl": "* Wykorzystaj automatyczną przebudowę modułu JS-Controller, jeśli to możliwe",
-				"zh-cn": "* 尽可能利用JS-Controller的自动模块重建"
-			},
-			"0.11.3": {
-				"en": "* Fixed a crash that happens when `noble` can not be loaded.",
-				"de": "* Es wurde ein Absturz behoben, der auftrat, wenn \"noble\" nicht geladen werden konnte.",
-				"ru": "* Исправлен сбой, который происходит, когда `noble` не может быть загружен.",
-				"pt": "* Corrigida uma falha que acontece quando o `noble` não pode ser carregado.",
-				"nl": "* Een crash gerepareerd die optreedt wanneer `noble` niet kan worden geladen.",
-				"fr": "* Correction d'un plantage qui se produit lorsque `noble` ne peut pas être chargé.",
-				"it": "* Risolto un crash che si verificava quando \"nobile\" non può essere caricato.",
-				"es": "* Se corrigió un bloqueo que ocurre cuando no se puede cargar `noble`.",
-				"pl": "* Naprawiono awarię występującą, gdy nie można załadować „szlachetnego”.",
-				"zh-cn": "* 修复了无法加载`noble`时发生的崩溃。"
-			},
-			"0.11.2": {
-				"en": "* Avoid setting `undefined` as a state value to be compatible with JS-Controller 3.0",
-				"de": "* Vermeiden Sie es, \"undefined\" als Statuswert festzulegen, um mit JS-Controller 3.0 kompatibel zu sein",
-				"ru": "* Избегайте установки значения undefined в качестве значения состояния для совместимости с JS-Controller 3.0",
-				"pt": "* Evite definir `undefined` como um valor de estado para ser compatível com o JS-Controller 3.0",
-				"nl": "* Vermijd het instellen van `undefined` als een statuswaarde om compatibel te zijn met JS-Controller 3.0",
-				"fr": "* Évitez de définir `undefined` comme valeur d'état pour être compatible avec JS-Controller 3.0",
-				"it": "* Evita di impostare `undefined` come valore di stato per essere compatibile con JS-Controller 3.0",
-				"es": "* Evite establecer 'undefined` como un valor de estado para ser compatible con JS-Controller 3.0",
-				"pl": "* Unikaj ustawiania `undefined` jako wartości stanu, aby być kompatybilnym z JS-Controller 3.0",
-				"zh-cn": "* 避免将undefined设置为与JS-Controller 3.0兼容的状态值"
-			},
-			"0.11.1": {
-				"en": "* Fixed typo in Ruuvi Tag plugin: `motionCounter` -> `movementCounter`",
-				"de": "* Tippfehler im Ruuvi Tag Plugin behoben: `motionCounter` ->` motionCounter`",
-				"ru": "* Исправлена опечатка в плагине Ruuvi Tag: `motionCounter` ->` motionCounter`",
-				"pt": "* Corrigido erro de digitação no plugin Ruuvi Tag: `motionCounter` ->` motionCounter`",
-				"nl": "* Vaste typefout in Ruuvi Tag-plug-in: `motionCounter` ->` movementCounter`",
-				"fr": "* Correction d'une faute de frappe dans le plugin Ruuvi Tag: `motionCounter` ->` motionCounter`",
-				"it": "* Corretto errore di battitura nel plug-in Ruuvi Tag: `motionCounter` ->` movementCounter`",
-				"es": "* Se corrigió el error tipográfico en el plugin Ruuvi Tag: `motionCounter` ->` movementCounter`",
-				"pl": "* Naprawiono literówkę we wtyczce Ruuvi Tag: `motionCounter` ->` movementCounter`",
-				"zh-cn": "* 修正了Ruuvi标签插件中的错别字：`motionCounter`->`movementCounter`"
-			},
-			"0.11.0": {
-				"en": "* Removed compact support. `noble` sometimes throws errors in callbacks that cannot be handled and would bring the whole compact group down.\n* Added support for the Xiaomi Kettle\n* Encrypted packets are no longer decoded (for now) to avoid creating thousands of `unknown (0xabcd)` states",
-				"de": "* Kompakte Unterstützung entfernt. `noble` wirft manchmal Fehler in Rückrufen auf, die nicht behandelt werden können und die gesamte kompakte Gruppe zum Erliegen bringen.\n* Unterstützung für den Xiaomi-Wasserkocher hinzugefügt\n* Verschlüsselte Pakete werden (vorerst) nicht mehr dekodiert, um zu vermeiden, dass Tausende von \"unbekannten (0xabcd)\" Zuständen erstellt werden",
-				"ru": "* Удалена компактная поддержка. noble иногда выдает ошибки в обратных вызовах, которые не могут быть обработаны, и может привести к сбою всей компактной группы.\n* Добавлена поддержка чайника Xiaomi\n* Зашифрованные пакеты больше не декодируются (пока), чтобы избежать создания тысяч «неизвестных (0xabcd)» состояний",
-				"pt": "* Removido o suporte compacto. Às vezes, o `noble 'gera erros nos retornos de chamada que não podem ser manipulados e derrubariam todo o grupo compacto.\n* Adicionado suporte para a Xiaomi Kettle\n* Pacotes criptografados não são mais decodificados (por enquanto) para evitar a criação de milhares de estados `unknown (0xabcd)`",
-				"nl": "* Compacte ondersteuning verwijderd. `nobel` veroorzaakt soms fouten in terugbelverzoeken die niet kunnen worden afgehandeld en zou de hele compacte groep ten val brengen.\n* Ondersteuning toegevoegd voor de Xiaomi-waterkoker\n* Versleutelde pakketten worden niet meer gedecodeerd (voorlopig) om te voorkomen dat duizenden `onbekende (0xabcd)` staten ontstaan",
-				"fr": "* Suppression du support compact. `noble` lance parfois des erreurs dans les rappels qui ne peuvent pas être gérées et ferait tomber l'ensemble du groupe compact.\n* Ajout de la prise en charge de la bouilloire Xiaomi\n* Les paquets chiffrés ne sont plus décodés (pour l'instant) pour éviter de créer des milliers d'états `inconnus (0xabcd)`",
-				"it": "* Supporto compatto rimosso. \"nobile\" a volte genera errori nei callback che non possono essere gestiti e porterebbe giù l'intero gruppo compatto.\n* Aggiunto supporto per Xiaomi Kettle\n* I pacchetti crittografati non vengono più decodificati (per ora) per evitare la creazione di migliaia di stati `sconosciuti (0xabcd)`",
-				"es": "* Se eliminó el soporte compacto. `noble` a veces arroja errores en devoluciones de llamada que no se pueden manejar y derribaría a todo el grupo compacto.\n* Se agregó soporte para el hervidor de agua Xiaomi\n* Los paquetes cifrados ya no se decodifican (por ahora) para evitar crear miles de estados `desconocidos (0xabcd)`",
-				"pl": "* Usunięto kompaktowe wsparcie. „szlachetny” czasami generuje błędy w wywołaniach zwrotnych, których nie można obsłużyć i sprowadziłoby całą kompaktową grupę w dół.\n* Dodano obsługę czajnika Xiaomi\n* Zaszyfrowane pakiety nie są już dekodowane (na razie), aby uniknąć tworzenia tysięcy stanów `nieznanych (0xabcd)`",
-				"zh-cn": "* 删除了紧凑型支架。有时，“ noble”会在无法处理的回调中引发错误，并使整个紧凑型组崩溃。\n* 添加了对小米水壶的支持\n* 不再对加密数据包进行解码（暂时），以避免创建数千个“未知（0xabcd）”状态"
-			},
-			"0.10.1": {
-				"en": "Fixed crash in JS-Controller 2.0",
-				"de": "Absturz in JS-Controller 2.0 behoben",
-				"ru": "Исправлено падение в JS-Controller 2.0",
-				"pt": "Corrigida falha no JS-Controller 2.0",
-				"nl": "Crash opgelost in JS-Controller 2.0",
-				"fr": "Correction d'un crash dans JS-Controller 2.0",
-				"it": "Risolto crash in JS-Controller 2.0",
-				"es": "Se corrigió el bloqueo en JS-Controller 2.0",
-				"pl": "Naprawiono awarię w JS-Controller 2.0",
-				"zh-cn": "修复了JS-Controller 2.0中的崩溃"
-			},
-			"0.10.0": {
-				"en": "Xiaomi plugin: test the received data instead of relying on MAC prefixes",
-				"de": "Xiaomi-Plugin: Testen Sie die empfangenen Daten, anstatt sich auf MAC-Präfixe zu verlassen",
-				"ru": "Плагин Xiaomi: тестируйте полученные данные, а не полагайтесь на префиксы MAC",
-				"pt": "Plugin Xiaomi: teste os dados recebidos em vez de confiar nos prefixos MAC",
-				"nl": "Xiaomi-plug-in: test de ontvangen gegevens in plaats van te vertrouwen op MAC-voorvoegsels",
-				"fr": "Xiaomi plugin: tester les données reçues au lieu de s'appuyer sur les préfixes MAC",
-				"it": "Plugin Xiaomi: prova i dati ricevuti invece di fare affidamento sui prefissi MAC",
-				"es": "Complemento Xiaomi: pruebe los datos recibidos en lugar de confiar en los prefijos MAC",
-				"pl": "Wtyczka Xiaomi: przetestuj otrzymane dane zamiast polegać na prefiksach MAC",
-				"zh-cn": "小米插件：测试接收到的数据，而不是依赖于MAC前缀"
-			},
-			"0.9.2": {
-				"en": "Added `e7:2e:00` as an alternative mac prefix",
-				"de": "`e7:2e:00` als alternatives Mac-Präfix hinzugefügt",
-				"ru": "Добавлен `e7:2e:00` в качестве альтернативного префикса mac",
-				"pt": "Adicionado `e7:2e:00` como um prefixo alternativo do mac",
-				"nl": "`e7:2e:00` toegevoegd als alternatief mac-voorvoegsel",
-				"fr": "Ajout de `e7:2e:00` comme préfixe mac alternatif",
-				"it": "Aggiunto `e7:2e:00` come prefisso mac alternativo",
-				"es": "Se agregó `e7:2e:00` como un prefijo mac alternativo",
-				"pl": "Dodano `e7:2e:00` jako alternatywny przedrostek mac",
-				"zh-cn": "添加了`e7:2e:00`作为替代的mac前缀"
-			},
-			"0.9.1": {
-				"en": "Fix compact mode crashes",
-				"de": "Abstürze im Kompaktmodus behoben",
-				"ru": "Исправление сбоев в компактном режиме",
-				"pt": "Corrigir falhas no modo compacto",
-				"nl": "Herstel crashes in compacte modus",
-				"fr": "Correction des plantages en mode compact",
-				"it": "Risolvi i crash della modalità compatta",
-				"es": "Repara bloqueos en modo compacto",
-				"pl": "Napraw awarie trybu kompaktowego",
-				"zh-cn": "修复压缩模式崩溃"
-			}
-		},
-		"title": "Bluetooth Low Energy (BLE)",
-		"titleLang": {
-			"en": "Bluetooth Low Energy (BLE)",
-			"de": "Bluetooth-Niedrigenergie (BLE)",
-			"ru": "Bluetooth с низким энергопотреблением (BLE)",
-			"pt": "Bluetooth de baixa energia (BLE)",
-			"nl": "Bluetooth lage energie (BLE)",
-			"fr": "Bluetooth à faible consommation d'énergie (BLE)",
-			"it": "Bluetooth a bassa energia (BLE)",
-			"es": "Bluetooth de baja energía (BLE)",
-			"pl": "Niskoenergetyczna łączność Bluetooth (BLE)",
-			"zh-cn": "低功耗蓝牙 (BLE)"
-		},
-		"desc": {
-			"en": "Monitor Bluetooth Low Energy (BLE) beacons",
-			"de": "Überwacht Bluetooth Low Energy (BLE) beacons",
-			"ru": "Монитор Bluetooth низкой энергии (BLE) маяки",
-			"pt": "Monitor de Bluetooth Low Energy (BLE) beacons",
-			"nl": "Monitor Bluetooth Low Energy (BLE) beacons",
-			"fr": "Moniteur Bluetooth Low Energy (BLE) balises",
-			"it": "Monitor Bluetooth Low Energy (BLE) beacon",
-			"es": "Monitor de Bluetooth de Baja Energía (BLE) las balizas",
-			"pl": "Monitor Bluetooth low energy (BLE) latarnie",
-			"zh-cn": "监测蓝牙低能源(BLE)信标"
-		},
-		"authors": ["AlCalzone <d.griesel@gmx.net>"],
-		"platform": "Javascript/Node.js",
-		"license": "MIT",
-		"main": "build/main.js",
-		"mode": "daemon",
-		"icon": "ble.png",
-		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
-		"keywords": ["bluetooth", "BLE", "beacon"],
-		"readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
-		"loglevel": "info",
-		"type": "hardware",
-		"messagebox": true,
-		"compact": false,
-		"materialize": true,
-		"dependencies": [
-			{
-				"js-controller": ">=1.4.2"
-			}
-		],
-		"osDependencies": {
-			"linux": [
-				"bluetooth",
-				"bluez",
-				"libbluetooth-dev",
-				"libudev-dev",
-				"libcap2-bin"
-			]
-		}
-	},
-	"native": {
-		"services": "",
-		"hciDevice": 0,
-		"plugins": "",
-		"allowEmptyDevices": false,
-		"rssiThrottle": 0
-	},
-	"objects": [],
-	"instanceObjects": [
-		{
-			"_id": "info",
-			"type": "channel",
-			"common": {
-				"name": "Adapter-Information"
-			},
-			"native": {}
-		},
-		{
-			"_id": "info.connection",
-			"type": "state",
-			"common": {
-				"role": "indicator.connected",
-				"name": "If BLE scan is active",
-				"type": "boolean",
-				"read": true,
-				"write": false,
-				"def": false
-			},
-			"native": {}
-		},
-		{
-			"_id": "info.driverState",
-			"type": "state",
-			"common": {
-				"role": "indicator.state",
-				"name": "bluetooth driver state",
-				"desc": "The current state of the bluetooth driver",
-				"type": "string",
-				"read": true,
-				"write": false,
-				"def": "poweredOff"
-			},
-			"native": {}
-		},
-		{
-			"_id": "options",
-			"type": "channel",
-			"common": {
-				"name": "Adapter-Optionen"
-			},
-			"native": {}
-		},
-		{
-			"_id": "options.allowNewDevices",
-			"type": "state",
-			"common": {
-				"role": "switch",
-				"name": "Allow new devices",
-				"desc": "Whether new devices should be recorded or not",
-				"type": "boolean",
-				"read": true,
-				"write": true,
-				"def": false
-			},
-			"native": {}
-		}
-	]
+    "common": {
+        "name": "ble",
+        "version": "0.12.0",
+        "news": {
+            "0.12.0": {
+                "en": "Scanning is now done in a separate process, so uncatchable errors in `noble` no longer bring down the main process",
+                "de": "Das Scannen erfolgt jetzt in einem separaten Prozess, sodass nicht abfangbare Fehler in \"nobel\" den Hauptprozess nicht mehr zum Erliegen bringen",
+                "ru": "Сканирование теперь выполняется в отдельном процессе, поэтому неисправимые ошибки в `noble` больше не прерывают основной процесс.",
+                "pt": "A digitalização agora é feita em um processo separado, portanto, erros não detectáveis em `noble` não desligam mais o processo principal",
+                "nl": "Het scannen gebeurt nu in een apart proces, dus niet te vinden fouten in `noble` brengen het hoofdproces niet langer naar beneden",
+                "fr": "La numérisation est maintenant effectuée dans un processus séparé, de sorte que les erreurs incontrôlables dans `noble` ne font plus tomber le processus principal",
+                "it": "La scansione ora viene eseguita in un processo separato, quindi gli errori non rilevabili in \"nobile\" non fanno più cadere il processo principale",
+                "es": "El escaneo ahora se realiza en un proceso separado, por lo que los errores irrecuperables en `noble` ya no derriban el proceso principal",
+                "pl": "Skanowanie jest teraz wykonywane w osobnym procesie, więc niemożliwe do wykrycia błędy w elemencie „noble” nie spowodują już obniżenia głównego procesu",
+                "zh-cn": "现在，扫描是在一个单独的过程中完成的，因此“ noble”中不可捕获的错误不再使主要过程中断"
+            },
+            "0.11.8": {
+                "en": "The pressure value reported by Ruuvi Tags is now parsed with two decimal places",
+                "de": "Der von Ruuvi Tags gemeldete Druckwert wird jetzt mit zwei Dezimalstellen analysiert",
+                "ru": "Значение давления, сообщаемое тегами Ruuvi, теперь анализируется с двумя десятичными знаками.",
+                "pt": "O valor de pressão relatado por Ruuvi Tags agora é analisado com duas casas decimais",
+                "nl": "De drukwaarde die door Ruuvi Tags wordt gerapporteerd, wordt nu geparseerd met twee decimalen",
+                "fr": "La valeur de pression rapportée par Ruuvi Tags est maintenant analysée avec deux décimales",
+                "it": "Il valore di pressione riportato da Ruuvi Tags viene ora analizzato con due cifre decimali",
+                "es": "El valor de presión informado por Ruuvi Tags ahora se analiza con dos lugares decimales",
+                "pl": "Wartość ciśnienia zgłaszana przez Ruuvi Tags jest teraz analizowana z dwoma miejscami po przecinku",
+                "zh-cn": "Ruuvi标签报告的压力值现在解析为两个小数位"
+            },
+            "0.11.7": {
+                "en": "Added a more helpful error message if the adapter terminates with error `EAFNOSUPPORT`",
+                "de": "Eine hilfreichere Fehlermeldung wurde hinzugefügt, wenn der Adapter mit dem Fehler \"EAFNOSUPPORT\" beendet wird",
+                "ru": "Добавлено более полезное сообщение об ошибке, если адаптер завершает работу с ошибкой `EAFNOSUPPORT`",
+                "pt": "Adicionada uma mensagem de erro mais útil se o adaptador terminar com o erro `EAFNOSUPPORT`",
+                "nl": "Een nuttiger foutbericht toegevoegd als de adapter eindigt met de fout 'EAFNOSUPPORT'",
+                "fr": "Ajout d'un message d'erreur plus utile si l'adaptateur se termine par l'erreur `EAFNOSUPPORT`",
+                "it": "Aggiunto un messaggio di errore più utile se l'adattatore termina con l'errore \"EAFNOSUPPORT\"",
+                "es": "Se agregó un mensaje de error más útil si el adaptador termina con el error `EAFNOSUPPORT`",
+                "pl": "Dodano bardziej pomocny komunikat o błędzie, jeśli adapter kończy pracę z błędem `EAFNOSUPPORT`",
+                "zh-cn": "如果适配器以错误“ EAFNOSUPPORT”终止，则添加了更有用的错误消息"
+            },
+            "0.11.6": {
+                "en": "* Ignore unhandled out of range error somewhere in `noble`",
+                "de": "* Ignorieren Sie nicht behandelte Fehler außerhalb des Bereichs irgendwo in `noble`",
+                "ru": "* Игнорировать необработанную ошибку вне диапазона где-то в `noble`",
+                "pt": "* Ignore o erro não tratado fora do intervalo em algum lugar nobre",
+                "nl": "* Negeer onverwerkte fout buiten bereik ergens in `noble`",
+                "fr": "* Ignorer l'erreur hors de portée non gérée quelque part dans `noble`",
+                "it": "* Ignora l'errore non gestito fuori portata da qualche parte in \"nobile\"",
+                "es": "* Ignora el error fuera de rango no manejado en algún lugar de `noble`",
+                "pl": "* Zignoruj nieobsługiwany błąd przekroczenia zakresu gdzieś w `noble`",
+                "zh-cn": "* 忽略`noble`中某处未处理的超出范围的错误"
+            },
+            "0.11.4": {
+                "en": "* Utilize JS-Controller's auto module rebuild if possible",
+                "de": "* Verwenden Sie nach Möglichkeit die automatische Modulwiederherstellung von JS-Controller",
+                "ru": "* Используйте автоматическую перестройку JS-контроллера, если это возможно",
+                "pt": "* Utilize a reconstrução automática do módulo do controlador JS, se possível",
+                "nl": "* Gebruik indien mogelijk de automatische herbouw van de JS-Controller",
+                "fr": "* Utilisez la reconstruction automatique du module JS-Controller si possible",
+                "it": "* Utilizzare la ricostruzione automatica del modulo di JS-Controller, se possibile",
+                "es": "* Utilice la reconstrucción automática del módulo JS-Controller si es posible",
+                "pl": "* Wykorzystaj automatyczną przebudowę modułu JS-Controller, jeśli to możliwe",
+                "zh-cn": "* 尽可能利用JS-Controller的自动模块重建"
+            },
+            "0.11.3": {
+                "en": "* Fixed a crash that happens when `noble` can not be loaded.",
+                "de": "* Es wurde ein Absturz behoben, der auftrat, wenn \"noble\" nicht geladen werden konnte.",
+                "ru": "* Исправлен сбой, который происходит, когда `noble` не может быть загружен.",
+                "pt": "* Corrigida uma falha que acontece quando o `noble` não pode ser carregado.",
+                "nl": "* Een crash gerepareerd die optreedt wanneer `noble` niet kan worden geladen.",
+                "fr": "* Correction d'un plantage qui se produit lorsque `noble` ne peut pas être chargé.",
+                "it": "* Risolto un crash che si verificava quando \"nobile\" non può essere caricato.",
+                "es": "* Se corrigió un bloqueo que ocurre cuando no se puede cargar `noble`.",
+                "pl": "* Naprawiono awarię występującą, gdy nie można załadować „szlachetnego”.",
+                "zh-cn": "* 修复了无法加载`noble`时发生的崩溃。"
+            },
+            "0.11.2": {
+                "en": "* Avoid setting `undefined` as a state value to be compatible with JS-Controller 3.0",
+                "de": "* Vermeiden Sie es, \"undefined\" als Statuswert festzulegen, um mit JS-Controller 3.0 kompatibel zu sein",
+                "ru": "* Избегайте установки значения undefined в качестве значения состояния для совместимости с JS-Controller 3.0",
+                "pt": "* Evite definir `undefined` como um valor de estado para ser compatível com o JS-Controller 3.0",
+                "nl": "* Vermijd het instellen van `undefined` als een statuswaarde om compatibel te zijn met JS-Controller 3.0",
+                "fr": "* Évitez de définir `undefined` comme valeur d'état pour être compatible avec JS-Controller 3.0",
+                "it": "* Evita di impostare `undefined` come valore di stato per essere compatibile con JS-Controller 3.0",
+                "es": "* Evite establecer 'undefined` como un valor de estado para ser compatible con JS-Controller 3.0",
+                "pl": "* Unikaj ustawiania `undefined` jako wartości stanu, aby być kompatybilnym z JS-Controller 3.0",
+                "zh-cn": "* 避免将undefined设置为与JS-Controller 3.0兼容的状态值"
+            },
+            "0.11.1": {
+                "en": "* Fixed typo in Ruuvi Tag plugin: `motionCounter` -> `movementCounter`",
+                "de": "* Tippfehler im Ruuvi Tag Plugin behoben: `motionCounter` ->` motionCounter`",
+                "ru": "* Исправлена опечатка в плагине Ruuvi Tag: `motionCounter` ->` motionCounter`",
+                "pt": "* Corrigido erro de digitação no plugin Ruuvi Tag: `motionCounter` ->` motionCounter`",
+                "nl": "* Vaste typefout in Ruuvi Tag-plug-in: `motionCounter` ->` movementCounter`",
+                "fr": "* Correction d'une faute de frappe dans le plugin Ruuvi Tag: `motionCounter` ->` motionCounter`",
+                "it": "* Corretto errore di battitura nel plug-in Ruuvi Tag: `motionCounter` ->` movementCounter`",
+                "es": "* Se corrigió el error tipográfico en el plugin Ruuvi Tag: `motionCounter` ->` movementCounter`",
+                "pl": "* Naprawiono literówkę we wtyczce Ruuvi Tag: `motionCounter` ->` movementCounter`",
+                "zh-cn": "* 修正了Ruuvi标签插件中的错别字：`motionCounter`->`movementCounter`"
+            },
+            "0.11.0": {
+                "en": "* Removed compact support. `noble` sometimes throws errors in callbacks that cannot be handled and would bring the whole compact group down.\n* Added support for the Xiaomi Kettle\n* Encrypted packets are no longer decoded (for now) to avoid creating thousands of `unknown (0xabcd)` states",
+                "de": "* Kompakte Unterstützung entfernt. `noble` wirft manchmal Fehler in Rückrufen auf, die nicht behandelt werden können und die gesamte kompakte Gruppe zum Erliegen bringen.\n* Unterstützung für den Xiaomi-Wasserkocher hinzugefügt\n* Verschlüsselte Pakete werden (vorerst) nicht mehr dekodiert, um zu vermeiden, dass Tausende von \"unbekannten (0xabcd)\" Zuständen erstellt werden",
+                "ru": "* Удалена компактная поддержка. noble иногда выдает ошибки в обратных вызовах, которые не могут быть обработаны, и может привести к сбою всей компактной группы.\n* Добавлена поддержка чайника Xiaomi\n* Зашифрованные пакеты больше не декодируются (пока), чтобы избежать создания тысяч «неизвестных (0xabcd)» состояний",
+                "pt": "* Removido o suporte compacto. Às vezes, o `noble 'gera erros nos retornos de chamada que não podem ser manipulados e derrubariam todo o grupo compacto.\n* Adicionado suporte para a Xiaomi Kettle\n* Pacotes criptografados não são mais decodificados (por enquanto) para evitar a criação de milhares de estados `unknown (0xabcd)`",
+                "nl": "* Compacte ondersteuning verwijderd. `nobel` veroorzaakt soms fouten in terugbelverzoeken die niet kunnen worden afgehandeld en zou de hele compacte groep ten val brengen.\n* Ondersteuning toegevoegd voor de Xiaomi-waterkoker\n* Versleutelde pakketten worden niet meer gedecodeerd (voorlopig) om te voorkomen dat duizenden `onbekende (0xabcd)` staten ontstaan",
+                "fr": "* Suppression du support compact. `noble` lance parfois des erreurs dans les rappels qui ne peuvent pas être gérées et ferait tomber l'ensemble du groupe compact.\n* Ajout de la prise en charge de la bouilloire Xiaomi\n* Les paquets chiffrés ne sont plus décodés (pour l'instant) pour éviter de créer des milliers d'états `inconnus (0xabcd)`",
+                "it": "* Supporto compatto rimosso. \"nobile\" a volte genera errori nei callback che non possono essere gestiti e porterebbe giù l'intero gruppo compatto.\n* Aggiunto supporto per Xiaomi Kettle\n* I pacchetti crittografati non vengono più decodificati (per ora) per evitare la creazione di migliaia di stati `sconosciuti (0xabcd)`",
+                "es": "* Se eliminó el soporte compacto. `noble` a veces arroja errores en devoluciones de llamada que no se pueden manejar y derribaría a todo el grupo compacto.\n* Se agregó soporte para el hervidor de agua Xiaomi\n* Los paquetes cifrados ya no se decodifican (por ahora) para evitar crear miles de estados `desconocidos (0xabcd)`",
+                "pl": "* Usunięto kompaktowe wsparcie. „szlachetny” czasami generuje błędy w wywołaniach zwrotnych, których nie można obsłużyć i sprowadziłoby całą kompaktową grupę w dół.\n* Dodano obsługę czajnika Xiaomi\n* Zaszyfrowane pakiety nie są już dekodowane (na razie), aby uniknąć tworzenia tysięcy stanów `nieznanych (0xabcd)`",
+                "zh-cn": "* 删除了紧凑型支架。有时，“ noble”会在无法处理的回调中引发错误，并使整个紧凑型组崩溃。\n* 添加了对小米水壶的支持\n* 不再对加密数据包进行解码（暂时），以避免创建数千个“未知（0xabcd）”状态"
+            },
+            "0.10.1": {
+                "en": "Fixed crash in JS-Controller 2.0",
+                "de": "Absturz in JS-Controller 2.0 behoben",
+                "ru": "Исправлено падение в JS-Controller 2.0",
+                "pt": "Corrigida falha no JS-Controller 2.0",
+                "nl": "Crash opgelost in JS-Controller 2.0",
+                "fr": "Correction d'un crash dans JS-Controller 2.0",
+                "it": "Risolto crash in JS-Controller 2.0",
+                "es": "Se corrigió el bloqueo en JS-Controller 2.0",
+                "pl": "Naprawiono awarię w JS-Controller 2.0",
+                "zh-cn": "修复了JS-Controller 2.0中的崩溃"
+            },
+            "0.10.0": {
+                "en": "Xiaomi plugin: test the received data instead of relying on MAC prefixes",
+                "de": "Xiaomi-Plugin: Testen Sie die empfangenen Daten, anstatt sich auf MAC-Präfixe zu verlassen",
+                "ru": "Плагин Xiaomi: тестируйте полученные данные, а не полагайтесь на префиксы MAC",
+                "pt": "Plugin Xiaomi: teste os dados recebidos em vez de confiar nos prefixos MAC",
+                "nl": "Xiaomi-plug-in: test de ontvangen gegevens in plaats van te vertrouwen op MAC-voorvoegsels",
+                "fr": "Xiaomi plugin: tester les données reçues au lieu de s'appuyer sur les préfixes MAC",
+                "it": "Plugin Xiaomi: prova i dati ricevuti invece di fare affidamento sui prefissi MAC",
+                "es": "Complemento Xiaomi: pruebe los datos recibidos en lugar de confiar en los prefijos MAC",
+                "pl": "Wtyczka Xiaomi: przetestuj otrzymane dane zamiast polegać na prefiksach MAC",
+                "zh-cn": "小米插件：测试接收到的数据，而不是依赖于MAC前缀"
+            },
+            "0.9.2": {
+                "en": "Added `e7:2e:00` as an alternative mac prefix",
+                "de": "`e7:2e:00` als alternatives Mac-Präfix hinzugefügt",
+                "ru": "Добавлен `e7:2e:00` в качестве альтернативного префикса mac",
+                "pt": "Adicionado `e7:2e:00` como um prefixo alternativo do mac",
+                "nl": "`e7:2e:00` toegevoegd als alternatief mac-voorvoegsel",
+                "fr": "Ajout de `e7:2e:00` comme préfixe mac alternatif",
+                "it": "Aggiunto `e7:2e:00` come prefisso mac alternativo",
+                "es": "Se agregó `e7:2e:00` como un prefijo mac alternativo",
+                "pl": "Dodano `e7:2e:00` jako alternatywny przedrostek mac",
+                "zh-cn": "添加了`e7:2e:00`作为替代的mac前缀"
+            },
+            "0.9.1": {
+                "en": "Fix compact mode crashes",
+                "de": "Abstürze im Kompaktmodus behoben",
+                "ru": "Исправление сбоев в компактном режиме",
+                "pt": "Corrigir falhas no modo compacto",
+                "nl": "Herstel crashes in compacte modus",
+                "fr": "Correction des plantages en mode compact",
+                "it": "Risolvi i crash della modalità compatta",
+                "es": "Repara bloqueos en modo compacto",
+                "pl": "Napraw awarie trybu kompaktowego",
+                "zh-cn": "修复压缩模式崩溃"
+            }
+        },
+        "title": "Bluetooth Low Energy (BLE)",
+        "titleLang": {
+            "en": "Bluetooth Low Energy (BLE)",
+            "de": "Bluetooth-Niedrigenergie (BLE)",
+            "ru": "Bluetooth с низким энергопотреблением (BLE)",
+            "pt": "Bluetooth de baixa energia (BLE)",
+            "nl": "Bluetooth lage energie (BLE)",
+            "fr": "Bluetooth à faible consommation d'énergie (BLE)",
+            "it": "Bluetooth a bassa energia (BLE)",
+            "es": "Bluetooth de baja energía (BLE)",
+            "pl": "Niskoenergetyczna łączność Bluetooth (BLE)",
+            "zh-cn": "低功耗蓝牙 (BLE)"
+        },
+        "desc": {
+            "en": "Monitor Bluetooth Low Energy (BLE) beacons",
+            "de": "Überwacht Bluetooth Low Energy (BLE) beacons",
+            "ru": "Монитор Bluetooth низкой энергии (BLE) маяки",
+            "pt": "Monitor de Bluetooth Low Energy (BLE) beacons",
+            "nl": "Monitor Bluetooth Low Energy (BLE) beacons",
+            "fr": "Moniteur Bluetooth Low Energy (BLE) balises",
+            "it": "Monitor Bluetooth Low Energy (BLE) beacon",
+            "es": "Monitor de Bluetooth de Baja Energía (BLE) las balizas",
+            "pl": "Monitor Bluetooth low energy (BLE) latarnie",
+            "zh-cn": "监测蓝牙低能源(BLE)信标"
+        },
+        "authors": [
+            "AlCalzone <d.griesel@gmx.net>"
+        ],
+        "platform": "Javascript/Node.js",
+        "license": "MIT",
+        "main": "build/main.js",
+        "mode": "daemon",
+        "icon": "ble.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
+        "keywords": [
+            "bluetooth",
+            "BLE",
+            "beacon"
+        ],
+        "readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
+        "loglevel": "info",
+        "type": "hardware",
+        "messagebox": true,
+        "compact": false,
+        "materialize": true,
+        "dependencies": [
+            {
+                "js-controller": ">=1.4.2"
+            }
+        ],
+        "osDependencies": {
+            "linux": [
+                "bluetooth",
+                "bluez",
+                "libbluetooth-dev",
+                "libudev-dev",
+                "libcap2-bin"
+            ]
+        }
+    },
+    "native": {
+        "services": "",
+        "hciDevice": 0,
+        "plugins": "",
+        "allowEmptyDevices": false,
+        "rssiThrottle": 0
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Adapter-Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "If BLE scan is active",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.driverState",
+            "type": "state",
+            "common": {
+                "role": "indicator.state",
+                "name": "bluetooth driver state",
+                "desc": "The current state of the bluetooth driver",
+                "type": "string",
+                "read": true,
+                "write": false,
+                "def": "poweredOff"
+            },
+            "native": {}
+        },
+        {
+            "_id": "options",
+            "type": "channel",
+            "common": {
+                "name": "Adapter-Optionen"
+            },
+            "native": {}
+        },
+        {
+            "_id": "options.allowNewDevices",
+            "type": "state",
+            "common": {
+                "role": "switch",
+                "name": "Allow new devices",
+                "desc": "Whether new devices should be recorded or not",
+                "type": "boolean",
+                "read": true,
+                "write": true,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
 }

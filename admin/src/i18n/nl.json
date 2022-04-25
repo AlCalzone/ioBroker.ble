@@ -1,0 +1,15 @@
+{
+	"Active plugins:": "Actieve plugins:",
+	"Allow creation of devices without advertised data": "Maken van apparaten zonder geadverteerde gegevens toestaan",
+	"BLE adapter settings": "BLE adapter instellingen",
+	"Monitored services, * for all services:": "Gecontroleerd diensten, * voor alle diensten:",
+	"On linux this can be determined with `hciconfig`:": "Op linux kan dit vastgesteld worden met `hciconfig`:",
+	"Plugin names, comma separated.": "Plug-namen, komma ' s gescheiden.",
+	"RSSI update interval [ms]:": "RSSI update-interval [ms]:",
+	"Select device:": "Selecteer apparaat:",
+	"Service characteristics as HEX codes or UUID, comma separated.": "Service kenmerken als HEX-codes of UUID door komma ' s gescheiden.",
+	"Settings": "Instellingen",
+	"Too frequent updates can slow down the admin.": "Te frequente updates kunnen vertragen de admin.",
+	"This will be automatically disabled after 5 minutes.": "Dit wordt automatisch uitgeschakeld na 5 minuten.",
+	"Accept new devices": "Nieuwe apparaten accepteren"
+}

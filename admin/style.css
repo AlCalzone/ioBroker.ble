@@ -1,34 +1,21 @@
+/* You can delete those if you want. I just found them very helpful */
 * {
-	box-sizing: border-box
-}
-.m {
-	/* Don't cut off dropdowns! */
-	overflow: initial;
+	box-sizing: border-box;
 }
 
-div.loading:first-child {
-	margin-top: 2em;
-}
-div.loading {
-	text-align: center;
+html,
+body {
+	height: 100%;
 }
 
-.tabs-header {
-	margin-bottom: 0.5rem;
-	margin-top: 0.5rem;
+body {
+	margin: 0;
 }
 
-/* #virtual-groups .delete-group {
-	margin-top: -0.25em;
-	margin-bottom: -0.25em;
-	width: 24px;
-	height: 20px;
-} */
-
-.admin-tooltip-icon {
-	margin-left: 0.25em;
-}
-.active > .admin-tooltip-icon {
-	/* Offset the downscaling in active labels */
-	transform: scale(1.25);
+.adapter-container {
+	height: 100%;
+	width: 100%;
+	position: relative;
+	display: flex;
+	flex-direction: column;
 }
