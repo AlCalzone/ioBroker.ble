@@ -1,78 +1,207 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Grid from "@material-ui/core/Grid";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import { SettingsApp } from "iobroker-react/app";
+import {
+	useGlobals,
+	useI18n,
+	useIoBrokerState,
+	useSettings,
+} from "iobroker-react/hooks";
+import type { Translations } from "iobroker-react/i18n";
+import React from "react";
+import ReactDOM from "react-dom";
 
-import { Tabs } from "iobroker-react-components";
+const useStyles = makeStyles((_theme: Theme) =>
+	createStyles({
+		root: {
+			// display: "flex",
+			// flexGrow: 1,
+			// flexFlow: "column nowrap",
+			// gap: theme.spacing(8),
+		},
+	}),
+);
 
-import { OnSettingsChangedCallback, Settings } from "./pages/settings";
+const SettingsPageContent: React.FC = React.memo(() => {
+	// settings is the current settings object, including the changes made in the UI
+	// originalSettings is the original settings object, as it was loaded from ioBroker
+	// setSettings is used to update the current settings object
+	const { settings, setSettings } = useSettings<ioBroker.AdapterConfig>();
+	const { translate: _ } = useI18n();
 
-// const namespace = `ble.${instance}`;
+	const { namespace } = useGlobals();
+	const [allowNewDevices, , setAllowNewDevices] = useIoBrokerState({
+		id: `${namespace}.options.allowNewDevices`,
+		defaultValue: false,
+	});
 
-// layout components
-interface RootProps {
-	settings: ioBroker.AdapterConfig;
-	onSettingsChanged: OnSettingsChangedCallback;
-}
-// interface RootState {
-// }
+	const classes = useStyles();
 
-// TODO: Remove `any`
-export class Root extends React.Component<RootProps /*, RootState*/ > {
-
-	constructor(props: RootProps) {
-		super(props);
-		this.state = {};
-	}
-
-	// public componentDidMount() { }
-
-	public render() {
-		return (
-			<Tabs labels={["Settings"]}>
-				<Settings settings={this.props.settings} onChange={this.props.onSettingsChanged} />
-				<></>
-			</Tabs>
-		);
-	}
-
-}
-
-let curSettings: ioBroker.AdapterConfig;
-let originalSettings: ioBroker.AdapterConfig;
-
-/**
- * Checks if any setting was changed
- */
-function hasChanges(): boolean {
-	if (Object.keys(originalSettings).length !== Object.keys(curSettings).length) return true;
-	for (const key of Object.keys(originalSettings) as (keyof ioBroker.AdapterConfig)[]) {
-		if (originalSettings[key] !== curSettings[key]) return true;
-	}
-	return false;
-}
-
-// the function loadSettings has to exist ...
-(window as any).load = (settings, onChange) => {
-
-	originalSettings = settings;
-
-	const settingsChanged: OnSettingsChangedCallback = (newSettings) => {
-		curSettings = newSettings;
-		onChange(hasChanges());
+	// Updates the settings when the checkbox changes. The changes are not saved yet.
+	const handleChange = <T extends keyof ioBroker.AdapterConfig>(
+		option: T,
+		value: ioBroker.AdapterConfig[T],
+	) => {
+		setSettings((s) => ({
+			...s,
+			[option]: value,
+		}));
 	};
 
-	ReactDOM.render(
-		<Root settings={settings} onSettingsChanged={settingsChanged} />,
-		document.getElementById("adapter-container") || document.getElementsByClassName("adapter-container")[0],
+	return (
+		<div className={classes.root}>
+			<Grid container spacing={8}>
+				<Grid item xs={4}>
+					<TextField
+						label={_("Select device:")}
+						inputProps={{
+							type: "number",
+							min: 0,
+						}}
+						fullWidth={true}
+						InputLabelProps={{
+							// Avoid overlapping the text if it was filled out
+							shrink: settings.hciDevice != undefined,
+						}}
+						value={settings.hciDevice}
+						onChange={(event) =>
+							handleChange(
+								"hciDevice",
+								parseInt(event.target.value),
+							)
+						}
+					/>
+					<Typography variant="body2">
+						{_("On linux this can be determined with `hciconfig`:")}
+						&nbsp;hci<b>&lt;X&gt;</b>
+					</Typography>
+				</Grid>
+
+				<Grid item xs={4}>
+					<TextField
+						label={_("RSSI update interval [ms]:")}
+						inputProps={{
+							type: "number",
+							min: 0,
+							max: 10000,
+						}}
+						fullWidth={true}
+						InputLabelProps={{
+							// Avoid overlapping the text if it was filled out
+							shrink: settings.rssiThrottle != undefined,
+						}}
+						value={settings.rssiThrottle}
+						onChange={(event) =>
+							handleChange(
+								"rssiThrottle",
+								parseInt(event.target.value),
+							)
+						}
+					/>
+					<Typography variant="body2">
+						{_("Too frequent updates can slow down the admin.")}
+					</Typography>
+				</Grid>
+
+				<Grid item xs={6}>
+					<TextField
+						label={_("Monitored services, * for all services:")}
+						multiline={true}
+						minRows={3}
+						variant="outlined"
+						fullWidth={true}
+						value={settings.services}
+						onChange={(event) =>
+							handleChange("services", event.target.value)
+						}
+					/>
+					<Typography variant="body2">
+						{_(
+							"Service characteristics as HEX codes or UUID, comma separated.",
+						)}
+					</Typography>
+				</Grid>
+
+				<Grid item xs={6}>
+					<TextField
+						label={_("Active plugins:")}
+						multiline={true}
+						minRows={3}
+						variant="outlined"
+						fullWidth={true}
+						value={settings.plugins}
+						onChange={(event) =>
+							handleChange("plugins", event.target.value)
+						}
+					/>
+					<Typography variant="body2">
+						{_("Plugin names, comma separated.")}
+					</Typography>
+				</Grid>
+
+				<Grid item xs={6}>
+					<FormControlLabel
+						label={_(
+							"Allow creation of devices without advertised data",
+						)}
+						control={
+							<Checkbox
+								checked={settings.allowEmptyDevices}
+								onChange={(event, checked) =>
+									handleChange("allowEmptyDevices", checked)
+								}
+							/>
+						}
+					/>
+				</Grid>
+
+				<Grid item xs={6}>
+					<FormControlLabel
+						label={_("Accept new devices")}
+						control={
+							<Checkbox
+								checked={allowNewDevices}
+								onChange={(event, checked) =>
+									setAllowNewDevices(checked)
+								}
+							/>
+						}
+					/>
+					<Typography variant="body2">
+						{_(
+							"This will be automatically disabled after 5 minutes.",
+						)}
+					</Typography>
+				</Grid>
+			</Grid>
+		</div>
 	);
+});
 
-	// Signal to admin, that no changes yet
-	onChange(false);
+// Load your translations
+const translations: Translations = {
+	en: require("./i18n/en.json"),
+	de: require("./i18n/de.json"),
+	ru: require("./i18n/ru.json"),
+	pt: require("./i18n/pt.json"),
+	nl: require("./i18n/nl.json"),
+	fr: require("./i18n/fr.json"),
+	it: require("./i18n/it.json"),
+	es: require("./i18n/es.json"),
+	pl: require("./i18n/pl.json"),
+	"zh-cn": require("./i18n/zh-cn.json"),
 };
 
-// ... and the function save has to exist.
-// you have to make sure the callback is called with the settings object as first param!
-(window as any).save = (callback) => {
-	// save the settings
-	callback(curSettings);
-	originalSettings = curSettings;
+const Root: React.FC = () => {
+	return (
+		<SettingsApp name="ble" translations={translations}>
+			<SettingsPageContent />
+		</SettingsApp>
+	);
 };
+
+ReactDOM.render(<Root />, document.getElementById("root"));

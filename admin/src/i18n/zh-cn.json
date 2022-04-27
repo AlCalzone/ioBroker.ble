@@ -1,0 +1,15 @@
+{
+	"Active plugins:": "活性的插件：",
+	"Allow creation of devices without advertised data": "允许创建没有广告数据的设备",
+	"BLE adapter settings": "BLE设置适配器",
+	"Monitored services, * for all services:": "监控的服务，*用于所有服务：",
+	"On linux this can be determined with `hciconfig`:": "在linux上这个可以确定与`hciconfig`:",
+	"Plugin names, comma separated.": "插件的名称、逗号分开。",
+	"RSSI update interval [ms]:": "RSSI更新的时间间隔[ms]:",
+	"Select device:": "选择设备：",
+	"Service characteristics as HEX codes or UUID, comma separated.": "服务的特性作为进制代码或测逗号分开。",
+	"Settings": "设置",
+	"Too frequent updates can slow down the admin.": "太频繁地更新可以慢下来的管理。",
+	"This will be automatically disabled after 5 minutes.": "这将在 5 分钟后自动禁用。",
+	"Accept new devices": "接受新设备"
+}

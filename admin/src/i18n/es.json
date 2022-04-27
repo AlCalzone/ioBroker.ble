@@ -1,0 +1,15 @@
+{
+	"Active plugins:": "Plugins activos:",
+	"Allow creation of devices without advertised data": "Permitir la creación de dispositivos sin datos anunciados",
+	"BLE adapter settings": "BLE configuración del adaptador",
+	"Monitored services, * for all services:": "Monitoreados servicios, * para todos los servicios:",
+	"On linux this can be determined with `hciconfig`:": "En linux esto puede ser determinado con `hciconfig`:",
+	"Plugin names, comma separated.": "Plugin de nombres, separados por comas.",
+	"RSSI update interval [ms]:": "RSSI intervalo de actualización [ms]:",
+	"Select device:": "Seleccione el dispositivo:",
+	"Service characteristics as HEX codes or UUID, comma separated.": "Características del servicio como códigos HEXADECIMALES o UUID, separados por comas.",
+	"Settings": "Configuración",
+	"Too frequent updates can slow down the admin.": "Actualizaciones demasiado frecuentes, puede ralentizar el admin.",
+	"This will be automatically disabled after 5 minutes.": "Esto se desactivará automáticamente después de 5 minutos.",
+	"Accept new devices": "Aceptar nuevos dispositivos"
+}
