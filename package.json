@@ -1,6 +1,6 @@
 {
   "name": "iobroker.ble",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "ioBroker adapter to monitor Bluetooth Low Energy (BLE) beacons",
   "author": {
     "name": "AlCalzone",
@@ -39,10 +39,10 @@
     "yargs": "^17.4.1"
   },
   "devDependencies": {
-    "@alcalzone/release-script": "~3.5.6",
-    "@alcalzone/release-script-plugin-iobroker": "~3.5.7",
-    "@alcalzone/release-script-plugin-license": "~3.5.3",
-    "@alcalzone/release-script-plugin-manual-review": "~3.5.3",
+    "@alcalzone/release-script": "~3.5.8",
+    "@alcalzone/release-script-plugin-iobroker": "~3.5.8",
+    "@alcalzone/release-script-plugin-license": "~3.5.8",
+    "@alcalzone/release-script-plugin-manual-review": "~3.5.8",
     "@iobroker/adapter-dev": "^1.0.0",
     "@iobroker/testing": "^2.6.0",
     "@material-ui/core": "^4.12.4",

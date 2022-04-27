@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.12.0",
+        "version": "0.13.0",
         "news": {
+            "0.13.0": {
+                "en": "The option to allow recording new devices is now available in the config dialog. When the adapter starts, it will be disabled, and when enabled, it will be automatically disabled after 5 minutes (#730, #729)\nFix: RSSI will now be updated, even if it was unchanged (#493)\nDependency updates, lots of dependency updates...",
+                "de": "Die Option, das Aufzeichnen neuer Geräte zuzulassen, ist jetzt im Konfigurationsdialog verfügbar. Wenn der Adapter startet, wird sie deaktiviert, und wenn sie aktiviert ist, wird sie nach 5 Minuten automatisch deaktiviert (#730, #729)\nFix: RSSI wird jetzt aktualisiert, auch wenn es unverändert war (#493)\nAbhängigkeiten aktualisiert",
+                "ru": "Опция, позволяющая записывать новые устройства, теперь доступна в диалоговом окне конфигурации. При запуске адаптера он будет отключен, а при включении автоматически отключится через 5 минут (#730, #729)\nИсправлено: RSSI теперь будет обновляться, даже если он не изменился (# 493)\nОбновления зависимостей, множество обновлений зависимостей...",
+                "pt": "A opção de permitir a gravação de novos dispositivos agora está disponível na caixa de diálogo de configuração. Quando o adaptador for iniciado, ele será desabilitado e, quando habilitado, será desabilitado automaticamente após 5 minutos (#730, #729)\nCorreção: RSSI agora será atualizado, mesmo que não tenha sido alterado (#493)\nAtualizações de dependências, muitas atualizações de dependências...",
+                "nl": "De optie om het opnemen van nieuwe apparaten toe te staan is nu beschikbaar in de configuratiedialoog. Wanneer de adapter start, wordt deze uitgeschakeld en wanneer ingeschakeld, wordt deze na 5 minuten automatisch uitgeschakeld (#730, #729)\nOplossing: RSSI wordt nu bijgewerkt, zelfs als deze ongewijzigd was (#493)\nAfhankelijkheidsupdates, veel afhankelijkheidsupdates...",
+                "fr": "L'option permettant d'enregistrer de nouveaux appareils est désormais disponible dans la boîte de dialogue de configuration. Lorsque l'adaptateur démarre, il sera désactivé, et lorsqu'il est activé, il sera automatiquement désactivé après 5 minutes (#730, #729)\nCorrection : RSSI sera désormais mis à jour, même s'il était inchangé (#493)\nMises à jour des dépendances, beaucoup de mises à jour des dépendances...",
+                "it": "L'opzione per consentire la registrazione di nuovi dispositivi è ora disponibile nella finestra di dialogo di configurazione. Quando l'adattatore si avvia, verrà disabilitato e, una volta abilitato, verrà automaticamente disabilitato dopo 5 minuti (#730, #729)\nCorrezione: RSSI ora verrà aggiornato, anche se era invariato (#493)\nAggiornamenti delle dipendenze, molti aggiornamenti delle dipendenze...",
+                "es": "La opción para permitir la grabación de nuevos dispositivos ahora está disponible en el cuadro de diálogo de configuración. Cuando se inicia el adaptador, se desactivará y, cuando se active, se desactivará automáticamente después de 5 minutos (#730, #729)\nSolución: RSSI ahora se actualizará, incluso si no se modificó (# 493)\nActualizaciones de dependencia, muchas actualizaciones de dependencia...",
+                "pl": "Opcja pozwalająca na nagrywanie nowych urządzeń jest teraz dostępna w oknie konfiguracji. Po uruchomieniu adapter zostanie wyłączony, a po włączeniu zostanie automatycznie wyłączony po 5 minutach (#730, #729)\nPoprawka: RSSI zostanie teraz zaktualizowany, nawet jeśli był niezmieniony (#493)\nAktualizacje zależności, wiele aktualizacji zależności...",
+                "zh-cn": "现在可以在配置对话框中使用允许录制新设备的选项。适配器启动时会被禁用，启用时会在5分钟后自动禁用（#730、#729）\n修复：RSSI 现在将被更新，即使它没有改变 (#493)\n依赖更新，大量依赖更新......"
+            },
             "0.12.0": {
                 "en": "Scanning is now done in a separate process, so uncatchable errors in `noble` no longer bring down the main process",
                 "de": "Das Scannen erfolgt jetzt in einem separaten Prozess, sodass nicht abfangbare Fehler in \"nobel\" den Hauptprozess nicht mehr zum Erliegen bringen",
@@ -74,90 +86,6 @@
                 "es": "* Se corrigió un bloqueo que ocurre cuando no se puede cargar `noble`.",
                 "pl": "* Naprawiono awarię występującą, gdy nie można załadować „szlachetnego”.",
                 "zh-cn": "* 修复了无法加载`noble`时发生的崩溃。"
-            },
-            "0.11.2": {
-                "en": "* Avoid setting `undefined` as a state value to be compatible with JS-Controller 3.0",
-                "de": "* Vermeiden Sie es, \"undefined\" als Statuswert festzulegen, um mit JS-Controller 3.0 kompatibel zu sein",
-                "ru": "* Избегайте установки значения undefined в качестве значения состояния для совместимости с JS-Controller 3.0",
-                "pt": "* Evite definir `undefined` como um valor de estado para ser compatível com o JS-Controller 3.0",
-                "nl": "* Vermijd het instellen van `undefined` als een statuswaarde om compatibel te zijn met JS-Controller 3.0",
-                "fr": "* Évitez de définir `undefined` comme valeur d'état pour être compatible avec JS-Controller 3.0",
-                "it": "* Evita di impostare `undefined` come valore di stato per essere compatibile con JS-Controller 3.0",
-                "es": "* Evite establecer 'undefined` como un valor de estado para ser compatible con JS-Controller 3.0",
-                "pl": "* Unikaj ustawiania `undefined` jako wartości stanu, aby być kompatybilnym z JS-Controller 3.0",
-                "zh-cn": "* 避免将undefined设置为与JS-Controller 3.0兼容的状态值"
-            },
-            "0.11.1": {
-                "en": "* Fixed typo in Ruuvi Tag plugin: `motionCounter` -> `movementCounter`",
-                "de": "* Tippfehler im Ruuvi Tag Plugin behoben: `motionCounter` ->` motionCounter`",
-                "ru": "* Исправлена опечатка в плагине Ruuvi Tag: `motionCounter` ->` motionCounter`",
-                "pt": "* Corrigido erro de digitação no plugin Ruuvi Tag: `motionCounter` ->` motionCounter`",
-                "nl": "* Vaste typefout in Ruuvi Tag-plug-in: `motionCounter` ->` movementCounter`",
-                "fr": "* Correction d'une faute de frappe dans le plugin Ruuvi Tag: `motionCounter` ->` motionCounter`",
-                "it": "* Corretto errore di battitura nel plug-in Ruuvi Tag: `motionCounter` ->` movementCounter`",
-                "es": "* Se corrigió el error tipográfico en el plugin Ruuvi Tag: `motionCounter` ->` movementCounter`",
-                "pl": "* Naprawiono literówkę we wtyczce Ruuvi Tag: `motionCounter` ->` movementCounter`",
-                "zh-cn": "* 修正了Ruuvi标签插件中的错别字：`motionCounter`->`movementCounter`"
-            },
-            "0.11.0": {
-                "en": "* Removed compact support. `noble` sometimes throws errors in callbacks that cannot be handled and would bring the whole compact group down.\n* Added support for the Xiaomi Kettle\n* Encrypted packets are no longer decoded (for now) to avoid creating thousands of `unknown (0xabcd)` states",
-                "de": "* Kompakte Unterstützung entfernt. `noble` wirft manchmal Fehler in Rückrufen auf, die nicht behandelt werden können und die gesamte kompakte Gruppe zum Erliegen bringen.\n* Unterstützung für den Xiaomi-Wasserkocher hinzugefügt\n* Verschlüsselte Pakete werden (vorerst) nicht mehr dekodiert, um zu vermeiden, dass Tausende von \"unbekannten (0xabcd)\" Zuständen erstellt werden",
-                "ru": "* Удалена компактная поддержка. noble иногда выдает ошибки в обратных вызовах, которые не могут быть обработаны, и может привести к сбою всей компактной группы.\n* Добавлена поддержка чайника Xiaomi\n* Зашифрованные пакеты больше не декодируются (пока), чтобы избежать создания тысяч «неизвестных (0xabcd)» состояний",
-                "pt": "* Removido o suporte compacto. Às vezes, o `noble 'gera erros nos retornos de chamada que não podem ser manipulados e derrubariam todo o grupo compacto.\n* Adicionado suporte para a Xiaomi Kettle\n* Pacotes criptografados não são mais decodificados (por enquanto) para evitar a criação de milhares de estados `unknown (0xabcd)`",
-                "nl": "* Compacte ondersteuning verwijderd. `nobel` veroorzaakt soms fouten in terugbelverzoeken die niet kunnen worden afgehandeld en zou de hele compacte groep ten val brengen.\n* Ondersteuning toegevoegd voor de Xiaomi-waterkoker\n* Versleutelde pakketten worden niet meer gedecodeerd (voorlopig) om te voorkomen dat duizenden `onbekende (0xabcd)` staten ontstaan",
-                "fr": "* Suppression du support compact. `noble` lance parfois des erreurs dans les rappels qui ne peuvent pas être gérées et ferait tomber l'ensemble du groupe compact.\n* Ajout de la prise en charge de la bouilloire Xiaomi\n* Les paquets chiffrés ne sont plus décodés (pour l'instant) pour éviter de créer des milliers d'états `inconnus (0xabcd)`",
-                "it": "* Supporto compatto rimosso. \"nobile\" a volte genera errori nei callback che non possono essere gestiti e porterebbe giù l'intero gruppo compatto.\n* Aggiunto supporto per Xiaomi Kettle\n* I pacchetti crittografati non vengono più decodificati (per ora) per evitare la creazione di migliaia di stati `sconosciuti (0xabcd)`",
-                "es": "* Se eliminó el soporte compacto. `noble` a veces arroja errores en devoluciones de llamada que no se pueden manejar y derribaría a todo el grupo compacto.\n* Se agregó soporte para el hervidor de agua Xiaomi\n* Los paquetes cifrados ya no se decodifican (por ahora) para evitar crear miles de estados `desconocidos (0xabcd)`",
-                "pl": "* Usunięto kompaktowe wsparcie. „szlachetny” czasami generuje błędy w wywołaniach zwrotnych, których nie można obsłużyć i sprowadziłoby całą kompaktową grupę w dół.\n* Dodano obsługę czajnika Xiaomi\n* Zaszyfrowane pakiety nie są już dekodowane (na razie), aby uniknąć tworzenia tysięcy stanów `nieznanych (0xabcd)`",
-                "zh-cn": "* 删除了紧凑型支架。有时，“ noble”会在无法处理的回调中引发错误，并使整个紧凑型组崩溃。\n* 添加了对小米水壶的支持\n* 不再对加密数据包进行解码（暂时），以避免创建数千个“未知（0xabcd）”状态"
-            },
-            "0.10.1": {
-                "en": "Fixed crash in JS-Controller 2.0",
-                "de": "Absturz in JS-Controller 2.0 behoben",
-                "ru": "Исправлено падение в JS-Controller 2.0",
-                "pt": "Corrigida falha no JS-Controller 2.0",
-                "nl": "Crash opgelost in JS-Controller 2.0",
-                "fr": "Correction d'un crash dans JS-Controller 2.0",
-                "it": "Risolto crash in JS-Controller 2.0",
-                "es": "Se corrigió el bloqueo en JS-Controller 2.0",
-                "pl": "Naprawiono awarię w JS-Controller 2.0",
-                "zh-cn": "修复了JS-Controller 2.0中的崩溃"
-            },
-            "0.10.0": {
-                "en": "Xiaomi plugin: test the received data instead of relying on MAC prefixes",
-                "de": "Xiaomi-Plugin: Testen Sie die empfangenen Daten, anstatt sich auf MAC-Präfixe zu verlassen",
-                "ru": "Плагин Xiaomi: тестируйте полученные данные, а не полагайтесь на префиксы MAC",
-                "pt": "Plugin Xiaomi: teste os dados recebidos em vez de confiar nos prefixos MAC",
-                "nl": "Xiaomi-plug-in: test de ontvangen gegevens in plaats van te vertrouwen op MAC-voorvoegsels",
-                "fr": "Xiaomi plugin: tester les données reçues au lieu de s'appuyer sur les préfixes MAC",
-                "it": "Plugin Xiaomi: prova i dati ricevuti invece di fare affidamento sui prefissi MAC",
-                "es": "Complemento Xiaomi: pruebe los datos recibidos en lugar de confiar en los prefijos MAC",
-                "pl": "Wtyczka Xiaomi: przetestuj otrzymane dane zamiast polegać na prefiksach MAC",
-                "zh-cn": "小米插件：测试接收到的数据，而不是依赖于MAC前缀"
-            },
-            "0.9.2": {
-                "en": "Added `e7:2e:00` as an alternative mac prefix",
-                "de": "`e7:2e:00` als alternatives Mac-Präfix hinzugefügt",
-                "ru": "Добавлен `e7:2e:00` в качестве альтернативного префикса mac",
-                "pt": "Adicionado `e7:2e:00` como um prefixo alternativo do mac",
-                "nl": "`e7:2e:00` toegevoegd als alternatief mac-voorvoegsel",
-                "fr": "Ajout de `e7:2e:00` comme préfixe mac alternatif",
-                "it": "Aggiunto `e7:2e:00` come prefisso mac alternativo",
-                "es": "Se agregó `e7:2e:00` como un prefijo mac alternativo",
-                "pl": "Dodano `e7:2e:00` jako alternatywny przedrostek mac",
-                "zh-cn": "添加了`e7:2e:00`作为替代的mac前缀"
-            },
-            "0.9.1": {
-                "en": "Fix compact mode crashes",
-                "de": "Abstürze im Kompaktmodus behoben",
-                "ru": "Исправление сбоев в компактном режиме",
-                "pt": "Corrigir falhas no modo compacto",
-                "nl": "Herstel crashes in compacte modus",
-                "fr": "Correction des plantages en mode compact",
-                "it": "Risolvi i crash della modalità compatta",
-                "es": "Repara bloqueos en modo compacto",
-                "pl": "Napraw awarie trybu kompaktowego",
-                "zh-cn": "修复压缩模式崩溃"
             }
         },
         "title": "Bluetooth Low Energy (BLE)",
@@ -185,9 +113,7 @@
             "pl": "Monitor Bluetooth low energy (BLE) latarnie",
             "zh-cn": "监测蓝牙低能源(BLE)信标"
         },
-        "authors": [
-            "AlCalzone <d.griesel@gmx.net>"
-        ],
+        "authors": ["AlCalzone <d.griesel@gmx.net>"],
         "platform": "Javascript/Node.js",
         "license": "MIT",
         "main": "build/main.js",
@@ -195,11 +121,7 @@
         "icon": "ble.png",
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
-        "keywords": [
-            "bluetooth",
-            "BLE",
-            "beacon"
-        ],
+        "keywords": ["bluetooth", "BLE", "beacon"],
         "readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
         "loglevel": "info",
         "type": "hardware",
