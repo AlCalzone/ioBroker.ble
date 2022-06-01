@@ -39,7 +39,7 @@
     "yargs": "^17.4.1"
   },
   "devDependencies": {
-    "@alcalzone/release-script": "~3.5.8",
+    "@alcalzone/release-script": "~3.5.9",
     "@alcalzone/release-script-plugin-iobroker": "~3.5.8",
     "@alcalzone/release-script-plugin-license": "~3.5.8",
     "@alcalzone/release-script-plugin-manual-review": "~3.5.8",
