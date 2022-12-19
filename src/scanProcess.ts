@@ -127,7 +127,13 @@ async function stopScanning() {
 	// load noble driver with the correct device selected
 	process.env.NOBLE_HCI_DEVICE_ID = argv.hciDevice.toString();
 	try {
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		noble = require("@abandonware/noble");
+		if (typeof noble.on !== "function") {
+			// The following commit broke the default exported instance of noble:
+			// https://github.com/abandonware/noble/commit/b67eea246f719947fc45b1b52b856e61637a8a8e
+			noble = (noble as any)({ extended: false });
+		}
 	} catch (error: any) {
 		await sendAsync({ type: "fatal", error });
 		process.exit(ScanExitCodes.RequireNobleFailed);
