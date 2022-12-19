@@ -8,28 +8,31 @@ const adapterDir = path.join(__dirname, "..");
 tests.integration(adapterDir, {
 	allowedExitCodes: [11],
 
-	defineAdditionalTests(getHarness) {
-
+	defineAdditionalTests({ describe, it, suite }) {
 		const ENV = { TESTING: "true" };
 
-		describe("Test sendTo", () => {
-
+		suite("Test sendTo", (getHarness) => {
 			it("Should work", function () {
 				this.timeout(60000);
-				return new Promise((resolve) => {
-					const harness = getHarness();
-					harness.startAdapterAndWait(ENV).then(() => {
-						setTimeout(() => {
-							harness.sendTo("ble.0", "test", "message", (resp) => {
-								console.dir(resp);
-								resolve();
-							});
-						}, 2500);
-					});
-				});
+				return /** @type {Promise<void>} */ (
+					new Promise((resolve) => {
+						const harness = getHarness();
+						harness.startAdapterAndWait(true, ENV).then(() => {
+							setTimeout(() => {
+								harness.sendTo(
+									"ble.0",
+									"test",
+									"message",
+									(resp) => {
+										console.dir(resp);
+										resolve();
+									},
+								);
+							}, 2500);
+						});
+					})
+				);
 			});
-
 		});
-
 	},
 });
