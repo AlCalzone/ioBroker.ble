@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.13.0",
+        "version": "0.13.1",
         "news": {
+            "0.13.1": {
+                "en": "Updated the `noble` dependency. This should fix the automatic rebuild after Node.js upgrades.",
+                "de": "Die Abhängigkeit `noble` wurde aktualisiert. Dies sollte den automatischen Rebuild nach Node.js Upgrades beheben.",
+                "ru": "Обновление благородной зависимости. Это должно исправить автоматический ремонт после обновления Node.js.",
+                "pt": "Atualizou a nobre dependência. Isso deve corrigir a reconstrução automática após atualizações Node.js.",
+                "nl": "Verhoogde de nobele afhankelijkheid. Dit moet de automatische reconstructie maken na Node.js upgrades.",
+                "fr": "Mis à jour la noble dépendance. Cela devrait réparer la reconstruction automatique après la mise à niveau de Node.js.",
+                "it": "Aggiornato la nobile dipendenza. Questo dovrebbe risolvere il ripristino automatico dopo gli aggiornamenti di Node.js.",
+                "es": "Actualizó la noble dependencia. Esto debe arreglar la reconstrucción automática después de Node.js actualizaciones.",
+                "pl": "Ulepszona szlachetna zależność. Postanowiono to naprawić automatyczną rekonstrukcję po modernizacji Node.js.",
+                "uk": "Оновлено благородну залежність. Це має виправити автоматичне відновлення після оновлення Node.js.",
+                "zh-cn": "更新崇高的依赖性。 这应该确定在诺贝尔升级后自动重建。."
+            },
             "0.13.0": {
                 "en": "The option to allow recording new devices is now available in the config dialog. When the adapter starts, it will be disabled, and when enabled, it will be automatically disabled after 5 minutes (#730, #729)\nFix: RSSI will now be updated, even if it was unchanged (#493)\nDependency updates, lots of dependency updates...",
                 "de": "Die Option, das Aufzeichnen neuer Geräte zuzulassen, ist jetzt im Konfigurationsdialog verfügbar. Wenn der Adapter startet, wird sie deaktiviert, und wenn sie aktiviert ist, wird sie nach 5 Minuten automatisch deaktiviert (#730, #729)\nFix: RSSI wird jetzt aktualisiert, auch wenn es unverändert war (#493)\nAbhängigkeiten aktualisiert",
@@ -74,18 +87,6 @@
                 "es": "* Utilice la reconstrucción automática del módulo JS-Controller si es posible",
                 "pl": "* Wykorzystaj automatyczną przebudowę modułu JS-Controller, jeśli to możliwe",
                 "zh-cn": "* 尽可能利用JS-Controller的自动模块重建"
-            },
-            "0.11.3": {
-                "en": "* Fixed a crash that happens when `noble` can not be loaded.",
-                "de": "* Es wurde ein Absturz behoben, der auftrat, wenn \"noble\" nicht geladen werden konnte.",
-                "ru": "* Исправлен сбой, который происходит, когда `noble` не может быть загружен.",
-                "pt": "* Corrigida uma falha que acontece quando o `noble` não pode ser carregado.",
-                "nl": "* Een crash gerepareerd die optreedt wanneer `noble` niet kan worden geladen.",
-                "fr": "* Correction d'un plantage qui se produit lorsque `noble` ne peut pas être chargé.",
-                "it": "* Risolto un crash che si verificava quando \"nobile\" non può essere caricato.",
-                "es": "* Se corrigió un bloqueo que ocurre cuando no se puede cargar `noble`.",
-                "pl": "* Naprawiono awarię występującą, gdy nie można załadować „szlachetnego”.",
-                "zh-cn": "* 修复了无法加载`noble`时发生的崩溃。"
             }
         },
         "title": "Bluetooth Low Energy (BLE)",
