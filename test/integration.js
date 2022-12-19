@@ -17,7 +17,7 @@ tests.integration(adapterDir, {
 				return /** @type {Promise<void>} */ (
 					new Promise((resolve) => {
 						const harness = getHarness();
-						harness.startAdapterAndWait(true, ENV).then(() => {
+						harness.startAdapterAndWait(false, ENV).then(() => {
 							setTimeout(() => {
 								harness.sendTo(
 									"ble.0",
