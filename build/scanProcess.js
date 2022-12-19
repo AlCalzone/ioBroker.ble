@@ -114,6 +114,9 @@ async function stopScanning() {
   process.env.NOBLE_HCI_DEVICE_ID = argv.hciDevice.toString();
   try {
     noble = require("@abandonware/noble");
+    if (typeof noble.on !== "function") {
+      noble = noble({ extended: false });
+    }
   } catch (error) {
     await sendAsync({ type: "fatal", error });
     process.exit(import_scanProcessInterface.ScanExitCodes.RequireNobleFailed);
