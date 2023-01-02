@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.13.1",
+        "version": "0.13.2",
         "news": {
+            "0.13.2": {
+                "en": "Downgraded the `noble` dependency again because of performance issues",
+                "de": "Die Abhängigkeit `noble` wurde wegen Performanceproblemen wieder gedowngradet",
+                "ru": "Понизил благородную зависимость снова из-за проблем с производительностью",
+                "pt": "Reduziu a nobre dependência novamente por causa de problemas de desempenho",
+                "nl": "Weer de nobele afhankelijkheid omwille van de prestaties",
+                "fr": "Reclassé la noble dépendance à cause des problèmes de performance",
+                "it": "Abbassato la nobile dipendenza di nuovo a causa di problemi di prestazione",
+                "es": "Reducción de la noble dependencia de nuevo debido a problemas de rendimiento",
+                "pl": "Pogrążony w szlachetną zależność 1ponownie z powodu problemów osiągowych",
+                "uk": "Внизив благородну залежність знову через проблеми виконання",
+                "zh-cn": "由于业绩问题,重新定性崇高的依赖性"
+            },
             "0.13.1": {
                 "en": "Updated the `noble` dependency. This should fix the automatic rebuild after Node.js upgrades.",
                 "de": "Die Abhängigkeit `noble` wurde aktualisiert. Dies sollte den automatischen Rebuild nach Node.js Upgrades beheben.",
@@ -75,18 +88,6 @@
                 "es": "* Ignora el error fuera de rango no manejado en algún lugar de `noble`",
                 "pl": "* Zignoruj nieobsługiwany błąd przekroczenia zakresu gdzieś w `noble`",
                 "zh-cn": "* 忽略`noble`中某处未处理的超出范围的错误"
-            },
-            "0.11.4": {
-                "en": "* Utilize JS-Controller's auto module rebuild if possible",
-                "de": "* Verwenden Sie nach Möglichkeit die automatische Modulwiederherstellung von JS-Controller",
-                "ru": "* Используйте автоматическую перестройку JS-контроллера, если это возможно",
-                "pt": "* Utilize a reconstrução automática do módulo do controlador JS, se possível",
-                "nl": "* Gebruik indien mogelijk de automatische herbouw van de JS-Controller",
-                "fr": "* Utilisez la reconstruction automatique du module JS-Controller si possible",
-                "it": "* Utilizzare la ricostruzione automatica del modulo di JS-Controller, se possibile",
-                "es": "* Utilice la reconstrucción automática del módulo JS-Controller si es posible",
-                "pl": "* Wykorzystaj automatyczną przebudowę modułu JS-Controller, jeśli to możliwe",
-                "zh-cn": "* 尽可能利用JS-Controller的自动模块重建"
             }
         },
         "title": "Bluetooth Low Energy (BLE)",
