@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "ble",
-        "version": "0.13.2",
+        "version": "0.13.3",
         "news": {
+            "0.13.3": {
+                "en": "Updated `noble` again. This should fix the automatic rebuild after Node.js upgrades and the previous performance issues.",
+                "de": "Die Abhängigkeit `noble` wurde aktualisiert. Dies sollte den automatischen Rebuild nach Node.js Upgrades und die Performanceprobleme vom letzten Versuch beheben",
+                "ru": "Обновленный благородный снова. Это должно исправить автоматический ремонт после обновления Node.js и предыдущие проблемы производительности.",
+                "pt": "Atualizado nobre novamente. Isso deve corrigir a reconstrução automática após as atualizações do Node.js e os problemas de desempenho anteriores.",
+                "nl": "Weer nobel. Dit zou de automatische reconstructie moeten herbouwen na Node.js upgrades en de vorige optredens.",
+                "fr": "Encore noble. Cela devrait corriger la reconstruction automatique après la mise à niveau de Node.js et les problèmes de performance précédents.",
+                "it": "Nobile aggiornato di nuovo. Questo dovrebbe risolvere il ripristino automatico dopo gli aggiornamenti di Node.js e i precedenti problemi di prestazioni.",
+                "es": "Actualizado noble de nuevo. Esto debe arreglar la reconstrucción automática después de las actualizaciones de Node.js y los problemas de rendimiento anteriores.",
+                "pl": "Powrócony ponownie szlachcic. Pozwoliło to na naprawę automatycznego rekonstruowania po ulepszeniach Node.jsa.",
+                "uk": "Оновлений благородний знову. Це має виправити автоматичний ремонт після оновлення Node.js та попередніх експлуатаційних питань.",
+                "zh-cn": "新的崇高。 这应该确定在诺贝尔升级后自动重建和以前的业绩问题。."
+            },
             "0.13.2": {
                 "en": "Downgraded the `noble` dependency again because of performance issues",
                 "de": "Die Abhängigkeit `noble` wurde wegen Performanceproblemen wieder gedowngradet",
@@ -76,18 +89,6 @@
                 "es": "Se agregó un mensaje de error más útil si el adaptador termina con el error `EAFNOSUPPORT`",
                 "pl": "Dodano bardziej pomocny komunikat o błędzie, jeśli adapter kończy pracę z błędem `EAFNOSUPPORT`",
                 "zh-cn": "如果适配器以错误“ EAFNOSUPPORT”终止，则添加了更有用的错误消息"
-            },
-            "0.11.6": {
-                "en": "* Ignore unhandled out of range error somewhere in `noble`",
-                "de": "* Ignorieren Sie nicht behandelte Fehler außerhalb des Bereichs irgendwo in `noble`",
-                "ru": "* Игнорировать необработанную ошибку вне диапазона где-то в `noble`",
-                "pt": "* Ignore o erro não tratado fora do intervalo em algum lugar nobre",
-                "nl": "* Negeer onverwerkte fout buiten bereik ergens in `noble`",
-                "fr": "* Ignorer l'erreur hors de portée non gérée quelque part dans `noble`",
-                "it": "* Ignora l'errore non gestito fuori portata da qualche parte in \"nobile\"",
-                "es": "* Ignora el error fuera de rango no manejado en algún lugar de `noble`",
-                "pl": "* Zignoruj nieobsługiwany błąd przekroczenia zakresu gdzieś w `noble`",
-                "zh-cn": "* 忽略`noble`中某处未处理的超出范围的错误"
             }
         },
         "title": "Bluetooth Low Energy (BLE)",
