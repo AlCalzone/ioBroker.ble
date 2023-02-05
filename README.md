@@ -41,6 +41,9 @@ If you have any device transmitting specially encoded information via advertisem
 	Placeholder for next release:
 	### __WORK IN PROGRESS__
 -->
+### __WORK IN PROGRESS__
+* Updated `noble` again. This should fix the automatic rebuild after Node.js upgrades and the previous performance issues.
+
 ### 0.13.2 (2023-01-02)
 * Downgraded the `noble` dependency again because of performance issues
 
