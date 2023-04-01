@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@abandonware/noble": "^1.9.2-19",
-    "@iobroker/adapter-core": "^2.6.0",
+    "@iobroker/adapter-core": "^2.6.8",
     "alcalzone-shared": "^4.0.1",
     "iobroker-react-components": "^1.0.0",
     "yargs": "^17.4.1"
