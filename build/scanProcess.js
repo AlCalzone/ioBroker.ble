@@ -64,6 +64,16 @@ process.on("unhandledRejection", (error) => {
     error: error instanceof Error ? error : new Error(`${error}`)
   });
 });
+process.on("message", (msg) => {
+  switch (msg) {
+    case "startScanning":
+      startScanning();
+      break;
+    case "stopScanning":
+      stopScanning();
+      break;
+  }
+});
 function serializePeripheral(peripheral) {
   return (0, import_misc.pick)(peripheral, [
     "id",

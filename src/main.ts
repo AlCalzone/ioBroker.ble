@@ -9,6 +9,7 @@ import {
 	extendState,
 } from "./lib/iobroker-objects";
 import { ObjectCache } from "./lib/object-cache";
+import Queue from "./lib/queue";
 import {
 	getMessageReviver,
 	PeripheralInfo,
@@ -40,6 +41,9 @@ function autoResetAllowNewDevices() {
 		);
 	}, 5000 * 60);
 }
+
+/** The queue of commands to be processed */
+const commandQueue = new Queue<{ args: any[] }>();
 
 /** Cache of new devices we already ignored */
 const ignoredNewDeviceIDs = new Set<string>();
@@ -121,6 +125,26 @@ const adapter = utils.adapter({
 
 		// And start scanning
 		if (!process.env.TESTING) startScanProcess();
+
+		// Start observing the command queue
+		const observer = commandQueue.observe();
+		observer.subscribe((item) => {
+			adapter.log.info("New item: " + item);
+			if (scanProcess) {
+				scanProcess.send("stopScanning");
+			}
+
+			// Do your thing here
+
+			const queueSize = commandQueue.size();
+			if (queueSize === 0 && scanProcess) {
+				// If the queue is empty, start scanning again
+				scanProcess.send("startScanning");
+			} else if (queueSize === 0 && !scanProcess) {
+				// If the queue is empty and the scan process is not running, start it
+				startScanProcess();
+			}
+		});
 	},
 
 	// is called when adapter shuts down - callback has to be called under any circumstances!
@@ -170,6 +194,10 @@ const adapter = utils.adapter({
 					autoResetAllowNewDevices();
 				}
 			}
+		}
+		if (/options\.command$/.test(id) && state != undefined && !state.ack) {
+			// and queue it for processing
+			commandQueue.enqueue({ args: [state.val] });
 		}
 	},
 

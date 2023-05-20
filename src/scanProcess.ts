@@ -75,6 +75,17 @@ process.on("unhandledRejection", (error) => {
 	});
 });
 
+process.on("message", (msg) => {
+	switch (msg) {
+		case "startScanning":
+			startScanning();
+			break;
+		case "stopScanning":
+			stopScanning();
+			break;
+	}
+});
+
 function serializePeripheral(peripheral: Peripheral): PeripheralInfo {
 	return pick(peripheral, [
 		"id",

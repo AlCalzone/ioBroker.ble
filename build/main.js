@@ -20,6 +20,7 @@ var path = __toESM(require("path"));
 var import_global = require("./lib/global");
 var import_iobroker_objects = require("./lib/iobroker-objects");
 var import_object_cache = require("./lib/object-cache");
+var import_queue = __toESM(require("./lib/queue"));
 var import_scanProcessInterface = require("./lib/scanProcessInterface");
 var import_plugins = __toESM(require("./plugins"));
 let enabledPlugins;
@@ -36,6 +37,7 @@ function autoResetAllowNewDevices() {
     import_global.Global.adapter.log.info("No longer accepting new devices (automatic timeout)");
   }, 5e3 * 60);
 }
+const commandQueue = new import_queue.default();
 const ignoredNewDeviceIDs = /* @__PURE__ */ new Set();
 let rssiUpdateInterval = 0;
 let scanProcess;
@@ -68,6 +70,13 @@ const adapter = utils.adapter({
     await adapter.setStateAsync("options.allowNewDevices", false, true);
     if (!process.env.TESTING)
       startScanProcess();
+    const observer = commandQueue.observe();
+    observer.subscribe((item) => {
+      adapter.log.info("New item: " + item);
+      if (scanProcess) {
+        scanProcess.send("stopScanning");
+      }
+    });
   },
   unload: (callback) => {
     try {
@@ -94,6 +103,9 @@ const adapter = utils.adapter({
           autoResetAllowNewDevices();
         }
       }
+    }
+    if (/options\.command$/.test(id) && state != void 0 && !state.ack) {
+      commandQueue.enqueue({ args: [state.val] });
     }
   },
   message: async (obj) => {
