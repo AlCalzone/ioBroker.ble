@@ -1,0 +1,40 @@
+{
+	"coding_formats": [
+		{
+			"name": "µ-law log",
+			"value": 0
+		},
+		{
+			"name": "A-law log",
+			"value": 1
+		},
+		{
+			"name": "CVSD",
+			"value": 2
+		},
+		{
+			"name": "Transparent",
+			"value": 3
+		},
+		{
+			"name": "Linear PCM",
+			"value": 4
+		},
+		{
+			"name": "mSBC",
+			"value": 5
+		},
+		{
+			"name": "LC3",
+			"value": 6
+		},
+		{
+			"name": "G.729A",
+			"value": 7
+		},
+		{
+			"name": "Vendor Specific",
+			"value": 255
+		}
+	]
+}

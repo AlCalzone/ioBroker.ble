@@ -1,0 +1,52 @@
+{
+	"uuids": [
+		{
+			"uuid": 65534,
+			"name": "Wireless Power Transfer Service"
+		},
+		{
+			"uuid": 65533,
+			"name": "Universal Second Factor Authenticator Service"
+		},
+		{
+			"uuid": 65532,
+			"name": "Wireless Power Transfer (WPT) Service"
+		},
+		{
+			"uuid": 65531,
+			"name": "Direct Thread Commissioning"
+		},
+		{
+			"uuid": 65530,
+			"name": "ASTM Remote ID"
+		},
+		{
+			"uuid": 65529,
+			"name": "FIDO2 secure client-to-authenticator transport"
+		},
+		{
+			"uuid": 65528,
+			"name": "Mopria Alliance BLE Service"
+		},
+		{
+			"uuid": 65527,
+			"name": "ZigBee Alliance"
+		},
+		{
+			"uuid": 65526,
+			"name": "ZigBee Alliance"
+		},
+		{
+			"uuid": 65525,
+			"name": "Car Connectivity Consortium, LLC"
+		},
+		{
+			"uuid": 65524,
+			"name": "FiRa Consortium"
+		},
+		{
+			"uuid": 65523,
+			"name": "FiRa Consortium"
+		}
+	]
+}

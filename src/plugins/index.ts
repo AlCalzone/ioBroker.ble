@@ -4,5 +4,6 @@ export default [
 	require("./xiaomi"),
 	require("./mi-flora"),
 	require("./ruuvi-tag"),
-	require("./_default"),
+	require("./switchbot"),
+	require("./_default"), // must be last
 ] as Plugin[];

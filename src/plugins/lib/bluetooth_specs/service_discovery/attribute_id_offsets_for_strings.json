@@ -1,0 +1,16 @@
+{
+	"attribute_ids": [
+		{
+			"name": "ServiceName",
+			"value": 0
+		},
+		{
+			"name": "ServiceDescription",
+			"value": 1
+		},
+		{
+			"name": "ProviderName",
+			"value": 2
+		}
+	]
+}

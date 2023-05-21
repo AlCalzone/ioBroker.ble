@@ -1,3 +1,4 @@
+var import_fs = require("fs");
 var import_global = require("../lib/global");
 function parseData(raw) {
   if (raw.length === 1) {
@@ -13,6 +14,7 @@ const plugin = {
   isHandling: (_p) => true,
   createContext: (peripheral) => peripheral,
   defineObjects: (peripheral) => {
+    const serviceList = JSON.parse((0, import_fs.readFileSync)(__dirname + "/lib/bluetooth_specs/service_list.json", "utf-8"));
     const deviceObject = {
       common: void 0,
       native: void 0
@@ -35,7 +37,7 @@ const plugin = {
           id: stateId,
           common: {
             role: "value",
-            name: "Advertised service " + uuid,
+            name: "Advertised service " + serviceList[uuid.toLowerCase()] ? serviceList[uuid.toLowerCase()] : uuid,
             desc: "",
             type: "mixed",
             read: true,

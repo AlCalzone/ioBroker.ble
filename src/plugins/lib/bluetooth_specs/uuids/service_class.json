@@ -1,0 +1,384 @@
+{
+	"uuids": [
+		{
+			"uuid": 4096,
+			"name": "ServiceDiscoveryServerServiceClassID",
+			"id": "org.bluetooth.service_class.service_discovery_server"
+		},
+		{
+			"uuid": 4097,
+			"name": "BrowseGroupDescriptorServiceClassID",
+			"id": "org.bluetooth.service_class.browse_group_descriptor"
+		},
+		{
+			"uuid": 4353,
+			"name": "SerialPort",
+			"id": "org.bluetooth.profile.serial_port"
+		},
+		{
+			"uuid": 4354,
+			"name": "LANAccessUsingPPP",
+			"id": "org.bluetooth.profile.lan_access"
+		},
+		{
+			"uuid": 4355,
+			"name": "DialupNetworking",
+			"id": "org.bluetooth.profile.dial_up_networking"
+		},
+		{
+			"uuid": 4356,
+			"name": "IrMCSync",
+			"id": "org.bluetooth.profile.synchronization_profile"
+		},
+		{
+			"uuid": 4357,
+			"name": "OBEXObjectPush",
+			"id": "org.bluetooth.profile.object_push"
+		},
+		{
+			"uuid": 4358,
+			"name": "OBEXFileTransfer",
+			"id": "org.bluetooth.profile.file_transfer_profile"
+		},
+		{
+			"uuid": 4359,
+			"name": "IrMCSyncCommand",
+			"id": "org.bluetooth.profile.synchronization_command"
+		},
+		{
+			"uuid": 4360,
+			"name": "Headset",
+			"id": "org.bluetooth.profile.headset"
+		},
+		{
+			"uuid": 4361,
+			"name": "CordlessTelephony",
+			"id": "org.bluetooth.profile.cordless_telephony"
+		},
+		{
+			"uuid": 4362,
+			"name": "AudioSource",
+			"id": "org.bluetooth.profile.a2dp_audio_source"
+		},
+		{
+			"uuid": 4363,
+			"name": "AudioSink",
+			"id": "org.bluetooth.profile.a2dp_audio_sink"
+		},
+		{
+			"uuid": 4364,
+			"name": "A/V_RemoteControlTarget",
+			"id": "org.bluetooth.profile.avrcp_remote_control_target"
+		},
+		{
+			"uuid": 4365,
+			"name": "AdvancedAudioDistribution",
+			"id": "org.bluetooth.profile.a2dp"
+		},
+		{
+			"uuid": 4366,
+			"name": "A/V_RemoteControl",
+			"id": "org.bluetooth.profile.avrcp_remote_control_remote_control"
+		},
+		{
+			"uuid": 4367,
+			"name": "A/V_RemoteControlController",
+			"id": "org.bluetooth.profile.avrcp_remote_control_remote_control_controller"
+		},
+		{
+			"uuid": 4368,
+			"name": "Intercom",
+			"id": "org.bluetooth.profile.intercom"
+		},
+		{
+			"uuid": 4369,
+			"name": "Fax",
+			"id": "org.bluetooth.profile.fax"
+		},
+		{
+			"uuid": 4370,
+			"name": "Headset - Audio Gateway",
+			"id": "org.bluetooth.profile.headset_audio_gateway"
+		},
+		{
+			"uuid": 4371,
+			"name": "WAP",
+			"id": "org.bluetooth.profile.wap"
+		},
+		{
+			"uuid": 4372,
+			"name": "WAP_CLIENT",
+			"id": "org.bluetooth.profile.wap_client"
+		},
+		{
+			"uuid": 4373,
+			"name": "PANU",
+			"id": "org.bluetooth.profile.pan_user"
+		},
+		{
+			"uuid": 4374,
+			"name": "NAP",
+			"id": "org.bluetooth.profile.pan_network_access_point"
+		},
+		{
+			"uuid": 4375,
+			"name": "GN",
+			"id": "org.bluetooth.profile.pan_gn"
+		},
+		{
+			"uuid": 4376,
+			"name": "DirectPrinting",
+			"id": "org.bluetooth.profile.bpp_direct_printing"
+		},
+		{
+			"uuid": 4377,
+			"name": "ReferencePrinting",
+			"id": "org.bluetooth.profile.bpp_reference_printing"
+		},
+		{
+			"uuid": 4378,
+			"name": "Basic Imaging Profile",
+			"id": "org.bluetooth.profile.bip"
+		},
+		{
+			"uuid": 4379,
+			"name": "ImagingResponder",
+			"id": "org.bluetooth.profile.bip_imaging_responder"
+		},
+		{
+			"uuid": 4380,
+			"name": "ImagingAutomaticArchive",
+			"id": "org.bluetooth.profile.bip_imaging_automatic_archive"
+		},
+		{
+			"uuid": 4381,
+			"name": "ImagingReferencedObjects",
+			"id": "org.bluetooth.profile.bip_imaging_referenced_objects"
+		},
+		{
+			"uuid": 4382,
+			"name": "Handsfree",
+			"id": "org.bluetooth.profile.handsfree"
+		},
+		{
+			"uuid": 4383,
+			"name": "HandsfreeAudioGateway",
+			"id": "org.bluetooth.service_class.handsfree_audio_gateway"
+		},
+		{
+			"uuid": 4384,
+			"name": "DirectPrintingReferenceObjectsService",
+			"id": "org.bluetooth.service_class.bpp_direct_printing_reference_objects"
+		},
+		{
+			"uuid": 4385,
+			"name": "ReflectedUI",
+			"id": "org.bluetooth.service_class.bpp_reflected_ui"
+		},
+		{
+			"uuid": 4386,
+			"name": "BasicPrinting",
+			"id": "org.bluetooth.profile.bpp"
+		},
+		{
+			"uuid": 4387,
+			"name": "PrintingStatus",
+			"id": "org.bluetooth.service_class.bpp_printing_status"
+		},
+		{
+			"uuid": 4388,
+			"name": "HumanInterfaceDeviceService",
+			"id": "org.bluetooth.profile.hid"
+		},
+		{
+			"uuid": 4389,
+			"name": "HardcopyCableReplacement",
+			"id": "org.bluetooth.profile.hcrp"
+		},
+		{
+			"uuid": 4390,
+			"name": "HCR_Print",
+			"id": "org.bluetooth.service_class.hcr_print"
+		},
+		{
+			"uuid": 4391,
+			"name": "HCR_Scan",
+			"id": "org.bluetooth.service_class.hcr_scan"
+		},
+		{
+			"uuid": 4392,
+			"name": "Common_ISDN_Access",
+			"id": "org.bluetooth.service_class.isdn"
+		},
+		{
+			"uuid": 4397,
+			"name": "SIM_Access",
+			"id": "org.bluetooth.profile.sap"
+		},
+		{
+			"uuid": 4398,
+			"name": "Phonebook Access - PCE",
+			"id": "org.bluetooth.service_class.phone_book_access_pce"
+		},
+		{
+			"uuid": 4399,
+			"name": "Phonebook Access - PSE",
+			"id": "org.bluetooth.service_class.phone_book_access_pse"
+		},
+		{
+			"uuid": 4400,
+			"name": "Phonebook Access",
+			"id": "org.bluetooth.profile.phone_book_access"
+		},
+		{
+			"uuid": 4401,
+			"name": "Headset - HS",
+			"id": "org.bluetooth.service_class.headset_hs"
+		},
+		{
+			"uuid": 4402,
+			"name": "Message Access Server",
+			"id": "org.bluetooth.service_class.map_server"
+		},
+		{
+			"uuid": 4403,
+			"name": "Message Notification Server",
+			"id": "org.bluetooth.service_class.map_notification_server"
+		},
+		{
+			"uuid": 4404,
+			"name": "Message Access Profile",
+			"id": "org.bluetooth.profile.message_access_profile"
+		},
+		{
+			"uuid": 4405,
+			"name": "GNSS",
+			"id": "org.bluetooth.profile.global_navigiation_satellite_system"
+		},
+		{
+			"uuid": 4406,
+			"name": "GNSS_Server",
+			"id": "org.bluetooth.service_class.global_navigiation_satellite_system_server"
+		},
+		{
+			"uuid": 4407,
+			"name": "3D Display",
+			"id": "org.bluetooth.service_class.3d_display"
+		},
+		{
+			"uuid": 4408,
+			"name": "3D Glasses",
+			"id": "org.bluetooth.service_class.3d_glasses"
+		},
+		{
+			"uuid": 4409,
+			"name": "3D Synchronization",
+			"id": "org.bluetooth.profile.3d_synchronization"
+		},
+		{
+			"uuid": 4410,
+			"name": "MPS Profile",
+			"id": "org.bluetooth.profile.multi_profile"
+		},
+		{
+			"uuid": 4411,
+			"name": "MPS SC",
+			"id": "org.bluetooth.service_class.multi_profile_service"
+		},
+		{
+			"uuid": 4412,
+			"name": "CTN Access Service",
+			"id": "org.bluetooth.service_class.calendar_task_note_access"
+		},
+		{
+			"uuid": 4413,
+			"name": "CTN Notification Service",
+			"id": "org.bluetooth.service_class.calendar_task_note_notification"
+		},
+		{
+			"uuid": 4414,
+			"name": "CTN Profile",
+			"id": "org.bluetooth.profile.calendar_task_notes"
+		},
+		{
+			"uuid": 4608,
+			"name": "PnPInformation",
+			"id": "org.bluetooth.service_class.device_identification"
+		},
+		{
+			"uuid": 4609,
+			"name": "GenericNetworking",
+			"id": "org.bluetooth.service_class.generic_networking"
+		},
+		{
+			"uuid": 4610,
+			"name": "GenericFileTransfer",
+			"id": "org.bluetooth.service_class.generic_file_transfer"
+		},
+		{
+			"uuid": 4611,
+			"name": "GenericAudio",
+			"id": "org.bluetooth.service_class.generic_audio"
+		},
+		{
+			"uuid": 4612,
+			"name": "GenericTelephony",
+			"id": "org.bluetooth.service_class.generic_telephony"
+		},
+		{
+			"uuid": 4613,
+			"name": "UPNP_Service",
+			"id": "org.bluetooth.service_class.enhanced_service_discovery_service"
+		},
+		{
+			"uuid": 4614,
+			"name": "UPNP_IP_Service",
+			"id": "org.bluetooth.service_class.enhanced_service_discovery_ip_service"
+		},
+		{
+			"uuid": 4864,
+			"name": "ESDP_UPNP_IP_PAN",
+			"id": "org.bluetooth.service_class.enhanced_service_discovery_ip_pan_service"
+		},
+		{
+			"uuid": 4865,
+			"name": "ESDP_UPNP_IP_LAP",
+			"id": "org.bluetooth.service_class.enhanced_service_discovery_ip_lap_service"
+		},
+		{
+			"uuid": 4866,
+			"name": "ESDP_UPNP_L2CAP",
+			"id": "org.bluetooth.service_class.enhanced_service_discovery_l2cap_service"
+		},
+		{
+			"uuid": 4867,
+			"name": "VideoSource",
+			"id": "org.bluetooth.service_class.video_distribution_source"
+		},
+		{
+			"uuid": 4868,
+			"name": "VideoSink",
+			"id": "org.bluetooth.service_class.video_distribution_sink"
+		},
+		{
+			"uuid": 4869,
+			"name": "VideoDistribution",
+			"id": "org.bluetooth.profile.video_distribution"
+		},
+		{
+			"uuid": 5120,
+			"name": "HDP",
+			"id": "org.bluetooth.profile.health_device"
+		},
+		{
+			"uuid": 5121,
+			"name": "HDP Source",
+			"id": "org.bluetooth.service_class.health_device_source"
+		},
+		{
+			"uuid": 5122,
+			"name": "HDP Sink",
+			"id": "org.bluetooth.service_class.health_device_sink"
+		}
+	]
+}

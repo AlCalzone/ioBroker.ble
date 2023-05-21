@@ -76,6 +76,12 @@ const adapter = utils.adapter({
       if (scanProcess) {
         scanProcess.send("stopScanning");
       }
+      const queueSize = commandQueue.size();
+      if (queueSize === 0 && scanProcess) {
+        scanProcess.send("startScanning");
+      } else if (queueSize === 0 && !scanProcess) {
+        startScanProcess();
+      }
     });
   },
   unload: (callback) => {

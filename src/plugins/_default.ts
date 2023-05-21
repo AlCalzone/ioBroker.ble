@@ -1,4 +1,5 @@
-﻿import { Global as _ } from "../lib/global";
+﻿import { readFileSync } from "fs";
+import { Global as _ } from "../lib/global";
 import type { PeripheralInfo } from "../lib/scanProcessInterface";
 import type {
 	ChannelObjectDefinition,
@@ -31,6 +32,13 @@ const plugin: Plugin = {
 	createContext: (peripheral: PeripheralInfo) => peripheral,
 
 	defineObjects: (peripheral: PeripheralInfo): PeripheralObjectStructure => {
+		const serviceList = JSON.parse(
+			readFileSync(
+				__dirname + "/lib/bluetooth_specs/service_list.json",
+				"utf-8",
+			),
+		);
+
 		const deviceObject: DeviceObjectDefinition = {
 			// no special definitions neccessary
 			common: undefined,
@@ -58,7 +66,11 @@ const plugin: Plugin = {
 					id: stateId,
 					common: {
 						role: "value",
-						name: "Advertised service " + uuid, // TODO: create readable names
+						name:
+							"Advertised service " +
+							serviceList[uuid.toLowerCase()]
+								? serviceList[uuid.toLowerCase()]
+								: uuid,
 						desc: "",
 						type: "mixed",
 						read: true,

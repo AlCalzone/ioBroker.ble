@@ -87,6 +87,7 @@ process.on("message", (msg) => {
 });
 
 function serializePeripheral(peripheral: Peripheral): PeripheralInfo {
+	const msg = peripheral.toString();
 	return pick(peripheral, [
 		"id",
 		"uuid",

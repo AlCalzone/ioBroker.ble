@@ -1,0 +1,60 @@
+{
+	"attribute_ids": [
+		{
+			"name": "ServiceRecordHandle",
+			"value": 0
+		},
+		{
+			"name": "ServiceClassIDList",
+			"value": 1
+		},
+		{
+			"name": "ServiceRecordState",
+			"value": 2
+		},
+		{
+			"name": "ServiceID",
+			"value": 3
+		},
+		{
+			"name": "ProtocolDescriptorList",
+			"value": 4
+		},
+		{
+			"name": "BrowseGroupList",
+			"value": 5
+		},
+		{
+			"name": "LanguageBaseAttributeIDList",
+			"value": 6
+		},
+		{
+			"name": "ServiceInfoTimeToLive",
+			"value": 7
+		},
+		{
+			"name": "ServiceAvailability",
+			"value": 8
+		},
+		{
+			"name": "BluetoothProfileDescriptorList",
+			"value": 9
+		},
+		{
+			"name": "DocumentationURL",
+			"value": 10
+		},
+		{
+			"name": "ClientExecutableURL",
+			"value": 11
+		},
+		{
+			"name": "IconURL",
+			"value": 12
+		},
+		{
+			"name": "AdditionalProtocolDescriptorLists",
+			"value": 13
+		}
+	]
+}

@@ -1,0 +1,1096 @@
+{
+	"namespace": [
+		{
+			"name": "unknown",
+			"value": 0
+		},
+		{
+			"name": "first",
+			"value": 1
+		},
+		{
+			"name": "second",
+			"value": 2
+		},
+		{
+			"name": "third",
+			"value": 3
+		},
+		{
+			"name": "fourth",
+			"value": 4
+		},
+		{
+			"name": "fifth",
+			"value": 5
+		},
+		{
+			"name": "sixth",
+			"value": 6
+		},
+		{
+			"name": "seventh",
+			"value": 7
+		},
+		{
+			"name": "eighth",
+			"value": 8
+		},
+		{
+			"name": "ninth",
+			"value": 9
+		},
+		{
+			"name": "tenth",
+			"value": 10
+		},
+		{
+			"name": "eleventh",
+			"value": 11
+		},
+		{
+			"name": "twelfth",
+			"value": 12
+		},
+		{
+			"name": "thirteenth",
+			"value": 13
+		},
+		{
+			"name": "fourteenth",
+			"value": 14
+		},
+		{
+			"name": "fifteenth",
+			"value": 15
+		},
+		{
+			"name": "sixteenth",
+			"value": 16
+		},
+		{
+			"name": "seventeenth",
+			"value": 17
+		},
+		{
+			"name": "eighteenth",
+			"value": 18
+		},
+		{
+			"name": "nineteenth",
+			"value": 19
+		},
+		{
+			"name": "twentieth",
+			"value": 20
+		},
+		{
+			"name": "twenty-first",
+			"value": 21
+		},
+		{
+			"name": "twenty-second",
+			"value": 22
+		},
+		{
+			"name": "twenty-third",
+			"value": 23
+		},
+		{
+			"name": "twenty-fourth",
+			"value": 24
+		},
+		{
+			"name": "twenty-fifth",
+			"value": 25
+		},
+		{
+			"name": "twenty-sixth",
+			"value": 26
+		},
+		{
+			"name": "twenty-seventh",
+			"value": 27
+		},
+		{
+			"name": "twenty-eighth",
+			"value": 28
+		},
+		{
+			"name": "twenty-ninth",
+			"value": 29
+		},
+		{
+			"name": "thirtieth",
+			"value": 30
+		},
+		{
+			"name": "thirty-first",
+			"value": 31
+		},
+		{
+			"name": "thirty-second",
+			"value": 32
+		},
+		{
+			"name": "thirty-third",
+			"value": 33
+		},
+		{
+			"name": "thirty-fourth",
+			"value": 34
+		},
+		{
+			"name": "thirty-fifth",
+			"value": 35
+		},
+		{
+			"name": "thirty-sixth",
+			"value": 36
+		},
+		{
+			"name": "thirty-seventh",
+			"value": 37
+		},
+		{
+			"name": "thirty-eighth",
+			"value": 38
+		},
+		{
+			"name": "thirty-ninth",
+			"value": 39
+		},
+		{
+			"name": "fortieth",
+			"value": 40
+		},
+		{
+			"name": "forty-first",
+			"value": 41
+		},
+		{
+			"name": "forty-second",
+			"value": 42
+		},
+		{
+			"name": "forty-third",
+			"value": 43
+		},
+		{
+			"name": "forty-fourth",
+			"value": 44
+		},
+		{
+			"name": "forty-fifth",
+			"value": 45
+		},
+		{
+			"name": "forty-sixth",
+			"value": 46
+		},
+		{
+			"name": "forty-seventh",
+			"value": 47
+		},
+		{
+			"name": "forty-eighth",
+			"value": 48
+		},
+		{
+			"name": "forty-ninth",
+			"value": 49
+		},
+		{
+			"name": "fiftieth",
+			"value": 50
+		},
+		{
+			"name": "fifty-first",
+			"value": 51
+		},
+		{
+			"name": "fifty-second",
+			"value": 52
+		},
+		{
+			"name": "fifty-third",
+			"value": 53
+		},
+		{
+			"name": "fifty-fourth",
+			"value": 54
+		},
+		{
+			"name": "fifty-fifth",
+			"value": 55
+		},
+		{
+			"name": "fifty-sixth",
+			"value": 56
+		},
+		{
+			"name": "fifty-seventh",
+			"value": 57
+		},
+		{
+			"name": "fifty-eighth",
+			"value": 58
+		},
+		{
+			"name": "fifty-ninth",
+			"value": 59
+		},
+		{
+			"name": "sixtieth",
+			"value": 60
+		},
+		{
+			"name": "sixty-first",
+			"value": 61
+		},
+		{
+			"name": "sixty-second",
+			"value": 62
+		},
+		{
+			"name": "sixty-third",
+			"value": 63
+		},
+		{
+			"name": "sixty-fourth",
+			"value": 64
+		},
+		{
+			"name": "sixty-fifth",
+			"value": 65
+		},
+		{
+			"name": "sixty-sixth",
+			"value": 66
+		},
+		{
+			"name": "sixty-seventh",
+			"value": 67
+		},
+		{
+			"name": "sixty-eighth",
+			"value": 68
+		},
+		{
+			"name": "sixty-ninth",
+			"value": 69
+		},
+		{
+			"name": "seventieth",
+			"value": 70
+		},
+		{
+			"name": "seventy-first",
+			"value": 71
+		},
+		{
+			"name": "seventy-second",
+			"value": 72
+		},
+		{
+			"name": "seventy-third",
+			"value": 73
+		},
+		{
+			"name": "seventy-fourth",
+			"value": 74
+		},
+		{
+			"name": "seventy-fifth",
+			"value": 75
+		},
+		{
+			"name": "seventy-sixth",
+			"value": 76
+		},
+		{
+			"name": "seventy-seventh",
+			"value": 77
+		},
+		{
+			"name": "seventy-eighth",
+			"value": 78
+		},
+		{
+			"name": "seventy-ninth",
+			"value": 79
+		},
+		{
+			"name": "eightieth",
+			"value": 80
+		},
+		{
+			"name": "eighty-first",
+			"value": 81
+		},
+		{
+			"name": "eighty-second",
+			"value": 82
+		},
+		{
+			"name": "eighty-third",
+			"value": 83
+		},
+		{
+			"name": "eighty-fourth",
+			"value": 84
+		},
+		{
+			"name": "eighty-fifth",
+			"value": 85
+		},
+		{
+			"name": "eighty-sixth",
+			"value": 86
+		},
+		{
+			"name": "eighty-seventh",
+			"value": 87
+		},
+		{
+			"name": "eighty-eighth",
+			"value": 88
+		},
+		{
+			"name": "eighty-ninth",
+			"value": 89
+		},
+		{
+			"name": "ninetieth",
+			"value": 90
+		},
+		{
+			"name": "ninety-first",
+			"value": 91
+		},
+		{
+			"name": "ninety-second",
+			"value": 92
+		},
+		{
+			"name": "ninety-third",
+			"value": 93
+		},
+		{
+			"name": "ninety-fourth",
+			"value": 94
+		},
+		{
+			"name": "ninety-fifth",
+			"value": 95
+		},
+		{
+			"name": "ninety-sixth",
+			"value": 96
+		},
+		{
+			"name": "ninety-seventh",
+			"value": 97
+		},
+		{
+			"name": "ninety-eighth",
+			"value": 98
+		},
+		{
+			"name": "ninety-ninth",
+			"value": 99
+		},
+		{
+			"name": "one-hundredth",
+			"value": 100
+		},
+		{
+			"name": "one-hundred-and-first",
+			"value": 101
+		},
+		{
+			"name": "one-hundred-and-second",
+			"value": 102
+		},
+		{
+			"name": "one-hundred-and-third",
+			"value": 103
+		},
+		{
+			"name": "one-hundred-and-fourth",
+			"value": 104
+		},
+		{
+			"name": "one-hundred-and-fifth",
+			"value": 105
+		},
+		{
+			"name": "one-hundred-and-sixth",
+			"value": 106
+		},
+		{
+			"name": "one-hundred-and-seventh",
+			"value": 107
+		},
+		{
+			"name": "one-hundred-and-eighth",
+			"value": 108
+		},
+		{
+			"name": "one-hundred-and-ninth",
+			"value": 109
+		},
+		{
+			"name": "one-hundred-and-tenth",
+			"value": 110
+		},
+		{
+			"name": "one-hundred-and-eleventh",
+			"value": 111
+		},
+		{
+			"name": "one-hundred-and-twelfth",
+			"value": 112
+		},
+		{
+			"name": "one-hundred-and-thirteenth",
+			"value": 113
+		},
+		{
+			"name": "one-hundred-and-fourteenth",
+			"value": 114
+		},
+		{
+			"name": "one-hundred-and-fifteenth",
+			"value": 115
+		},
+		{
+			"name": "one-hundred-and-sixteenth",
+			"value": 116
+		},
+		{
+			"name": "one-hundred-and-seventeenth",
+			"value": 117
+		},
+		{
+			"name": "one-hundred-and-eighteenth",
+			"value": 118
+		},
+		{
+			"name": "one-hundred-and-nineteenth",
+			"value": 119
+		},
+		{
+			"name": "one-hundred-twentieth",
+			"value": 120
+		},
+		{
+			"name": "one-hundred-and-twenty-first",
+			"value": 121
+		},
+		{
+			"name": "one-hundred-and-twenty-second",
+			"value": 122
+		},
+		{
+			"name": "one-hundred-and-twenty-third",
+			"value": 123
+		},
+		{
+			"name": "one-hundred-and-twenty-fourth",
+			"value": 124
+		},
+		{
+			"name": "one-hundred-and-twenty-fifth",
+			"value": 125
+		},
+		{
+			"name": "one-hundred-and-twenty-sixth",
+			"value": 126
+		},
+		{
+			"name": "one-hundred-and-twenty-seventh",
+			"value": 127
+		},
+		{
+			"name": "one-hundred-and-twenty-eighth",
+			"value": 128
+		},
+		{
+			"name": "one-hundred-and-twenty-ninth",
+			"value": 129
+		},
+		{
+			"name": "one-hundred-thirtieth",
+			"value": 130
+		},
+		{
+			"name": "one-hundred-and-thirty-first",
+			"value": 131
+		},
+		{
+			"name": "one-hundred-and-thirty-second",
+			"value": 132
+		},
+		{
+			"name": "one-hundred-and-thirty-third",
+			"value": 133
+		},
+		{
+			"name": "one-hundred-and-thirty-fourth",
+			"value": 134
+		},
+		{
+			"name": "one-hundred-and-thirty-fifth",
+			"value": 135
+		},
+		{
+			"name": "one-hundred-and-thirty-sixth",
+			"value": 136
+		},
+		{
+			"name": "one-hundred-and-thirty-seventh",
+			"value": 137
+		},
+		{
+			"name": "one-hundred-and-thirty-eighth",
+			"value": 138
+		},
+		{
+			"name": "one-hundred-and-thirty-ninth",
+			"value": 139
+		},
+		{
+			"name": "one-hundred-fortieth",
+			"value": 140
+		},
+		{
+			"name": "one-hundred-and-forty-first",
+			"value": 141
+		},
+		{
+			"name": "one-hundred-and-forty-second",
+			"value": 142
+		},
+		{
+			"name": "one-hundred-and-forty-third",
+			"value": 143
+		},
+		{
+			"name": "one-hundred-and-forty-fourth",
+			"value": 144
+		},
+		{
+			"name": "one-hundred-and-forty-fifth",
+			"value": 145
+		},
+		{
+			"name": "one-hundred-and-forty-sixth",
+			"value": 146
+		},
+		{
+			"name": "one-hundred-and-forty-seventh",
+			"value": 147
+		},
+		{
+			"name": "one-hundred-and-forty-eighth",
+			"value": 148
+		},
+		{
+			"name": "one-hundred-and-forty-ninth",
+			"value": 149
+		},
+		{
+			"name": "one-hundred-fiftieth",
+			"value": 150
+		},
+		{
+			"name": "one-hundred-and-fifty-first",
+			"value": 151
+		},
+		{
+			"name": "one-hundred-and-fifty-second",
+			"value": 152
+		},
+		{
+			"name": "one-hundred-and-fifty-third",
+			"value": 153
+		},
+		{
+			"name": "one-hundred-and-fifty-fourth",
+			"value": 154
+		},
+		{
+			"name": "one-hundred-and-fifty-fifth",
+			"value": 155
+		},
+		{
+			"name": "one-hundred-and-fifty-sixth",
+			"value": 156
+		},
+		{
+			"name": "one-hundred-and-fifty-seventh",
+			"value": 157
+		},
+		{
+			"name": "one-hundred-and-fifty-eighth",
+			"value": 158
+		},
+		{
+			"name": "one-hundred-and-fifty-ninth",
+			"value": 159
+		},
+		{
+			"name": "one-hundred-sixtieth",
+			"value": 160
+		},
+		{
+			"name": "one-hundred-and-sixty-first",
+			"value": 161
+		},
+		{
+			"name": "one-hundred-and-sixty-second",
+			"value": 162
+		},
+		{
+			"name": "one-hundred-and-sixty-third",
+			"value": 163
+		},
+		{
+			"name": "one-hundred-and-sixty-fourth",
+			"value": 164
+		},
+		{
+			"name": "one-hundred-and-sixty-fifth",
+			"value": 165
+		},
+		{
+			"name": "one-hundred-and-sixty-sixth",
+			"value": 166
+		},
+		{
+			"name": "one-hundred-and-sixty-seventh",
+			"value": 167
+		},
+		{
+			"name": "one-hundred-and-sixty-eighth",
+			"value": 168
+		},
+		{
+			"name": "one-hundred-and-sixty-ninth",
+			"value": 169
+		},
+		{
+			"name": "one-hundred-seventieth",
+			"value": 170
+		},
+		{
+			"name": "one-hundred-and-seventy-first",
+			"value": 171
+		},
+		{
+			"name": "one-hundred-and-seventy-second",
+			"value": 172
+		},
+		{
+			"name": "one-hundred-and-seventy-third",
+			"value": 173
+		},
+		{
+			"name": "one-hundred-and-seventy-fourth",
+			"value": 174
+		},
+		{
+			"name": "one-hundred-and-seventy-fifth",
+			"value": 175
+		},
+		{
+			"name": "one-hundred-and-seventy-sixth",
+			"value": 176
+		},
+		{
+			"name": "one-hundred-and-seventy-seventh",
+			"value": 177
+		},
+		{
+			"name": "one-hundred-and-seventy-eighth",
+			"value": 178
+		},
+		{
+			"name": "one-hundred-and-seventy-ninth",
+			"value": 179
+		},
+		{
+			"name": "one-hundred-eightieth",
+			"value": 180
+		},
+		{
+			"name": "one-hundred-and-eighty-first",
+			"value": 181
+		},
+		{
+			"name": "one-hundred-and-eighty-second",
+			"value": 182
+		},
+		{
+			"name": "one-hundred-and-eighty-third",
+			"value": 183
+		},
+		{
+			"name": "one-hundred-and-eighty-fourth",
+			"value": 184
+		},
+		{
+			"name": "one-hundred-and-eighty-fifth",
+			"value": 185
+		},
+		{
+			"name": "one-hundred-and-eighty-sixth",
+			"value": 186
+		},
+		{
+			"name": "one-hundred-and-eighty-seventh",
+			"value": 187
+		},
+		{
+			"name": "one-hundred-and-eighty-eighth",
+			"value": 188
+		},
+		{
+			"name": "one-hundred-and-eighty-ninth",
+			"value": 189
+		},
+		{
+			"name": "one-hundred-ninetieth",
+			"value": 190
+		},
+		{
+			"name": "one-hundred-and-ninety-first",
+			"value": 191
+		},
+		{
+			"name": "one-hundred-and-ninety-second",
+			"value": 192
+		},
+		{
+			"name": "one-hundred-and-ninety-third",
+			"value": 193
+		},
+		{
+			"name": "one-hundred-and-ninety-fourth",
+			"value": 194
+		},
+		{
+			"name": "one-hundred-and-ninety-fifth",
+			"value": 195
+		},
+		{
+			"name": "one-hundred-and-ninety-sixth",
+			"value": 196
+		},
+		{
+			"name": "one-hundred-and-ninety-seventh",
+			"value": 197
+		},
+		{
+			"name": "one-hundred-and-ninety-eighth",
+			"value": 198
+		},
+		{
+			"name": "one-hundred-and-ninety-ninth",
+			"value": 199
+		},
+		{
+			"name": "two-hundredth",
+			"value": 200
+		},
+		{
+			"name": "two-hundred-and-first",
+			"value": 201
+		},
+		{
+			"name": "two-hundred-and-second",
+			"value": 202
+		},
+		{
+			"name": "two-hundred-and-third",
+			"value": 203
+		},
+		{
+			"name": "two-hundred-and-fourth",
+			"value": 204
+		},
+		{
+			"name": "two-hundred-and-fifth",
+			"value": 205
+		},
+		{
+			"name": "two-hundred-and-sixth",
+			"value": 206
+		},
+		{
+			"name": "two-hundred-and-seventh",
+			"value": 207
+		},
+		{
+			"name": "two-hundred-and-eighth",
+			"value": 208
+		},
+		{
+			"name": "two-hundred-and-ninth",
+			"value": 209
+		},
+		{
+			"name": "two-hundred-and-tenth",
+			"value": 210
+		},
+		{
+			"name": "two-hundred-and-eleventh",
+			"value": 211
+		},
+		{
+			"name": "two-hundred-and-twelfth",
+			"value": 212
+		},
+		{
+			"name": "two-hundred-and-thirteenth",
+			"value": 213
+		},
+		{
+			"name": "two-hundred-and-fourteenth",
+			"value": 214
+		},
+		{
+			"name": "two-hundred-and-fifteenth",
+			"value": 215
+		},
+		{
+			"name": "two-hundred-and-sixteenth",
+			"value": 216
+		},
+		{
+			"name": "two-hundred-and-seventeenth",
+			"value": 217
+		},
+		{
+			"name": "two-hundred-and-eighteenth",
+			"value": 218
+		},
+		{
+			"name": "two-hundred-and-nineteenth",
+			"value": 219
+		},
+		{
+			"name": "two-hundred-twentieth",
+			"value": 220
+		},
+		{
+			"name": "two-hundred-and-twenty-first",
+			"value": 221
+		},
+		{
+			"name": "two-hundred-and-twenty-second",
+			"value": 222
+		},
+		{
+			"name": "two-hundred-and-twenty-third",
+			"value": 223
+		},
+		{
+			"name": "two-hundred-and-twenty-fourth",
+			"value": 224
+		},
+		{
+			"name": "two-hundred-and-twenty-fifth",
+			"value": 225
+		},
+		{
+			"name": "two-hundred-and-twenty-sixth",
+			"value": 226
+		},
+		{
+			"name": "two-hundred-and-twenty-seventh",
+			"value": 227
+		},
+		{
+			"name": "two-hundred-and-twenty-eighth",
+			"value": 228
+		},
+		{
+			"name": "two-hundred-and-twenty-ninth",
+			"value": 229
+		},
+		{
+			"name": "two-hundred-thirtieth",
+			"value": 230
+		},
+		{
+			"name": "two-hundred-and-thirty-first",
+			"value": 231
+		},
+		{
+			"name": "two-hundred-and-thirty-second",
+			"value": 232
+		},
+		{
+			"name": "two-hundred-and-thirty-third",
+			"value": 233
+		},
+		{
+			"name": "two-hundred-and-thirty-fourth",
+			"value": 234
+		},
+		{
+			"name": "two-hundred-and-thirty-fifth",
+			"value": 235
+		},
+		{
+			"name": "two-hundred-and-thirty-sixth",
+			"value": 236
+		},
+		{
+			"name": "two-hundred-and-thirty-seventh",
+			"value": 237
+		},
+		{
+			"name": "two-hundred-and-thirty-eighth",
+			"value": 238
+		},
+		{
+			"name": "two-hundred-and-thirty-ninth",
+			"value": 239
+		},
+		{
+			"name": "two-hundred-fortieth",
+			"value": 240
+		},
+		{
+			"name": "two-hundred-and-forty-first",
+			"value": 241
+		},
+		{
+			"name": "two-hundred-and-forty-second",
+			"value": 242
+		},
+		{
+			"name": "two-hundred-and-forty-third",
+			"value": 243
+		},
+		{
+			"name": "two-hundred-and-forty-fourth",
+			"value": 244
+		},
+		{
+			"name": "two-hundred-and-forty-fifth",
+			"value": 245
+		},
+		{
+			"name": "two-hundred-and-forty-sixth",
+			"value": 246
+		},
+		{
+			"name": "two-hundred-and-forty-seventh",
+			"value": 247
+		},
+		{
+			"name": "two-hundred-and-forty-eighth",
+			"value": 248
+		},
+		{
+			"name": "two-hundred-and-forty-ninth",
+			"value": 249
+		},
+		{
+			"name": "two-hundred-fiftieth",
+			"value": 250
+		},
+		{
+			"name": "two-hundred-and-fifty-first",
+			"value": 251
+		},
+		{
+			"name": "two-hundred-and-fifty-second",
+			"value": 252
+		},
+		{
+			"name": "two-hundred-and-fifty-third",
+			"value": 253
+		},
+		{
+			"name": "two-hundred-and-fifty-fourth",
+			"value": 254
+		},
+		{
+			"name": "two-hundred-and-fifty-fifth",
+			"value": 255
+		},
+		{
+			"name": "front",
+			"value": 256
+		},
+		{
+			"name": "back",
+			"value": 257
+		},
+		{
+			"name": "top",
+			"value": 258
+		},
+		{
+			"name": "bottom",
+			"value": 259
+		},
+		{
+			"name": "upper",
+			"value": 260
+		},
+		{
+			"name": "lower",
+			"value": 261
+		},
+		{
+			"name": "main",
+			"value": 262
+		},
+		{
+			"name": "backup",
+			"value": 263
+		},
+		{
+			"name": "auxiliary",
+			"value": 264
+		},
+		{
+			"name": "supplementary",
+			"value": 265
+		},
+		{
+			"name": "flash",
+			"value": 266
+		},
+		{
+			"name": "inside",
+			"value": 267
+		},
+		{
+			"name": "outside",
+			"value": 268
+		},
+		{
+			"name": "left",
+			"value": 269
+		},
+		{
+			"name": "right",
+			"value": 270
+		},
+		{
+			"name": "internal",
+			"value": 271
+		},
+		{
+			"name": "external",
+			"value": 272
+		}
+	]
+}

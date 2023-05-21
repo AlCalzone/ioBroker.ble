@@ -1,0 +1,20 @@
+{
+	"attribute_ids": [
+		{
+			"name": "NetworkAddress",
+			"value": 774
+		},
+		{
+			"name": "WAPGateway",
+			"value": 775
+		},
+		{
+			"name": "HomePageURL",
+			"value": 776
+		},
+		{
+			"name": "WAPStackType",
+			"value": 777
+		}
+	]
+}

@@ -1,0 +1,16 @@
+{
+	"transport_layers": [
+		{
+			"name": "Disabled",
+			"value": 0
+		},
+		{
+			"name": "WCI-1 Transport",
+			"value": 1
+		},
+		{
+			"name": "WCI-2 Transport",
+			"value": 2
+		}
+	]
+}

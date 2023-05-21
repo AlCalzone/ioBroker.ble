@@ -1,0 +1,80 @@
+{
+	"attribute_ids": [
+		{
+			"name": "Document Formats Supported",
+			"value": 848
+		},
+		{
+			"name": "Character Repertoires Supported",
+			"value": 850
+		},
+		{
+			"name": "XHTML-Print Image Formats Supported",
+			"value": 852
+		},
+		{
+			"name": "Color Supported",
+			"value": 854
+		},
+		{
+			"name": "1284ID",
+			"value": 856
+		},
+		{
+			"name": "Printer Name",
+			"value": 858
+		},
+		{
+			"name": "Printer Location",
+			"value": 860
+		},
+		{
+			"name": "Duplex Supported",
+			"value": 862
+		},
+		{
+			"name": "Media Types Supported",
+			"value": 864
+		},
+		{
+			"name": "MaxMediaWidth",
+			"value": 866
+		},
+		{
+			"name": "MaxMediaLength",
+			"value": 868
+		},
+		{
+			"name": "Enhanced Layout Supported",
+			"value": 870
+		},
+		{
+			"name": "RUI Formats Supported",
+			"value": 872
+		},
+		{
+			"name": "Reference Printing RUI Supported",
+			"value": 880
+		},
+		{
+			"name": "Direct Printing RUI Supported",
+			"value": 882
+		},
+		{
+			"name": "Reference Printing Top URL",
+			"value": 884
+		},
+		{
+			"name": "Direct Printing Top URL",
+			"value": 886
+		},
+		{
+			"name": "Printer Admin RUI Top URL",
+			"value": 888
+		},
+		{
+			"name": "Device Name",
+			"value": 890
+		}
+	]
+}

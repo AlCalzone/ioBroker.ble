@@ -1,0 +1,20 @@
+{
+	"attribute_ids": [
+		{
+			"name": "GoepL2capPsm (MAP v1.2 and later)",
+			"value": 512
+		},
+		{
+			"name": "MASInstanceID",
+			"value": 789
+		},
+		{
+			"name": "SupportedMessageTypes",
+			"value": 790
+		},
+		{
+			"name": "MapSupportedFeatures (MAP v1.2 and later)",
+			"value": 791
+		}
+	]
+}

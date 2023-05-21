@@ -1,0 +1,9 @@
+{
+	"uuids": [
+		{
+			"uuid": 4098,
+			"name": "PublicBrowseRoot",
+			"id": "org.bluetooth.browse_group.public_browse_root"
+		}
+	]
+}

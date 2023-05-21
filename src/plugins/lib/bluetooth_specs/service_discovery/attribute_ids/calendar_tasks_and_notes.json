@@ -1,0 +1,12 @@
+{
+	"attribute_ids": [
+		{
+			"name": "CASInstanceID",
+			"value": 789
+		},
+		{
+			"name": "CTNSupportedFeatures",
+			"value": 791
+		}
+	]
+}

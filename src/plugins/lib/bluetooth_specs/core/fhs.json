@@ -1,0 +1,448 @@
+{
+	"major_service_classes": [
+		{
+			"bit": 13,
+			"name": "Limited Discoverable Mode"
+		},
+		{
+			"bit": 14,
+			"name": "LE audio"
+		},
+		{
+			"bit": 15,
+			"name": "(reserved)"
+		},
+		{
+			"bit": 16,
+			"name": "Positioning (Location identification)"
+		},
+		{
+			"bit": 17,
+			"name": "Networking (LAN, Ad hoc, ...)"
+		},
+		{
+			"bit": 18,
+			"name": "Rendering (Printing, Speakers, ...)"
+		},
+		{
+			"bit": 19,
+			"name": "Capturing (Scanner, Microphone, ...)"
+		},
+		{
+			"bit": 20,
+			"name": "Object Transfer (v-Inbox, v-Folder, ...)"
+		},
+		{
+			"bit": 21,
+			"name": "Audio (Speaker, Microphone, Headset service, ...)"
+		},
+		{
+			"bit": 22,
+			"name": "Telephony (Cordless telephony, Modem, Headset service, ...)"
+		},
+		{
+			"bit": 23,
+			"name": "Information (WEB-server, WAP-server, ...)"
+		}
+	],
+	"device_classes": [
+		{
+			"major": 0,
+			"name": "Miscellaneous"
+		},
+		{
+			"major": 1,
+			"name": "Computer (desktop, notebook, PDA, organizer, ...)",
+			"minors": [
+				{
+					"minor": 0,
+					"name": "Uncategorized, code for device not assigned"
+				},
+				{
+					"minor": 1,
+					"name": "Desktop workstation"
+				},
+				{
+					"minor": 2,
+					"name": "Service-class computer"
+				},
+				{
+					"minor": 3,
+					"name": "Laptop"
+				},
+				{
+					"minor": 4,
+					"name": "Handheld PC/PDA (clamshell)"
+				},
+				{
+					"minor": 5,
+					"name": "Palm-size PC/PDA"
+				},
+				{
+					"minor": 6,
+					"name": "Wearable computer (watch size)"
+				},
+				{
+					"minor": 7,
+					"name": "Tablet"
+				}
+			]
+		},
+		{
+			"major": 2,
+			"name": "Phone (cellular, cordless, pay phone, modem, ...)",
+			"minors": [
+				{
+					"minor": 0,
+					"name": "Uncategorized, code for device not assigned"
+				},
+				{
+					"minor": 1,
+					"name": "Cellular"
+				},
+				{
+					"minor": 2,
+					"name": "Cordless"
+				},
+				{
+					"minor": 3,
+					"name": "Smartphone"
+				},
+				{
+					"minor": 4,
+					"name": "Wired modem or voice gateway"
+				},
+				{
+					"minor": 5,
+					"name": "Common ISDN access"
+				}
+			]
+		},
+		{
+			"major": 3,
+			"name": "LAN / Network Access point",
+			"minors765": [
+				{
+					"minor": 0,
+					"name": "Fully available"
+				},
+				{
+					"minor": 1,
+					"name": "1% to 17% utilized"
+				},
+				{
+					"minor": 2,
+					"name": "17% to 33% utilized"
+				},
+				{
+					"minor": 3,
+					"name": "33% to 50% utilized"
+				},
+				{
+					"minor": 4,
+					"name": "50% to 67% utilized"
+				},
+				{
+					"minor": 5,
+					"name": "67% to 83% utilized"
+				},
+				{
+					"minor": 6,
+					"name": "83% to 99% utilized"
+				},
+				{
+					"minor": 7,
+					"name": "No service available"
+				}
+			],
+			"minors432": [
+				{
+					"minor": 0,
+					"name": "Uncategorized, code for device not assigned"
+				}
+			]
+		},
+		{
+			"major": 4,
+			"name": "Audio/Video (headset, speaker, stereo, video display, VCR, ...)",
+			"minors": [
+				{
+					"minor": 0,
+					"name": "Uncategorized, code for device not assigned"
+				},
+				{
+					"minor": 1,
+					"name": "Wearable Headset Device"
+				},
+				{
+					"minor": 2,
+					"name": "Hands-free Device"
+				},
+				{
+					"minor": 3,
+					"name": "(Reserved)"
+				},
+				{
+					"minor": 4,
+					"name": "Microphone"
+				},
+				{
+					"minor": 5,
+					"name": "Loudspeaker"
+				},
+				{
+					"minor": 6,
+					"name": "Headphones"
+				},
+				{
+					"minor": 7,
+					"name": "Portable Audio"
+				},
+				{
+					"minor": 8,
+					"name": "Caraudio"
+				},
+				{
+					"minor": 9,
+					"name": "Set-topbox"
+				},
+				{
+					"minor": 10,
+					"name": "HiFi Audio Device"
+				},
+				{
+					"minor": 11,
+					"name": "VCR"
+				},
+				{
+					"minor": 12,
+					"name": "VideoCamera"
+				},
+				{
+					"minor": 13,
+					"name": "Camcorder"
+				},
+				{
+					"minor": 14,
+					"name": "VideoMonitor"
+				},
+				{
+					"minor": 15,
+					"name": "Video Display and Loudspeaker"
+				},
+				{
+					"minor": 16,
+					"name": "Video Conferencing"
+				},
+				{
+					"minor": 17,
+					"name": "(Reserved)"
+				},
+				{
+					"minor": 18,
+					"name": "Gaming/Toy"
+				}
+			]
+		},
+		{
+			"major": 5,
+			"name": "Peripheral (mouse, joystick, keyboard, ...)",
+			"minors76": [
+				{
+					"minor": 0,
+					"name": "Not Keyboard / Not Pointing Device"
+				},
+				{
+					"minor": 1,
+					"name": "Keyboard"
+				},
+				{
+					"minor": 2,
+					"name": "Pointing device"
+				},
+				{
+					"minor": 3,
+					"name": "Combo keyboard / pointing device"
+				}
+			],
+			"minors5432": [
+				{
+					"minor": 0,
+					"name": "Uncategorized device"
+				},
+				{
+					"minor": 1,
+					"name": "Joystick"
+				},
+				{
+					"minor": 2,
+					"name": "Gamepad"
+				},
+				{
+					"minor": 3,
+					"name": "Remote control"
+				},
+				{
+					"minor": 4,
+					"name": "Sensing device"
+				},
+				{
+					"minor": 5,
+					"name": "Digitizer Tablet"
+				},
+				{
+					"minor": 6,
+					"name": "Card Reader (e.g. SIM Card Reader)"
+				},
+				{
+					"minor": 7,
+					"name": "Digital Pen"
+				},
+				{
+					"minor": 8,
+					"name": "Handheld scanner for bar-codes, RFID, etc."
+				},
+				{
+					"minor": 9,
+					"name": "Handheld gestural input device (e.g., “wand” form factor)"
+				}
+			]
+		},
+		{
+			"major": 6,
+			"name": "Imaging (printer, scanner, camera, display, ...)",
+			"minors32": [
+				{
+					"minor": 0,
+					"name": "Uncategorized, default"
+				}
+			]
+		},
+		{
+			"major": 7,
+			"name": "Wearable",
+			"minors": [
+				{
+					"minor": 0,
+					"name": "Wristwatch"
+				},
+				{
+					"minor": 1,
+					"name": "Pager"
+				},
+				{
+					"minor": 2,
+					"name": "Jacket"
+				},
+				{
+					"minor": 3,
+					"name": "Helmet"
+				},
+				{
+					"minor": 4,
+					"name": "Glasses"
+				}
+			]
+		},
+		{
+			"major": 8,
+			"name": "Toy",
+			"minors": [
+				{
+					"minor": 0,
+					"name": "Robot"
+				},
+				{
+					"minor": 1,
+					"name": "Vehicle"
+				},
+				{
+					"minor": 2,
+					"name": "Doll / Action figure"
+				},
+				{
+					"minor": 3,
+					"name": "Controller"
+				},
+				{
+					"minor": 4,
+					"name": "Game"
+				}
+			]
+		},
+		{
+			"major": 9,
+			"name": "Health",
+			"minors": [
+				{
+					"minor": 0,
+					"name": "Undefined"
+				},
+				{
+					"minor": 1,
+					"name": "Blood Pressure Monitor"
+				},
+				{
+					"minor": 2,
+					"name": "Thermometer"
+				},
+				{
+					"minor": 3,
+					"name": "Weighing Scale"
+				},
+				{
+					"minor": 4,
+					"name": "GlucoseMeter"
+				},
+				{
+					"minor": 5,
+					"name": "Pulse Oximeter"
+				},
+				{
+					"minor": 6,
+					"name": "Heart/Pulse Rate Monitor"
+				},
+				{
+					"minor": 7,
+					"name": "Health Data Display"
+				},
+				{
+					"minor": 8,
+					"name": "StepCounter"
+				},
+				{
+					"minor": 9,
+					"name": "Body Composition Analyzer"
+				},
+				{
+					"minor": 10,
+					"name": "Peak Flow Monitor"
+				},
+				{
+					"minor": 11,
+					"name": "Medication Monitor"
+				},
+				{
+					"minor": 12,
+					"name": "Knee Prosthesis"
+				},
+				{
+					"minor": 13,
+					"name": "Ankle Prosthesis"
+				},
+				{
+					"minor": 14,
+					"name": "Generic Health Manager"
+				},
+				{
+					"minor": 15,
+					"name": "Personal Mobility Device"
+				}
+			]
+		},
+		{
+			"major": 31,
+			"name": "Uncategorized: device code not specified"
+		}
+	]
+}

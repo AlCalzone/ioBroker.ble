@@ -1,0 +1,16 @@
+{
+	"attribute_ids": [
+		{
+			"name": "GoepL2capPsm (PBAP v1.2 and later)",
+			"value": 512
+		},
+		{
+			"name": "SupportedRepositories",
+			"value": 788
+		},
+		{
+			"name": "PbapSupportedFeatures (PBAP v1.2 and later)",
+			"value": 791
+		}
+	]
+}

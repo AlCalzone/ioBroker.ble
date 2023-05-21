@@ -1,0 +1,16 @@
+{
+	"attribute_ids": [
+		{
+			"name": "SupportFeaturesList",
+			"value": 512
+		},
+		{
+			"name": "DataExchangeSpecification",
+			"value": 769
+		},
+		{
+			"name": "MCAP Supported Procedures",
+			"value": 770
+		}
+	]
+}

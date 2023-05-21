@@ -1,0 +1,30 @@
+{
+	"controller_types": [
+		{
+			"name": "Primary BR/EDR Controller",
+			"value": 0
+		},
+		{
+			"name": "802.11 AMP Controller",
+			"value": 1
+		}
+	],
+	"security_keyIDs": [
+		{
+			"key": "802b",
+			"name": "802.11 PAL keyID"
+		}
+	],
+	"security_keyLengths": [
+		{
+			"name": "802.11 PAL keyLength",
+			"value": 32
+		}
+	],
+	"pal_versions": [
+		{
+			"name": "Bluetooth Core Specification 3.0 + HS and later",
+			"value": 1
+		}
+	]
+}
