@@ -49,7 +49,7 @@ export interface Plugin<TContext = any> {
 	getValues: (context: TContext) => Record<string, any> | undefined;
 
 	/** Receive state changes from the adapter */
-	stateChange?: (context: TContext) => void;
+	stateChange?: () => void;
 }
 
 export function getServiceData(

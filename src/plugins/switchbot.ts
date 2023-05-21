@@ -350,11 +350,12 @@ const plugin: Plugin<SwitchbotContext> = {
 		return ret;
 	},
 
-	stateChange: async (context: SwitchbotContext) => {
-		_.adapter.log.info(`stateChange: ${context.toString()}`);
-		_.adapter.on("stateChange", async (id, state) => {
-			_.adapter.log.info(`stateChange: ${id} ${state?.val}`);
+	stateChange: () => {
+		_.adapter.log.info(`stateChange:`);
+		_.adapter.on("stateChange", (id, state) => {
+			_.adapter.log.info(`stateChange: ${id} ${JSON.stringify(state)}`);
 		});
+		return;
 	},
 };
 

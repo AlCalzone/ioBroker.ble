@@ -83,6 +83,12 @@ const adapter = utils.adapter({
         startScanProcess();
       }
     });
+    enabledPlugins.forEach((plugin) => {
+      if (plugin.stateChange) {
+        adapter.log.info("Plugin found with stateChange function");
+        plugin.stateChange();
+      }
+    });
   },
   unload: (callback) => {
     try {

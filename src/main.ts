@@ -145,6 +145,14 @@ const adapter = utils.adapter({
 				startScanProcess();
 			}
 		});
+
+		// Look if a plugin has a stateChange function and call it
+		enabledPlugins.forEach((plugin) => {
+			if (plugin.stateChange) {
+				adapter.log.info("Plugin found with stateChange function");
+				plugin.stateChange();
+			}
+		});
 	},
 
 	// is called when adapter shuts down - callback has to be called under any circumstances!
