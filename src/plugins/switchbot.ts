@@ -14,7 +14,11 @@ import { ChannelObjectDefinition, getServiceData } from "./plugin";
 const serviceUUID = "0d00";
 
 interface SwitchbotContext {
-	peripheral?: PeripheralInfo; // ? -> just a workaround to pass type check for createContext
+	peripheral?: PeripheralInfo;
+	data?: Buffer;
+	battery?: number;
+	switchState?: number;
+	mode?: number;
 }
 
 const plugin: Plugin<SwitchbotContext> = {
@@ -53,13 +57,13 @@ const plugin: Plugin<SwitchbotContext> = {
 		const data = getServiceData(peripheral, serviceUUID);
 		if (data === undefined) return;
 
-		_.adapter.log.info(`Switchbot >> got data: ${data.toString("hex")}`);
+		// _.adapter.log.info(`Switchbot >> got data: ${data.toString("hex")}`);
 
 		return parseData(data);
 	},
 
 	defineObjects: (context: SwitchbotContext) => {
-		if (context == undefined || context.peripheral == undefined) return;
+		if (context == undefined) return;
 
 		const deviceObject: DeviceObjectDefinition = {
 			// no special definitions neccessary
@@ -266,10 +270,10 @@ const plugin: Plugin<SwitchbotContext> = {
 					type: "number",
 					read: true,
 					write: true,
-					def: 1,
+					def: 0,
 					states: {
-						0: "Switch mode",
-						1: "Press mode",
+						0: "Press",
+						1: "Switch",
 					},
 				},
 				native: undefined,
@@ -299,6 +303,30 @@ const plugin: Plugin<SwitchbotContext> = {
 				},
 				native: undefined,
 			},
+			{
+				id: "switchState",
+				common: {
+					role: "button",
+					name: "Switch state",
+					type: "boolean",
+					read: false,
+					write: true,
+					def: false,
+					desc: {
+						en: "Represents the state of the switch. True = On, False = Off",
+						de: "Stellt den Zustand des Schalters dar. True = Ein, False = Aus",
+						fr: "Représente l'état du commutateur. True = On, False = Off",
+						nl: "Vertegenwoordigt de staat van de schakelaar. True = Aan, False = Uit",
+						ru: "Представляет состояние переключателя. True = Вкл, False = Выкл",
+						pt: "Representa o estado do interruptor. True = On, False = Off",
+						es: "Representa el estado del interruptor. True = On, False = Off",
+						pl: "Przedstawia stan przełącznika. True = On, False = Off",
+						"zh-cn": "表示开关的状态。 True = On，False = Off",
+						uk: "Представляє стан перемикача. True = Вкл, False = Вимкн.",
+					},
+				},
+				native: undefined,
+			},
 		];
 
 		return {
@@ -311,17 +339,46 @@ const plugin: Plugin<SwitchbotContext> = {
 	getValues: (context: SwitchbotContext) => {
 		if (context == null) return;
 
-		_.adapter.log.info(`getValues: ${JSON.stringify(context)}`);
-		return context;
+		//_.adapter.log.info(`getValues: ${context.mode}`);
+
+		const ret = {
+			switchState: context.switchState === 1,
+			battery: context.battery,
+			"control.mode": context.mode,
+		};
+
+		return ret;
+	},
+
+	stateChange: async (context: SwitchbotContext) => {
+		_.adapter.log.info(`stateChange: ${context.toString()}`);
+		_.adapter.on("stateChange", async (id, state) => {
+			_.adapter.log.info(`stateChange: ${id} ${state?.val}`);
+		});
 	},
 };
 
-function parseData(data: Buffer) {
+function parseData(data: Buffer): SwitchbotContext {
 	const result: Record<string, any> = {};
-	// 0x481064 -> 0x64 -> 1100100 = 100%
-	// 0x481000 -> 0x00 -> 0000000 = 0%
-	// Extract the battery level from the advertisement
+	// Bit 7 of byte 1 is the mode
+	result.mode = data[1] & 0x80;
+	// Bit 6 to 0 of byte 1 is the switch state
+	result.switchState = data[1] & 0x7f;
+	// Bit 4 of byte 1 is data commit flag
+	result.dataCommit = data[1] & 0x10;
+	// Bit 3 of byte 1 represents group D
+	result.groupD = data[1] & 0x08;
+	// Bit 2 of byte 1 represents group C
+	result.groupC = data[1] & 0x04;
+	// Bit 1 of byte 1 represents group B
+	result.groupB = data[1] & 0x02;
+	// Bit 0 of byte 1 represents group A
+	result.groupA = data[1] & 0x01;
+	// Bit 6 to 0 of byte 2 is the battery level
 	result.battery = data[2] & 0x7f;
+	// Bit 7 of byte 2 is the Sync UTC flag
+	result.syncUtc = data[2] & 0x80;
+
 	return result;
 }
 
