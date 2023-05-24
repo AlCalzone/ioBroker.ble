@@ -1,7 +1,7 @@
 import { extend } from "alcalzone-shared/objects";
 import { expect } from "chai";
 import * as proxyquireModule from "proxyquire";
-import { SinonFakeTimers, useFakeTimers } from "sinon";
+import { useFakeTimers, type SinonFakeTimers } from "sinon";
 import { createCustomSubscriptionsMock } from "../../test/mocks/custom-subscriptions";
 import { createGlobalMock } from "../../test/mocks/global";
 

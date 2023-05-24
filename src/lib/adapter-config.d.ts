@@ -4,6 +4,7 @@ declare global {
 	namespace ioBroker {
 		interface AdapterConfig {
 			services: string;
+			server: string;
 			hciDevice: number;
 			plugins: string;
 			allowEmptyDevices: boolean;

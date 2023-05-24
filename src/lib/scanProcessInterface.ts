@@ -5,6 +5,14 @@ export enum ScanExitCodes {
 	RequireNobleFailed = 1,
 }
 
+export type InboundMessage =
+	| {
+			type: "startScanning";
+	  }
+	| {
+			type: "stopScanning";
+	  };
+
 export type ScanMessage =
 	| {
 			type: "error";
