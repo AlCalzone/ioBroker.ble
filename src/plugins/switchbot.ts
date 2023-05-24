@@ -9,7 +9,7 @@ import type {
 	Plugin,
 	StateObjectDefinition,
 } from "./plugin";
-import { ChannelObjectDefinition, getServiceData } from "./plugin";
+import { getServiceData, type ChannelObjectDefinition } from "./plugin";
 
 const serviceUUID = "0d00";
 

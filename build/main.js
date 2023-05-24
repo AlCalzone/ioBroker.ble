@@ -1,3 +1,4 @@
+"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -12,7 +13,10 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var utils = __toESM(require("@iobroker/adapter-core"));
 var import_objects = require("alcalzone-shared/objects");
 var import_child_process = require("child_process");
@@ -22,6 +26,7 @@ var import_iobroker_objects = require("./lib/iobroker-objects");
 var import_object_cache = require("./lib/object-cache");
 var import_queue = __toESM(require("./lib/queue"));
 var import_scanProcessInterface = require("./lib/scanProcessInterface");
+var import_net = require("net");
 var import_plugins = __toESM(require("./plugins"));
 let enabledPlugins;
 let services = [];
@@ -34,23 +39,32 @@ function autoResetAllowNewDevices() {
     allowNewDevices = false;
     import_global.Global.adapter.setState("options.allowNewDevices", false, true);
     resetAllowNewDevicesTimeout = void 0;
-    import_global.Global.adapter.log.info("No longer accepting new devices (automatic timeout)");
+    import_global.Global.adapter.log.info(
+      "No longer accepting new devices (automatic timeout)"
+    );
   }, 5e3 * 60);
 }
 const commandQueue = new import_queue.default();
 const ignoredNewDeviceIDs = /* @__PURE__ */ new Set();
 let rssiUpdateInterval = 0;
 let scanProcess;
+let socket;
 const adapter = utils.adapter({
   name: "ble",
   ready: async () => {
     import_global.Global.adapter = adapter;
     import_global.Global.objectCache = new import_object_cache.ObjectCache(6e4);
     await import_global.Global.ensureInstanceObjects();
-    import_global.Global.adapter.log.info(`loaded plugins: ${import_plugins.default.map((p) => p.name).join(", ")}`);
+    import_global.Global.adapter.log.info(
+      `loaded plugins: ${import_plugins.default.map((p) => p.name).join(", ")}`
+    );
     const enabledPluginNames = (adapter.config.plugins || "").split(",").map((p) => p.trim().toLowerCase()).concat("_default");
-    enabledPlugins = import_plugins.default.filter((p) => enabledPluginNames.indexOf(p.name.toLowerCase()) > -1);
-    import_global.Global.adapter.log.info(`enabled plugins: ${enabledPlugins.map((p) => p.name).join(", ")}`);
+    enabledPlugins = import_plugins.default.filter(
+      (p) => enabledPluginNames.indexOf(p.name.toLowerCase()) > -1
+    );
+    import_global.Global.adapter.log.info(
+      `enabled plugins: ${enabledPlugins.map((p) => p.name).join(", ")}`
+    );
     if (adapter.config.services === "*") {
       services = [];
       import_global.Global.adapter.log.info(`monitoring all services`);
@@ -63,26 +77,21 @@ const adapter = utils.adapter({
       import_global.Global.adapter.log.info(`monitored services: ${services.join(", ")}`);
     }
     if (adapter.config.rssiThrottle != null) {
-      rssiUpdateInterval = Math.max(0, Math.min(1e4, adapter.config.rssiThrottle));
+      rssiUpdateInterval = Math.max(
+        0,
+        Math.min(1e4, adapter.config.rssiThrottle)
+      );
     }
     adapter.subscribeStates("*");
     adapter.subscribeObjects("*");
     await adapter.setStateAsync("options.allowNewDevices", false, true);
-    if (!process.env.TESTING)
-      startScanProcess();
-    const observer = commandQueue.observe();
-    observer.subscribe((item) => {
-      adapter.log.info("New item: " + item);
-      if (scanProcess) {
-        scanProcess.send("stopScanning");
-      }
-      const queueSize = commandQueue.size();
-      if (queueSize === 0 && scanProcess) {
-        scanProcess.send("startScanning");
-      } else if (queueSize === 0 && !scanProcess) {
+    if (!process.env.TESTING) {
+      if (adapter.config.server) {
+        connectToBLEServer();
+      } else {
         startScanProcess();
       }
-    });
+    }
     enabledPlugins.forEach((plugin) => {
       if (plugin.stateChange) {
         adapter.log.info("Plugin found with stateChange function");
@@ -93,6 +102,7 @@ const adapter = utils.adapter({
   unload: (callback) => {
     try {
       scanProcess == null ? void 0 : scanProcess.kill();
+      socket == null ? void 0 : socket.destroy();
     } catch {
     }
     callback();
@@ -109,7 +119,9 @@ const adapter = utils.adapter({
       if (typeof state.val === "boolean" && state.val !== allowNewDevices) {
         allowNewDevices = state.val;
         import_global.Global.adapter.setState(id, state.val, true);
-        import_global.Global.adapter.log.info(allowNewDevices ? "Now accepting new devices" : "No longer accepting new devices");
+        import_global.Global.adapter.log.info(
+          allowNewDevices ? "Now accepting new devices" : "No longer accepting new devices"
+        );
         if (allowNewDevices) {
           ignoredNewDeviceIDs.clear();
           autoResetAllowNewDevices();
@@ -178,30 +190,55 @@ function startScanProcess() {
       scanProcess = void 0;
     }
   });
-  scanProcess.on("message", (0, import_scanProcessInterface.getMessageReviver)((message) => {
-    var _a;
-    switch (message.type) {
-      case "connected":
-        adapter.setState("info.connection", true, true);
-        break;
-      case "disconnected":
-        adapter.setState("info.connection", false, true);
-        break;
-      case "discover":
-        onDiscover(message.peripheral);
-        break;
-      case "driverState":
-        adapter.setState("info.driverState", message.driverState, true);
-        break;
-      case "error":
-      case "fatal":
-        handleScanProcessError(message.error);
-        break;
-      case "log":
-        adapter.log[(_a = message.level) != null ? _a : "info"](message.message);
-        break;
+  scanProcess.on("message", (0, import_scanProcessInterface.getMessageReviver)(handleMessage));
+}
+function connectToBLEServer() {
+  socket = new import_net.Socket();
+  const reviver = (0, import_scanProcessInterface.getMessageReviver)(handleMessage);
+  socket.on("close", () => {
+    adapter.log.info("Disconnected from BLE server");
+    adapter.setState("info.connection", false, true);
+  }).on("connect", () => {
+    adapter.log.info("Connected to BLE server");
+    adapter.setState("info.connection", true, true);
+  }).on("data", (data) => {
+    try {
+      const msg = JSON.parse(data.toString());
+      reviver(msg);
+    } catch (e) {
+      console.error(e);
     }
-  }));
+  });
+  const [host, port] = adapter.config.server.split(":", 2);
+  adapter.log.info("connecting to BLE server...");
+  socket.connect({
+    host,
+    port: +port
+  });
+}
+function handleMessage(message) {
+  var _a;
+  switch (message.type) {
+    case "connected":
+      adapter.setState("info.connection", true, true);
+      break;
+    case "disconnected":
+      adapter.setState("info.connection", false, true);
+      break;
+    case "discover":
+      onDiscover(message.peripheral);
+      break;
+    case "driverState":
+      adapter.setState("info.driverState", message.driverState, true);
+      break;
+    case "error":
+    case "fatal":
+      handleScanProcessError(message.error);
+      break;
+    case "log":
+      adapter.log[(_a = message.level) != null ? _a : "info"](message.message);
+      break;
+  }
 }
 function fixServiceName(name) {
   if (name == null)
@@ -219,16 +256,30 @@ async function onDiscover(peripheral) {
   let serviceDataIsNotEmpty = false;
   let manufacturerDataIsNotEmpty = false;
   import_global.Global.adapter.log.debug(`discovered peripheral ${peripheral.address}`);
-  import_global.Global.adapter.log.debug(`  has advertisement: ${peripheral.advertisement != null}`);
+  import_global.Global.adapter.log.debug(
+    `  has advertisement: ${peripheral.advertisement != null}`
+  );
   if (peripheral.advertisement != null) {
-    import_global.Global.adapter.log.debug(`  has serviceData: ${peripheral.advertisement.serviceData != null}`);
+    import_global.Global.adapter.log.debug(
+      `  has serviceData: ${peripheral.advertisement.serviceData != null}`
+    );
     if (peripheral.advertisement.serviceData != null) {
-      import_global.Global.adapter.log.debug(`  serviceData = ${JSON.stringify(peripheral.advertisement.serviceData)}`);
+      import_global.Global.adapter.log.debug(
+        `  serviceData = ${JSON.stringify(
+          peripheral.advertisement.serviceData
+        )}`
+      );
       serviceDataIsNotEmpty = peripheral.advertisement.serviceData.length > 0;
     }
-    import_global.Global.adapter.log.debug(`  has manufacturerData: ${peripheral.advertisement.manufacturerData != null}`);
+    import_global.Global.adapter.log.debug(
+      `  has manufacturerData: ${peripheral.advertisement.manufacturerData != null}`
+    );
     if (peripheral.advertisement.manufacturerData != null) {
-      import_global.Global.adapter.log.debug(`  manufacturerData = ${peripheral.advertisement.manufacturerData.toString("hex")}`);
+      import_global.Global.adapter.log.debug(
+        `  manufacturerData = ${peripheral.advertisement.manufacturerData.toString(
+          "hex"
+        )}`
+      );
       manufacturerDataIsNotEmpty = peripheral.advertisement.manufacturerData.length > 0;
     }
   } else {
@@ -247,13 +298,17 @@ async function onDiscover(peripheral) {
     }
   }
   if (!plugin) {
-    import_global.Global.adapter.log.warn(`no handling plugin found for peripheral ${peripheral.id}`);
+    import_global.Global.adapter.log.warn(
+      `no handling plugin found for peripheral ${peripheral.id}`
+    );
     return;
   }
   if (!allowNewDevices) {
     if (ignoredNewDeviceIDs.has(deviceId))
       return;
-    if (!await import_global.Global.objectCache.objectExists(`${import_global.Global.adapter.namespace}.${deviceId}.rssi`)) {
+    if (!await import_global.Global.objectCache.objectExists(
+      `${import_global.Global.adapter.namespace}.${deviceId}.rssi`
+    )) {
       ignoredNewDeviceIDs.add(deviceId);
       return;
     }
@@ -282,19 +337,33 @@ async function onDiscover(peripheral) {
     return;
   await (0, import_iobroker_objects.extendDevice)(deviceId, peripheral, objects.device);
   if (objects.channels != null && objects.channels.length > 0) {
-    await Promise.all(objects.channels.map((c) => (0, import_iobroker_objects.extendChannel)(deviceId + "." + c.id, c)));
+    await Promise.all(
+      objects.channels.map(
+        (c) => (0, import_iobroker_objects.extendChannel)(deviceId + "." + c.id, c)
+      )
+    );
   }
-  await Promise.all(objects.states.map((s) => (0, import_iobroker_objects.extendState)(deviceId + "." + s.id, s)));
+  await Promise.all(
+    objects.states.map((s) => (0, import_iobroker_objects.extendState)(deviceId + "." + s.id, s))
+  );
   if (values != null) {
-    import_global.Global.adapter.log.debug(`${deviceId} > got values: ${JSON.stringify(values)}`);
+    import_global.Global.adapter.log.debug(
+      `${deviceId} > got values: ${JSON.stringify(values)}`
+    );
     for (let [stateId, value] of (0, import_objects.entries)(values)) {
       stateId = stateId.replace(/[\(\)]+/g, "").replace(" ", "_");
       const iobStateId = `${adapter.namespace}.${deviceId}.${stateId}`;
       if (await import_global.Global.objectCache.getObject(iobStateId) != null) {
         import_global.Global.adapter.log.debug(`setting state ${iobStateId}`);
-        await adapter.setStateChangedAsync(iobStateId, value != null ? value : null, true);
+        await adapter.setStateChangedAsync(
+          iobStateId,
+          value != null ? value : null,
+          true
+        );
       } else {
-        import_global.Global.adapter.log.warn(`skipping state ${iobStateId} because the object does not exist`);
+        import_global.Global.adapter.log.warn(
+          `skipping state ${iobStateId} because the object does not exist`
+        );
       }
     }
   } else {
@@ -310,7 +379,9 @@ function handleScanProcessError(err) {
   } else if (err.message.includes(`The value of "offset" is out of range`)) {
     ((_b = adapter == null ? void 0 : adapter.log) != null ? _b : console).error(err.message);
   } else if (err.message.includes("EAFNOSUPPORT")) {
-    terminate("Unsupported Address Family (EAFNOSUPPORT). If ioBroker is running in a Docker container, make sure that the container uses host mode networking.");
+    terminate(
+      "Unsupported Address Family (EAFNOSUPPORT). If ioBroker is running in a Docker container, make sure that the container uses host mode networking."
+    );
   } else {
     ((_c = adapter == null ? void 0 : adapter.log) != null ? _c : console).error(err.message);
   }

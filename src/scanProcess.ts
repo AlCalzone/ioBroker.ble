@@ -1,12 +1,14 @@
 /** noble-Treiber-Instanz */
 import type { Peripheral } from "@abandonware/noble";
-import * as yargs from "yargs";
+import { createServer, type AddressInfo, type Server, type Socket } from "net";
 import { pick } from "./lib/misc";
 import {
-	PeripheralInfo,
 	ScanExitCodes,
-	ScanMessage,
+	type InboundMessage,
+	type PeripheralInfo,
+	type ScanMessage,
 } from "./lib/scanProcessInterface";
+import yargs = require("yargs");
 
 /** Define command line arguments */
 const argv = yargs
@@ -26,22 +28,47 @@ const argv = yargs
 			desc: "Which BLE services to scan for",
 			default: [],
 		},
+		listenInterface: {
+			alias: "-i",
+			type: "string",
+			desc: "If not spawned as a child process, the interface to listen for TCP connections. Default: all interfaces.",
+		},
+		listenPort: {
+			alias: "-p",
+			type: "number",
+			desc: "If not spawned as a child process, the port to listen on.",
+			default: 8734,
+		},
 	})
 	.parseSync();
 
 let noble: typeof import("@abandonware/noble");
+let server: Server | undefined;
+const clients: Set<Socket> = new Set();
 
 function sendAsync(
 	message: ScanMessage,
 	sendHandle?: any,
 	swallowErrors: boolean = true,
 ): Promise<void> {
-	return new Promise((resolve, reject) => {
-		process.send!(message, sendHandle, undefined, (err) => {
-			if (err && !swallowErrors) reject(err);
-			else resolve();
+	if (process.send) {
+		return new Promise((resolve, reject) => {
+			process.send!(message, sendHandle, undefined, (err) => {
+				if (err && !swallowErrors) reject(err);
+				else resolve();
+			});
 		});
-	});
+	} else {
+		const promises = [...clients].map((client) => {
+			return new Promise<void>((resolve, reject) => {
+				client.write(JSON.stringify(message) + "\n", (err) => {
+					if (err && !swallowErrors) reject(err);
+					else resolve();
+				});
+			});
+		});
+		return Promise.all(promises).then(() => undefined);
+	}
 }
 
 // @ts-expect-error We need this to serialize and deserialize Error objects
@@ -75,8 +102,13 @@ process.on("unhandledRejection", (error) => {
 	});
 });
 
+// This will be called when an IPC channel exists
 process.on("message", (msg) => {
-	switch (msg) {
+	handleMessage(msg as InboundMessage);
+});
+
+function handleMessage(msg: InboundMessage) {
+	switch (msg.type) {
 		case "startScanning":
 			startScanning();
 			break;
@@ -84,10 +116,9 @@ process.on("message", (msg) => {
 			stopScanning();
 			break;
 	}
-});
+}
 
 function serializePeripheral(peripheral: Peripheral): PeripheralInfo {
-	const msg = peripheral.toString();
 	return pick(peripheral, [
 		"id",
 		"uuid",
@@ -135,7 +166,58 @@ async function stopScanning() {
 	isScanning = false;
 }
 
-(async () => {
+function maybeStartServer(): Promise<void> {
+	// This is a child process, we have an IPC channel
+	if (process.send) return Promise.resolve();
+
+	return new Promise((resolve, reject) => {
+		// Start a TCP server, listen for connections, and forward them to the serial port
+		server = createServer((socket) => {
+			console.log("Client connected");
+			clients.add(socket);
+
+			// when the connection is closed, unpipe the streams
+			socket.on("close", () => {
+				console.log("Client disconnected");
+				clients.delete(socket);
+			});
+
+			// Handle incoming commands
+			socket.on("data", (data) => {
+				try {
+					const msg = JSON.parse(data.toString("utf8"));
+					handleMessage(msg as InboundMessage);
+				} catch (e) {
+					console.error(e);
+				}
+			});
+		});
+
+		// Do not allow more than one client to connect
+		server.maxConnections = 1;
+
+		server.on("error", (err) => {
+			if ((err as any).code === "EADDRINUSE") {
+				reject(err);
+			}
+		});
+		server.listen(
+			{
+				host: argv.listenInterface,
+				port: argv.listenPort,
+			},
+			() => {
+				const address: AddressInfo = server!.address() as any;
+				console.log(
+					`Server listening on tcp://${address.address}:${address.port}`,
+				);
+				resolve();
+			},
+		);
+	});
+}
+
+async function loadNoble() {
 	// load noble driver with the correct device selected
 	process.env.NOBLE_HCI_DEVICE_ID = argv.hciDevice.toString();
 	try {
@@ -150,7 +232,9 @@ async function stopScanning() {
 		await sendAsync({ type: "fatal", error });
 		process.exit(ScanExitCodes.RequireNobleFailed);
 	}
+}
 
+async function main() {
 	// prepare scanning for beacons
 	noble.on("stateChange", (state) => {
 		switch (state) {
@@ -161,8 +245,23 @@ async function stopScanning() {
 				stopScanning();
 				break;
 		}
+		console.log(`driver state is ${state}`);
 		sendAsync({ type: "driverState", driverState: state });
 	});
 	if (noble.state === "poweredOn") startScanning();
 	sendAsync({ type: "driverState", driverState: noble.state });
+}
+
+(async () => {
+	await loadNoble();
+	await maybeStartServer();
+	if (server) {
+		// wait for connection
+		server.once("connection", () => {
+			main();
+		});
+	} else {
+		// child process, start scanning immediately
+		main();
+	}
 })();

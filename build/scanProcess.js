@@ -1,21 +1,8 @@
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
-var yargs = __toESM(require("yargs"));
+"use strict";
+var import_net = require("net");
 var import_misc = require("./lib/misc");
 var import_scanProcessInterface = require("./lib/scanProcessInterface");
+const yargs = require("yargs");
 const argv = yargs.env("IOB_BLE").strict().usage("ioBroker.ble scanner process\n\nUsage: $0 [options]").options({
   hciDevice: {
     alias: "-d",
@@ -28,18 +15,45 @@ const argv = yargs.env("IOB_BLE").strict().usage("ioBroker.ble scanner process\n
     type: "array",
     desc: "Which BLE services to scan for",
     default: []
+  },
+  listenInterface: {
+    alias: "-i",
+    type: "string",
+    desc: "If not spawned as a child process, the interface to listen for TCP connections. Default: all interfaces."
+  },
+  listenPort: {
+    alias: "-p",
+    type: "number",
+    desc: "If not spawned as a child process, the port to listen on.",
+    default: 8734
   }
 }).parseSync();
 let noble;
+let server;
+const clients = /* @__PURE__ */ new Set();
 function sendAsync(message, sendHandle, swallowErrors = true) {
-  return new Promise((resolve, reject) => {
-    process.send(message, sendHandle, void 0, (err) => {
-      if (err && !swallowErrors)
-        reject(err);
-      else
-        resolve();
+  if (process.send) {
+    return new Promise((resolve, reject) => {
+      process.send(message, sendHandle, void 0, (err) => {
+        if (err && !swallowErrors)
+          reject(err);
+        else
+          resolve();
+      });
     });
-  });
+  } else {
+    const promises = [...clients].map((client) => {
+      return new Promise((resolve, reject) => {
+        client.write(JSON.stringify(message) + "\n", (err) => {
+          if (err && !swallowErrors)
+            reject(err);
+          else
+            resolve();
+        });
+      });
+    });
+    return Promise.all(promises).then(() => void 0);
+  }
 }
 Error.prototype.toJSON = function() {
   const ret = {
@@ -65,7 +79,10 @@ process.on("unhandledRejection", (error) => {
   });
 });
 process.on("message", (msg) => {
-  switch (msg) {
+  handleMessage(msg);
+});
+function handleMessage(msg) {
+  switch (msg.type) {
     case "startScanning":
       startScanning();
       break;
@@ -73,9 +90,8 @@ process.on("message", (msg) => {
       stopScanning();
       break;
   }
-});
+}
 function serializePeripheral(peripheral) {
-  const msg = peripheral.toString();
   return (0, import_misc.pick)(peripheral, [
     "id",
     "uuid",
@@ -121,7 +137,48 @@ async function stopScanning() {
   sendAsync({ type: "disconnected" });
   isScanning = false;
 }
-(async () => {
+function maybeStartServer() {
+  if (process.send)
+    return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    server = (0, import_net.createServer)((socket) => {
+      console.log("Client connected");
+      clients.add(socket);
+      socket.on("close", () => {
+        console.log("Client disconnected");
+        clients.delete(socket);
+      });
+      socket.on("data", (data) => {
+        try {
+          const msg = JSON.parse(data.toString("utf8"));
+          handleMessage(msg);
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    });
+    server.maxConnections = 1;
+    server.on("error", (err) => {
+      if (err.code === "EADDRINUSE") {
+        reject(err);
+      }
+    });
+    server.listen(
+      {
+        host: argv.listenInterface,
+        port: argv.listenPort
+      },
+      () => {
+        const address = server.address();
+        console.log(
+          `Server listening on tcp://${address.address}:${address.port}`
+        );
+        resolve();
+      }
+    );
+  });
+}
+async function loadNoble() {
   process.env.NOBLE_HCI_DEVICE_ID = argv.hciDevice.toString();
   try {
     noble = require("@abandonware/noble");
@@ -132,6 +189,8 @@ async function stopScanning() {
     await sendAsync({ type: "fatal", error });
     process.exit(import_scanProcessInterface.ScanExitCodes.RequireNobleFailed);
   }
+}
+async function main() {
   noble.on("stateChange", (state) => {
     switch (state) {
       case "poweredOn":
@@ -141,10 +200,22 @@ async function stopScanning() {
         stopScanning();
         break;
     }
+    console.log(`driver state is ${state}`);
     sendAsync({ type: "driverState", driverState: state });
   });
   if (noble.state === "poweredOn")
     startScanning();
   sendAsync({ type: "driverState", driverState: noble.state });
+}
+(async () => {
+  await loadNoble();
+  await maybeStartServer();
+  if (server) {
+    server.once("connection", () => {
+      main();
+    });
+  } else {
+    main();
+  }
 })();
 //# sourceMappingURL=scanProcess.js.map

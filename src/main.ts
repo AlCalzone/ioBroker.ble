@@ -1,6 +1,6 @@
 import * as utils from "@iobroker/adapter-core";
 import { entries } from "alcalzone-shared/objects";
-import { ChildProcess, exec, fork } from "child_process";
+import { exec, fork, type ChildProcess } from "child_process";
 import * as path from "path";
 import { Global as _ } from "./lib/global";
 import {
@@ -11,12 +11,13 @@ import {
 import { ObjectCache } from "./lib/object-cache";
 import Queue from "./lib/queue";
 import {
-	getMessageReviver,
-	PeripheralInfo,
 	ScanExitCodes,
-	ScanMessage,
+	getMessageReviver,
+	type PeripheralInfo,
+	type ScanMessage,
 } from "./lib/scanProcessInterface";
 // Load all registered plugins
+import { Socket } from "net";
 import plugins from "./plugins";
 import type { Plugin } from "./plugins/plugin";
 
@@ -56,6 +57,7 @@ let rssiUpdateInterval = 0;
 
 /** A reference to the scanning process */
 let scanProcess: ChildProcess | undefined;
+let socket: Socket | undefined;
 
 // Adapter-Objekt erstellen
 const adapter = utils.adapter({
@@ -124,27 +126,36 @@ const adapter = utils.adapter({
 		await adapter.setStateAsync("options.allowNewDevices", false, true);
 
 		// And start scanning
-		if (!process.env.TESTING) startScanProcess();
-
-		// Start observing the command queue
-		const observer = commandQueue.observe();
-		observer.subscribe((item) => {
-			adapter.log.info("New item: " + item);
-			if (scanProcess) {
-				scanProcess.send("stopScanning");
-			}
-
-			// Do your thing here
-
-			const queueSize = commandQueue.size();
-			if (queueSize === 0 && scanProcess) {
-				// If the queue is empty, start scanning again
-				scanProcess.send("startScanning");
-			} else if (queueSize === 0 && !scanProcess) {
-				// If the queue is empty and the scan process is not running, start it
+		if (!process.env.TESTING) {
+			if (adapter.config.server) {
+				connectToBLEServer();
+			} else {
 				startScanProcess();
 			}
-		});
+		}
+
+		// TODO: I don't think we need to start/stop the scanning actively
+		// Just tell the scan process to connect to a device
+
+		// // Start observing the command queue
+		// const observer = commandQueue.observe();
+		// observer.subscribe((item) => {
+		// 	adapter.log.info("New item: " + item);
+		// 	if (scanProcess) {
+		// 		scanProcess.send("stopScanning");
+		// 	}
+
+		// 	// Do your thing here
+
+		// 	const queueSize = commandQueue.size();
+		// 	if (queueSize === 0 && scanProcess) {
+		// 		// If the queue is empty, start scanning again
+		// 		scanProcess.send("startScanning");
+		// 	} else if (queueSize === 0 && !scanProcess) {
+		// 		// If the queue is empty and the scan process is not running, start it
+		// 		startScanProcess();
+		// 	}
+		// });
 
 		// Look if a plugin has a stateChange function and call it
 		enabledPlugins.forEach((plugin) => {
@@ -159,6 +170,7 @@ const adapter = utils.adapter({
 	unload: (callback) => {
 		try {
 			scanProcess?.kill();
+			socket?.destroy();
 		} catch {}
 		callback();
 	},
@@ -270,6 +282,7 @@ const adapter = utils.adapter({
 	},
 });
 
+/** Starts a local scanner process */
 function startScanProcess() {
 	const args: string[] = ["-s", ...services];
 	if (adapter.config.hciDevice) {
@@ -290,36 +303,64 @@ function startScanProcess() {
 			scanProcess = undefined;
 		}
 	});
-	scanProcess.on(
-		"message",
-		getMessageReviver((message: ScanMessage) => {
-			switch (message.type) {
-				case "connected":
-					adapter.setState("info.connection", true, true);
-					break;
-				case "disconnected":
-					adapter.setState("info.connection", false, true);
-					break;
-				case "discover":
-					onDiscover(message.peripheral);
-					break;
-				case "driverState":
-					adapter.setState(
-						"info.driverState",
-						message.driverState,
-						true,
-					);
-					break;
-				case "error": // fall through
-				case "fatal":
-					handleScanProcessError(message.error);
-					break;
-				case "log":
-					adapter.log[message.level ?? "info"](message.message);
-					break;
+	scanProcess.on("message", getMessageReviver(handleMessage));
+}
+
+/** Connects to a remote TCP server running a scanner process */
+function connectToBLEServer() {
+	socket = new Socket();
+
+	const reviver = getMessageReviver(handleMessage);
+
+	socket
+		.on("close", () => {
+			adapter.log.info("Disconnected from BLE server");
+			adapter.setState("info.connection", false, true);
+		})
+		.on("connect", () => {
+			adapter.log.info("Connected to BLE server");
+			adapter.setState("info.connection", true, true);
+		})
+		.on("data", (data) => {
+			try {
+				const msg = JSON.parse(data.toString());
+				reviver(msg);
+			} catch (e) {
+				console.error(e);
 			}
-		}),
-	);
+		});
+
+	const [host, port] = adapter.config.server.split(":", 2);
+
+	adapter.log.info("connecting to BLE server...");
+	socket.connect({
+		host,
+		port: +port,
+	});
+}
+
+function handleMessage(message: ScanMessage) {
+	switch (message.type) {
+		case "connected":
+			adapter.setState("info.connection", true, true);
+			break;
+		case "disconnected":
+			adapter.setState("info.connection", false, true);
+			break;
+		case "discover":
+			onDiscover(message.peripheral);
+			break;
+		case "driverState":
+			adapter.setState("info.driverState", message.driverState, true);
+			break;
+		case "error": // fall through
+		case "fatal":
+			handleScanProcessError(message.error);
+			break;
+		case "log":
+			adapter.log[message.level ?? "info"](message.message);
+			break;
+	}
 }
 
 function fixServiceName(name: string | null | undefined): string {

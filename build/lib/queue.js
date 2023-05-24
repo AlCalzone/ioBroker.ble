@@ -16,17 +16,40 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var object_polyfill_exports = {};
-__export(object_polyfill_exports, {
-  stripUndefinedProperties: () => stripUndefinedProperties
+var queue_exports = {};
+__export(queue_exports, {
+  default: () => Queue
 });
-module.exports = __toCommonJS(object_polyfill_exports);
-var import_objects = require("alcalzone-shared/objects");
-function stripUndefinedProperties(obj) {
-  return (0, import_objects.composeObject)((0, import_objects.entries)(obj).filter(([_key, value]) => value != null));
+module.exports = __toCommonJS(queue_exports);
+var import_rxjs = require("rxjs");
+class Queue {
+  constructor() {
+    this.items = [];
+    this.subject = new import_rxjs.Subject();
+  }
+  enqueue(item) {
+    this.items.push(item);
+    this.subject.next(item);
+  }
+  dequeue() {
+    return this.items.shift();
+  }
+  isEmpty() {
+    return this.items.length === 0;
+  }
+  size() {
+    return this.items.length;
+  }
+  peek() {
+    return this.items[0];
+  }
+  clear() {
+    this.items = [];
+  }
+  observe() {
+    return this.subject;
+  }
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  stripUndefinedProperties
-});
-//# sourceMappingURL=object-polyfill.js.map
+0 && (module.exports = {});
+//# sourceMappingURL=queue.js.map

@@ -1,3 +1,4 @@
+"use strict";
 var import_objects = require("alcalzone-shared/objects");
 var import_global = require("../lib/global");
 var import_xiaomi_protocol = require("./lib/xiaomi_protocol");
@@ -15,7 +16,9 @@ function parseAdvertisementEvent(data) {
   }
   if (!advertisement.hasEvent || advertisement.isBindingFrame) {
     import_global.Global.adapter.log.debug(`xiaomi >> The device is not fully initialized.`);
-    import_global.Global.adapter.log.debug(`xiaomi >> Use its app to complete the initialization.`);
+    import_global.Global.adapter.log.debug(
+      `xiaomi >> Use its app to complete the initialization.`
+    );
     return;
   }
   return advertisement.event;

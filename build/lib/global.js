@@ -1,3 +1,4 @@
+"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -16,7 +17,10 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var global_exports = {};
 __export(global_exports, {
@@ -40,7 +44,10 @@ class Global {
     Global._objectCache = cache;
   }
   static async $$(pattern, type, role) {
-    const objects = await Global._adapter.getForeignObjectsAsync(pattern, type);
+    const objects = await Global._adapter.getForeignObjectsAsync(
+      pattern,
+      type
+    );
     if (role) {
       return (0, import_objects.filter)(objects, (o) => o.common.role === role);
     } else {
@@ -48,10 +55,17 @@ class Global {
     }
   }
   static async ensureInstanceObjects() {
-    const ioPack = JSON.parse(fs.readFileSync(path.join(__dirname, "../../io-package.json"), "utf8"));
+    const ioPack = JSON.parse(
+      fs.readFileSync(
+        path.join(__dirname, "../../io-package.json"),
+        "utf8"
+      )
+    );
     if (ioPack.instanceObjects == null || ioPack.instanceObjects.length === 0)
       return;
-    const setObjects = ioPack.instanceObjects.map((obj) => Global._adapter.setObjectNotExistsAsync(obj._id, obj));
+    const setObjects = ioPack.instanceObjects.map(
+      (obj) => Global._adapter.setObjectNotExistsAsync(obj._id, obj)
+    );
     await Promise.all(setObjects);
   }
 }

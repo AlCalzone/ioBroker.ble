@@ -1,7 +1,7 @@
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { createStyles, makeStyles, type Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { SettingsApp } from "iobroker-react/app";
@@ -55,6 +55,27 @@ const SettingsPageContent: React.FC = React.memo(() => {
 	return (
 		<div className={classes.root}>
 			<Grid container spacing={8}>
+				<Grid item xs={4}>
+					<TextField
+						label={_("Use remote server:")}
+						fullWidth={true}
+						InputLabelProps={{
+							// Avoid overlapping the text if it was filled out
+							shrink: true,
+						}}
+						placeholder="address:port"
+						value={settings.server}
+						onChange={(event) =>
+							handleChange("server", event.target.value)
+						}
+					/>
+					<Typography variant="body2">
+						{_(
+							"when configured, the local bluetooth adapter is not used",
+						)}
+					</Typography>
+				</Grid>
+
 				<Grid item xs={4}>
 					<TextField
 						label={_("Select device:")}

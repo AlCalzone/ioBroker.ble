@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../../src/plugins/mi-flora.ts"],
-  "sourcesContent": ["/*!\n * Alias for Xiaomi plugin\n */\n\n/* eslint-disable @typescript-eslint/no-var-requires */\n\nimport { alias, Plugin } from \"./plugin\";\nconst plugin: Plugin = alias(\"mi-flora\", require(\"./xiaomi\") as Plugin);\nexport = plugin;\n"],
-  "mappings": "AAMA,oBAA8B;AAN9B;AAAA;AAAA;AAOA,MAAM,SAAiB,yBAAM,YAAY,QAAQ,UAAU,CAAW;AACtE,iBAAS;",
+  "sourcesContent": ["/*!\n * Alias for Xiaomi plugin\n */\n\n/* eslint-disable @typescript-eslint/no-var-requires */\n\nimport { alias, type Plugin } from \"./plugin\";\nconst plugin: Plugin = alias(\"mi-flora\", require(\"./xiaomi\") as Plugin);\nexport = plugin;\n"],
+  "mappings": ";AAMA,oBAAmC;AANnC;AAAA;AAAA;AAOA,MAAM,aAAiB,qBAAM,YAAY,QAAQ,UAAU,CAAW;AACtE,iBAAS;",
   "names": []
 }

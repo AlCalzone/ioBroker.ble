@@ -1,3 +1,4 @@
+"use strict";
 var import_fs = require("fs");
 var import_global = require("../lib/global");
 function parseData(raw) {
@@ -14,7 +15,12 @@ const plugin = {
   isHandling: (_p) => true,
   createContext: (peripheral) => peripheral,
   defineObjects: (peripheral) => {
-    const serviceList = JSON.parse((0, import_fs.readFileSync)(__dirname + "/lib/bluetooth_specs/service_list.json", "utf-8"));
+    const serviceList = JSON.parse(
+      (0, import_fs.readFileSync)(
+        __dirname + "/lib/bluetooth_specs/service_list.json",
+        "utf-8"
+      )
+    );
     const deviceObject = {
       common: void 0,
       native: void 0
@@ -74,13 +80,17 @@ const plugin = {
         const uuid = entry.uuid;
         const stateId = `services.${uuid}`;
         ret[stateId] = parseData(entry.data);
-        import_global.Global.adapter.log.debug(`_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`);
+        import_global.Global.adapter.log.debug(
+          `_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`
+        );
       }
     }
     if (peripheral.advertisement && peripheral.advertisement.manufacturerData && peripheral.advertisement.manufacturerData.length > 0) {
       const stateId = `services.manufacturerData`;
       ret[stateId] = parseData(peripheral.advertisement.manufacturerData);
-      import_global.Global.adapter.log.debug(`_default: ${peripheral.address} > got manufacturer data ${ret[stateId]}`);
+      import_global.Global.adapter.log.debug(
+        `_default: ${peripheral.address} > got manufacturer data ${ret[stateId]}`
+      );
     }
     return ret;
   }

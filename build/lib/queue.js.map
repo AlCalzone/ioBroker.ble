@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/lib/queue.ts"],
+  "sourcesContent": ["import { Subject } from \"rxjs\";\nexport default class Queue<T> {\n\tprivate items: T[];\n\tprivate subject: Subject<T>;\n\tconstructor() {\n\t\tthis.items = [];\n\t\tthis.subject = new Subject<T>();\n\t}\n\n\t// Add new item to queue\n\tenqueue(item: T): void {\n\t\tthis.items.push(item);\n\t\tthis.subject.next(item);\n\t}\n\n\t// Remove item from queue\n\tdequeue(): T | undefined {\n\t\treturn this.items.shift();\n\t}\n\n\t// Check if queue is empty\n\tisEmpty(): boolean {\n\t\treturn this.items.length === 0;\n\t}\n\n\t// Get size of queue\n\tsize(): number {\n\t\treturn this.items.length;\n\t}\n\n\t// Get first item in queue without removing it\n\tpeek(): T | undefined {\n\t\treturn this.items[0];\n\t}\n\n\t// Clear queue\n\tclear(): void {\n\t\tthis.items = [];\n\t}\n\tobserve(): Subject<T> {\n\t\treturn this.subject;\n\t}\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,kBAAwB;AACxB,MAAO,MAAuB;AAAA,EAG7B,cAAc;AACb,SAAK,QAAQ,CAAC;AACd,SAAK,UAAU,IAAI,oBAAW;AAAA,EAC/B;AAAA,EAGA,QAAQ,MAAe;AACtB,SAAK,MAAM,KAAK,IAAI;AACpB,SAAK,QAAQ,KAAK,IAAI;AAAA,EACvB;AAAA,EAGA,UAAyB;AACxB,WAAO,KAAK,MAAM,MAAM;AAAA,EACzB;AAAA,EAGA,UAAmB;AAClB,WAAO,KAAK,MAAM,WAAW;AAAA,EAC9B;AAAA,EAGA,OAAe;AACd,WAAO,KAAK,MAAM;AAAA,EACnB;AAAA,EAGA,OAAsB;AACrB,WAAO,KAAK,MAAM;AAAA,EACnB;AAAA,EAGA,QAAc;AACb,SAAK,QAAQ,CAAC;AAAA,EACf;AAAA,EACA,UAAsB;AACrB,WAAO,KAAK;AAAA,EACb;AACD;",
+  "names": []
+}
