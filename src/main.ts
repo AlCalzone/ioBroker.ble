@@ -1,6 +1,6 @@
 import * as utils from "@iobroker/adapter-core";
 import { entries } from "alcalzone-shared/objects";
-import { ChildProcess, exec, fork } from "child_process";
+import { exec, fork, type ChildProcess } from "child_process";
 import * as path from "path";
 import { Global as _ } from "./lib/global";
 import {
@@ -10,12 +10,13 @@ import {
 } from "./lib/iobroker-objects";
 import { ObjectCache } from "./lib/object-cache";
 import {
-	getMessageReviver,
-	PeripheralInfo,
 	ScanExitCodes,
-	ScanMessage,
+	getMessageReviver,
+	type PeripheralInfo,
+	type ScanMessage,
 } from "./lib/scanProcessInterface";
 // Load all registered plugins
+import { Socket } from "net";
 import plugins from "./plugins";
 import type { Plugin } from "./plugins/plugin";
 
@@ -52,6 +53,7 @@ let rssiUpdateInterval = 0;
 
 /** A reference to the scanning process */
 let scanProcess: ChildProcess | undefined;
+let socket: Socket | undefined;
 
 // Adapter-Objekt erstellen
 const adapter = utils.adapter({
@@ -120,7 +122,13 @@ const adapter = utils.adapter({
 		await adapter.setStateAsync("options.allowNewDevices", false, true);
 
 		// And start scanning
-		if (!process.env.TESTING) startScanProcess();
+		if (!process.env.TESTING) {
+			if (adapter.config.server) {
+				connectToBLEServer();
+			} else {
+				startScanProcess();
+			}
+		}
 	},
 
 	// is called when adapter shuts down - callback has to be called under any circumstances!
@@ -254,36 +262,63 @@ function startScanProcess() {
 			scanProcess = undefined;
 		}
 	});
-	scanProcess.on(
-		"message",
-		getMessageReviver((message: ScanMessage) => {
-			switch (message.type) {
-				case "connected":
-					adapter.setState("info.connection", true, true);
-					break;
-				case "disconnected":
-					adapter.setState("info.connection", false, true);
-					break;
-				case "discover":
-					onDiscover(message.peripheral);
-					break;
-				case "driverState":
-					adapter.setState(
-						"info.driverState",
-						message.driverState,
-						true,
-					);
-					break;
-				case "error": // fall through
-				case "fatal":
-					handleScanProcessError(message.error);
-					break;
-				case "log":
-					adapter.log[message.level ?? "info"](message.message);
-					break;
+	scanProcess.on("message", getMessageReviver(handleMessage));
+}
+
+function connectToBLEServer() {
+	socket = new Socket();
+
+	const reviver = getMessageReviver(handleMessage);
+
+	socket
+		.on("close", () => {
+			adapter.log.info("Disconnected from BLE server");
+			adapter.setState("info.connection", false, true);
+		})
+		.on("connect", () => {
+			adapter.log.info("Connected to BLE server");
+			adapter.setState("info.connection", true, true);
+		})
+		.on("data", (data) => {
+			try {
+				const msg = JSON.parse(data.toString());
+				reviver(msg);
+			} catch (e) {
+				console.error(e);
 			}
-		}),
-	);
+		});
+
+	const [host, port] = adapter.config.server.split(":", 2);
+
+	adapter.log.info("connecting to BLE server...");
+	socket.connect({
+		host,
+		port: +port,
+	});
+}
+
+function handleMessage(message: ScanMessage) {
+	switch (message.type) {
+		case "connected":
+			adapter.setState("info.connection", true, true);
+			break;
+		case "disconnected":
+			adapter.setState("info.connection", false, true);
+			break;
+		case "discover":
+			onDiscover(message.peripheral);
+			break;
+		case "driverState":
+			adapter.setState("info.driverState", message.driverState, true);
+			break;
+		case "error": // fall through
+		case "fatal":
+			handleScanProcessError(message.error);
+			break;
+		case "log":
+			adapter.log[message.level ?? "info"](message.message);
+			break;
+	}
 }
 
 function fixServiceName(name: string | null | undefined): string {

@@ -5,12 +5,12 @@
 import { entries } from "alcalzone-shared/objects";
 import { Global as _ } from "../lib/global";
 import type { PeripheralInfo } from "../lib/scanProcessInterface";
-import { XiaomiAdvertisement, XiaomiEvent } from "./lib/xiaomi_protocol";
+import { XiaomiAdvertisement, type XiaomiEvent } from "./lib/xiaomi_protocol";
 import {
-	DeviceObjectDefinition,
 	getServiceData,
-	Plugin,
-	StateObjectDefinition,
+	type DeviceObjectDefinition,
+	type Plugin,
+	type StateObjectDefinition,
 } from "./plugin";
 
 interface XiaomiContext {

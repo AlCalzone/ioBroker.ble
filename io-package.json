@@ -1,216 +1,217 @@
 {
-    "common": {
-        "name": "ble",
-        "version": "0.13.3",
-        "news": {
-            "0.13.3": {
-                "en": "Updated `noble` again. This should fix the automatic rebuild after Node.js upgrades and the previous performance issues.",
-                "de": "Die Abhängigkeit `noble` wurde aktualisiert. Dies sollte den automatischen Rebuild nach Node.js Upgrades und die Performanceprobleme vom letzten Versuch beheben",
-                "ru": "Обновленный благородный снова. Это должно исправить автоматический ремонт после обновления Node.js и предыдущие проблемы производительности.",
-                "pt": "Atualizado nobre novamente. Isso deve corrigir a reconstrução automática após as atualizações do Node.js e os problemas de desempenho anteriores.",
-                "nl": "Weer nobel. Dit zou de automatische reconstructie moeten herbouwen na Node.js upgrades en de vorige optredens.",
-                "fr": "Encore noble. Cela devrait corriger la reconstruction automatique après la mise à niveau de Node.js et les problèmes de performance précédents.",
-                "it": "Nobile aggiornato di nuovo. Questo dovrebbe risolvere il ripristino automatico dopo gli aggiornamenti di Node.js e i precedenti problemi di prestazioni.",
-                "es": "Actualizado noble de nuevo. Esto debe arreglar la reconstrucción automática después de las actualizaciones de Node.js y los problemas de rendimiento anteriores.",
-                "pl": "Powrócony ponownie szlachcic. Pozwoliło to na naprawę automatycznego rekonstruowania po ulepszeniach Node.jsa.",
-                "uk": "Оновлений благородний знову. Це має виправити автоматичний ремонт після оновлення Node.js та попередніх експлуатаційних питань.",
-                "zh-cn": "新的崇高。 这应该确定在诺贝尔升级后自动重建和以前的业绩问题。."
-            },
-            "0.13.2": {
-                "en": "Downgraded the `noble` dependency again because of performance issues",
-                "de": "Die Abhängigkeit `noble` wurde wegen Performanceproblemen wieder gedowngradet",
-                "ru": "Понизил благородную зависимость снова из-за проблем с производительностью",
-                "pt": "Reduziu a nobre dependência novamente por causa de problemas de desempenho",
-                "nl": "Weer de nobele afhankelijkheid omwille van de prestaties",
-                "fr": "Reclassé la noble dépendance à cause des problèmes de performance",
-                "it": "Abbassato la nobile dipendenza di nuovo a causa di problemi di prestazione",
-                "es": "Reducción de la noble dependencia de nuevo debido a problemas de rendimiento",
-                "pl": "Pogrążony w szlachetną zależność 1ponownie z powodu problemów osiągowych",
-                "uk": "Внизив благородну залежність знову через проблеми виконання",
-                "zh-cn": "由于业绩问题,重新定性崇高的依赖性"
-            },
-            "0.13.1": {
-                "en": "Updated the `noble` dependency. This should fix the automatic rebuild after Node.js upgrades.",
-                "de": "Die Abhängigkeit `noble` wurde aktualisiert. Dies sollte den automatischen Rebuild nach Node.js Upgrades beheben.",
-                "ru": "Обновление благородной зависимости. Это должно исправить автоматический ремонт после обновления Node.js.",
-                "pt": "Atualizou a nobre dependência. Isso deve corrigir a reconstrução automática após atualizações Node.js.",
-                "nl": "Verhoogde de nobele afhankelijkheid. Dit moet de automatische reconstructie maken na Node.js upgrades.",
-                "fr": "Mis à jour la noble dépendance. Cela devrait réparer la reconstruction automatique après la mise à niveau de Node.js.",
-                "it": "Aggiornato la nobile dipendenza. Questo dovrebbe risolvere il ripristino automatico dopo gli aggiornamenti di Node.js.",
-                "es": "Actualizó la noble dependencia. Esto debe arreglar la reconstrucción automática después de Node.js actualizaciones.",
-                "pl": "Ulepszona szlachetna zależność. Postanowiono to naprawić automatyczną rekonstrukcję po modernizacji Node.js.",
-                "uk": "Оновлено благородну залежність. Це має виправити автоматичне відновлення після оновлення Node.js.",
-                "zh-cn": "更新崇高的依赖性。 这应该确定在诺贝尔升级后自动重建。."
-            },
-            "0.13.0": {
-                "en": "The option to allow recording new devices is now available in the config dialog. When the adapter starts, it will be disabled, and when enabled, it will be automatically disabled after 5 minutes (#730, #729)\nFix: RSSI will now be updated, even if it was unchanged (#493)\nDependency updates, lots of dependency updates...",
-                "de": "Die Option, das Aufzeichnen neuer Geräte zuzulassen, ist jetzt im Konfigurationsdialog verfügbar. Wenn der Adapter startet, wird sie deaktiviert, und wenn sie aktiviert ist, wird sie nach 5 Minuten automatisch deaktiviert (#730, #729)\nFix: RSSI wird jetzt aktualisiert, auch wenn es unverändert war (#493)\nAbhängigkeiten aktualisiert",
-                "ru": "Опция, позволяющая записывать новые устройства, теперь доступна в диалоговом окне конфигурации. При запуске адаптера он будет отключен, а при включении автоматически отключится через 5 минут (#730, #729)\nИсправлено: RSSI теперь будет обновляться, даже если он не изменился (# 493)\nОбновления зависимостей, множество обновлений зависимостей...",
-                "pt": "A opção de permitir a gravação de novos dispositivos agora está disponível na caixa de diálogo de configuração. Quando o adaptador for iniciado, ele será desabilitado e, quando habilitado, será desabilitado automaticamente após 5 minutos (#730, #729)\nCorreção: RSSI agora será atualizado, mesmo que não tenha sido alterado (#493)\nAtualizações de dependências, muitas atualizações de dependências...",
-                "nl": "De optie om het opnemen van nieuwe apparaten toe te staan is nu beschikbaar in de configuratiedialoog. Wanneer de adapter start, wordt deze uitgeschakeld en wanneer ingeschakeld, wordt deze na 5 minuten automatisch uitgeschakeld (#730, #729)\nOplossing: RSSI wordt nu bijgewerkt, zelfs als deze ongewijzigd was (#493)\nAfhankelijkheidsupdates, veel afhankelijkheidsupdates...",
-                "fr": "L'option permettant d'enregistrer de nouveaux appareils est désormais disponible dans la boîte de dialogue de configuration. Lorsque l'adaptateur démarre, il sera désactivé, et lorsqu'il est activé, il sera automatiquement désactivé après 5 minutes (#730, #729)\nCorrection : RSSI sera désormais mis à jour, même s'il était inchangé (#493)\nMises à jour des dépendances, beaucoup de mises à jour des dépendances...",
-                "it": "L'opzione per consentire la registrazione di nuovi dispositivi è ora disponibile nella finestra di dialogo di configurazione. Quando l'adattatore si avvia, verrà disabilitato e, una volta abilitato, verrà automaticamente disabilitato dopo 5 minuti (#730, #729)\nCorrezione: RSSI ora verrà aggiornato, anche se era invariato (#493)\nAggiornamenti delle dipendenze, molti aggiornamenti delle dipendenze...",
-                "es": "La opción para permitir la grabación de nuevos dispositivos ahora está disponible en el cuadro de diálogo de configuración. Cuando se inicia el adaptador, se desactivará y, cuando se active, se desactivará automáticamente después de 5 minutos (#730, #729)\nSolución: RSSI ahora se actualizará, incluso si no se modificó (# 493)\nActualizaciones de dependencia, muchas actualizaciones de dependencia...",
-                "pl": "Opcja pozwalająca na nagrywanie nowych urządzeń jest teraz dostępna w oknie konfiguracji. Po uruchomieniu adapter zostanie wyłączony, a po włączeniu zostanie automatycznie wyłączony po 5 minutach (#730, #729)\nPoprawka: RSSI zostanie teraz zaktualizowany, nawet jeśli był niezmieniony (#493)\nAktualizacje zależności, wiele aktualizacji zależności...",
-                "zh-cn": "现在可以在配置对话框中使用允许录制新设备的选项。适配器启动时会被禁用，启用时会在5分钟后自动禁用（#730、#729）\n修复：RSSI 现在将被更新，即使它没有改变 (#493)\n依赖更新，大量依赖更新......"
-            },
-            "0.12.0": {
-                "en": "Scanning is now done in a separate process, so uncatchable errors in `noble` no longer bring down the main process",
-                "de": "Das Scannen erfolgt jetzt in einem separaten Prozess, sodass nicht abfangbare Fehler in \"nobel\" den Hauptprozess nicht mehr zum Erliegen bringen",
-                "ru": "Сканирование теперь выполняется в отдельном процессе, поэтому неисправимые ошибки в `noble` больше не прерывают основной процесс.",
-                "pt": "A digitalização agora é feita em um processo separado, portanto, erros não detectáveis em `noble` não desligam mais o processo principal",
-                "nl": "Het scannen gebeurt nu in een apart proces, dus niet te vinden fouten in `noble` brengen het hoofdproces niet langer naar beneden",
-                "fr": "La numérisation est maintenant effectuée dans un processus séparé, de sorte que les erreurs incontrôlables dans `noble` ne font plus tomber le processus principal",
-                "it": "La scansione ora viene eseguita in un processo separato, quindi gli errori non rilevabili in \"nobile\" non fanno più cadere il processo principale",
-                "es": "El escaneo ahora se realiza en un proceso separado, por lo que los errores irrecuperables en `noble` ya no derriban el proceso principal",
-                "pl": "Skanowanie jest teraz wykonywane w osobnym procesie, więc niemożliwe do wykrycia błędy w elemencie „noble” nie spowodują już obniżenia głównego procesu",
-                "zh-cn": "现在，扫描是在一个单独的过程中完成的，因此“ noble”中不可捕获的错误不再使主要过程中断"
-            },
-            "0.11.8": {
-                "en": "The pressure value reported by Ruuvi Tags is now parsed with two decimal places",
-                "de": "Der von Ruuvi Tags gemeldete Druckwert wird jetzt mit zwei Dezimalstellen analysiert",
-                "ru": "Значение давления, сообщаемое тегами Ruuvi, теперь анализируется с двумя десятичными знаками.",
-                "pt": "O valor de pressão relatado por Ruuvi Tags agora é analisado com duas casas decimais",
-                "nl": "De drukwaarde die door Ruuvi Tags wordt gerapporteerd, wordt nu geparseerd met twee decimalen",
-                "fr": "La valeur de pression rapportée par Ruuvi Tags est maintenant analysée avec deux décimales",
-                "it": "Il valore di pressione riportato da Ruuvi Tags viene ora analizzato con due cifre decimali",
-                "es": "El valor de presión informado por Ruuvi Tags ahora se analiza con dos lugares decimales",
-                "pl": "Wartość ciśnienia zgłaszana przez Ruuvi Tags jest teraz analizowana z dwoma miejscami po przecinku",
-                "zh-cn": "Ruuvi标签报告的压力值现在解析为两个小数位"
-            },
-            "0.11.7": {
-                "en": "Added a more helpful error message if the adapter terminates with error `EAFNOSUPPORT`",
-                "de": "Eine hilfreichere Fehlermeldung wurde hinzugefügt, wenn der Adapter mit dem Fehler \"EAFNOSUPPORT\" beendet wird",
-                "ru": "Добавлено более полезное сообщение об ошибке, если адаптер завершает работу с ошибкой `EAFNOSUPPORT`",
-                "pt": "Adicionada uma mensagem de erro mais útil se o adaptador terminar com o erro `EAFNOSUPPORT`",
-                "nl": "Een nuttiger foutbericht toegevoegd als de adapter eindigt met de fout 'EAFNOSUPPORT'",
-                "fr": "Ajout d'un message d'erreur plus utile si l'adaptateur se termine par l'erreur `EAFNOSUPPORT`",
-                "it": "Aggiunto un messaggio di errore più utile se l'adattatore termina con l'errore \"EAFNOSUPPORT\"",
-                "es": "Se agregó un mensaje de error más útil si el adaptador termina con el error `EAFNOSUPPORT`",
-                "pl": "Dodano bardziej pomocny komunikat o błędzie, jeśli adapter kończy pracę z błędem `EAFNOSUPPORT`",
-                "zh-cn": "如果适配器以错误“ EAFNOSUPPORT”终止，则添加了更有用的错误消息"
-            }
-        },
-        "title": "Bluetooth Low Energy (BLE)",
-        "titleLang": {
-            "en": "Bluetooth Low Energy (BLE)",
-            "de": "Bluetooth-Niedrigenergie (BLE)",
-            "ru": "Bluetooth с низким энергопотреблением (BLE)",
-            "pt": "Bluetooth de baixa energia (BLE)",
-            "nl": "Bluetooth lage energie (BLE)",
-            "fr": "Bluetooth à faible consommation d'énergie (BLE)",
-            "it": "Bluetooth a bassa energia (BLE)",
-            "es": "Bluetooth de baja energía (BLE)",
-            "pl": "Niskoenergetyczna łączność Bluetooth (BLE)",
-            "zh-cn": "低功耗蓝牙 (BLE)"
-        },
-        "desc": {
-            "en": "Monitor Bluetooth Low Energy (BLE) beacons",
-            "de": "Überwacht Bluetooth Low Energy (BLE) beacons",
-            "ru": "Монитор Bluetooth низкой энергии (BLE) маяки",
-            "pt": "Monitor de Bluetooth Low Energy (BLE) beacons",
-            "nl": "Monitor Bluetooth Low Energy (BLE) beacons",
-            "fr": "Moniteur Bluetooth Low Energy (BLE) balises",
-            "it": "Monitor Bluetooth Low Energy (BLE) beacon",
-            "es": "Monitor de Bluetooth de Baja Energía (BLE) las balizas",
-            "pl": "Monitor Bluetooth low energy (BLE) latarnie",
-            "zh-cn": "监测蓝牙低能源(BLE)信标"
-        },
-        "authors": ["AlCalzone <d.griesel@gmx.net>"],
-        "platform": "Javascript/Node.js",
-        "license": "MIT",
-        "main": "build/main.js",
-        "mode": "daemon",
-        "icon": "ble.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
-        "keywords": ["bluetooth", "BLE", "beacon"],
-        "readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
-        "loglevel": "info",
-        "type": "hardware",
-        "messagebox": true,
-        "compact": false,
-        "materialize": true,
-        "dependencies": [
-            {
-                "js-controller": ">=1.4.2"
-            }
-        ],
-        "osDependencies": {
-            "linux": [
-                "bluetooth",
-                "bluez",
-                "libbluetooth-dev",
-                "libudev-dev",
-                "libcap2-bin"
-            ]
-        }
-    },
-    "native": {
-        "services": "",
-        "hciDevice": 0,
-        "plugins": "",
-        "allowEmptyDevices": false,
-        "rssiThrottle": 0
-    },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Adapter-Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "If BLE scan is active",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.driverState",
-            "type": "state",
-            "common": {
-                "role": "indicator.state",
-                "name": "bluetooth driver state",
-                "desc": "The current state of the bluetooth driver",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": "poweredOff"
-            },
-            "native": {}
-        },
-        {
-            "_id": "options",
-            "type": "channel",
-            "common": {
-                "name": "Adapter-Optionen"
-            },
-            "native": {}
-        },
-        {
-            "_id": "options.allowNewDevices",
-            "type": "state",
-            "common": {
-                "role": "switch",
-                "name": "Allow new devices",
-                "desc": "Whether new devices should be recorded or not",
-                "type": "boolean",
-                "read": true,
-                "write": true,
-                "def": false
-            },
-            "native": {}
-        }
-    ]
+	"common": {
+		"name": "ble",
+		"version": "0.13.3",
+		"news": {
+			"0.13.3": {
+				"en": "Updated `noble` again. This should fix the automatic rebuild after Node.js upgrades and the previous performance issues.",
+				"de": "Die Abhängigkeit `noble` wurde aktualisiert. Dies sollte den automatischen Rebuild nach Node.js Upgrades und die Performanceprobleme vom letzten Versuch beheben",
+				"ru": "Обновленный благородный снова. Это должно исправить автоматический ремонт после обновления Node.js и предыдущие проблемы производительности.",
+				"pt": "Atualizado nobre novamente. Isso deve corrigir a reconstrução automática após as atualizações do Node.js e os problemas de desempenho anteriores.",
+				"nl": "Weer nobel. Dit zou de automatische reconstructie moeten herbouwen na Node.js upgrades en de vorige optredens.",
+				"fr": "Encore noble. Cela devrait corriger la reconstruction automatique après la mise à niveau de Node.js et les problèmes de performance précédents.",
+				"it": "Nobile aggiornato di nuovo. Questo dovrebbe risolvere il ripristino automatico dopo gli aggiornamenti di Node.js e i precedenti problemi di prestazioni.",
+				"es": "Actualizado noble de nuevo. Esto debe arreglar la reconstrucción automática después de las actualizaciones de Node.js y los problemas de rendimiento anteriores.",
+				"pl": "Powrócony ponownie szlachcic. Pozwoliło to na naprawę automatycznego rekonstruowania po ulepszeniach Node.jsa.",
+				"uk": "Оновлений благородний знову. Це має виправити автоматичний ремонт після оновлення Node.js та попередніх експлуатаційних питань.",
+				"zh-cn": "新的崇高。 这应该确定在诺贝尔升级后自动重建和以前的业绩问题。."
+			},
+			"0.13.2": {
+				"en": "Downgraded the `noble` dependency again because of performance issues",
+				"de": "Die Abhängigkeit `noble` wurde wegen Performanceproblemen wieder gedowngradet",
+				"ru": "Понизил благородную зависимость снова из-за проблем с производительностью",
+				"pt": "Reduziu a nobre dependência novamente por causa de problemas de desempenho",
+				"nl": "Weer de nobele afhankelijkheid omwille van de prestaties",
+				"fr": "Reclassé la noble dépendance à cause des problèmes de performance",
+				"it": "Abbassato la nobile dipendenza di nuovo a causa di problemi di prestazione",
+				"es": "Reducción de la noble dependencia de nuevo debido a problemas de rendimiento",
+				"pl": "Pogrążony w szlachetną zależność 1ponownie z powodu problemów osiągowych",
+				"uk": "Внизив благородну залежність знову через проблеми виконання",
+				"zh-cn": "由于业绩问题,重新定性崇高的依赖性"
+			},
+			"0.13.1": {
+				"en": "Updated the `noble` dependency. This should fix the automatic rebuild after Node.js upgrades.",
+				"de": "Die Abhängigkeit `noble` wurde aktualisiert. Dies sollte den automatischen Rebuild nach Node.js Upgrades beheben.",
+				"ru": "Обновление благородной зависимости. Это должно исправить автоматический ремонт после обновления Node.js.",
+				"pt": "Atualizou a nobre dependência. Isso deve corrigir a reconstrução automática após atualizações Node.js.",
+				"nl": "Verhoogde de nobele afhankelijkheid. Dit moet de automatische reconstructie maken na Node.js upgrades.",
+				"fr": "Mis à jour la noble dépendance. Cela devrait réparer la reconstruction automatique après la mise à niveau de Node.js.",
+				"it": "Aggiornato la nobile dipendenza. Questo dovrebbe risolvere il ripristino automatico dopo gli aggiornamenti di Node.js.",
+				"es": "Actualizó la noble dependencia. Esto debe arreglar la reconstrucción automática después de Node.js actualizaciones.",
+				"pl": "Ulepszona szlachetna zależność. Postanowiono to naprawić automatyczną rekonstrukcję po modernizacji Node.js.",
+				"uk": "Оновлено благородну залежність. Це має виправити автоматичне відновлення після оновлення Node.js.",
+				"zh-cn": "更新崇高的依赖性。 这应该确定在诺贝尔升级后自动重建。."
+			},
+			"0.13.0": {
+				"en": "The option to allow recording new devices is now available in the config dialog. When the adapter starts, it will be disabled, and when enabled, it will be automatically disabled after 5 minutes (#730, #729)\nFix: RSSI will now be updated, even if it was unchanged (#493)\nDependency updates, lots of dependency updates...",
+				"de": "Die Option, das Aufzeichnen neuer Geräte zuzulassen, ist jetzt im Konfigurationsdialog verfügbar. Wenn der Adapter startet, wird sie deaktiviert, und wenn sie aktiviert ist, wird sie nach 5 Minuten automatisch deaktiviert (#730, #729)\nFix: RSSI wird jetzt aktualisiert, auch wenn es unverändert war (#493)\nAbhängigkeiten aktualisiert",
+				"ru": "Опция, позволяющая записывать новые устройства, теперь доступна в диалоговом окне конфигурации. При запуске адаптера он будет отключен, а при включении автоматически отключится через 5 минут (#730, #729)\nИсправлено: RSSI теперь будет обновляться, даже если он не изменился (# 493)\nОбновления зависимостей, множество обновлений зависимостей...",
+				"pt": "A opção de permitir a gravação de novos dispositivos agora está disponível na caixa de diálogo de configuração. Quando o adaptador for iniciado, ele será desabilitado e, quando habilitado, será desabilitado automaticamente após 5 minutos (#730, #729)\nCorreção: RSSI agora será atualizado, mesmo que não tenha sido alterado (#493)\nAtualizações de dependências, muitas atualizações de dependências...",
+				"nl": "De optie om het opnemen van nieuwe apparaten toe te staan is nu beschikbaar in de configuratiedialoog. Wanneer de adapter start, wordt deze uitgeschakeld en wanneer ingeschakeld, wordt deze na 5 minuten automatisch uitgeschakeld (#730, #729)\nOplossing: RSSI wordt nu bijgewerkt, zelfs als deze ongewijzigd was (#493)\nAfhankelijkheidsupdates, veel afhankelijkheidsupdates...",
+				"fr": "L'option permettant d'enregistrer de nouveaux appareils est désormais disponible dans la boîte de dialogue de configuration. Lorsque l'adaptateur démarre, il sera désactivé, et lorsqu'il est activé, il sera automatiquement désactivé après 5 minutes (#730, #729)\nCorrection : RSSI sera désormais mis à jour, même s'il était inchangé (#493)\nMises à jour des dépendances, beaucoup de mises à jour des dépendances...",
+				"it": "L'opzione per consentire la registrazione di nuovi dispositivi è ora disponibile nella finestra di dialogo di configurazione. Quando l'adattatore si avvia, verrà disabilitato e, una volta abilitato, verrà automaticamente disabilitato dopo 5 minuti (#730, #729)\nCorrezione: RSSI ora verrà aggiornato, anche se era invariato (#493)\nAggiornamenti delle dipendenze, molti aggiornamenti delle dipendenze...",
+				"es": "La opción para permitir la grabación de nuevos dispositivos ahora está disponible en el cuadro de diálogo de configuración. Cuando se inicia el adaptador, se desactivará y, cuando se active, se desactivará automáticamente después de 5 minutos (#730, #729)\nSolución: RSSI ahora se actualizará, incluso si no se modificó (# 493)\nActualizaciones de dependencia, muchas actualizaciones de dependencia...",
+				"pl": "Opcja pozwalająca na nagrywanie nowych urządzeń jest teraz dostępna w oknie konfiguracji. Po uruchomieniu adapter zostanie wyłączony, a po włączeniu zostanie automatycznie wyłączony po 5 minutach (#730, #729)\nPoprawka: RSSI zostanie teraz zaktualizowany, nawet jeśli był niezmieniony (#493)\nAktualizacje zależności, wiele aktualizacji zależności...",
+				"zh-cn": "现在可以在配置对话框中使用允许录制新设备的选项。适配器启动时会被禁用，启用时会在5分钟后自动禁用（#730、#729）\n修复：RSSI 现在将被更新，即使它没有改变 (#493)\n依赖更新，大量依赖更新......"
+			},
+			"0.12.0": {
+				"en": "Scanning is now done in a separate process, so uncatchable errors in `noble` no longer bring down the main process",
+				"de": "Das Scannen erfolgt jetzt in einem separaten Prozess, sodass nicht abfangbare Fehler in \"nobel\" den Hauptprozess nicht mehr zum Erliegen bringen",
+				"ru": "Сканирование теперь выполняется в отдельном процессе, поэтому неисправимые ошибки в `noble` больше не прерывают основной процесс.",
+				"pt": "A digitalização agora é feita em um processo separado, portanto, erros não detectáveis em `noble` não desligam mais o processo principal",
+				"nl": "Het scannen gebeurt nu in een apart proces, dus niet te vinden fouten in `noble` brengen het hoofdproces niet langer naar beneden",
+				"fr": "La numérisation est maintenant effectuée dans un processus séparé, de sorte que les erreurs incontrôlables dans `noble` ne font plus tomber le processus principal",
+				"it": "La scansione ora viene eseguita in un processo separato, quindi gli errori non rilevabili in \"nobile\" non fanno più cadere il processo principale",
+				"es": "El escaneo ahora se realiza en un proceso separado, por lo que los errores irrecuperables en `noble` ya no derriban el proceso principal",
+				"pl": "Skanowanie jest teraz wykonywane w osobnym procesie, więc niemożliwe do wykrycia błędy w elemencie „noble” nie spowodują już obniżenia głównego procesu",
+				"zh-cn": "现在，扫描是在一个单独的过程中完成的，因此“ noble”中不可捕获的错误不再使主要过程中断"
+			},
+			"0.11.8": {
+				"en": "The pressure value reported by Ruuvi Tags is now parsed with two decimal places",
+				"de": "Der von Ruuvi Tags gemeldete Druckwert wird jetzt mit zwei Dezimalstellen analysiert",
+				"ru": "Значение давления, сообщаемое тегами Ruuvi, теперь анализируется с двумя десятичными знаками.",
+				"pt": "O valor de pressão relatado por Ruuvi Tags agora é analisado com duas casas decimais",
+				"nl": "De drukwaarde die door Ruuvi Tags wordt gerapporteerd, wordt nu geparseerd met twee decimalen",
+				"fr": "La valeur de pression rapportée par Ruuvi Tags est maintenant analysée avec deux décimales",
+				"it": "Il valore di pressione riportato da Ruuvi Tags viene ora analizzato con due cifre decimali",
+				"es": "El valor de presión informado por Ruuvi Tags ahora se analiza con dos lugares decimales",
+				"pl": "Wartość ciśnienia zgłaszana przez Ruuvi Tags jest teraz analizowana z dwoma miejscami po przecinku",
+				"zh-cn": "Ruuvi标签报告的压力值现在解析为两个小数位"
+			},
+			"0.11.7": {
+				"en": "Added a more helpful error message if the adapter terminates with error `EAFNOSUPPORT`",
+				"de": "Eine hilfreichere Fehlermeldung wurde hinzugefügt, wenn der Adapter mit dem Fehler \"EAFNOSUPPORT\" beendet wird",
+				"ru": "Добавлено более полезное сообщение об ошибке, если адаптер завершает работу с ошибкой `EAFNOSUPPORT`",
+				"pt": "Adicionada uma mensagem de erro mais útil se o adaptador terminar com o erro `EAFNOSUPPORT`",
+				"nl": "Een nuttiger foutbericht toegevoegd als de adapter eindigt met de fout 'EAFNOSUPPORT'",
+				"fr": "Ajout d'un message d'erreur plus utile si l'adaptateur se termine par l'erreur `EAFNOSUPPORT`",
+				"it": "Aggiunto un messaggio di errore più utile se l'adattatore termina con l'errore \"EAFNOSUPPORT\"",
+				"es": "Se agregó un mensaje de error más útil si el adaptador termina con el error `EAFNOSUPPORT`",
+				"pl": "Dodano bardziej pomocny komunikat o błędzie, jeśli adapter kończy pracę z błędem `EAFNOSUPPORT`",
+				"zh-cn": "如果适配器以错误“ EAFNOSUPPORT”终止，则添加了更有用的错误消息"
+			}
+		},
+		"title": "Bluetooth Low Energy (BLE)",
+		"titleLang": {
+			"en": "Bluetooth Low Energy (BLE)",
+			"de": "Bluetooth-Niedrigenergie (BLE)",
+			"ru": "Bluetooth с низким энергопотреблением (BLE)",
+			"pt": "Bluetooth de baixa energia (BLE)",
+			"nl": "Bluetooth lage energie (BLE)",
+			"fr": "Bluetooth à faible consommation d'énergie (BLE)",
+			"it": "Bluetooth a bassa energia (BLE)",
+			"es": "Bluetooth de baja energía (BLE)",
+			"pl": "Niskoenergetyczna łączność Bluetooth (BLE)",
+			"zh-cn": "低功耗蓝牙 (BLE)"
+		},
+		"desc": {
+			"en": "Monitor Bluetooth Low Energy (BLE) beacons",
+			"de": "Überwacht Bluetooth Low Energy (BLE) beacons",
+			"ru": "Монитор Bluetooth низкой энергии (BLE) маяки",
+			"pt": "Monitor de Bluetooth Low Energy (BLE) beacons",
+			"nl": "Monitor Bluetooth Low Energy (BLE) beacons",
+			"fr": "Moniteur Bluetooth Low Energy (BLE) balises",
+			"it": "Monitor Bluetooth Low Energy (BLE) beacon",
+			"es": "Monitor de Bluetooth de Baja Energía (BLE) las balizas",
+			"pl": "Monitor Bluetooth low energy (BLE) latarnie",
+			"zh-cn": "监测蓝牙低能源(BLE)信标"
+		},
+		"authors": ["AlCalzone <d.griesel@gmx.net>"],
+		"platform": "Javascript/Node.js",
+		"license": "MIT",
+		"main": "build/main.js",
+		"mode": "daemon",
+		"icon": "ble.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
+		"keywords": ["bluetooth", "BLE", "beacon"],
+		"readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
+		"loglevel": "info",
+		"type": "hardware",
+		"messagebox": true,
+		"compact": false,
+		"materialize": true,
+		"dependencies": [
+			{
+				"js-controller": ">=1.4.2"
+			}
+		],
+		"osDependencies": {
+			"linux": [
+				"bluetooth",
+				"bluez",
+				"libbluetooth-dev",
+				"libudev-dev",
+				"libcap2-bin"
+			]
+		}
+	},
+	"native": {
+		"services": "",
+		"hciDevice": 0,
+		"server": "",
+		"plugins": "",
+		"allowEmptyDevices": false,
+		"rssiThrottle": 0
+	},
+	"objects": [],
+	"instanceObjects": [
+		{
+			"_id": "info",
+			"type": "channel",
+			"common": {
+				"name": "Adapter-Information"
+			},
+			"native": {}
+		},
+		{
+			"_id": "info.connection",
+			"type": "state",
+			"common": {
+				"role": "indicator.connected",
+				"name": "If BLE scan is active",
+				"type": "boolean",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "info.driverState",
+			"type": "state",
+			"common": {
+				"role": "indicator.state",
+				"name": "bluetooth driver state",
+				"desc": "The current state of the bluetooth driver",
+				"type": "string",
+				"read": true,
+				"write": false,
+				"def": "poweredOff"
+			},
+			"native": {}
+		},
+		{
+			"_id": "options",
+			"type": "channel",
+			"common": {
+				"name": "Adapter-Optionen"
+			},
+			"native": {}
+		},
+		{
+			"_id": "options.allowNewDevices",
+			"type": "state",
+			"common": {
+				"role": "switch",
+				"name": "Allow new devices",
+				"desc": "Whether new devices should be recorded or not",
+				"type": "boolean",
+				"read": true,
+				"write": true,
+				"def": false
+			},
+			"native": {}
+		}
+	]
 }

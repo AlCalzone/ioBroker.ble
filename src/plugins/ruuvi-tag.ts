@@ -10,13 +10,13 @@ import {
 	parseDataFormat2or4,
 	parseDataFormat3,
 	parseDataFormat5,
-	RuuviContext,
+	type RuuviContext,
 } from "./lib/ruuvi-tag_protocol";
 import {
-	DeviceObjectDefinition,
 	getServiceData,
-	Plugin,
-	StateObjectDefinition,
+	type DeviceObjectDefinition,
+	type Plugin,
+	type StateObjectDefinition,
 } from "./plugin";
 
 const serviceUUID = "feaa";

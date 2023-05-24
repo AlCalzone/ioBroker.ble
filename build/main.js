@@ -21,6 +21,7 @@ var import_global = require("./lib/global");
 var import_iobroker_objects = require("./lib/iobroker-objects");
 var import_object_cache = require("./lib/object-cache");
 var import_scanProcessInterface = require("./lib/scanProcessInterface");
+var import_net = require("net");
 var import_plugins = __toESM(require("./plugins"));
 let enabledPlugins;
 let services = [];
@@ -39,6 +40,7 @@ function autoResetAllowNewDevices() {
 const ignoredNewDeviceIDs = /* @__PURE__ */ new Set();
 let rssiUpdateInterval = 0;
 let scanProcess;
+let socket;
 const adapter = utils.adapter({
   name: "ble",
   ready: async () => {
@@ -66,8 +68,13 @@ const adapter = utils.adapter({
     adapter.subscribeStates("*");
     adapter.subscribeObjects("*");
     await adapter.setStateAsync("options.allowNewDevices", false, true);
-    if (!process.env.TESTING)
-      startScanProcess();
+    if (!process.env.TESTING) {
+      if (adapter.config.server) {
+        connectToBLEServer();
+      } else {
+        startScanProcess();
+      }
+    }
   },
   unload: (callback) => {
     try {
@@ -154,30 +161,55 @@ function startScanProcess() {
       scanProcess = void 0;
     }
   });
-  scanProcess.on("message", (0, import_scanProcessInterface.getMessageReviver)((message) => {
-    var _a;
-    switch (message.type) {
-      case "connected":
-        adapter.setState("info.connection", true, true);
-        break;
-      case "disconnected":
-        adapter.setState("info.connection", false, true);
-        break;
-      case "discover":
-        onDiscover(message.peripheral);
-        break;
-      case "driverState":
-        adapter.setState("info.driverState", message.driverState, true);
-        break;
-      case "error":
-      case "fatal":
-        handleScanProcessError(message.error);
-        break;
-      case "log":
-        adapter.log[(_a = message.level) != null ? _a : "info"](message.message);
-        break;
+  scanProcess.on("message", (0, import_scanProcessInterface.getMessageReviver)(handleMessage));
+}
+function connectToBLEServer() {
+  socket = new import_net.Socket();
+  const reviver = (0, import_scanProcessInterface.getMessageReviver)(handleMessage);
+  socket.on("close", () => {
+    adapter.log.info("Disconnected from BLE server");
+    adapter.setState("info.connection", false, true);
+  }).on("connect", () => {
+    adapter.log.info("Connected to BLE server");
+    adapter.setState("info.connection", true, true);
+  }).on("data", (data) => {
+    try {
+      const msg = JSON.parse(data.toString());
+      reviver(msg);
+    } catch (e) {
+      console.error(e);
     }
-  }));
+  });
+  const [host, port] = adapter.config.server.split(":", 2);
+  adapter.log.info("connecting to BLE server...");
+  socket.connect({
+    host,
+    port: +port
+  });
+}
+function handleMessage(message) {
+  var _a;
+  switch (message.type) {
+    case "connected":
+      adapter.setState("info.connection", true, true);
+      break;
+    case "disconnected":
+      adapter.setState("info.connection", false, true);
+      break;
+    case "discover":
+      onDiscover(message.peripheral);
+      break;
+    case "driverState":
+      adapter.setState("info.driverState", message.driverState, true);
+      break;
+    case "error":
+    case "fatal":
+      handleScanProcessError(message.error);
+      break;
+    case "log":
+      adapter.log[(_a = message.level) != null ? _a : "info"](message.message);
+      break;
+  }
 }
 function fixServiceName(name) {
   if (name == null)

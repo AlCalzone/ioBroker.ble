@@ -13,8 +13,6 @@
 		"outDir": "./build/",
 		"removeComments": false,
 		"jsx": "react",
-		// Avoid runtime imports that are unnecessary
-		"importsNotUsedAsValues": "error",
 		// Required for TS debugging
 		"sourceMap": true,
 		"inlineSourceMap": false

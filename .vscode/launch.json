@@ -5,13 +5,22 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Attach",
+			"name": "Debug TS adapter",
 			"port": 9229,
 			"request": "attach",
 			"skipFiles": [
 				"<node_internals>/**"
 			],
-			"type": "pwa-node"
+			"type": "node",
+			"resolveSourceMapLocations": [
+				"${workspaceFolder}/**",
+				// only exclude node_modules from the workspace folder
+				// If we exclude node_modules from .dev-server/..., we don't get sourcemaps
+				"!${workspaceFolder}/node_modules/**"
+			],
+			"sourceMapPathOverrides": {
+				"../src/*": "${workspaceFolder}/src/*"
+			}
 		},
 		{
 			"type": "node",

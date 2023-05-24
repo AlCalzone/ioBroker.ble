@@ -95,6 +95,16 @@ module.exports = {
 			{ allowArgumentsExplicitlyTypedAsAny: true },
 		],
 		"@typescript-eslint/no-this-alias": "off",
+
+		// Make sure type imports are used where necessary
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{
+				fixStyle: "inline-type-imports",
+				disallowTypeAnnotations: false,
+			},
+		],
+		"@typescript-eslint/consistent-type-exports": "error",
 	},
 	overrides: [
 		{
