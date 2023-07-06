@@ -1,0 +1,12 @@
+{
+	"attribute_ids": [
+		{
+			"name": "VersionNumberList",
+			"value": 512
+		},
+		{
+			"name": "ServiceDatabaseState",
+			"value": 513
+		}
+	]
+}

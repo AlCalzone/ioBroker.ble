@@ -1,0 +1,100 @@
+{
+	"uuids": [
+		{
+			"uuid": 1,
+			"name": "SDP"
+		},
+		{
+			"uuid": 2,
+			"name": "UDP"
+		},
+		{
+			"uuid": 3,
+			"name": "RFCOMM"
+		},
+		{
+			"uuid": 4,
+			"name": "TCP"
+		},
+		{
+			"uuid": 5,
+			"name": "TCS-BIN"
+		},
+		{
+			"uuid": 6,
+			"name": "TCS-AT"
+		},
+		{
+			"uuid": 7,
+			"name": "ATT"
+		},
+		{
+			"uuid": 8,
+			"name": "OBEX"
+		},
+		{
+			"uuid": 9,
+			"name": "IP"
+		},
+		{
+			"uuid": 10,
+			"name": "FTP"
+		},
+		{
+			"uuid": 12,
+			"name": "HTTP"
+		},
+		{
+			"uuid": 14,
+			"name": "WSP"
+		},
+		{
+			"uuid": 15,
+			"name": "BNEP"
+		},
+		{
+			"uuid": 16,
+			"name": "UPNP"
+		},
+		{
+			"uuid": 17,
+			"name": "HIDP"
+		},
+		{
+			"uuid": 18,
+			"name": "HardcopyControlChannel"
+		},
+		{
+			"uuid": 20,
+			"name": "HardcopyDataChannel"
+		},
+		{
+			"uuid": 22,
+			"name": "HardcopyNotification"
+		},
+		{
+			"uuid": 23,
+			"name": "AVCTP"
+		},
+		{
+			"uuid": 25,
+			"name": "AVDTP"
+		},
+		{
+			"uuid": 27,
+			"name": "CMTP"
+		},
+		{
+			"uuid": 30,
+			"name": "MCAPControlChannel"
+		},
+		{
+			"uuid": 31,
+			"name": "MCAPDataChannel"
+		},
+		{
+			"uuid": 256,
+			"name": "L2CAP"
+		}
+	]
+}

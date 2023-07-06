@@ -1,0 +1,48 @@
+{
+	"permitted_characteristics": [
+		{
+			"service": "org.bluetooth.service.user_data",
+			"characteristics": [
+				"org.bluetooth.characteristic.activity_goal",
+				"org.bluetooth.characteristic.aerobic_heart_rate_lower_limit",
+				"org.bluetooth.characteristic.aerobic_heart_rate_upper_limit",
+				"org.bluetooth.characteristic.aerobic_threshold",
+				"org.bluetooth.characteristic.age",
+				"org.bluetooth.characteristic.anaerobic_heart_rate_lower_limit",
+				"org.bluetooth.characteristic.anaerobic_heart_rate_upper_limit",
+				"org.bluetooth.characteristic.anaerobic_threshold",
+				"org.bluetooth.characteristic.caloric_intake",
+				"org.bluetooth.characteristic.date_of_birth",
+				"org.bluetooth.characteristic.date_of_threshold_assessment",
+				"org.bluetooth.characteristic.device_wearing_position",
+				"org.bluetooth.characteristic.email_address",
+				"org.bluetooth.characteristic.fat_burn_heart_rate_lower_limit",
+				"org.bluetooth.characteristic.fat_burn_heart_rate_upper_limit",
+				"org.bluetooth.characteristic.first_name",
+				"org.bluetooth.characteristic.five_zone_heart_rate_limits",
+				"org.bluetooth.characteristic.four_zone_heart_rate_limits",
+				"org.bluetooth.characteristic.gender",
+				"org.bluetooth.characteristic.handedness",
+				"org.bluetooth.characteristic.heart_rate_max",
+				"org.bluetooth.characteristic.height",
+				"org.bluetooth.characteristic.high_intensity_exercise_threshold",
+				"org.bluetooth.characteristic.high_resolution_height",
+				"org.bluetooth.characteristic.hip_circumference",
+				"org.bluetooth.characteristic.language",
+				"org.bluetooth.characteristic.last_name",
+				"org.bluetooth.characteristic.maximum_recommended_heart_rate",
+				"org.bluetooth.characteristic.middle_name",
+				"org.bluetooth.characteristic.preferred_units",
+				"org.bluetooth.characteristic.resting_heart_rate",
+				"org.bluetooth.characteristic.sedentary_interval_notification",
+				"org.bluetooth.characteristic.sport_type_for_aerobic_and_anaerobic_thresholds",
+				"org.bluetooth.characteristic.stride_length",
+				"org.bluetooth.characteristic.three_zone_heart_rate_limits",
+				"org.bluetooth.characteristic.two_zone_heart_rate_limits",
+				"org.bluetooth.characteristic.vo2_max",
+				"org.bluetooth.characteristic.waist_circumference",
+				"org.bluetooth.characteristic.weight"
+			]
+		}
+	]
+}

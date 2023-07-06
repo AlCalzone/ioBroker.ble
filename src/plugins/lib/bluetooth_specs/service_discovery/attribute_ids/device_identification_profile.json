@@ -1,0 +1,28 @@
+{
+    "attribute_ids": [
+        {
+            "name": "SpecificationID",
+            "value": 512
+        },
+        {
+            "name": "VendorID",
+            "value": 513
+        },
+        {
+            "name": "ProductID",
+            "value": 514
+        },
+        {
+            "name": "Version",
+            "value": 515
+        },
+        {
+            "name": "PrimaryRecord",
+            "value": 516
+        },
+        {
+            "name": "VendorIDSource",
+            "value": 517
+        }
+    ]
+}

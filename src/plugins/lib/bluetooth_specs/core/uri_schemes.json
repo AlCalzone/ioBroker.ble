@@ -1,0 +1,748 @@
+{
+	"uri_schemes": [
+		{
+			"name": "empty scheme name",
+			"value": 1
+		},
+		{
+			"name": "aaa:",
+			"value": 2
+		},
+		{
+			"name": "aaas:",
+			"value": 3
+		},
+		{
+			"name": "about:",
+			"value": 4
+		},
+		{
+			"name": "acap:",
+			"value": 5
+		},
+		{
+			"name": "acct:",
+			"value": 6
+		},
+		{
+			"name": "cap:",
+			"value": 7
+		},
+		{
+			"name": "cid:",
+			"value": 8
+		},
+		{
+			"name": "coap:",
+			"value": 9
+		},
+		{
+			"name": "coaps:",
+			"value": 10
+		},
+		{
+			"name": "crid:",
+			"value": 11
+		},
+		{
+			"name": "data:",
+			"value": 12
+		},
+		{
+			"name": "dav:",
+			"value": 13
+		},
+		{
+			"name": "dict:",
+			"value": 14
+		},
+		{
+			"name": "dns:",
+			"value": 15
+		},
+		{
+			"name": "file:",
+			"value": 16
+		},
+		{
+			"name": "ftp:",
+			"value": 17
+		},
+		{
+			"name": "geo:",
+			"value": 18
+		},
+		{
+			"name": "go:",
+			"value": 19
+		},
+		{
+			"name": "gopher:",
+			"value": 20
+		},
+		{
+			"name": "h323:",
+			"value": 21
+		},
+		{
+			"name": "http:",
+			"value": 22
+		},
+		{
+			"name": "https:",
+			"value": 23
+		},
+		{
+			"name": "iax:",
+			"value": 24
+		},
+		{
+			"name": "icap:",
+			"value": 25
+		},
+		{
+			"name": "im:",
+			"value": 26
+		},
+		{
+			"name": "imap:",
+			"value": 27
+		},
+		{
+			"name": "info:",
+			"value": 28
+		},
+		{
+			"name": "ipp:",
+			"value": 29
+		},
+		{
+			"name": "ipps:",
+			"value": 30
+		},
+		{
+			"name": "iris:",
+			"value": 31
+		},
+		{
+			"name": "iris.beep:",
+			"value": 32
+		},
+		{
+			"name": "iris.xpc:",
+			"value": 33
+		},
+		{
+			"name": "iris.xpcs:",
+			"value": 34
+		},
+		{
+			"name": "iris.lwz:",
+			"value": 35
+		},
+		{
+			"name": "jabber:",
+			"value": 36
+		},
+		{
+			"name": "ldap:",
+			"value": 37
+		},
+		{
+			"name": "mailto:",
+			"value": 38
+		},
+		{
+			"name": "mid:",
+			"value": 39
+		},
+		{
+			"name": "msrp:",
+			"value": 40
+		},
+		{
+			"name": "msrps:",
+			"value": 41
+		},
+		{
+			"name": "mtqp:",
+			"value": 42
+		},
+		{
+			"name": "mupdate:",
+			"value": 43
+		},
+		{
+			"name": "news:",
+			"value": 44
+		},
+		{
+			"name": "nfs:",
+			"value": 45
+		},
+		{
+			"name": "ni:",
+			"value": 46
+		},
+		{
+			"name": "nih:",
+			"value": 47
+		},
+		{
+			"name": "nntp:",
+			"value": 48
+		},
+		{
+			"name": "opaquelocktoken:",
+			"value": 49
+		},
+		{
+			"name": "pop:",
+			"value": 50
+		},
+		{
+			"name": "pres:",
+			"value": 51
+		},
+		{
+			"name": "reload:",
+			"value": 52
+		},
+		{
+			"name": "rtsp:",
+			"value": 53
+		},
+		{
+			"name": "rtsps:",
+			"value": 54
+		},
+		{
+			"name": "rtspu:",
+			"value": 55
+		},
+		{
+			"name": "service:",
+			"value": 56
+		},
+		{
+			"name": "session:",
+			"value": 57
+		},
+		{
+			"name": "shttp:",
+			"value": 58
+		},
+		{
+			"name": "sieve:",
+			"value": 59
+		},
+		{
+			"name": "sip:",
+			"value": 60
+		},
+		{
+			"name": "sips:",
+			"value": 61
+		},
+		{
+			"name": "sms:",
+			"value": 62
+		},
+		{
+			"name": "snmp:",
+			"value": 63
+		},
+		{
+			"name": "soap.beep:",
+			"value": 64
+		},
+		{
+			"name": "soap.beeps:",
+			"value": 65
+		},
+		{
+			"name": "stun:",
+			"value": 66
+		},
+		{
+			"name": "stuns:",
+			"value": 67
+		},
+		{
+			"name": "tag:",
+			"value": 68
+		},
+		{
+			"name": "tel:",
+			"value": 69
+		},
+		{
+			"name": "telnet:",
+			"value": 70
+		},
+		{
+			"name": "tftp:",
+			"value": 71
+		},
+		{
+			"name": "thismessage:",
+			"value": 72
+		},
+		{
+			"name": "tn3270:",
+			"value": 73
+		},
+		{
+			"name": "tip:",
+			"value": 74
+		},
+		{
+			"name": "turn:",
+			"value": 75
+		},
+		{
+			"name": "turns:",
+			"value": 76
+		},
+		{
+			"name": "tv:",
+			"value": 77
+		},
+		{
+			"name": "urn:",
+			"value": 78
+		},
+		{
+			"name": "vemmi:",
+			"value": 79
+		},
+		{
+			"name": "ws:",
+			"value": 80
+		},
+		{
+			"name": "wss:",
+			"value": 81
+		},
+		{
+			"name": "xcon:",
+			"value": 82
+		},
+		{
+			"name": "xcon-userid:",
+			"value": 83
+		},
+		{
+			"name": "xmlrpc.beep:",
+			"value": 84
+		},
+		{
+			"name": "xmlrpc.beeps:",
+			"value": 85
+		},
+		{
+			"name": "xmpp:",
+			"value": 86
+		},
+		{
+			"name": "z39.50r:",
+			"value": 87
+		},
+		{
+			"name": "z39.50s:",
+			"value": 88
+		},
+		{
+			"name": "acr:",
+			"value": 89
+		},
+		{
+			"name": "adiumxtra:",
+			"value": 90
+		},
+		{
+			"name": "afp:",
+			"value": 91
+		},
+		{
+			"name": "afs:",
+			"value": 92
+		},
+		{
+			"name": "aim:",
+			"value": 93
+		},
+		{
+			"name": "apt:",
+			"value": 94
+		},
+		{
+			"name": "attachment:",
+			"value": 95
+		},
+		{
+			"name": "aw:",
+			"value": 96
+		},
+		{
+			"name": "barion:",
+			"value": 97
+		},
+		{
+			"name": "beshare:",
+			"value": 98
+		},
+		{
+			"name": "bitcoin:",
+			"value": 99
+		},
+		{
+			"name": "bolo:",
+			"value": 100
+		},
+		{
+			"name": "callto:",
+			"value": 101
+		},
+		{
+			"name": "chrome:",
+			"value": 102
+		},
+		{
+			"name": "chrome-extension:",
+			"value": 103
+		},
+		{
+			"name": "com-eventbrite-attendee:",
+			"value": 104
+		},
+		{
+			"name": "content:",
+			"value": 105
+		},
+		{
+			"name": "cvs:",
+			"value": 106
+		},
+		{
+			"name": "dlna-playsingle:",
+			"value": 107
+		},
+		{
+			"name": "dlna-playcontainer:",
+			"value": 108
+		},
+		{
+			"name": "dtn:",
+			"value": 109
+		},
+		{
+			"name": "dvb:",
+			"value": 110
+		},
+		{
+			"name": "ed2k:",
+			"value": 111
+		},
+		{
+			"name": "facetime:",
+			"value": 112
+		},
+		{
+			"name": "feed:",
+			"value": 113
+		},
+		{
+			"name": "feedready:",
+			"value": 114
+		},
+		{
+			"name": "finger:",
+			"value": 115
+		},
+		{
+			"name": "fish:",
+			"value": 116
+		},
+		{
+			"name": "gg:",
+			"value": 117
+		},
+		{
+			"name": "git:",
+			"value": 118
+		},
+		{
+			"name": "gizmoproject:",
+			"value": 119
+		},
+		{
+			"name": "gtalk:",
+			"value": 120
+		},
+		{
+			"name": "ham:",
+			"value": 121
+		},
+		{
+			"name": "hcp:",
+			"value": 122
+		},
+		{
+			"name": "icon:",
+			"value": 123
+		},
+		{
+			"name": "ipn:",
+			"value": 124
+		},
+		{
+			"name": "irc:",
+			"value": 125
+		},
+		{
+			"name": "irc6:",
+			"value": 126
+		},
+		{
+			"name": "ircs:",
+			"value": 127
+		},
+		{
+			"name": "itms:",
+			"value": 128
+		},
+		{
+			"name": "jar:",
+			"value": 129
+		},
+		{
+			"name": "jms:",
+			"value": 130
+		},
+		{
+			"name": "keyparc:",
+			"value": 131
+		},
+		{
+			"name": "lastfm:",
+			"value": 132
+		},
+		{
+			"name": "ldaps:",
+			"value": 133
+		},
+		{
+			"name": "magnet:",
+			"value": 134
+		},
+		{
+			"name": "maps:",
+			"value": 135
+		},
+		{
+			"name": "market:",
+			"value": 136
+		},
+		{
+			"name": "message:",
+			"value": 137
+		},
+		{
+			"name": "mms:",
+			"value": 138
+		},
+		{
+			"name": "ms-help:",
+			"value": 139
+		},
+		{
+			"name": "ms-settings-power:",
+			"value": 140
+		},
+		{
+			"name": "msnim:",
+			"value": 141
+		},
+		{
+			"name": "mumble:",
+			"value": 142
+		},
+		{
+			"name": "mvn:",
+			"value": 143
+		},
+		{
+			"name": "notes:",
+			"value": 144
+		},
+		{
+			"name": "oid:",
+			"value": 145
+		},
+		{
+			"name": "palm:",
+			"value": 146
+		},
+		{
+			"name": "paparazzi:",
+			"value": 147
+		},
+		{
+			"name": "pkcs11:",
+			"value": 148
+		},
+		{
+			"name": "platform:",
+			"value": 149
+		},
+		{
+			"name": "proxy:",
+			"value": 150
+		},
+		{
+			"name": "psyc:",
+			"value": 151
+		},
+		{
+			"name": "query:",
+			"value": 152
+		},
+		{
+			"name": "res:",
+			"value": 153
+		},
+		{
+			"name": "resource:",
+			"value": 154
+		},
+		{
+			"name": "rmi:",
+			"value": 155
+		},
+		{
+			"name": "rsync:",
+			"value": 156
+		},
+		{
+			"name": "rtmfp:",
+			"value": 157
+		},
+		{
+			"name": "rtmp:",
+			"value": 158
+		},
+		{
+			"name": "secondlife:",
+			"value": 159
+		},
+		{
+			"name": "sftp:",
+			"value": 160
+		},
+		{
+			"name": "sgn:",
+			"value": 161
+		},
+		{
+			"name": "skype:",
+			"value": 162
+		},
+		{
+			"name": "smb:",
+			"value": 163
+		},
+		{
+			"name": "smtp:",
+			"value": 164
+		},
+		{
+			"name": "soldat:",
+			"value": 165
+		},
+		{
+			"name": "spotify:",
+			"value": 166
+		},
+		{
+			"name": "ssh:",
+			"value": 167
+		},
+		{
+			"name": "steam:",
+			"value": 168
+		},
+		{
+			"name": "submit:",
+			"value": 169
+		},
+		{
+			"name": "svn:",
+			"value": 170
+		},
+		{
+			"name": "teamspeak:",
+			"value": 171
+		},
+		{
+			"name": "teliaeid:",
+			"value": 172
+		},
+		{
+			"name": "things:",
+			"value": 173
+		},
+		{
+			"name": "udp:",
+			"value": 174
+		},
+		{
+			"name": "unreal:",
+			"value": 175
+		},
+		{
+			"name": "ut2004:",
+			"value": 176
+		},
+		{
+			"name": "ventrilo:",
+			"value": 177
+		},
+		{
+			"name": "view-source:",
+			"value": 178
+		},
+		{
+			"name": "webcal:",
+			"value": 179
+		},
+		{
+			"name": "wtai:",
+			"value": 180
+		},
+		{
+			"name": "wyciwyg:",
+			"value": 181
+		},
+		{
+			"name": "xfire:",
+			"value": 182
+		},
+		{
+			"name": "xri:",
+			"value": 183
+		},
+		{
+			"name": "ymsgr:",
+			"value": 184
+		},
+		{
+			"name": "example:",
+			"value": 185
+		},
+		{
+			"name": "ms-settings-cloudstorage:",
+			"value": 186
+		}
+	]
+}

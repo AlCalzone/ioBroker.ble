@@ -1,0 +1,72 @@
+{
+	"attribute_ids": [
+		{
+			"name": "HIDDeviceReleaseNumber (Deprecated)",
+			"value": 512
+		},
+		{
+			"name": "HIDParserVersion",
+			"value": 513
+		},
+		{
+			"name": "HIDDeviceSubclass",
+			"value": 514
+		},
+		{
+			"name": "HIDCountryCode",
+			"value": 515
+		},
+		{
+			"name": "HIDVirtualCable",
+			"value": 516
+		},
+		{
+			"name": "HIDReconnectInitiate",
+			"value": 517
+		},
+		{
+			"name": "HIDDescriptorList",
+			"value": 518
+		},
+		{
+			"name": "HIDLANGIDBaseList",
+			"value": 519
+		},
+		{
+			"name": "HIDSDPDisable (Deprecated)",
+			"value": 520
+		},
+		{
+			"name": "HIDBatteryPower",
+			"value": 521
+		},
+		{
+			"name": "HIDRemoteWake",
+			"value": 522
+		},
+		{
+			"name": "HIDProfileVersion",
+			"value": 523
+		},
+		{
+			"name": "HIDSupervisionTimeout",
+			"value": 524
+		},
+		{
+			"name": "HIDNormallyConnectable",
+			"value": 525
+		},
+		{
+			"name": "HIDBootDevice",
+			"value": 526
+		},
+		{
+			"name": "HIDSSRHostMaxLatency",
+			"value": 527
+		},
+		{
+			"name": "HIDSSRHostMinTimeout",
+			"value": 528
+		}
+	]
+}

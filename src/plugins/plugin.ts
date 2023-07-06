@@ -47,6 +47,9 @@ export interface Plugin<TContext = any> {
 	defineObjects: (context: TContext) => PeripheralObjectStructure | undefined;
 	/** Returns the values extracted from the peripheral */
 	getValues: (context: TContext) => Record<string, any> | undefined;
+
+	/** Receive state changes from the adapter */
+	stateChange?: () => void;
 }
 
 export function getServiceData(

@@ -1,0 +1,72 @@
+{
+	"psms": [
+		{
+			"name": "SDP",
+			"psm": 1
+		},
+		{
+			"name": "RFCOMM",
+			"psm": 3
+		},
+		{
+			"name": "TCS-BIN",
+			"psm": 5
+		},
+		{
+			"name": "TCS-BIN-CORDLESS",
+			"psm": 7
+		},
+		{
+			"name": "BNEP",
+			"psm": 15
+		},
+		{
+			"name": "HID_Control",
+			"psm": 17
+		},
+		{
+			"name": "HID_Interrupt",
+			"psm": 19
+		},
+		{
+			"name": "UPnP",
+			"psm": 21
+		},
+		{
+			"name": "AVCTP",
+			"psm": 23
+		},
+		{
+			"name": "AVDTP",
+			"psm": 25
+		},
+		{
+			"name": "AVCTP_Browsing",
+			"psm": 27
+		},
+		{
+			"name": "UDI_C-Plane",
+			"psm": 29
+		},
+		{
+			"name": "ATT",
+			"psm": 31
+		},
+		{
+			"name": "3DSP",
+			"psm": 33
+		},
+		{
+			"name": "LE_PSM_IPSP",
+			"psm": 35
+		},
+		{
+			"name": "OTS",
+			"psm": 37
+		},
+		{
+			"name": "EATT",
+			"psm": 39
+		}
+	]
+}

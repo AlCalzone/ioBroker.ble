@@ -1,0 +1,16 @@
+{
+	"attribute_ids": [
+		{
+			"name": "GoepL2capPsm (OPP v1.2 and later)",
+			"value": 512
+		},
+		{
+			"name": "Service Version",
+			"value": 768
+		},
+		{
+			"name": "Supported Formats List",
+			"value": 771
+		}
+	]
+}

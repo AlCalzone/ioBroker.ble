@@ -1,3 +1,4 @@
+"use strict";
 var import_net = require("net");
 var import_misc = require("./lib/misc");
 var import_scanProcessInterface = require("./lib/scanProcessInterface");
@@ -136,7 +137,7 @@ async function stopScanning() {
   sendAsync({ type: "disconnected" });
   isScanning = false;
 }
-function ensureServer() {
+function maybeStartServer() {
   if (process.send)
     return Promise.resolve();
   return new Promise((resolve, reject) => {
@@ -147,6 +148,14 @@ function ensureServer() {
         console.log("Client disconnected");
         clients.delete(socket);
       });
+      socket.on("data", (data) => {
+        try {
+          const msg = JSON.parse(data.toString("utf8"));
+          handleMessage(msg);
+        } catch (e) {
+          console.error(e);
+        }
+      });
     });
     server.maxConnections = 1;
     server.on("error", (err) => {
@@ -154,17 +163,22 @@ function ensureServer() {
         reject(err);
       }
     });
-    server.listen({
-      host: argv.listenInterface,
-      port: argv.listenPort
-    }, () => {
-      const address = server.address();
-      console.log(`Server listening on tcp://${address.address}:${address.port}`);
-      resolve();
-    });
+    server.listen(
+      {
+        host: argv.listenInterface,
+        port: argv.listenPort
+      },
+      () => {
+        const address = server.address();
+        console.log(
+          `Server listening on tcp://${address.address}:${address.port}`
+        );
+        resolve();
+      }
+    );
   });
 }
-async function main() {
+async function loadNoble() {
   process.env.NOBLE_HCI_DEVICE_ID = argv.hciDevice.toString();
   try {
     noble = require("@abandonware/noble");
@@ -175,6 +189,8 @@ async function main() {
     await sendAsync({ type: "fatal", error });
     process.exit(import_scanProcessInterface.ScanExitCodes.RequireNobleFailed);
   }
+}
+async function main() {
   noble.on("stateChange", (state) => {
     switch (state) {
       case "poweredOn":
@@ -184,11 +200,22 @@ async function main() {
         stopScanning();
         break;
     }
+    console.log(`driver state is ${state}`);
     sendAsync({ type: "driverState", driverState: state });
   });
   if (noble.state === "poweredOn")
     startScanning();
   sendAsync({ type: "driverState", driverState: noble.state });
 }
-ensureServer().then(() => main());
+(async () => {
+  await loadNoble();
+  await maybeStartServer();
+  if (server) {
+    server.once("connection", () => {
+      main();
+    });
+  } else {
+    main();
+  }
+})();
 //# sourceMappingURL=scanProcess.js.map

@@ -1,0 +1,20 @@
+{
+	"attribute_ids": [
+		{
+			"name": "1284ID",
+			"value": 768
+		},
+		{
+			"name": "Device Name",
+			"value": 770
+		},
+		{
+			"name": "Friendly Name",
+			"value": 772
+		},
+		{
+			"name": "Device Location",
+			"value": 774
+		}
+	]
+}

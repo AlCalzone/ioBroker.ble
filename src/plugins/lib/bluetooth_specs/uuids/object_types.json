@@ -1,0 +1,14 @@
+{
+	"uuids": [
+		{
+			"uuid": 10954,
+			"name": "Unspecified",
+			"id": "org.bluetooth.object.unspecified"
+		},
+		{
+			"uuid": 10955,
+			"name": "Directory Listing",
+			"id": "org.bluetooth.object.directory_listing"
+		}
+	]
+}

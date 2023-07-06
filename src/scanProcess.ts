@@ -181,6 +181,16 @@ function maybeStartServer(): Promise<void> {
 				console.log("Client disconnected");
 				clients.delete(socket);
 			});
+
+			// Handle incoming commands
+			socket.on("data", (data) => {
+				try {
+					const msg = JSON.parse(data.toString("utf8"));
+					handleMessage(msg as InboundMessage);
+				} catch (e) {
+					console.error(e);
+				}
+			});
 		});
 
 		// Do not allow more than one client to connect

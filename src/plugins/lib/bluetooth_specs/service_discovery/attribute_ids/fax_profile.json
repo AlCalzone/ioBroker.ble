@@ -1,0 +1,20 @@
+{
+	"attribute_ids": [
+		{
+			"name": "Fax Class 1 Support",
+			"value": 770
+		},
+		{
+			"name": "Fax Class 2.0 Support",
+			"value": 771
+		},
+		{
+			"name": "Fax Class 2 Support(vendor-specific class)",
+			"value": 772
+		},
+		{
+			"name": "Audio Feedback Support",
+			"value": 773
+		}
+	]
+}

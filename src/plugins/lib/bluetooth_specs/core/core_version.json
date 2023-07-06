@@ -1,0 +1,60 @@
+{
+	"core_version": [
+		{
+			"name": "Bluetooth® Core Specification 1.0b (Withdrawn)",
+			"value": 0
+		},
+		{
+			"name": "Bluetooth® Core Specification 1.1 (Withdrawn)",
+			"value": 1
+		},
+		{
+			"name": "Bluetooth® Core Specification 1.2 (Withdrawn)",
+			"value": 2
+		},
+		{
+			"name": "Bluetooth® Core Specification 2.0+EDR (Withdrawn)",
+			"value": 3
+		},
+		{
+			"name": "Bluetooth® Core Specification 2.1+EDR (Withdrawn)",
+			"value": 4
+		},
+		{
+			"name": "Bluetooth® Core Specification 3.0+HS (Withdrawn)",
+			"value": 5
+		},
+		{
+			"name": "Bluetooth® Core Specification 4.0 (Withdrawn)",
+			"value": 6
+		},
+		{
+			"name": "Bluetooth® Core Specification 4.1 (Deprecated)",
+			"value": 7
+		},
+		{
+			"name": "Bluetooth® Core Specification 4.2",
+			"value": 8
+		},
+		{
+			"name": "Bluetooth® Core Specification 5.0",
+			"value": 9
+		},
+		{
+			"name": "Bluetooth® Core Specification 5.1",
+			"value": 10
+		},
+		{
+			"name": "Bluetooth® Core Specification 5.2",
+			"value": 11
+		},
+		{
+			"name": "Bluetooth® Core Specification 5.3",
+			"value": 12
+		},
+		{
+			"name": "Bluetooth® Core Specification 5.4",
+			"value": 13
+		}
+	]
+}

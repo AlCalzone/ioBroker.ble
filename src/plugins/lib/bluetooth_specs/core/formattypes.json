@@ -1,0 +1,163 @@
+{
+	"formattypes": [
+		{
+			"value": 1,
+			"short_name": "boolean",
+			"exponent": false,
+			"size": 1
+		},
+		{
+			"value": 2,
+			"short_name": "uint2",
+			"exponent": false,
+			"size": 1
+		},
+		{
+			"value": 3,
+			"short_name": "uint4",
+			"exponent": false,
+			"size": 1
+		},
+		{
+			"value": 4,
+			"short_name": "uint8",
+			"exponent": true,
+			"size": 1
+		},
+		{
+			"value": 5,
+			"short_name": "uint12",
+			"exponent": true,
+			"size": 2
+		},
+		{
+			"value": 6,
+			"short_name": "uint16",
+			"exponent": true,
+			"size": 2
+		},
+		{
+			"value": 7,
+			"short_name": "uint24",
+			"exponent": true,
+			"size": 3
+		},
+		{
+			"value": 8,
+			"short_name": "uint32",
+			"exponent": true,
+			"size": 4
+		},
+		{
+			"value": 9,
+			"short_name": "uint48",
+			"exponent": true,
+			"size": 6
+		},
+		{
+			"value": 10,
+			"short_name": "uint64",
+			"exponent": true,
+			"size": 8
+		},
+		{
+			"value": 11,
+			"short_name": "uint128",
+			"exponent": true,
+			"size": 16
+		},
+		{
+			"value": 12,
+			"short_name": "sint8",
+			"exponent": true,
+			"size": 1
+		},
+		{
+			"value": 13,
+			"short_name": "sint12",
+			"exponent": true,
+			"size": 2
+		},
+		{
+			"value": 14,
+			"short_name": "sint16",
+			"exponent": true,
+			"size": 2
+		},
+		{
+			"value": 15,
+			"short_name": "sint24",
+			"exponent": true,
+			"size": 3
+		},
+		{
+			"value": 16,
+			"short_name": "sint32",
+			"exponent": true,
+			"size": 4
+		},
+		{
+			"value": 17,
+			"short_name": "sint48",
+			"exponent": true,
+			"size": 6
+		},
+		{
+			"value": 18,
+			"short_name": "sint64",
+			"exponent": true,
+			"size": 8
+		},
+		{
+			"value": 19,
+			"short_name": "sint128",
+			"exponent": true,
+			"size": 16
+		},
+		{
+			"value": 20,
+			"short_name": "float32",
+			"exponent": false,
+			"size": 4
+		},
+		{
+			"value": 21,
+			"short_name": "float64",
+			"exponent": false,
+			"size": 8
+		},
+		{
+			"value": 22,
+			"short_name": "medfloat16",
+			"exponent": false,
+			"size": 2
+		},
+		{
+			"value": 23,
+			"short_name": "medfloat32",
+			"exponent": false,
+			"size": 4
+		},
+		{
+			"value": 24,
+			"short_name": "uint16[2]",
+			"exponent": false,
+			"size": 4
+		},
+		{
+			"value": 25,
+			"short_name": "utf8s",
+			"exponent": false
+		},
+		{
+			"value": 26,
+			"short_name": "utf16s",
+			"exponent": false
+		},
+		{
+			"value": 27,
+			"short_name": "struct",
+			"exponent": false
+		}
+	]
+}

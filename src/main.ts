@@ -9,6 +9,7 @@ import {
 	extendState,
 } from "./lib/iobroker-objects";
 import { ObjectCache } from "./lib/object-cache";
+import Queue from "./lib/queue";
 import {
 	ScanExitCodes,
 	getMessageReviver,
@@ -41,6 +42,9 @@ function autoResetAllowNewDevices() {
 		);
 	}, 5000 * 60);
 }
+
+/** The queue of commands to be processed */
+const commandQueue = new Queue<{ args: any[] }>();
 
 /** Cache of new devices we already ignored */
 const ignoredNewDeviceIDs = new Set<string>();
@@ -129,12 +133,44 @@ const adapter = utils.adapter({
 				startScanProcess();
 			}
 		}
+
+		// TODO: I don't think we need to start/stop the scanning actively
+		// Just tell the scan process to connect to a device
+
+		// // Start observing the command queue
+		// const observer = commandQueue.observe();
+		// observer.subscribe((item) => {
+		// 	adapter.log.info("New item: " + item);
+		// 	if (scanProcess) {
+		// 		scanProcess.send("stopScanning");
+		// 	}
+
+		// 	// Do your thing here
+
+		// 	const queueSize = commandQueue.size();
+		// 	if (queueSize === 0 && scanProcess) {
+		// 		// If the queue is empty, start scanning again
+		// 		scanProcess.send("startScanning");
+		// 	} else if (queueSize === 0 && !scanProcess) {
+		// 		// If the queue is empty and the scan process is not running, start it
+		// 		startScanProcess();
+		// 	}
+		// });
+
+		// Look if a plugin has a stateChange function and call it
+		enabledPlugins.forEach((plugin) => {
+			if (plugin.stateChange) {
+				adapter.log.info("Plugin found with stateChange function");
+				plugin.stateChange();
+			}
+		});
 	},
 
 	// is called when adapter shuts down - callback has to be called under any circumstances!
 	unload: (callback) => {
 		try {
 			scanProcess?.kill();
+			socket?.destroy();
 		} catch {}
 		callback();
 	},
@@ -178,6 +214,10 @@ const adapter = utils.adapter({
 					autoResetAllowNewDevices();
 				}
 			}
+		}
+		if (/options\.command$/.test(id) && state != undefined && !state.ack) {
+			// and queue it for processing
+			commandQueue.enqueue({ args: [state.val] });
 		}
 	},
 
@@ -242,6 +282,7 @@ const adapter = utils.adapter({
 	},
 });
 
+/** Starts a local scanner process */
 function startScanProcess() {
 	const args: string[] = ["-s", ...services];
 	if (adapter.config.hciDevice) {
@@ -265,6 +306,7 @@ function startScanProcess() {
 	scanProcess.on("message", getMessageReviver(handleMessage));
 }
 
+/** Connects to a remote TCP server running a scanner process */
 function connectToBLEServer() {
 	socket = new Socket();
 

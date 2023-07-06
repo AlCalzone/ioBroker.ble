@@ -1,3 +1,4 @@
+"use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -30,7 +31,10 @@ class ObjectCache {
   constructor(expiryDuration = false) {
     this.expiryDuration = expiryDuration;
     this.cache = /* @__PURE__ */ new Map();
-    this.expireTimestamps = new import_sorted_list.SortedList(void 0, compareExpireTimestamp);
+    this.expireTimestamps = new import_sorted_list.SortedList(
+      void 0,
+      compareExpireTimestamp
+    );
   }
   async getObject(id) {
     if (!this.cache.has(id)) {
@@ -59,7 +63,9 @@ class ObjectCache {
   rememberForExpiry(id) {
     if (typeof this.expiryDuration !== "number")
       return;
-    const existingTimestamp = [...this.expireTimestamps].find((ets) => ets.id === id);
+    const existingTimestamp = [...this.expireTimestamps].find(
+      (ets) => ets.id === id
+    );
     if (existingTimestamp != null) {
       this.expireTimestamps.remove(existingTimestamp);
     }
@@ -69,7 +75,10 @@ class ObjectCache {
     };
     this.expireTimestamps.add(newTimestamp);
     if (this.expireTimer == null) {
-      this.expireTimer = setTimeout(() => this.expire(), this.expiryDuration);
+      this.expireTimer = setTimeout(
+        () => this.expire(),
+        this.expiryDuration
+      );
     }
   }
   expire() {
@@ -89,7 +98,10 @@ class ObjectCache {
       return;
     const nextTimestamp = this.expireTimestamps.peekStart();
     const timeDelta = nextTimestamp.timestamp - Date.now();
-    this.expireTimer = setTimeout(() => this.expire(), Math.max(timeDelta, 100));
+    this.expireTimer = setTimeout(
+      () => this.expire(),
+      Math.max(timeDelta, 100)
+    );
   }
   invalidateObject(id) {
     this.cache.delete(id);

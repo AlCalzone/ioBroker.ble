@@ -1,0 +1,40 @@
+{
+	"permitted_characteristics": [
+		{
+			"service": "org.bluetooth.service.environmental_sensing",
+			"characteristics": [
+				"org.bluetooth.characteristic.ammonia_concentration",
+				"org.bluetooth.characteristic.apparent_wind_direction",
+				"org.bluetooth.characteristic.apparent_wind_speed",
+				"org.bluetooth.characteristic.barometric_pressure_trend",
+				"org.bluetooth.characteristic.carbon_monoxide_concentration",
+				"org.bluetooth.characteristic.dew_point",
+				"org.bluetooth.characteristic.elevation",
+				"org.bluetooth.characteristic.gust_factor",
+				"org.bluetooth.characteristic.heat_index",
+				"org.bluetooth.characteristic.humidity",
+				"org.bluetooth.characteristic.irradiance",
+				"org.bluetooth.characteristic.magnetic_declination",
+				"org.bluetooth.characteristic.magnetic_flux_density_2d",
+				"org.bluetooth.characteristic.magnetic_flux_density_3d",
+				"org.bluetooth.characteristic.methane_concentration",
+				"org.bluetooth.characteristic.nitrogen_dioxide_concentration",
+				"org.bluetooth.characteristic.non-methane_volatile_organic_compounds_concentration",
+				"org.bluetooth.characteristic.ozone_concentration",
+				"org.bluetooth.characteristic.particulate_matter_pm10_concentration",
+				"org.bluetooth.characteristic.particulate_matter_pm1_concentration",
+				"org.bluetooth.characteristic.particulate_matter_pm2_5_concentration",
+				"org.bluetooth.characteristic.pollen_concentration",
+				"org.bluetooth.characteristic.pressure",
+				"org.bluetooth.characteristic.rainfall",
+				"org.bluetooth.characteristic.sulfur_dioxide_concentration",
+				"org.bluetooth.characteristic.sulfur_hexafluoride_concentration",
+				"org.bluetooth.characteristic.temperature",
+				"org.bluetooth.characteristic.true_wind_direction",
+				"org.bluetooth.characteristic.true_wind_speed",
+				"org.bluetooth.characteristic.uv_index",
+				"org.bluetooth.characteristic.wind_chill"
+			]
+		}
+	]
+}

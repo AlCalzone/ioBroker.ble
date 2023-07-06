@@ -1,0 +1,28 @@
+{
+	"attribute_ids": [
+		{
+			"name": "IpSubnet (Not used in PAN v1.0)",
+			"value": 512
+		},
+		{
+			"name": "SecurityDescription",
+			"value": 778
+		},
+		{
+			"name": "NetAccessType",
+			"value": 779
+		},
+		{
+			"name": "MaxNetAccessrate",
+			"value": 780
+		},
+		{
+			"name": "IPv4Subnet",
+			"value": 781
+		},
+		{
+			"name": "IPv6Subnet",
+			"value": 782
+		}
+	]
+}
