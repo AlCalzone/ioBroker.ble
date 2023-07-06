@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../../src/lib/object-polyfill.ts"],
   "sourcesContent": ["\uFEFFimport { composeObject, entries } from \"alcalzone-shared/objects\";\n\nexport function stripUndefinedProperties<T = any>(\n\tobj: Record<string, T>,\n): Record<string, T> {\n\treturn composeObject(entries(obj).filter(([_key, value]) => value != null));\n}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAC,qBAAuC;AAEjC,kCACN,KACoB;AACpB,SAAO,kCAAc,4BAAQ,GAAG,EAAE,OAAO,CAAC,CAAC,MAAM,WAAW,SAAS,IAAI,CAAC;AAC3E;",
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAC,qBAAuC;AAEjC,SAAS,yBACf,KACoB;AACpB,aAAO,kCAAc,wBAAQ,GAAG,EAAE,OAAO,CAAC,CAAC,MAAM,KAAK,MAAM,SAAS,IAAI,CAAC;AAC3E;",
   "names": []
 }

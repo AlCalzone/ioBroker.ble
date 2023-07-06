@@ -41,7 +41,7 @@ If you have any device transmitting specially encoded information via advertisem
 	Placeholder for next release:
 	### __WORK IN PROGRESS__
 -->
-### __WORK IN PROGRESS__
+### 0.13.4 (2023-07-06)
 * Very experimental support for scanning on a remote host (#793)
 * Another attempt at updating `noble`. Hopefully this version works now...
 

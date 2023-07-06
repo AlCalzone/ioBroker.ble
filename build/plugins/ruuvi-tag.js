@@ -1,23 +1,10 @@
+"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __objRest = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
-        target[prop] = source[prop];
-    }
-  return target;
-};
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -26,7 +13,10 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var nodeUrl = __toESM(require("url"));
 var import_global = require("../lib/global");
 var import_ruuvi_tag_protocol = require("./lib/ruuvi-tag_protocol");
@@ -66,7 +56,9 @@ const plugin = {
     let data = (0, import_plugin.getServiceData)(peripheral, serviceUUID);
     if (data != void 0) {
       const url = data.toString("utf8");
-      import_global.Global.adapter.log.debug(`ruuvi-tag >> got url: ${data.toString("utf8")}`);
+      import_global.Global.adapter.log.debug(
+        `ruuvi-tag >> got url: ${data.toString("utf8")}`
+      );
       const parsedUrl = nodeUrl.parse(url);
       if (!parsedUrl.hash)
         return;
@@ -75,17 +67,25 @@ const plugin = {
     } else if (peripheral.advertisement.manufacturerData != null && peripheral.advertisement.manufacturerData.length > 0) {
       data = peripheral.advertisement.manufacturerData;
       if (data.length <= 2 || !data.slice(0, 2).equals(manufacturerId)) {
-        import_global.Global.adapter.log.debug(`ruuvi-tag >> got unsupported data: ${data.toString("hex")}`);
+        import_global.Global.adapter.log.debug(
+          `ruuvi-tag >> got unsupported data: ${data.toString(
+            "hex"
+          )}`
+        );
         return;
       }
       data = data.slice(2);
-      import_global.Global.adapter.log.debug(`ruuvi-tag >> got data: ${data.toString("hex")}`);
+      import_global.Global.adapter.log.debug(
+        `ruuvi-tag >> got data: ${data.toString("hex")}`
+      );
       if (data[0] === 3) {
         return (0, import_ruuvi_tag_protocol.parseDataFormat3)(data);
       } else if (data[0] === 5) {
         return (0, import_ruuvi_tag_protocol.parseDataFormat5)(data);
       } else {
-        import_global.Global.adapter.log.debug(`ruuvi-tag >> unsupported data format ${data[0]}`);
+        import_global.Global.adapter.log.debug(
+          `ruuvi-tag >> unsupported data format ${data[0]}`
+        );
       }
     }
   },
@@ -242,18 +242,14 @@ const plugin = {
   getValues: (context) => {
     if (context == null)
       return;
-    const _a = context, {
+    const {
       dataFormat,
       beaconID,
       macAddress,
-      sequenceNumber
-    } = _a, remainder = __objRest(_a, [
-      "dataFormat",
-      "beaconID",
-      "macAddress",
-      "sequenceNumber"
-    ]);
-    const _b = remainder, { acceleration } = _b, ret = __objRest(_b, ["acceleration"]);
+      sequenceNumber,
+      ...remainder
+    } = context;
+    const { acceleration, ...ret } = remainder;
     if (acceleration != null) {
       const { x, y, z } = acceleration;
       if (x != null)

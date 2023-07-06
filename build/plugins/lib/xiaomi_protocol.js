@@ -1,3 +1,4 @@
+"use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -75,7 +76,9 @@ const valueTransforms = {
 class XiaomiAdvertisement {
   constructor(data) {
     if (!data || data.length < 5) {
-      throw new Error("A xiaomi advertisement frame must be at least 5 bytes long");
+      throw new Error(
+        "A xiaomi advertisement frame must be at least 5 bytes long"
+      );
     }
     const frameControl = data.readUInt16LE(0);
     this._version = frameControl >>> 12;
@@ -97,7 +100,9 @@ class XiaomiAdvertisement {
     }
     let offset = 5;
     if (this._hasMacAddress) {
-      this._macAddress = reverseBuffer(data.slice(offset, offset + 6)).toString("hex");
+      this._macAddress = reverseBuffer(
+        data.slice(offset, offset + 6)
+      ).toString("hex");
       offset += 6;
     }
     if (this._hasCapabilities) {
