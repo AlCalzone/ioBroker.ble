@@ -62,7 +62,7 @@
     "chai-as-promised": "^7.1.1",
     "esbuild": "^0.18.17",
     "eslint": "^8.41.0",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^4.2.1",
     "iobroker-react": "git+https://git@github.com/AlCalzone/iobroker-react.git",
     "mocha": "^10.2.0",
