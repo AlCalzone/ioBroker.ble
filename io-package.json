@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "ble",
-		"version": "0.13.4",
+		"version": "0.14.0",
 		"news": {
+			"0.14.0": {
+				"en": "**BREAKING:** Dropped support for Node.js 16 and below\nAdd support for the BTHome v2 protocol (unencrypted packets only)",
+				"de": "**BREAKING:** Node.js 16 und darunter werden nicht mehr unterstützt\nUnterstützung für das BTHome v2 Protokoll hinzugefügt (vorerst nur unverschlüsselte Pakete)",
+				"ru": "ЗАВТРАК: Dropped поддержка Node.js 16 и ниже\nДобавьте поддержку протокола BTHome v2 (только незашифрованные пакеты)",
+				"pt": "BREAKING: Suporte dropped para Node.js 16 e abaixo\nAdicione suporte para o protocolo BTHome v2 (apenas pacotes não criptografados)",
+				"nl": "Gevallen ondersteuning voor Node\nVoeg steun aan het BTHome v2 protocol (onbeschermde pakketten alleen)",
+				"fr": "BREAKING: Support abandonné pour Node.js 16 et ci-dessous\nAjouter le support pour le protocole BTHome v2 (paquets non chiffrés seulement)",
+				"it": "BREAKING: Supporto a goccia per Node.js 16 e seguenti\nAggiungi supporto per il protocollo BTHome v2 (solo pacchetti non crittografati)",
+				"es": "BREAKING: Soporte abandonado para Node.js 16 y abajo\nAñadir soporte para el protocolo BTHome v2 (sólo paquetes no cifrados)",
+				"pl": "BREAKING: Dropped support for Node.js 16 i poniżej\nWsparcie dla protokołu BTHome v2 (bez szyfrowanych pakietów)",
+				"uk": "BREAKING: Dropped підтримка для Node.js 16 і нижче\nДодайте підтримку протоколу BTHome v2 (тільки зашифровані пакети)",
+				"zh-cn": "BREAK:为第16号及其后各期会议提供的支持\n增加对BTHome v2议定书(仅加密包装)的支持"
+			},
 			"0.13.4": {
 				"en": "Very experimental support for scanning on a remote host (#793)\nAnother attempt at updating `noble`. Hopefully this version works now...",
 				"de": "Sehr experimentelle Unterstützung für Scannen auf einem Remote-Host #(793)\nErneuter Versuch, `noble` zu aktualisieren. Hoffentlich funktioniert diese Version endlich...",
@@ -78,18 +91,6 @@
 				"es": "El escaneo ahora se realiza en un proceso separado, por lo que los errores irrecuperables en `noble` ya no derriban el proceso principal",
 				"pl": "Skanowanie jest teraz wykonywane w osobnym procesie, więc niemożliwe do wykrycia błędy w elemencie „noble” nie spowodują już obniżenia głównego procesu",
 				"zh-cn": "现在，扫描是在一个单独的过程中完成的，因此“ noble”中不可捕获的错误不再使主要过程中断"
-			},
-			"0.11.8": {
-				"en": "The pressure value reported by Ruuvi Tags is now parsed with two decimal places",
-				"de": "Der von Ruuvi Tags gemeldete Druckwert wird jetzt mit zwei Dezimalstellen analysiert",
-				"ru": "Значение давления, сообщаемое тегами Ruuvi, теперь анализируется с двумя десятичными знаками.",
-				"pt": "O valor de pressão relatado por Ruuvi Tags agora é analisado com duas casas decimais",
-				"nl": "De drukwaarde die door Ruuvi Tags wordt gerapporteerd, wordt nu geparseerd met twee decimalen",
-				"fr": "La valeur de pression rapportée par Ruuvi Tags est maintenant analysée avec deux décimales",
-				"it": "Il valore di pressione riportato da Ruuvi Tags viene ora analizzato con due cifre decimali",
-				"es": "El valor de presión informado por Ruuvi Tags ahora se analiza con dos lugares decimales",
-				"pl": "Wartość ciśnienia zgłaszana przez Ruuvi Tags jest teraz analizowana z dwoma miejscami po przecinku",
-				"zh-cn": "Ruuvi标签报告的压力值现在解析为两个小数位"
 			}
 		},
 		"title": "Bluetooth Low Energy (BLE)",
@@ -117,7 +118,9 @@
 			"pl": "Monitor Bluetooth low energy (BLE) latarnie",
 			"zh-cn": "监测蓝牙低能源(BLE)信标"
 		},
-		"authors": ["AlCalzone <d.griesel@gmx.net>"],
+		"authors": [
+			"AlCalzone <d.griesel@gmx.net>"
+		],
 		"platform": "Javascript/Node.js",
 		"license": "MIT",
 		"main": "build/main.js",
@@ -125,7 +128,11 @@
 		"icon": "ble.png",
 		"enabled": true,
 		"extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
-		"keywords": ["bluetooth", "BLE", "beacon"],
+		"keywords": [
+			"bluetooth",
+			"BLE",
+			"beacon"
+		],
 		"readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
 		"loglevel": "info",
 		"type": "hardware",

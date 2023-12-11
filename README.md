@@ -42,7 +42,7 @@ If you have any device transmitting specially encoded information via advertisem
 	Placeholder for next release:
 	### __WORK IN PROGRESS__
 -->
-### __WORK IN PROGRESS__
+### 0.14.0 (2023-12-11)
 * **BREAKING:** Dropped support for Node.js 16 and below
 * Add support for the BTHome v2 protocol (unencrypted packets only)
 
