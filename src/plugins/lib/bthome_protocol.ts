@@ -582,6 +582,7 @@ export class BTHomeAdvertisement {
 
 		this.multilevelSensors = multilevelSensors;
 		this.binarySensors = binarySensors;
+		this.specialSensors = specialSensors;
 		this.events = events;
 	}
 
@@ -593,6 +594,6 @@ export class BTHomeAdvertisement {
 
 	public readonly multilevelSensors: readonly BTHomeMultilevelSensorData[];
 	public readonly binarySensors: readonly BTHomeBinarySensorData[];
-	public readonly specialSensors: readonly SpecialSensors[] = [];
-	public readonly events: readonly BTHomeEvent[] = [];
+	public readonly specialSensors: readonly SpecialSensors[];
+	public readonly events: readonly BTHomeEvent[];
 }
