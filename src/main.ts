@@ -269,6 +269,7 @@ function connectToBLEServer() {
 	socket = new Socket();
 
 	const reviver = getMessageReviver(handleMessage);
+	let receiveBuffer = "";
 
 	socket
 		.on("close", () => {
@@ -280,11 +281,20 @@ function connectToBLEServer() {
 			adapter.setState("info.connection", true, true);
 		})
 		.on("data", (data) => {
-			try {
-				const msg = JSON.parse(data.toString());
-				reviver(msg);
-			} catch (e) {
-				console.error(e);
+			// Each message ends with a newline. We might receive multiple messages at once,
+			// and we might also receive incomplete messages.
+			receiveBuffer += data.toString();
+			let newlineIndex: number;
+			while ((newlineIndex = receiveBuffer.indexOf("\n")) > -1) {
+				const line = receiveBuffer.slice(0, newlineIndex);
+				receiveBuffer = receiveBuffer.slice(newlineIndex + 1);
+				try {
+					const msg = JSON.parse(line);
+					reviver(msg);
+				} catch (e) {
+					console.error(e);
+					console.error("data was: " + line);
+				}
 			}
 		});
 
