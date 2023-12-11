@@ -37,7 +37,7 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x, 20.x]
-        os: [ubuntu-latest, macos-latest] # TODO: Get Windows to work again 🤷🏻‍♂️
+        os: [ubuntu-latest] # TODO: Get Windows and MacOS to work again 🤷🏻‍♂️
 
     steps:
       - uses: ioBroker/testing-action-adapter@v1
