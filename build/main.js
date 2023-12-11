@@ -183,6 +183,7 @@ function startScanProcess() {
 function connectToBLEServer() {
   socket = new import_net.Socket();
   const reviver = (0, import_scanProcessInterface.getMessageReviver)(handleMessage);
+  let receiveBuffer = "";
   socket.on("close", () => {
     adapter.log.info("Disconnected from BLE server");
     adapter.setState("info.connection", false, true);
@@ -190,11 +191,18 @@ function connectToBLEServer() {
     adapter.log.info("Connected to BLE server");
     adapter.setState("info.connection", true, true);
   }).on("data", (data) => {
-    try {
-      const msg = JSON.parse(data.toString());
-      reviver(msg);
-    } catch (e) {
-      console.error(e);
+    receiveBuffer += data.toString();
+    let newlineIndex;
+    while ((newlineIndex = receiveBuffer.indexOf("\n")) > -1) {
+      const line = receiveBuffer.slice(0, newlineIndex);
+      receiveBuffer = receiveBuffer.slice(newlineIndex + 1);
+      try {
+        const msg = JSON.parse(line);
+        reviver(msg);
+      } catch (e) {
+        console.error(e);
+        console.error("data was: " + line);
+      }
     }
   });
   const [host, port] = adapter.config.server.split(":", 2);
