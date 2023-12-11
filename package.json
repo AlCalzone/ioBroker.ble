@@ -69,6 +69,7 @@
     "eslint-plugin-prettier": "^5.0.1",
     "iobroker-react": "git+https://git@github.com/AlCalzone/iobroker-react.git",
     "mocha": "^10.2.0",
+    "node-gyp": "^10.0.1",
     "nyc": "^15.1.0",
     "prettier": "^3.1.1",
     "prettier-plugin-organize-imports": "^3.2.4",
