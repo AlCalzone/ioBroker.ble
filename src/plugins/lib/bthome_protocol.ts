@@ -407,6 +407,44 @@ const binarySensorDefinitions = new Map<number, BTHomeBinarySensorDefinition>(
 	binarySensorsArray.map((def) => [def.id, def] as const),
 );
 
+export type BTHomeEvent =
+	| {
+			type: "button";
+			event?:
+				| "press" // 0x01
+				| "double_press" // 0x02
+				| "triple_press" // 0x03
+				| "long_press" // 0x04
+				| "long_double_press" // 0x05
+				| "long_triple_press"; // 0x06
+	  }
+	| {
+			type: "dimmer";
+			event?:
+				| {
+						event: "rotate left"; // 0x01
+						steps: number;
+				  }
+				| {
+						event: "rotate left"; // 0x02
+						steps: number;
+				  };
+	  };
+
+export type SpecialSensors =
+	| {
+			type: "timestamp";
+			value: Date;
+	  }
+	| {
+			type: "text";
+			value: string;
+	  }
+	| {
+			type: "raw";
+			value: Buffer;
+	  };
+
 export class BTHomeAdvertisement {
 	public constructor(data: Buffer) {
 		if (!data || data.length < 1) {
@@ -432,6 +470,8 @@ export class BTHomeAdvertisement {
 
 		const multilevelSensors: BTHomeMultilevelSensorData[] = [];
 		const binarySensors: BTHomeBinarySensorData[] = [];
+		const specialSensors: SpecialSensors[] = [];
+		const events: BTHomeEvent[] = [];
 
 		while (data.length > 0) {
 			const objectId = data[0];
@@ -466,6 +506,73 @@ export class BTHomeAdvertisement {
 				binarySensors.push(sensorData);
 
 				data = data.slice(2);
+			} else if (objectId === 0x3a) {
+				// button event
+				const eventId = data[1];
+
+				const event: BTHomeEvent = {
+					type: "button",
+				};
+				if (eventId !== 0x00) {
+					event.event = (
+						[
+							"press",
+							"double_press",
+							"triple_press",
+							"long_press",
+							"long_double_press",
+							"long_triple_press",
+						] as const
+					)[eventId - 1];
+				}
+				events.push(event);
+
+				data = data.slice(2);
+			} else if (objectId === 0x3c) {
+				// button event
+				const eventId = data[1];
+
+				const event: BTHomeEvent = {
+					type: "dimmer",
+				};
+				if (eventId !== 0x00) {
+					event.event = {
+						// @ts-expect-error
+						event: (["rotate left", "rotate right"] as const)[
+							eventId - 1
+						],
+						steps: data[2],
+					};
+				}
+				events.push(event);
+
+				data = data.slice(3);
+			} else if (objectId === 0x50) {
+				// unix timestamp UTC
+				const timestamp = data.readUInt32LE(1);
+				specialSensors.push({
+					type: "timestamp",
+					value: new Date(timestamp * 1000),
+				});
+				data = data.slice(5);
+			} else if (objectId === 0x53) {
+				// text sensor (utf8)
+				const length = data[1];
+				const value = data.slice(2, 2 + length).toString("utf8");
+				specialSensors.push({
+					type: "text",
+					value,
+				});
+				data = data.slice(2 + length);
+			} else if (objectId === 0x54) {
+				// raw sensor
+				const length = data[1];
+				const value = data.slice(2, 2 + length);
+				specialSensors.push({
+					type: "raw",
+					value,
+				});
+				data = data.slice(2 + length);
 			} else {
 				throw new Error(
 					`Unsupported BTHome object ID ${objectId.toString(16)}`,
@@ -475,6 +582,7 @@ export class BTHomeAdvertisement {
 
 		this.multilevelSensors = multilevelSensors;
 		this.binarySensors = binarySensors;
+		this.events = events;
 	}
 
 	public readonly btHomeVersion: number;
@@ -485,4 +593,6 @@ export class BTHomeAdvertisement {
 
 	public readonly multilevelSensors: readonly BTHomeMultilevelSensorData[];
 	public readonly binarySensors: readonly BTHomeBinarySensorData[];
+	public readonly specialSensors: readonly SpecialSensors[] = [];
+	public readonly events: readonly BTHomeEvent[] = [];
 }

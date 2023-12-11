@@ -31,16 +31,20 @@ describe("bthome protocol => ", () => {
 		});
 
 		it("Test 1", () => {
-			const frame = Buffer.from(
-				"4400980164055802002101", // 3a01
-				"hex",
-			);
+			const frame = Buffer.from("44009801640558020021013a01", "hex");
 			const parsed = new BTHomeAdvertisement(frame);
 
 			parsed.packetId!.should.equal(0x98);
 			assertMultilevelSensor(parsed, "battery", 100);
 			assertMultilevelSensor(parsed, "illuminance", 6);
 			assertBinarySensor(parsed, "motion", true);
+
+			parsed.events.should.deep.equal([
+				{
+					type: "button",
+					event: "press",
+				},
+			]);
 		});
 	});
 });
