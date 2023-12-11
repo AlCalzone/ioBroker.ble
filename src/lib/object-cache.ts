@@ -25,7 +25,7 @@ export class ObjectCache {
 		undefined,
 		compareExpireTimestamp,
 	);
-	private expireTimer: NodeJS.Timer | undefined;
+	private expireTimer: NodeJS.Timeout | undefined;
 
 	/**
 	 * Retrieves an object from the cache or queries the database if it is not cached yet

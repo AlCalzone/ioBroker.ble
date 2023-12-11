@@ -29,10 +29,10 @@ export class Global {
 		type: ioBroker.ObjectType,
 		role?: string,
 	): Promise<Record<string, ioBroker.Object>> {
-		const objects = await Global._adapter.getForeignObjectsAsync(
+		const objects = (await Global._adapter.getForeignObjectsAsync(
 			pattern,
 			type,
-		);
+		)) as Record<string, ioBroker.Object>;
 		if (role) {
 			return objFilter(objects, (o) => o.common.role === role);
 		} else {

@@ -121,54 +121,71 @@ class XiaomiAdvertisement {
       }
     }
   }
+  _productID;
   get productID() {
     return this._productID;
   }
+  _version;
   get version() {
     return this._version;
   }
+  _frameCounter;
   get frameCounter() {
     return this._frameCounter;
   }
+  _isNewFactory;
   get isNewFactory() {
     return this._isNewFactory;
   }
+  _isConnected;
   get isConnected() {
     return this._isConnected;
   }
+  _isCentral;
   get isCentral() {
     return this._isCentral;
   }
+  _isEncrypted;
   get isEncrypted() {
     return this._isEncrypted;
   }
+  _hasMacAddress;
   get hasMacAddress() {
     return this._hasMacAddress;
   }
+  _macAddress;
   get macAddress() {
     return this._macAddress;
   }
+  _hasCapabilities;
   get hasCapabilities() {
     return this._hasCapabilities;
   }
+  _capabilities;
   get capabilities() {
     return this._capabilities;
   }
+  _hasEvent;
   get hasEvent() {
     return this._hasEvent;
   }
+  _event;
   get event() {
     return this._event;
   }
+  _hasCustomData;
   get hasCustomData() {
     return this._hasCustomData;
   }
+  _customData;
   get customData() {
     return this._customData;
   }
+  _hasSubtitle;
   get hasSubtitle() {
     return this._hasSubtitle;
   }
+  _isBindingFrame;
   get isBindingFrame() {
     return this._isBindingFrame;
   }
