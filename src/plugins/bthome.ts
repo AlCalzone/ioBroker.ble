@@ -89,11 +89,13 @@ const plugin: Plugin<BTHomeContext> = {
 			const id = ms.label.toLowerCase();
 			const count = duplicates.get(id) ?? 0;
 			duplicates.set(id, count + 1);
+			const stateId = id + (count > 0 ? `_${count + 1}` : "");
+			const stateName = ms.label + (count > 0 ? ` (${count + 1})` : "");
 
 			const stateObject: StateObjectDefinition = {
-				id: id + (count > 1 ? `_${count + 1}` : ""),
+				id: stateId,
 				common: {
-					name: ms.label + (count > 1 ? ` (${count + 1})` : ""),
+					name: stateName,
 					read: true,
 					write: false,
 					type: "number",
@@ -109,11 +111,13 @@ const plugin: Plugin<BTHomeContext> = {
 			const id = bs.label.toLowerCase();
 			const count = duplicates.get(id) ?? 0;
 			duplicates.set(id, count + 1);
+			const stateId = id + (count > 0 ? `_${count + 1}` : "");
+			const stateName = bs.label + (count > 0 ? ` (${count + 1})` : "");
 
 			const stateObject: StateObjectDefinition = {
-				id: id + (count > 1 ? `_${count + 1}` : ""),
+				id: stateId,
 				common: {
-					name: bs.label + (count > 1 ? ` (${count + 1})` : ""),
+					name: stateName,
 					read: true,
 					write: false,
 					type: "boolean",
@@ -125,7 +129,89 @@ const plugin: Plugin<BTHomeContext> = {
 			stateObjects.push(stateObject);
 		}
 
-		// TODO: Events and special sensors
+		for (const ss of context.specialSensors) {
+			const id = ss.type.toLowerCase();
+			const count = duplicates.get(id) ?? 0;
+			duplicates.set(id, count + 1);
+			const stateId = id + (count > 0 ? `_${count + 1}` : "");
+			const stateName = ss.type + (count > 0 ? ` (${count + 1})` : "");
+
+			if (ss.type === "text" || ss.type === "raw") {
+				const stateObject: StateObjectDefinition = {
+					id: stateId,
+					common: {
+						name: stateName,
+						read: true,
+						write: false,
+						type: "string",
+						role: "text",
+					},
+					native: undefined,
+				};
+				stateObjects.push(stateObject);
+			} else if (ss.type === "timestamp") {
+				const stateObject: StateObjectDefinition = {
+					id: stateId,
+					common: {
+						name: stateName,
+						read: true,
+						write: false,
+						type: "number",
+						role: "value.time",
+					},
+					native: undefined,
+				};
+				stateObjects.push(stateObject);
+			}
+		}
+
+		for (const evt of context.events) {
+			const id = evt.type.toLowerCase();
+			const count = duplicates.get(id) ?? 0;
+			duplicates.set(id, count + 1);
+			const stateId = id + (count > 0 ? `_${count + 1}` : "");
+			const stateName = evt.type + (count > 0 ? ` (${count + 1})` : "");
+
+			if (evt.type === "button") {
+				const stateObject: StateObjectDefinition = {
+					id: stateId,
+					common: {
+						name: stateName,
+						read: true,
+						write: false,
+						type: "string",
+						role: "text",
+					},
+					native: undefined,
+				};
+				stateObjects.push(stateObject);
+			} else if (evt.type === "dimmer") {
+				stateObjects.push(
+					{
+						id: stateId,
+						common: {
+							name: stateName,
+							read: true,
+							write: false,
+							type: "string",
+							role: "text",
+						},
+						native: undefined,
+					},
+					{
+						id: stateId + "_steps",
+						common: {
+							name: stateName + " steps",
+							read: true,
+							write: false,
+							type: "number",
+							role: "value",
+						},
+						native: undefined,
+					},
+				);
+			}
+		}
 
 		return ret;
 	},
@@ -141,7 +227,7 @@ const plugin: Plugin<BTHomeContext> = {
 			const count = duplicates.get(id) ?? 0;
 			duplicates.set(id, count + 1);
 
-			const stateId = id + (count > 1 ? `_${count + 1}` : "");
+			const stateId = id + (count > 0 ? `_${count + 1}` : "");
 			ret[stateId] = ms.value;
 		}
 
@@ -150,11 +236,36 @@ const plugin: Plugin<BTHomeContext> = {
 			const count = duplicates.get(id) ?? 0;
 			duplicates.set(id, count + 1);
 
-			const stateId = id + (count > 1 ? `_${count + 1}` : "");
+			const stateId = id + (count > 0 ? `_${count + 1}` : "");
 			ret[stateId] = bs.value;
 		}
 
-		// TODO: Events and special sensors
+		for (const ss of context.specialSensors) {
+			const id = ss.type.toLowerCase();
+			const count = duplicates.get(id) ?? 0;
+			duplicates.set(id, count + 1);
+
+			const stateId = id + (count > 0 ? `_${count + 1}` : "");
+			if (ss.type === "text") {
+				ret[stateId] = ss.value;
+			} else if (ss.type === "raw") {
+				ret[stateId] = ss.value.toString("hex");
+			} else if (ss.type === "timestamp") {
+				ret[stateId] = ss.value.getTime();
+			}
+		}
+
+		for (const evt of context.events) {
+			const id = evt.type.toLowerCase();
+			const count = duplicates.get(id) ?? 0;
+			duplicates.set(id, count + 1);
+			const stateId = id + (count > 0 ? `_${count + 1}` : "");
+
+			ret[stateId] = evt.event ?? null;
+			if (evt.type === "dimmer") {
+				ret[stateId + "_steps"] = evt.event?.steps ?? null;
+			}
+		}
 
 		return ret;
 	},
