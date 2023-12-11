@@ -43,6 +43,7 @@ If you have any device transmitting specially encoded information via advertisem
 	### __WORK IN PROGRESS__
 -->
 ### __WORK IN PROGRESS__
+* **BREAKING:** Dropped support for Node.js 16 and below
 * Add support for the BTHome v2 protocol (unencrypted packets only)
 
 ### 0.13.4 (2023-07-06)

@@ -24,7 +24,8 @@ const argv = yargs
 		},
 		services: {
 			alias: "-s",
-			type: "array",
+			type: "string",
+			array: true,
 			desc: "Which BLE services to scan for",
 			default: [],
 		},

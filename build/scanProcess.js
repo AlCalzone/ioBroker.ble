@@ -12,7 +12,8 @@ const argv = yargs.env("IOB_BLE").strict().usage("ioBroker.ble scanner process\n
   },
   services: {
     alias: "-s",
-    type: "array",
+    type: "string",
+    array: true,
     desc: "Which BLE services to scan for",
     default: []
   },

@@ -94,6 +94,7 @@ export async function extendState(
 	// update the object while preserving the existing properties
 	const updated: ioBroker.SettableObject = {
 		type: "state",
+		// @ts-expect-error
 		common: {
 			role: "state",
 			read: true,
