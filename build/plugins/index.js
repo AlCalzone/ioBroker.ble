@@ -25,6 +25,7 @@ var plugins_default = [
   require("./xiaomi"),
   require("./mi-flora"),
   require("./ruuvi-tag"),
+  require("./bthome"),
   require("./_default")
 ];
 // Annotate the CommonJS export names for ESM import in node:
