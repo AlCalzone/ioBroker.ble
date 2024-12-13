@@ -1,12 +1,14 @@
-﻿import { Global as _ } from "../lib/global";
+﻿import { QingpingAdvertisement } from "./lib/qingping_protocol";
+import { Global as _ } from "../lib/global";
 import type { PeripheralInfo } from "../lib/scanProcessInterface";
-import type {
-	ChannelObjectDefinition,
-	DeviceObjectDefinition,
-	PeripheralObjectStructure,
-	Plugin,
-	StateObjectDefinition,
-} from "iobroker.ble/src/plugins/plugin";
+import {
+	getServiceData,
+	type ChannelObjectDefinition,
+	type DeviceObjectDefinition,
+	type PeripheralObjectStructure,
+	type Plugin,
+	type StateObjectDefinition,
+} from "./plugin";
 
 function parseData(raw: Buffer): string | number {
 	if (raw.length === 1) {
@@ -17,6 +19,28 @@ function parseData(raw: Buffer): string | number {
 		return raw.toString("hex");
 	}
 }
+
+function parseAdvertisementEvent(
+	data: Buffer,
+): QingpingAdvertisement | undefined {
+	// try to parse the data
+	let advertisement: QingpingAdvertisement;
+	try {
+		advertisement = new QingpingAdvertisement(data);
+	} catch (e) {
+		_.adapter.log.debug(`qingping >> failed to parse data`);
+		return;
+	}
+
+	return advertisement;
+}
+
+// remember tested peripherals by their MAC address for 1h
+const testValidity = 1000 * 3600;
+const testedPeripherals = new Map<
+	string,
+	{ timestamp: number; result: boolean }
+>();
 
 const plugin: Plugin = {
 	name: "Qingping",
@@ -31,7 +55,26 @@ const plugin: Plugin = {
 			!p.advertisement.serviceData.some((entry) => entry.uuid === "fdcd")
 		)
 			return false;
-		return true;
+		const mac = p.address.toLowerCase();
+		const cached = testedPeripherals.get(mac);
+		if (cached && cached.timestamp >= Date.now() - testValidity) {
+			// we have a recent test result, return it
+			return cached.result;
+		}
+		// Try to parse advertisement data as a XiaomiEvent to see if this
+		// is for us
+		let ret = false;
+		const data = getServiceData(p, "fdcd");
+		if (data != undefined) {
+			const event = parseAdvertisementEvent(data);
+			ret = event != undefined;
+		}
+		// store the test result
+		testedPeripherals.set(mac, {
+			timestamp: Date.now(),
+			result: ret,
+		});
+		return ret;
 	},
 
 	// No special context necessary. Return the peripheral, so it gets passed to the other methods.
