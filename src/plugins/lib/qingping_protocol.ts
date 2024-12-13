@@ -1,3 +1,14 @@
+export class QingpingEvent {
+	temperature: number;
+	humidity: number;
+	battery: number;
+
+	constructor(temp: number, hum: number, batt: number) {
+		this.temperature = temp;
+		this.humidity = hum;
+		this.battery = batt;
+	}
+}
 interface FieldDefinition {
 	name: string;
 	offset: number;
@@ -28,11 +39,19 @@ export class QingpingAdvertisement {
 		}
 		const record = this.decodeMessage(data, schema);
 		if (record.mac) this._macAddress = record.mac;
-		if (record.temperature) this._temperature = record.temperature;
-		if (record.humidity) this._humidity = record.humidity;
-		if (record.battery) this._battery = record.battery;
-		if (record.temperature && record.humidity && record.battery)
+		if (record.temperature && record.humidity && record.battery){
 			this._hasEvent = true;
+			this._event = new QingpingEvent(
+				record.temperature,
+				record.humidity,
+				record.battery,
+			);
+		}
+	}
+
+	private _event: QingpingEvent | undefined;
+	public get event(): QingpingEvent | undefined {
+		return this._event;
 	}
 
 	private _hasEvent: boolean = false;
@@ -43,21 +62,6 @@ export class QingpingAdvertisement {
 	private _macAddress: string | undefined;
 	public get macAddress(): string | undefined {
 		return this._macAddress;
-	}
-
-	private _temperature: number | undefined;
-	public get temperature(): number | undefined {
-		return this._temperature;
-	}
-
-	private _humidity: number | undefined;
-	public get humidity(): number | undefined {
-		return this._humidity;
-	}
-
-	private _battery: number | undefined;
-	public get battery(): number | undefined {
-		return this._battery;
 	}
 
 	private decodeMessage(buffer: Buffer, schema: Schema): Record<string, any> {

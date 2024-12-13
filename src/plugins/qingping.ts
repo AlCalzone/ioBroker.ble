@@ -1,4 +1,7 @@
-﻿import { QingpingAdvertisement } from "./lib/qingping_protocol";
+﻿import {
+	QingpingAdvertisement,
+	type QingpingEvent,
+} from "./lib/qingping_protocol";
 import { Global as _ } from "../lib/global";
 import type { PeripheralInfo } from "../lib/scanProcessInterface";
 import {
@@ -10,6 +13,10 @@ import {
 	type StateObjectDefinition,
 } from "./plugin";
 
+interface QingpingContext {
+	event?: QingpingEvent;
+}
+
 function parseData(raw: Buffer): string | number {
 	if (raw.length === 1) {
 		// single byte
@@ -20,9 +27,7 @@ function parseData(raw: Buffer): string | number {
 	}
 }
 
-function parseAdvertisementEvent(
-	data: Buffer,
-): QingpingAdvertisement | undefined {
+function parseAdvertisementEvent(data: Buffer): QingpingEvent | undefined {
 	// try to parse the data
 	let advertisement: QingpingAdvertisement;
 	try {
@@ -32,7 +37,7 @@ function parseAdvertisementEvent(
 		return;
 	}
 
-	return advertisement;
+	return advertisement.event;
 }
 
 // remember tested peripherals by their MAC address for 1h
@@ -42,7 +47,7 @@ const testedPeripherals = new Map<
 	{ timestamp: number; result: boolean }
 >();
 
-const plugin: Plugin = {
+const plugin: Plugin<QingpingContext> = {
 	name: "Qingping",
 	description: "Handles Qingping temperature and humidity sensors",
 
@@ -78,98 +83,89 @@ const plugin: Plugin = {
 	},
 
 	// No special context necessary. Return the peripheral, so it gets passed to the other methods.
-	createContext: (peripheral: PeripheralInfo) => peripheral,
+	createContext: (peripheral: PeripheralInfo) => {
+		const data = getServiceData(peripheral, "fdcd");
+		if (data == undefined) return;
 
-	defineObjects: (peripheral: PeripheralInfo): PeripheralObjectStructure => {
+		_.adapter.log.debug(`qingping >> got data: ${data.toString("hex")}`);
+
+		const event = parseAdvertisementEvent(data);
+		if (event == undefined) return;
+
+		return { event };
+	},
+
+	defineObjects: (context: QingpingContext) => {
+		if (context == undefined || context.event == undefined) return;
+
 		const deviceObject: DeviceObjectDefinition = {
 			// no special definitions neccessary
 			common: undefined,
 			native: undefined,
 		};
 
-		const channelId = `services`;
-		const channelObject: ChannelObjectDefinition = {
-			id: channelId,
-			common: {
-				// common
-				name: "Advertised services",
-				role: "info",
-			},
-			native: undefined,
-		};
+		// no channels
 
 		const stateObjects: StateObjectDefinition[] = [];
-		if (peripheral.advertisement && peripheral.advertisement.serviceData) {
-			for (const entry of peripheral.advertisement.serviceData) {
-				const uuid = entry.uuid;
-				const stateId = `${channelId}.${uuid}`;
 
-				stateObjects.push({
-					id: stateId,
-					common: {
-						role: "value",
-						name: "Advertised service " + uuid, // TODO: create readable names
-						desc: "",
-						type: "mixed",
-						read: true,
-						write: false,
-					},
-					native: undefined,
-				});
-			}
-		}
-		if (
-			peripheral.advertisement &&
-			peripheral.advertisement.manufacturerData &&
-			peripheral.advertisement.manufacturerData.length > 0
-		) {
+		const ret = {
+			device: deviceObject,
+			channels: undefined,
+			states: stateObjects,
+		};
+
+		const event = context.event;
+		if ("temperature" in event) {
 			stateObjects.push({
-				id: `${channelId}.manufacturerData`,
+				id: "temperature",
 				common: {
 					role: "value",
-					name: "Manufacturer Data",
-					desc: "",
-					type: "mixed",
+					name: "Temperature",
+					type: "number",
+					unit: "°C",
 					read: true,
 					write: false,
 				},
 				native: undefined,
 			});
 		}
-
-		return {
-			device: deviceObject,
-			channels: [channelObject],
-			states: stateObjects,
-		};
-	},
-
-	getValues: (peripheral: PeripheralInfo) => {
-		const ret: Record<string, any> = {};
-		if (peripheral.advertisement && peripheral.advertisement.serviceData) {
-			for (const entry of peripheral.advertisement.serviceData) {
-				const uuid = entry.uuid;
-				const stateId = `services.${uuid}`;
-				// remember the transmitted data
-				ret[stateId] = parseData(entry.data);
-				_.adapter.log.debug(
-					`_default: ${peripheral.address} > got data ${ret[stateId]} for ${uuid}`,
-				);
-			}
+		if ("humidity" in event) {
+			stateObjects.push({
+				id: "humidity",
+				common: {
+					role: "value",
+					name: "Relative Humidity",
+					type: "number",
+					unit: "%rF",
+					read: true,
+					write: false,
+				},
+				native: undefined,
+			});
 		}
-		if (
-			peripheral.advertisement &&
-			peripheral.advertisement.manufacturerData &&
-			peripheral.advertisement.manufacturerData.length > 0
-		) {
-			const stateId = `services.manufacturerData`;
-			// remember the transmitted data
-			ret[stateId] = parseData(peripheral.advertisement.manufacturerData);
-			_.adapter.log.debug(
-				`_default: ${peripheral.address} > got manufacturer data ${ret[stateId]}`,
-			);
+		if ("battery" in event) {
+			stateObjects.push({
+				id: "battery",
+				common: {
+					role: "value",
+					name: "Battery",
+					desc: "Battery status of the sensor",
+					type: "number",
+					unit: "%",
+					read: true,
+					write: false,
+				},
+				native: undefined,
+			});
 		}
 		return ret;
+	},
+
+	getValues: (context: QingpingContext) => {
+		if (context == null || context.event == null) return;
+
+		// The event is simply the value dictionary itself
+		return context.event;
 	},
 };
 
