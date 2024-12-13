@@ -404,6 +404,16 @@ async function onDiscover(peripheral: PeripheralInfo) {
 	for (const p of enabledPlugins) {
 		if (p.isHandling(peripheral)) {
 			_.adapter.log.debug(`plugin ${p.name} is handling ${deviceId}`);
+			if (
+				peripheral.advertisement?.serviceData &&
+				peripheral.advertisement?.serviceData.length > 0
+			) {
+				_.adapter.log.info(
+					`serviceData = ${JSON.stringify(
+						peripheral.advertisement.serviceData,
+					)}`,
+				);
+			}
 			plugin = p;
 			break;
 		}
