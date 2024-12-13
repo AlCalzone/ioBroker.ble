@@ -1,4 +1,3 @@
-"use strict";
 var import_objects = require("alcalzone-shared/objects");
 var import_global = require("../lib/global");
 var import_xiaomi_protocol = require("./lib/xiaomi_protocol");

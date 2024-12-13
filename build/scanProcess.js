@@ -1,4 +1,3 @@
-"use strict";
 var import_net = require("net");
 var import_misc = require("./lib/misc");
 var import_scanProcessInterface = require("./lib/scanProcessInterface");

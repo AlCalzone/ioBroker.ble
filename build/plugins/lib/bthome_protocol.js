@@ -1,4 +1,3 @@
-"use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -506,14 +505,6 @@ class BTHomeAdvertisement {
     this.specialSensors = specialSensors;
     this.events = events;
   }
-  btHomeVersion;
-  encrypted;
-  triggerBased;
-  packetId;
-  multilevelSensors;
-  binarySensors;
-  specialSensors;
-  events;
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
