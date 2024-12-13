@@ -5,5 +5,6 @@ export default [
 	require("./mi-flora"),
 	require("./ruuvi-tag"),
 	require("./bthome"),
+	require("./qingping"),
 	require("./_default"),
 ] as Plugin[];

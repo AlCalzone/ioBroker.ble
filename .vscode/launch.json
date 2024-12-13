@@ -33,6 +33,25 @@
 			"outFiles": [
 				"${workspaceFolder}/**/*.js"
 			]
-		}
+		},
+		{
+			"name": "Debug Current Test File",
+			"type": "node",
+			"args": [
+				// "-u",
+				// "tdd",
+				"--require", "ts-node/register",
+				"--timeout",
+				"999999",
+				"--colors",
+				"${relativeFile}"
+			],
+			"internalConsoleOptions": "openOnSessionStart",
+			"program": "node_modules/mocha/bin/_mocha",
+			"request": "launch",
+			"env": {
+    			"NODE_ENV": "testing"
+  			}
+		},		
 	]
 }

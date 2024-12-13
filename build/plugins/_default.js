@@ -1,4 +1,3 @@
-"use strict";
 var import_global = require("../lib/global");
 function parseData(raw) {
   if (raw.length === 1) {

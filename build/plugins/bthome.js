@@ -1,4 +1,3 @@
-"use strict";
 var import_global = require("../lib/global");
 var import_bthome_protocol = require("./lib/bthome_protocol");
 var import_plugin = require("./plugin");

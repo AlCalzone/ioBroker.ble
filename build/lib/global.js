@@ -1,4 +1,3 @@
-"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -31,14 +30,12 @@ var import_objects = require("alcalzone-shared/objects");
 var fs = __toESM(require("fs"));
 var path = __toESM(require("path"));
 class Global {
-  static _adapter;
   static get adapter() {
     return Global._adapter;
   }
   static set adapter(adapter) {
     Global._adapter = adapter;
   }
-  static _objectCache;
   static get objectCache() {
     return Global._objectCache;
   }

@@ -1,4 +1,3 @@
-"use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -30,13 +29,12 @@ function compareExpireTimestamp(a, b) {
 class ObjectCache {
   constructor(expiryDuration = false) {
     this.expiryDuration = expiryDuration;
+    this.cache = /* @__PURE__ */ new Map();
+    this.expireTimestamps = new import_sorted_list.SortedList(
+      void 0,
+      compareExpireTimestamp
+    );
   }
-  cache = /* @__PURE__ */ new Map();
-  expireTimestamps = new import_sorted_list.SortedList(
-    void 0,
-    compareExpireTimestamp
-  );
-  expireTimer;
   async getObject(id) {
     if (!this.cache.has(id)) {
       const ret = await import_global.Global.adapter.getForeignObjectAsync(id);

@@ -1,4 +1,3 @@
-"use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -26,6 +25,7 @@ var plugins_default = [
   require("./mi-flora"),
   require("./ruuvi-tag"),
   require("./bthome"),
+  require("./qingping"),
   require("./_default")
 ];
 // Annotate the CommonJS export names for ESM import in node:

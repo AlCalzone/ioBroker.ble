@@ -1,4 +1,3 @@
-"use strict";
 var import_plugin = require("./plugin");
 /*!
  * Alias for Xiaomi plugin
