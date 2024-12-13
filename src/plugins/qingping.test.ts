@@ -1,5 +1,8 @@
 import { expect } from "chai";
 import plugin from "./qingping";
+import { Global as _ } from "../lib/global";
+
+_["_adapter"] = { log: { debug: () => {} } } as any;
 
 describe("qingping plugin => ", () => {
 	describe("correctly detects which peripherals should be handled => ", () => {
@@ -54,7 +57,7 @@ describe("qingping plugin => ", () => {
 				advertisement: {
 					serviceData: [
 						{
-							uuid: "fdcd",
+							uuid: "fdce",
 							data: Buffer.from("invaliddata", "hex"),
 						},
 					],
