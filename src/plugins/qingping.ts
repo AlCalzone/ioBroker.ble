@@ -6,25 +6,13 @@ import { Global as _ } from "../lib/global";
 import type { PeripheralInfo } from "../lib/scanProcessInterface";
 import {
 	getServiceData,
-	type ChannelObjectDefinition,
 	type DeviceObjectDefinition,
-	type PeripheralObjectStructure,
 	type Plugin,
 	type StateObjectDefinition,
 } from "./plugin";
 
 interface QingpingContext {
 	event?: QingpingEvent;
-}
-
-function parseData(raw: Buffer): string | number {
-	if (raw.length === 1) {
-		// single byte
-		return raw[0];
-	} else {
-		// Output hex value
-		return raw.toString("hex");
-	}
 }
 
 function parseAdvertisementEvent(data: Buffer): QingpingEvent | undefined {
