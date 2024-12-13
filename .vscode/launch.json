@@ -49,7 +49,6 @@
 			"internalConsoleOptions": "openOnSessionStart",
 			"program": "node_modules/mocha/bin/_mocha",
 			"request": "launch",
-			"stopOnEntry": true,
 			"env": {
     			"NODE_ENV": "testing"
   			}
