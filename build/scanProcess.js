@@ -174,7 +174,7 @@ function maybeStartServer() {
 async function loadNoble() {
   process.env.NOBLE_HCI_DEVICE_ID = argv.hciDevice.toString();
   try {
-    noble = require("@abandonware/noble");
+    noble = require("@stoprocent/noble");
     if (typeof noble.on !== "function") {
       noble = noble({ extended: false });
     }
