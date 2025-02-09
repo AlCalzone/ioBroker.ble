@@ -35,8 +35,8 @@
     "node": ">= 18"
   },
   "dependencies": {
-    "@abandonware/noble": "^1.9.2-23",
     "@iobroker/adapter-core": "^3.0.4",
+    "@stoprocent/noble": "^1.18.2",
     "alcalzone-shared": "^4.0.8",
     "iobroker-react-components": "^1.0.0",
     "yargs": "^17.7.2"
