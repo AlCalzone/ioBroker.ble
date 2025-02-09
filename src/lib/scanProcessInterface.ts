@@ -1,4 +1,4 @@
-import type { Peripheral } from "@abandonware/noble";
+import type { Peripheral } from "@stoprocent/noble";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 
 export enum ScanExitCodes {

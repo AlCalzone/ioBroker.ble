@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-import type { Peripheral } from "@abandonware/noble";
+import type { Peripheral } from "@stoprocent/noble";
 import * as proxyquireModule from "proxyquire";
 import { createGlobalMock } from "../../../test/mocks/global";
 

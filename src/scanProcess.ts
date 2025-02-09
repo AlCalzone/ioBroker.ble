@@ -1,5 +1,5 @@
 /** noble-Treiber-Instanz */
-import type { Peripheral } from "@abandonware/noble";
+import type { Peripheral } from "@stoprocent/noble";
 import { createServer, type AddressInfo, type Server, type Socket } from "net";
 import { pick } from "./lib/misc";
 import {
@@ -43,7 +43,7 @@ const argv = yargs
 	})
 	.parseSync();
 
-let noble: typeof import("@abandonware/noble");
+let noble: typeof import("@stoprocent/noble");
 let server: Server | undefined;
 const clients: Set<Socket> = new Set();
 
@@ -213,10 +213,10 @@ async function loadNoble() {
 	process.env.NOBLE_HCI_DEVICE_ID = argv.hciDevice.toString();
 	try {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		noble = require("@abandonware/noble");
+		noble = require("@stoprocent/noble");
 		if (typeof noble.on !== "function") {
 			// The following commit broke the default exported instance of noble:
-			// https://github.com/abandonware/noble/commit/b67eea246f719947fc45b1b52b856e61637a8a8e
+			// https://github.com/stoprocent/noble/commit/b67eea246f719947fc45b1b52b856e61637a8a8e
 			noble = (noble as any)({ extended: false });
 		}
 	} catch (error: any) {
