@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "ble",
-		"version": "0.14.0",
+		"version": "0.14.1",
 		"news": {
+			"0.14.1": {
+				"en": "Fixed compatibility issues with newer OS and Node.js versions (#874)",
+				"de": "Kompatibilitätsprobleme mit neueren Betriebssystem- und Node.js-Versionen behoben (#874)",
+				"ru": "Исправленные проблемы совместимости с новыми версиями OS и Node.js (#874)",
+				"pt": "Problemas de compatibilidade corrigidos com versões mais recentes do sistema operacional e Node.js (#874)",
+				"nl": "Vaste compatibiliteitsproblemen met nieuwere versies van OS en Node.js (#874)",
+				"fr": "Correction des problèmes de compatibilité avec les versions OS et Node.js (#874)",
+				"it": "Problemi di compatibilità fissi con le nuove versioni OS e Node.js (#874)",
+				"es": "Problemas de compatibilidad fijos con nuevas versiones OS y Node.js (#874)",
+				"pl": "Naprawiono problemy kompatybilności z nowszymi wersjami OS i Node.js (# 874)",
+				"uk": "Виправлено проблеми сумісності з новими версіями OS та Node.js (#874)",
+				"zh-cn": "与更新的OS和Node.js版本的固定兼容性问题(# 874)"
+			},
 			"0.14.0": {
 				"en": "**BREAKING:** Dropped support for Node.js 16 and below\nAdd support for the BTHome v2 protocol (unencrypted packets only)",
 				"de": "**BREAKING:** Node.js 16 und darunter werden nicht mehr unterstützt\nUnterstützung für das BTHome v2 Protokoll hinzugefügt (vorerst nur unverschlüsselte Pakete)",
@@ -79,18 +92,6 @@
 				"es": "La opción para permitir la grabación de nuevos dispositivos ahora está disponible en el cuadro de diálogo de configuración. Cuando se inicia el adaptador, se desactivará y, cuando se active, se desactivará automáticamente después de 5 minutos (#730, #729)\nSolución: RSSI ahora se actualizará, incluso si no se modificó (# 493)\nActualizaciones de dependencia, muchas actualizaciones de dependencia...",
 				"pl": "Opcja pozwalająca na nagrywanie nowych urządzeń jest teraz dostępna w oknie konfiguracji. Po uruchomieniu adapter zostanie wyłączony, a po włączeniu zostanie automatycznie wyłączony po 5 minutach (#730, #729)\nPoprawka: RSSI zostanie teraz zaktualizowany, nawet jeśli był niezmieniony (#493)\nAktualizacje zależności, wiele aktualizacji zależności...",
 				"zh-cn": "现在可以在配置对话框中使用允许录制新设备的选项。适配器启动时会被禁用，启用时会在5分钟后自动禁用（#730、#729）\n修复：RSSI 现在将被更新，即使它没有改变 (#493)\n依赖更新，大量依赖更新......"
-			},
-			"0.12.0": {
-				"en": "Scanning is now done in a separate process, so uncatchable errors in `noble` no longer bring down the main process",
-				"de": "Das Scannen erfolgt jetzt in einem separaten Prozess, sodass nicht abfangbare Fehler in \"nobel\" den Hauptprozess nicht mehr zum Erliegen bringen",
-				"ru": "Сканирование теперь выполняется в отдельном процессе, поэтому неисправимые ошибки в `noble` больше не прерывают основной процесс.",
-				"pt": "A digitalização agora é feita em um processo separado, portanto, erros não detectáveis em `noble` não desligam mais o processo principal",
-				"nl": "Het scannen gebeurt nu in een apart proces, dus niet te vinden fouten in `noble` brengen het hoofdproces niet langer naar beneden",
-				"fr": "La numérisation est maintenant effectuée dans un processus séparé, de sorte que les erreurs incontrôlables dans `noble` ne font plus tomber le processus principal",
-				"it": "La scansione ora viene eseguita in un processo separato, quindi gli errori non rilevabili in \"nobile\" non fanno più cadere il processo principale",
-				"es": "El escaneo ahora se realiza en un proceso separado, por lo que los errores irrecuperables en `noble` ya no derriban el proceso principal",
-				"pl": "Skanowanie jest teraz wykonywane w osobnym procesie, więc niemożliwe do wykrycia błędy w elemencie „noble” nie spowodują już obniżenia głównego procesu",
-				"zh-cn": "现在，扫描是在一个单独的过程中完成的，因此“ noble”中不可捕获的错误不再使主要过程中断"
 			}
 		},
 		"title": "Bluetooth Low Energy (BLE)",
@@ -118,9 +119,7 @@
 			"pl": "Monitor Bluetooth low energy (BLE) latarnie",
 			"zh-cn": "监测蓝牙低能源(BLE)信标"
 		},
-		"authors": [
-			"AlCalzone <d.griesel@gmx.net>"
-		],
+		"authors": ["AlCalzone <d.griesel@gmx.net>"],
 		"platform": "Javascript/Node.js",
 		"license": "MIT",
 		"main": "build/main.js",
@@ -128,11 +127,7 @@
 		"icon": "ble.png",
 		"enabled": true,
 		"extIcon": "https://raw.githubusercontent.com/AlCalzone/ioBroker.ble/master/admin/ble.png",
-		"keywords": [
-			"bluetooth",
-			"BLE",
-			"beacon"
-		],
+		"keywords": ["bluetooth", "BLE", "beacon"],
 		"readme": "https://github.com/AlCalzone/ioBroker.ble/blob/master/README.md",
 		"loglevel": "info",
 		"type": "hardware",
