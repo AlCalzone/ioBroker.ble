@@ -122,7 +122,6 @@
 		"authors": ["AlCalzone <d.griesel@gmx.net>"],
 		"platform": "Javascript/Node.js",
 		"license": "MIT",
-		"main": "build/main.js",
 		"mode": "daemon",
 		"icon": "ble.png",
 		"enabled": true,
