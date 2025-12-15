@@ -94,7 +94,6 @@
 				"zh-cn": "现在可以在配置对话框中使用允许录制新设备的选项。适配器启动时会被禁用，启用时会在5分钟后自动禁用（#730、#729）\n修复：RSSI 现在将被更新，即使它没有改变 (#493)\n依赖更新，大量依赖更新......"
 			}
 		},
-		"title": "Bluetooth Low Energy (BLE)",
 		"titleLang": {
 			"en": "Bluetooth Low Energy (BLE)",
 			"de": "Bluetooth-Niedrigenergie (BLE)",
