@@ -65,9 +65,9 @@ var require_typeguards = __commonJS({
 var require_build = __commonJS({
 	"node_modules/y18n/build/index.cjs"(exports, module2) {
 		"use strict";
-		var fs = require("fs");
-		var util = require("util");
-		var path = require("path");
+		var fs = require("node:fs");
+		var util = require("node:util");
+		var path = require("node:path");
 		var shim;
 		var Y18N = class {
 			constructor(opts) {
@@ -276,9 +276,9 @@ var require_build = __commonJS({
 var require_build2 = __commonJS({
 	"node_modules/yargs-parser/build/index.cjs"(exports, module2) {
 		"use strict";
-		var util = require("util");
-		var path = require("path");
-		var fs = require("fs");
+		var util = require("node:util");
+		var path = require("node:path");
+		var fs = require("node:fs");
 		function camelCase(str) {
 			const isCamelCase =
 				str !== str.toLowerCase() && str !== str.toUpperCase();
@@ -3369,8 +3369,8 @@ var require_build3 = __commonJS({
 // node_modules/escalade/sync/index.js
 var require_sync = __commonJS({
 	"node_modules/escalade/sync/index.js"(exports, module2) {
-		var { dirname, resolve } = require("path");
-		var { readdirSync, statSync } = require("fs");
+		var { dirname, resolve } = require("node:path");
+		var { readdirSync, statSync } = require("node:fs");
 		module2.exports = function (start, callback) {
 			let dir = resolve(".", start);
 			let tmp,
@@ -3422,10 +3422,10 @@ var require_get_caller_file = __commonJS({
 var require_require_directory = __commonJS({
 	"node_modules/require-directory/index.js"(exports, module2) {
 		"use strict";
-		var fs = require("fs");
-		var join = require("path").join;
-		var resolve = require("path").resolve;
-		var dirname = require("path").dirname;
+		var fs = require("node:fs");
+		var join = require("node:path").join;
+		var resolve = require("node:path").resolve;
+		var dirname = require("node:path").dirname;
 		var defaultOptions = {
 			extensions: ["js", "json", "coffee"],
 			recurse: true,
@@ -3514,7 +3514,7 @@ var require_require_directory = __commonJS({
 var require_build4 = __commonJS({
 	"node_modules/yargs/build/index.cjs"(exports, module2) {
 		"use strict";
-		var t = require("assert");
+		var t = require("node:assert");
 		var e = class extends Error {
 			constructor(t2) {
 				super(t2 || "yargs error"),
@@ -7446,9 +7446,9 @@ ${t5.join("\n")}`
 		};
 		var Qt;
 		var te;
-		var { readFileSync: ee } = require("fs");
-		var { inspect: se } = require("util");
-		var { resolve: ie } = require("path");
+		var { readFileSync: ee } = require("node:fs");
+		var { inspect: se } = require("node:util");
+		var { resolve: ie } = require("node:path");
 		var ne = require_build();
 		var re = require_build2();
 		var oe;
@@ -7476,7 +7476,7 @@ ${t5.join("\n")}`
 					? te
 					: process.cwd(),
 			Parser: re,
-			path: require("path"),
+			path: require("node:path"),
 			process: {
 				argv: () => process.argv,
 				cwd: process.cwd,
@@ -7592,7 +7592,7 @@ var require_yargs = __commonJS({
 });
 
 // src/scanProcess.ts
-var import_net = require("net");
+var import_net = require("node:net");
 
 // src/lib/misc.ts
 function pick(obj, keys) {
