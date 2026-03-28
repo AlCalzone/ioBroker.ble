@@ -1,7 +1,7 @@
 import * as utils from "@iobroker/adapter-core";
 import { entries } from "alcalzone-shared/objects";
-import { exec, fork, type ChildProcess } from "child_process";
-import * as path from "path";
+import { exec, fork, type ChildProcess } from "node:child_process";
+import * as path from "node:path";
 import { Global as _ } from "./lib/global";
 import {
 	extendChannel,
@@ -16,7 +16,7 @@ import {
 	type ScanMessage,
 } from "./lib/scanProcessInterface";
 // Load all registered plugins
-import { Socket } from "net";
+import { Socket } from "node:net";
 import plugins from "./plugins";
 import type { Plugin } from "./plugins/plugin";
 

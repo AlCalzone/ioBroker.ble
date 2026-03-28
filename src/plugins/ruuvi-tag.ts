@@ -3,7 +3,7 @@
  * See https://github.com/ruuvi/ruuvi-sensor-protocols for details
  */
 
-import * as nodeUrl from "url";
+import * as nodeUrl from "node:url";
 import { Global as _ } from "../lib/global";
 import type { PeripheralInfo } from "../lib/scanProcessInterface";
 import {
