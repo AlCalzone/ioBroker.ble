@@ -38,6 +38,9 @@ If you have any device transmitting specially encoded information via advertisem
 * `"bthome"`: Sensors using the [BTHome](https://bthome.io) protocol. For now this is limited to the `v2` revision of the protocol and does not support encrypted packets.
 
 ## Changelog
+
+### **WORK IN PROGRESS**
+- (iobroker-bot) Adapter requires node.js >= 20 now.
 <!--
 	Placeholder for next release:
 	### __WORK IN PROGRESS__
