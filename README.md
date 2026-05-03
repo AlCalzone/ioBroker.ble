@@ -209,6 +209,8 @@ If you have any device transmitting specially encoded information via advertisem
 ### 0.0.1
 * initial release
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 The MIT License (MIT)
 
